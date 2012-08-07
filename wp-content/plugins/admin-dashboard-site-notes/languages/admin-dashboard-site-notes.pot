@@ -1,0 +1,179 @@
+# Copyright (C) 2010 
+# This file is distributed under the same license as the  package.
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/admin-dashboard-site-notes\n"
+"POT-Creation-Date: 2011-09-14 14:31:14+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: dashboard-site-notes.php:73
+msgid "Site Notes Configuration"
+msgstr ""
+
+#: dashboard-site-notes.php:74 dashboard-site-notes.php:566
+msgid "Site Notes"
+msgstr ""
+
+#: dashboard-site-notes.php:149
+msgid "Table of Contents"
+msgstr ""
+
+#: dashboard-site-notes.php:196 dashboard-site-notes.php:219
+msgid "Error: note output aborted, hierarchy too deep (>64)"
+msgstr ""
+
+#: dashboard-site-notes.php:427
+msgid "When and where to display this message"
+msgstr ""
+
+#: dashboard-site-notes.php:503
+msgid "Miscellaneous Options:"
+msgstr ""
+
+#: dashboard-site-notes.php:505
+msgid "Include in the dashboard widget"
+msgstr ""
+
+#: dashboard-site-notes.php:514
+msgid "Exclude from site instruction manual."
+msgstr ""
+
+#: dashboard-site-notes.php:518
+msgid "Hide the title of this post for inline notes."
+msgstr ""
+
+#: dashboard-site-notes.php:524
+msgid "Show for the following roles:"
+msgstr ""
+
+#: dashboard-site-notes.php:532
+msgid "Display in the following locations:"
+msgstr ""
+
+#: dashboard-site-notes.php:540
+msgid "Everywhere"
+msgstr ""
+
+#: dashboard-site-notes.php:548
+msgid "Edit"
+msgstr ""
+
+#: dashboard-site-notes.php:549
+msgid "New"
+msgstr ""
+
+#: dashboard-site-notes.php:550
+msgid "Search"
+msgstr ""
+
+#: dashboard-site-notes.php:551
+msgid "All"
+msgstr ""
+
+#: dashboard-site-notes.php:567
+msgid "Site Note"
+msgstr ""
+
+#: dashboard-site-notes.php:568
+msgid "Add Site Note"
+msgstr ""
+
+#: dashboard-site-notes.php:569
+msgid "Edit Site Note"
+msgstr ""
+
+#: dashboard-site-notes.php:570
+msgid "New Site Note"
+msgstr ""
+
+#: dashboard-site-notes.php:571
+msgid "View Site Note"
+msgstr ""
+
+#: dashboard-site-notes.php:601
+msgid "Add helpful notes for site admins"
+msgstr ""
+
+#: dashboard-site-notes.php:630
+msgid "Admin Guide"
+msgstr ""
+
+#: dashboard-site-notes.php:631
+msgid "Site Instruction Manual"
+msgstr ""
+
+#: dashboard-site-notes.php:632
+msgid "Site Instructions"
+msgstr ""
+
+#: dashboard-site-notes.php:668
+msgid "General Settings"
+msgstr ""
+
+#: dashboard-site-notes.php:671
+msgid "Permissions"
+msgstr ""
+
+#: dashboard-site-notes.php:682
+msgid "Add custom field support"
+msgstr ""
+
+#: dashboard-site-notes.php:683
+msgid "Add revision support"
+msgstr ""
+
+#: dashboard-site-notes.php:684
+msgid "Add excerpt support"
+msgstr ""
+
+#: dashboard-site-notes.php:685
+msgid "Use content filter on excerpts"
+msgstr ""
+
+#: dashboard-site-notes.php:686
+msgid "Use content filter on full notes"
+msgstr ""
+
+#: dashboard-site-notes.php:687
+msgid "Group notes into one box"
+msgstr ""
+
+#: dashboard-site-notes.php:688
+msgid "Dashboard widget title"
+msgstr ""
+
+#: dashboard-site-notes.php:689
+msgid "Instruction manual page title"
+msgstr ""
+
+#: dashboard-site-notes.php:690
+msgid "Instruction manual nav title"
+msgstr ""
+
+#: dashboard-site-notes.php:710
+msgid ""
+"Assign the roles that can create and edit notes. Super-admins can always "
+"create and edit notes."
+msgstr ""
+
+#: dashboard-site-notes.php:748
+msgid "You don't have permission to access this page."
+msgstr ""
+
+#: dashboard-site-notes.php:756
+msgid "Save Changes"
+msgstr ""
+
+#: dashboard-site-notes.php:772
+msgid "Flattr"
+msgstr ""
+
+#: dashboard-site-notes.php:773
+msgid "Donate"
+msgstr ""

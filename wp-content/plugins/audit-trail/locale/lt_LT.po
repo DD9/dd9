@@ -1,0 +1,415 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Audit Trail ET\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-01-23 23:46+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Natalija Strazdauskienė <ciuvir@mail.ru>\n"
+"Language-Team: Nata Strazda <nata@epastas.lt>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1\n"
+"X-Poedit-Language: Lithuanian\n"
+"X-Poedit-Country: LITHUANIA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../audit-trail.php:93
+msgid "Audit Trail Help"
+msgstr "Audit Trail pagalba"
+
+#: ../audit-trail.php:94
+msgid "Audit Trail Documentation"
+msgstr "Audit Trail dokumentacija"
+
+#: ../audit-trail.php:95
+msgid "Audit Trail Support Forum"
+msgstr "Audit Trail paramos forumas"
+
+#: ../audit-trail.php:96
+msgid "Audit Trail Bug Tracker"
+msgstr "Audit Trail <em>klaidų seklys</em>"
+
+#: ../audit-trail.php:97
+msgid "Please read the documentation and check the bug tracker before asking a question."
+msgstr "Prašome perskaityti dokumentaciją ir patikrinti per klaidų seklį prieš užduodant klausimą."
+
+# ?
+#: ../audit-trail.php:105
+msgid "Trail"
+msgstr "Trail"
+
+#: ../audit-trail.php:180
+msgid "Audit Trail"
+msgstr "Audit Trail"
+
+#: ../audit-trail.php:278
+msgid "Options have been updated"
+msgstr "Parinktys buvo atnaujintos"
+
+#: ../models/auditor.php:52
+msgid "Post & page management"
+msgstr "Žinutės ir puslapio valdymas"
+
+#: ../models/auditor.php:53
+msgid "File attachments"
+msgstr "Prisegti failai"
+
+#: ../models/auditor.php:54
+msgid "User profiles & logins"
+msgstr "Vartotojų profiliai ir loginai"
+
+#: ../models/auditor.php:55
+msgid "Theme switching"
+msgstr "Temos perjungimas"
+
+#: ../models/auditor.php:56
+msgid "Link management"
+msgstr "Nuorodos valdymas"
+
+#: ../models/auditor.php:57
+msgid "Category management"
+msgstr "Kategorijos valdymas"
+
+#: ../models/auditor.php:58
+msgid "Comment management"
+msgstr "Komentaro valdymas"
+
+#: ../models/auditor.php:59
+msgid "User page visits"
+msgstr "Vartotojo apsilankymai puslapyje"
+
+#: ../models/auditor.php:60
+msgid "Audit Trail actions"
+msgstr "Audit Trail veiksmai"
+
+#: ../models/auditor.php:282
+msgid "Theme switch"
+msgstr "Temos jungiklis"
+
+# ?
+#: ../models/auditor.php:288
+msgid "Profile updated for deleted user"
+msgstr "Ištrinto vartotojo profilis atnaujintas"
+
+#: ../models/auditor.php:290
+msgid "Profile updated"
+msgstr "Profilis atnaujintas"
+
+#: ../models/auditor.php:296
+msgid "Logged In"
+msgstr "Prisijungęs"
+
+#: ../models/auditor.php:300
+msgid "Logged Out"
+msgstr "Atsijungęs"
+
+#: ../models/auditor.php:304
+msgid "Login failed"
+msgstr "Prisijungti nepavyko"
+
+#: ../models/auditor.php:308
+msgid "New user registration"
+msgstr "Naujo vartotojo registracija"
+
+#: ../models/auditor.php:312
+msgid "Retrieve password"
+msgstr "Gauti slaptažodį"
+
+#: ../models/auditor.php:316
+msgid "Delete user"
+msgstr "Ištrinti vartotoją"
+
+#: ../models/auditor.php:320
+msgid "Add link"
+msgstr "Pridėti nuorodą"
+
+#: ../models/auditor.php:325
+msgid "Edit link"
+msgstr "Redaguoti nuorodą"
+
+#: ../models/auditor.php:329
+msgid "Delete link"
+msgstr "Ištrinti nuorodą"
+
+#: ../models/auditor.php:333
+msgid "Edit category "
+msgstr "Redaguoti kategoriją"
+
+#: ../models/auditor.php:337
+msgid "Add category"
+msgstr "Pridėti kategoriją"
+
+#: ../models/auditor.php:341
+msgid "Delete category"
+msgstr "Ištrinti kategoriją"
+
+#: ../models/auditor.php:345
+msgid "Edit comment"
+msgstr "Redaguoti komentarą"
+
+#: ../models/auditor.php:349
+msgid "Delete comment"
+msgstr "Ištrinti komentarą"
+
+#: ../models/auditor.php:353
+msgid "Delete post"
+msgstr "Ištrinti žinutę"
+
+#: ../models/auditor.php:359
+msgid "Save post"
+msgstr "Išsaugoti žinutę"
+
+#: ../models/auditor.php:361
+msgid "Save page"
+msgstr "Išsaugoti puslapį"
+
+#: ../models/auditor.php:370
+msgid "Add attachment"
+msgstr "Pridėti priedą"
+
+#: ../models/auditor.php:378
+msgid "Edit attachment"
+msgstr "Redaguoti priedą"
+
+#: ../models/auditor.php:382
+msgid "View page"
+msgstr "Peržiūrėti puslapį"
+
+#: ../models/auditor.php:386
+msgid "Restored"
+msgstr "Atkurtas"
+
+#: ../models/auditor.php:434
+msgid "<strong>ERROR</strong>: Incorrect password."
+msgstr "<strong>KLAIDA</strong>: Neteisingas slaptažodis."
+
+#: ../models/pager.php:404
+msgid "Previous"
+msgstr "Ankstesnis"
+
+#: ../models/pager.php:405
+msgid "Next"
+msgstr "Kitas"
+
+#: ../models/pager.php:463
+#, php-format
+msgid "%d per-page"
+msgstr "%d puslapyje"
+
+# ?
+#: ../models/pager.php:472
+#, php-format
+msgid "Displaying %s&#8211;%s of %s"
+msgstr "Parodyta %s&#8211;%s iš %s"
+
+#: ../view/admin/options.php:4
+msgid "Audit Trail Options"
+msgstr "Audit Trail parinktys"
+
+#: ../view/admin/options.php:11
+msgid "Actions to monitor"
+msgstr "Kontroliuojami veiksmai"
+
+#: ../view/admin/options.php:23
+msgid "There are no actions to monitor"
+msgstr "Nėra kontroliuojamų veiksmų"
+
+#: ../view/admin/options.php:26
+msgid "Other Options"
+msgstr "Kiti nustatymai"
+
+#: ../view/admin/options.php:30
+msgid "Plugin Support"
+msgstr "Plagino palaikymas"
+
+#: ../view/admin/options.php:33
+#, php-format
+msgid "Click this if you have <a href=\"%s\">supported</a> the author"
+msgstr "Spustelėkite čia, jei turite Autoriaus <a href=\"%s\">palaikymą</a>"
+
+#: ../view/admin/options.php:37
+msgid "Auto-expire"
+msgstr "Automatiškai baigiasi"
+
+#: ../view/admin/options.php:38
+msgid "days (0 for no expiry)"
+msgstr "dienų (0 be pabaigos)"
+
+#: ../view/admin/options.php:41
+msgid "Ignore users"
+msgstr "Ignoruojami vartotojai"
+
+#: ../view/admin/options.php:42
+msgid "separate user IDs with a comma"
+msgstr "atskiriamas naudotojo ID su kableliais"
+
+#: ../view/admin/options.php:46
+msgid "Save Options"
+msgstr "Išsaugoti parinktis"
+
+#: ../view/admin/pager.php:6
+msgid "Search"
+msgstr "Ieškoti"
+
+#: ../view/admin/pager.php:9
+msgid "Results per page"
+msgstr "Rezultatų puslapyje"
+
+#: ../view/admin/pager.php:16
+msgid "Go"
+msgstr "Eiti"
+
+#: ../view/admin/submenu.php:4
+msgid "Options"
+msgstr "Parinktys"
+
+#: ../view/admin/submenu.php:5
+msgid "Support"
+msgstr "Palaikymas"
+
+#: ../view/admin/support.php:5
+msgid "Audit Trail | Support"
+msgstr "Audit Trail | Palaikymas"
+
+#: ../view/admin/support.php:9
+msgid "Audit Trail is free to use - life is wonderful and lovely!  However, it has required a great deal of time and effort to develop and if it has been useful you can help support this development by <strong>making a small donation</strong>."
+msgstr "Audit Trail galima naudotis nemokamai - gyvenimas yra nuostabus ir mielas! Tačiau reikia daug laiko ir pastangų šį plaginą plėtoti ir, jei jis buvo naudingas jums, galite paremti šią plėtrą, <strong>simboliška suma.</strong>"
+
+#: ../view/admin/support.php:10
+msgid "This will act as an incentive for me to carry on developing, providing countless hours of support, and including new features and suggestions. You get some useful software and I get to carry on making it.  Everybody wins."
+msgstr "Tai yra man kaip paskatinimas kurti toliau, skiriant nemažai laiko plėtojimui, įskaitant ir naujas funkcijas bei pasiūlymus. Jūms yra naudinga programinė įranga ir man bus stimulas rūpintis ja. Kiekvienas laimi."
+
+#: ../view/admin/support.php:13
+msgid "If you are using this plugin in a commercial setup, or feel that it's been particularly useful, then you may want to consider a <strong>commercial donation</strong>.  If you really really want to show your appreciation then there is the <strong>Super Smashing Great</strong> donation which, along with making my day, will earn you a badge of honour (125x125 image of your choosing + nofollow link) to be displayed on the Audit Trail page for a period of two months."
+msgstr "Jei naudojate šį įskiepį <strong>komerciniu</strong> pagrindu ar manote, kad tai yra tikrai naudinga, tada jūs galbūt norėsite apsvarstyti <strong>komercinę paramą.</strong> Jei tikrai norite parodyti savo dėkingumą, ten yra <strong>Super Smashing Didžioji parama</strong>, kuri gavimo diena jums uždirbs garbės ženklelį (125x125 paveiksliuką pasirinktinai + nofollow nuorodą), kuris bus rodomas Audit Trail puslapyje du mėnesius."
+
+#: ../view/admin/support.php:36
+msgid "Individual<br/>Donation"
+msgstr "Individuali<br/>Parama</em>"
+
+#: ../view/admin/support.php:57
+msgid "Commercial<br/>Donation"
+msgstr "Komercinė<br/>Parama"
+
+#: ../view/admin/support.php:78
+msgid "Super Smashing<br/>Great Donation"
+msgstr "Super Smashing<br/>Dydžioji Parama"
+
+#: ../view/admin/support.php:82
+msgid "Translations"
+msgstr "Vertimai"
+
+#: ../view/admin/support.php:84
+msgid "If you're multi-lingual then you may want to consider donating a translation:"
+msgstr "Jei esate daugiakalbis, tuomet galbūt jūs norėsite apsvarstyti apmokamą vertimą:"
+
+#: ../view/admin/support.php:92
+msgid "All translators will have a link to their website placed on the plugin homepage at <a href=\"http://urbangiraffe.com/plugins/audit-trail/\">UrbanGiraffe</a> and <a href=\"http://wordpress.org/extend/plugins/audit-trail/\">WordPress.org</a>, in addition to being an individual supporter."
+msgstr "Visi vertėjai turės nuorodą į savo svetainę, patalpinta įskiepio puslapyje adresu <a href=\"http://urbangiraffe.com/plugins/audit-trail/\">UrbanGiraffe</a> ir <a href=\"http://wordpress.org/extend/plugins/audit-trail/\">WordPress.org</a> , be to bus individualus palaikymas."
+
+#: ../view/admin/support.php:93
+msgid "Full details of producing a translation can be found in this <a href=\"http://urbangiraffe.com/articles/translating-wordpress-themes-and-plugins/\">guide to translating WordPress plugins</a>."
+msgstr "Išsamų aprašymą vertimui galima rasti šiame <a href=\"http://urbangiraffe.com/articles/translating-wordpress-themes-and-plugins/\"WordPress įskiepių vadove</a> ."
+
+#: ../view/admin/trail.php:16
+msgid "Bulk Actions"
+msgstr "Globalūs veiksmai"
+
+#: ../view/admin/trail.php:17
+msgid "Delete"
+msgstr "Ištrinti"
+
+#: ../view/admin/trail.php:20
+msgid "Apply"
+msgstr "Taikyti"
+
+#: ../view/admin/trail.php:24
+msgid "Filter"
+msgstr "Filtras"
+
+#: ../view/admin/trail.php:39
+#: ../view/admin/trail.php:50
+msgid "User"
+msgstr "Vartotojas"
+
+#: ../view/admin/trail.php:40
+#: ../view/admin/trail.php:51
+msgid "Action"
+msgstr "Veiksmas"
+
+#: ../view/admin/trail.php:41
+#: ../view/admin/trail.php:52
+msgid "Target"
+msgstr "Tikslas"
+
+#: ../view/admin/trail.php:42
+#: ../view/admin/trail.php:53
+msgid "Date"
+msgstr "Data"
+
+#: ../view/admin/trail.php:43
+#: ../view/admin/trail.php:54
+msgid "IP"
+msgstr "IP"
+
+#: ../view/admin/trail.php:76
+msgid "There is nothing to display!"
+msgstr "Nėra ką rodyti!"
+
+#: ../view/admin/version.php:2
+msgid "Audit Trail News"
+msgstr "Audit Trail naujienos"
+
+# ?
+#: ../view/admin/version.php:5
+#, php-format
+msgid "%s ago"
+msgstr "%s atgal"
+
+#: ../view/admin/details/edit_category.php:1
+#: ../view/admin/details/edit_link.php:1
+msgid "Name"
+msgstr "Vardas"
+
+#: ../view/admin/details/edit_category.php:5
+#: ../view/admin/details/edit_link.php:5
+#: ../view/admin/details/profile_update.php:9
+#: ../view/admin/details/save_post.php:5
+msgid "URL"
+msgstr "URL"
+
+#: ../view/admin/details/edit_category.php:9
+#: ../view/admin/details/edit_link.php:9
+msgid "Description"
+msgstr "Aprašymas"
+
+#: ../view/admin/details/edit_comment.php:1
+msgid "Author"
+msgstr "Autorius"
+
+#: ../view/admin/details/edit_comment.php:5
+#: ../view/admin/details/save_post.php:9
+msgid "Content"
+msgstr "Turinys"
+
+# ?
+#: ../view/admin/details/profile_update.php:1
+msgid "Login"
+msgstr "Prisijungimas"
+
+#: ../view/admin/details/profile_update.php:5
+msgid "Email"
+msgstr "El-paštas"
+
+#: ../view/admin/details/save_post.php:1
+msgid "Title"
+msgstr "Pavadinimas"
+
+#: ../view/admin/details/save_post.php:15
+msgid "Difference between this and current version"
+msgstr "Skirtumai tarp šios ir esamos versijos"
+

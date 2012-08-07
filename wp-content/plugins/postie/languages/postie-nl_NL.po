@@ -1,0 +1,356 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Postie\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Gideon van Melle <gvmelle@gmail.com>\n"
+"Language-Team: EconomysizeGeek <headgeek@economysizegeek.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Dutch\n"
+"X-Poedit-Country: NETHERLANDS\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __\n"
+
+#: config_form.php:18
+msgid "Postie Options"
+msgstr "Postie Opties"
+
+#: config_form.php:18
+msgid "Reset Configs To Default"
+msgstr "Herstel de standaard configuratie"
+
+#: config_form.php:2
+msgid "If you would like to start over - you can click the button on the right to reset all configurations to the default."
+msgstr "Wanneer u opneuw wilt beginnen, kunt u klikken op de knop aan de rechterkant om de configuratie naar de standaard instellingen terug te zetten."
+
+#: config_form.php:30
+msgid "To run the check mail script manually"
+msgstr "Om het check mail script handmatig uit te voeren"
+
+#: config_form.php:32
+msgid "Run Postie"
+msgstr "Postie uitvoeren"
+
+#: config_form.php:39
+msgid "If you have problems with Postie this will run a special script to test your configuraiton options"
+msgstr "Wanneer u problemen hebt met Postie voert dit een speciaal script uit om uw configuratie instellingen te testen"
+
+#: config_form.php:41
+msgid "Test Config"
+msgstr "Test Config"
+
+msgid "Recommended"
+msgstr "Aaanbevolen"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "No"
+msgstr "Nee"
+
+#: config_form.php
+msgid "Authorization Settings"
+msgstr "Autorisatie Instellingen"
+
+#: config_form.php
+msgid "Allow Anyone To Post Via Email"
+msgstr "Sta iedereen toe via e-mail te posten"
+
+#: config_form.php
+msgid "Changing this to yes is NOT RECOMMEDED - anything that gets sent in will automatically be posted. This could make it easier to compromise your server - YOU HAVE BEEN WARNED."
+msgstr "Dit naar Ja veranderen wordt NIET AANBEVOLEN - alles wat wordt verzonden zal automatisch worden gepost. Dit kan het compromiteren van uw server eenvoudiger maken - U BENT GEWAARSCHUWD!"
+
+#: config_form.php
+msgid "Minimum Access Level Required To Post:"
+msgstr "Minimaal Toegangssniveau Vereist Voor Posten:"
+
+#: config_form.php
+msgid "This allows you to grant access to other users to post if they have the proper access level"
+msgstr "Hierme kunt u andere gebruikers het recht verlenen te posten wanneer ze het juiste toegangsniveau hebben"
+
+#: config_form.php
+msgid "Authorized Addresses"
+msgstr "Geautoriseerde adressen"
+
+#: config_form.php
+msgid "Put each email address on a single line. Posts from emails in this list will be treated as if they came from the admin. If you would prefer to have users post under their own name - create a WordPress user with the correct access level."
+msgstr "Zet elk e-mail adres op een aparte regel. Postings van e-mails uit deze lijst zullen worden beschouwd aslof ze weren versutrrd door de beheerder. Als u liever hebt dat gebruikers onder hun eigen naam posten, kunt u een WordPress gebruiker aanmaken met het correcte toegangsniveau."
+
+#: config_form.php
+msgid "Directory Settings"
+msgstr "Map instellingen"
+
+#: config_form.php
+msgid "Directory For Photos:"
+msgstr "Map voor Afbeeldingen:"
+
+#: config_form.php
+msgid "Directory For Files:"
+msgstr "Map voor Documenten:"
+
+#: config_form.php
+msgid "Message Settings"
+msgstr "Bericht Instellingen"
+
+#: config_form.php
+msgid "Default post by mail category:"
+msgstr "Standaard post via e-mail categorie:"
+
+#: config_form.php
+msgid "Default Title:"
+msgstr "Standaard Titel:"
+
+#: config_form.php
+msgid "Live from the field"
+msgstr "Vers van de Pers"
+
+#: config_form.php
+msgid "Prefered Text Type (HTML/plain):"
+msgstr "Voorkeur tekstsoort (HTML/plat): "
+
+#: config_form.php
+msgid "plain"
+msgstr "platte tekst"
+
+#: config_form.php
+msgid "html"
+msgstr "html"
+
+#: config_form.php
+msgid "Forward Rejected Mail"
+msgstr "Doorsturen verworpen e-mail"
+
+#: config_form.php
+msgid "Allow Subject In Mail"
+msgstr "Toestaan Onderwerp in E-mail"
+
+#: config_form.php
+msgid "Allow HTML In Mail Subject"
+msgstr "Toestaan HTML in onderwerpregel E-mail"
+
+#: config_form.php
+msgid "Allow HTML In Mail Body"
+msgstr "Toestaan HTML in Hoofdtekst E-mail"
+
+#: config_form.php
+msgid "Encoding for pages and feeds:"
+msgstr "Encoding voor pagina's en feeds:"
+
+#: config_form.php
+msgid "UTF-8"
+msgstr "UTF-8"
+
+#: config_form.php
+msgid "it should handle ISO-8859-1 as well"
+msgstr "Het moet ook ISO-8859-1 aankunnen"
+
+#: config_form.php
+msgid "Decode Quoted Printable Data"
+msgstr "Decoderen Quoted Printable Data"
+
+#: config_form.php
+msgid "Should be yes in most cases."
+msgstr "Moet JA zijn in de meeste gevallen."
+
+#: config_form.php
+msgid "Supported File Types"
+msgstr "Ondersteunde bestandstypen"
+
+#: config_form.php
+msgid "Put each type on a single line."
+msgstr "Zet elke type op een aparte regel."
+
+#: config_form.php
+msgid "Banned File Names"
+msgstr "Verboden Bestandsnamen"
+
+#: config_form.php
+msgid "Put each file name on a single line.Files matching this list will never be posted to your blog."
+msgstr "Zet elke bestandsnaam op een aparte regel. Bestanden die in de lijst staan zullen nooit naar uw blog worden verzonden."
+
+#: config_form.php
+msgid "Drop The Signature From Mail"
+msgstr "Weglaten van de E-mail handtekening"
+
+#: config_form.php
+msgid "Signature Patterns"
+msgstr "Handtekening herkenningselementen"
+
+#: config_form.php
+msgid "Put each pattern on a seperate line and make sure to escape any special characters."
+msgstr "Zet elk herkenningselement op een aparte regel en escape elk speciaal letterteken."
+
+#: config_form.php
+msgid "Image Settings"
+msgstr "Afbeelding Instellingen"
+
+#: config_form.php
+msgid "No GD Support"
+msgstr "Geen GD Ondersteuning"
+
+#: config_form.php
+msgid "Currently your installation of PHP does not have GD installed so no image resizing can occur."
+msgstr "Uw huidige installatie van PHP heeft geen GD geïnstalleerd. Afbeeldingen kunnen niet worden verkleind."
+
+#: config_form.php
+msgid "Post Images At End"
+msgstr "Zet afbeeldingen aan het einde van de tekst"
+
+#: config_form.php
+msgid "No means they will be put before the text of the message."
+msgstr "Nee betekent dat ze aan het begin van het bericht worden geplaatst."
+
+#: config_form.php
+msgid "Resize Large Images"
+msgstr "Verklein grote afbeeldingen"
+
+#: config_form.php
+msgid "Maximum Image Width:"
+msgstr "Maximale afbeeldings breedte (width):"
+
+#: config_form.php
+msgid "pixels"
+msgstr "pixels"
+
+#: config_form.php
+msgid "JPEG Compression:"
+msgstr "JPEG Compressie:"
+
+#: config_form.php
+msgid "%"
+msgstr "%"
+
+#: config_form.php
+msgid "Use ImageMagick"
+msgstr "Gebruik ImageMagick"
+
+#: config_form.php
+msgid "convert binary location:"
+msgstr "convert binary locatie:"
+
+#: config_form.php
+msgid "only needed if you are using ImageMagick"
+msgstr "allee nodig als u ImageMagick gebruikt"
+
+#: config_form.php
+msgid "should be /usr/bin/convert"
+msgstr "moet /usr/bin/convert zijn"
+
+#: config_form.php
+msgid "identify binary location:"
+msgstr "identificeer binaire locatie:"
+
+#: config_form.php
+msgid "should be /usr/bin/identify"
+msgstr "moet /usr/bin/identify zijn"
+
+#: config_form.php
+msgid "Start Image Count At 0"
+msgstr "Start tellen Afbeeldingen bij 0"
+
+#: config_form.php
+msgid "Image Place Holder Tag:"
+msgstr "Afbeelding Place Holder Tag:"
+
+#: config_form.php
+msgid "Image CSS Class:"
+msgstr "Afbeelding CSS Class:"
+
+#: config_form.php
+msgid "Image CSS Style:"
+msgstr "Afbeelding CSS Stijl:"
+
+#: config_form.php
+msgid "3GP"
+msgstr "3GP"
+
+#: config_form.php
+msgid "Embed 3GP videos as QuickTime"
+msgstr "Ingebedde 3GP videos in QuickTime formaat"
+
+#: config_form.php
+msgid "This controls if the video is just a link or embeded in the page using QuickTime"
+msgstr "Dit bepaalt of de video alleen mar een snelkoppeling is of ingebed in de pagina bij gebruik van QuickTime"
+
+#: config_form.php
+msgid "Location of ffmpeg:"
+msgstr "Locatie van ffmpeg:"
+
+#: config_form.php
+msgid "only needed if you are on a Linux server and use 3gp video,and don't embed the video. This allows postie to make thumbnail of the very first frame"
+msgstr "alleen nodig als u op een Linux server bent en 3gp video gebruikt en de video niet inbed. Dit laat Postie miniatuurafbeeldingen maken van het eerste frame"
+
+#: config_form.php
+msgid "should be /usr/bin/ffmpeg"
+msgstr "moet /usr/bin/ffmpeg zijn"
+
+#: config_form.php
+msgid "3GP CSS Class:"
+msgstr "3GP CSS Class:"
+
+#: config_form.php
+msgid "Mailserver Settings"
+msgstr "E-Mail server Instellingen"
+
+#: config_form.php
+msgid "Mail Protocol:"
+msgstr "E-Mail Protocol:"
+
+#: config_form.php
+msgid "IMAP/IMAP-SSL/POP3-SSL unavailable"
+msgstr "IMAP/IMAP-SSL/POP3-SSL niet beschikbaar"
+
+#: config_form.php
+msgid "Standard Ports:"
+msgstr "Standaard Poorten:"
+
+#: config_form.php
+msgid "POP3"
+msgstr "POP3"
+
+#: config_form.php
+msgid "IMAP"
+msgstr "IMAP"
+
+#: config_form.php
+msgid "IMAP-SSL"
+msgstr "IMAP-SSL"
+
+#: config_form.php
+msgid "POP3-SSL"
+msgstr "POP3-SSL"
+
+#: config_form.php
+msgid "Postie Time Correction:"
+msgstr "Postie Tijd Correctie:"
+
+#: config_form.php
+msgid "hours"
+msgstr "uren"
+
+#: config_form.php
+msgid "Should be the same as your normal offset - but this lets you adjust it in cases where that doesn't work."
+msgstr "Moet hetselfde zijn als het normale tijdsverschil - maar laat u dit aanpassen waar dat niet werkt."
+
+#: config_form.php
+msgid "Mail Server:"
+msgstr "E-Mail Server:"
+
+#: config_form.php
+msgid "Port:"
+msgstr "Poort:"
+
+#: config_form.php
+msgid "Mail Userid:"
+msgstr "E-Mail Gebruikers ID:"
+
+#: config_form.php
+msgid "Mail Password:"
+msgstr "E-Mail Wachtwoord:"
+
+#: config_form.php
+msgid "Update Options"
+msgstr "Update Opties"
+

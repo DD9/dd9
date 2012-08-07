@@ -1,0 +1,6 @@
+#!/bin/bash
+find . -iname '*php' >files.tmp
+xgettext --language=PHP --keyword=__ --keyword=_e --keyword=__ngettext:1,2 --keyword=BuildBooleanSelect:1 --keyword=BuildTextArea:1 -F -n --from-code=UTF8 -o languages/postie.pot -f files.tmp
+xgettext --language=PHP --keyword=BuildBooleanSelect:4 --keyword=BuildTextArea:4 -F -n --from-code=UTF8 -j -o languages/postie.pot -f files.tmp
+rm files.tmp
+

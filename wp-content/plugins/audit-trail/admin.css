@@ -1,0 +1,161 @@
+.options
+{
+list-style-type: none;
+margin: 0;
+padding: 0;
+margin: 0.5em 0;
+}
+
+.options li
+{
+margin: 0; padding: 0;
+line-height: 1.8;
+}
+
+.csv
+{
+float: right;
+padding: 4px;
+}
+
+.csv a
+{
+border: none;
+}
+
+.pager
+{
+font-size: 0.9em;
+text-align: right;
+}
+
+.pager select, .pager input { font-size: 0.9em }
+
+
+
+#subsubmenu li {
+	display: inline;
+	line-height: 170%;
+	list-style: none;
+	text-align: center;
+}
+
+#subsubmenu {
+  font-size: 0.9em;
+	background: #CDD9E2;
+	border-bottom: none;
+	margin: 0;
+	color: #4F5D69;
+	padding: 2px 2em 0 5em;
+}
+
+#subsubmenu .current {
+	background: #f9fcfe;
+	border-top: 1px solid #045290;
+	color: black;
+}
+
+#subsubmenu a {
+	border: none;
+	color: #4F5D69;
+	font-size: 12px;
+	padding: 3px 1em 2px 1em;
+}
+
+#subsubmenu a:hover {
+	background: #89A5BB;
+	color: #393939;
+}
+
+#subsubmenu li {
+	line-height: 150%;
+}
+
+.audit
+{
+	width: 100%;
+}
+
+.alt
+{
+	background-color: #efefef;
+}
+
+.audit th
+{
+background-color: #ccc;
+text-align: left;
+}
+
+.audit td
+{
+vertical-align: top;
+}
+
+.audit textarea
+{
+width: 95%;
+}
+
+.audit ins
+{
+color: green;
+}
+
+.audit del
+{
+color: red;
+text-decoration: line-through;
+}
+
+.diff
+{
+border: 1px solid #999;
+padding: 2px;
+overflow: auto;
+max-height: 200px;
+}
+
+fieldset
+{
+border: 1px solid #ccc;
+margin-bottom: 1em;
+padding-left: 1em;
+}
+
+legend
+{
+font-weight: bold;
+font-size: 1.2em;
+}
+
+.bulleted li {
+list-style-type: square;
+margin-left: 20px;
+}
+
+.donations li
+{
+list-style-type: none;
+float: left;
+text-align: center;
+padding: 1em 2em;
+}
+
+.translators li
+{
+float: left;
+width: 300px;
+margin-left: 1.5em;
+}
+
+div .supporter strong
+{
+background-color: yellow;
+}
+
+
+.wrap h5
+{
+font-size: 1em;
+}

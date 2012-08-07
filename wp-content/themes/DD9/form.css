@@ -1,0 +1,134 @@
+/*
+DD9 Inquiry Form Overrides
+*/
+
+#container, html.embed {
+    background-color: transparent;
+}
+
+#container, html.embed {
+    background-color: #FFFFFF;
+}
+
+.wufoo .info h2 {
+	display: none !important;
+}
+
+.wufoo .info, .wufoo .paging-context {
+    border-bottom: 1px dotted #000000;
+}
+
+form ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: "DroidSerifRegular","Palatino Linotype","Book Antiqua",Palatino,serif !important;
+    position: relative;
+}
+form li.section h3,
+.wufoo .section h3 {
+    color:#E4311F;
+       font-size: 18px;
+}
+.wufoo .info div,
+.wufoo .section div {
+    font-size: 13px;
+    font-family: Tahoma, Arial, Helvetica, sans-serif;
+}
+
+.wufoo li.focused {
+    background-color: #F4F4F4;
+}
+
+form li.section div,
+form li.section h3,
+.info,
+.wufoo li,
+form li {
+    margin-left: 0px !important;
+    padding-left: 0px !important;
+    /* [disabled]margin-right:0px !important; */
+    /* [disabled]padding-right: 0px !important; */
+}
+
+.wufoo li {
+    /* [disabled]width: 80%; */
+}
+.safari select.select, 
+.wufoo input.text, .wufoo textarea.textarea, .wufoo input.file, .wufoo select.select {
+    font-size: 13px !important;
+    font-family: Tahoma, Arial, Helvetica, sans-serif;
+}
+
+.wufoo li.fullWidth{
+    width: 98% !important;  
+}
+.wufoo li.threeColumns  {
+       width: 100% !important; 
+}
+
+form li.buttons input {
+    color: #FFF;
+    background-color: #710400;
+    border: 2px solid #670200;
+    cursor: pointer;
+    font-weight: bold;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;
+    border-radius:3px;
+}
+
+form li.buttons input:hover {
+    background-color: #A51700;
+}
+input.btTxt {
+
+}
+.pgStyle1 b {
+    color: #000000;
+    font-size: 100%;
+    font-weight: bold;
+}
+.pgStyle1 .selected var {
+    border: 1px solid #680200;
+}
+
+.pgStyle1 .selected var, .pgStyle2 var, .pgStyle2 var em {
+    color: #FFFFFF;
+    background-attachment: scroll;
+    background-color: #840A00;
+    background-image: none;
+    background-repeat: repeat;
+    background-position: 0 0;
+}
+.pgStyle1 var {
+
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+
+}
+button.link:hover {
+    color: #000;
+}
+
+button.link {
+    color: #E6311F;
+    
+}
+.wufoo .passField input.text{
+    font-style: oblique;
+    color: #999;    
+}
+form .instruct,
+p.instruct {
+    padding-top:0px !important;
+    margin-top:0px !important;
+    font-style:italic !important;
+    font-size:10px !important;
+}
+
+.wufoo .instruct small {
+    color: #999 !important;    
+        font-size:10px !important;
+}

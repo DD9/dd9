@@ -1,0 +1,415 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Audit Trail ET\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-01-23 23:46+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Alexandr K.\n"
+"Language-Team: Alyona Lompar <alyona.lompar@aol.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1\n"
+"X-Poedit-Language: Russian\n"
+"X-Poedit-Country: RUSSIAN FEDERATION\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../audit-trail.php:93
+msgid "Audit Trail Help"
+msgstr "Справка"
+
+#: ../audit-trail.php:94
+msgid "Audit Trail Documentation"
+msgstr "Документация"
+
+#: ../audit-trail.php:95
+msgid "Audit Trail Support Forum"
+msgstr "Форум поддержки"
+
+#: ../audit-trail.php:96
+msgid "Audit Trail Bug Tracker"
+msgstr "<em>Bug tracker</em>"
+
+#: ../audit-trail.php:97
+msgid "Please read the documentation and check the bug tracker before asking a question."
+msgstr "Пожалуйста, прочитайте документацию и проверьте ошибки трекера, прежде, чем задавать вопрос."
+
+# ?
+#: ../audit-trail.php:105
+msgid "Trail"
+msgstr "Trail"
+
+#: ../audit-trail.php:180
+msgid "Audit Trail"
+msgstr "Audit Trail"
+
+#: ../audit-trail.php:278
+msgid "Options have been updated"
+msgstr "Параметры были обновлены"
+
+#: ../models/auditor.php:52
+msgid "Post & page management"
+msgstr "Сообщение & страница управления"
+
+#: ../models/auditor.php:53
+msgid "File attachments"
+msgstr "Прикрепленные файлы"
+
+#: ../models/auditor.php:54
+msgid "User profiles & logins"
+msgstr "Профили пользователей и логины"
+
+#: ../models/auditor.php:55
+msgid "Theme switching"
+msgstr "Тема переключения"
+
+#: ../models/auditor.php:56
+msgid "Link management"
+msgstr "Управление ссылками"
+
+#: ../models/auditor.php:57
+msgid "Category management"
+msgstr "Управление категориями"
+
+#: ../models/auditor.php:58
+msgid "Comment management"
+msgstr "Управление комментариями"
+
+#: ../models/auditor.php:59
+msgid "User page visits"
+msgstr "Посещений страницы"
+
+#: ../models/auditor.php:60
+msgid "Audit Trail actions"
+msgstr "Audit Trail действия"
+
+#: ../models/auditor.php:282
+msgid "Theme switch"
+msgstr "Тема переключатель"
+
+# ?
+#: ../models/auditor.php:288
+msgid "Profile updated for deleted user"
+msgstr "Обновление профиля удаленных пользователей"
+
+#: ../models/auditor.php:290
+msgid "Profile updated"
+msgstr "Профиль обновлен"
+
+#: ../models/auditor.php:296
+msgid "Logged In"
+msgstr "Зарегистрированный в"
+
+#: ../models/auditor.php:300
+msgid "Logged Out"
+msgstr "Вышли из"
+
+#: ../models/auditor.php:304
+msgid "Login failed"
+msgstr "Войти не удалось"
+
+#: ../models/auditor.php:308
+msgid "New user registration"
+msgstr "Регистрация нового пользователя"
+
+#: ../models/auditor.php:312
+msgid "Retrieve password"
+msgstr "Восстановить пароль"
+
+#: ../models/auditor.php:316
+msgid "Delete user"
+msgstr "Удалить пользователя"
+
+#: ../models/auditor.php:320
+msgid "Add link"
+msgstr "Добавить ссылку"
+
+#: ../models/auditor.php:325
+msgid "Edit link"
+msgstr "Изменить ссылку"
+
+#: ../models/auditor.php:329
+msgid "Delete link"
+msgstr "Удалить ссылку"
+
+#: ../models/auditor.php:333
+msgid "Edit category "
+msgstr "Изменить категории"
+
+#: ../models/auditor.php:337
+msgid "Add category"
+msgstr "Добавить категорию"
+
+#: ../models/auditor.php:341
+msgid "Delete category"
+msgstr "Удалить категорию"
+
+#: ../models/auditor.php:345
+msgid "Edit comment"
+msgstr "Изменить комментарий"
+
+#: ../models/auditor.php:349
+msgid "Delete comment"
+msgstr "Удалить комментарий"
+
+#: ../models/auditor.php:353
+msgid "Delete post"
+msgstr "Удалить сообщение"
+
+#: ../models/auditor.php:359
+msgid "Save post"
+msgstr "Сохранить сообщение"
+
+#: ../models/auditor.php:361
+msgid "Save page"
+msgstr "Сохранить страницу"
+
+#: ../models/auditor.php:370
+msgid "Add attachment"
+msgstr "Добавить вложение"
+
+#: ../models/auditor.php:378
+msgid "Edit attachment"
+msgstr "Изменить вложения"
+
+#: ../models/auditor.php:382
+msgid "View page"
+msgstr "Открыть страницу"
+
+#: ../models/auditor.php:386
+msgid "Restored"
+msgstr "Восстановить"
+
+#: ../models/auditor.php:434
+msgid "<strong>ERROR</strong>: Incorrect password."
+msgstr "<strong>ОШИБКА:</strong> Неверный пароль."
+
+#: ../models/pager.php:404
+msgid "Previous"
+msgstr "Предыдущая"
+
+#: ../models/pager.php:405
+msgid "Next"
+msgstr "Следующая"
+
+#: ../models/pager.php:463
+#, php-format
+msgid "%d per-page"
+msgstr "%d на страницу"
+
+# ?
+#: ../models/pager.php:472
+#, php-format
+msgid "Displaying %s&#8211;%s of %s"
+msgstr "Отображение %s&#8211;%s s/ %s"
+
+#: ../view/admin/options.php:4
+msgid "Audit Trail Options"
+msgstr "Audit Trail | Опции"
+
+#: ../view/admin/options.php:11
+msgid "Actions to monitor"
+msgstr "Действия для мониторинга"
+
+#: ../view/admin/options.php:23
+msgid "There are no actions to monitor"
+msgstr "Никаких действий для мониторинга"
+
+#: ../view/admin/options.php:26
+msgid "Other Options"
+msgstr "Другие варианты"
+
+#: ../view/admin/options.php:30
+msgid "Plugin Support"
+msgstr "Поддержка модуля"
+
+#: ../view/admin/options.php:33
+#, php-format
+msgid "Click this if you have <a href=\"%s\">supported</a> the author"
+msgstr "Нажмите, если у вас модуль <a href=\"%s\">поддерживается</a> автором."
+
+#: ../view/admin/options.php:37
+msgid "Auto-expire"
+msgstr "Авто-срок"
+
+#: ../view/admin/options.php:38
+msgid "days (0 for no expiry)"
+msgstr "дней (0 при отсутствии срока действия)"
+
+#: ../view/admin/options.php:41
+msgid "Ignore users"
+msgstr "Игнорировать пользователя"
+
+#: ../view/admin/options.php:42
+msgid "separate user IDs with a comma"
+msgstr "отдельные идентификаторы пользователей с запятой"
+
+#: ../view/admin/options.php:46
+msgid "Save Options"
+msgstr "Параметры сохранения"
+
+#: ../view/admin/pager.php:6
+msgid "Search"
+msgstr "Поиск"
+
+#: ../view/admin/pager.php:9
+msgid "Results per page"
+msgstr "Количество результатов на странице"
+
+#: ../view/admin/pager.php:16
+msgid "Go"
+msgstr "Перейти"
+
+#: ../view/admin/submenu.php:4
+msgid "Options"
+msgstr "Настройки"
+
+#: ../view/admin/submenu.php:5
+msgid "Support"
+msgstr "Поддержка"
+
+#: ../view/admin/support.php:5
+msgid "Audit Trail | Support"
+msgstr "Audit Trail | Поддержка"
+
+#: ../view/admin/support.php:9
+msgid "Audit Trail is free to use - life is wonderful and lovely!  However, it has required a great deal of time and effort to develop and if it has been useful you can help support this development by <strong>making a small donation</strong>."
+msgstr "Audit Trail может свободно использоваться - жизнь прекрасна и хороша! Однако, потребовалось много времени и усилий для разработки и, если это было полезным, вы можете поддержать <strong>развитие</strong>, внеся небольшое <strong>пожертвование.</strong>"
+
+#: ../view/admin/support.php:10
+msgid "This will act as an incentive for me to carry on developing, providing countless hours of support, and including new features and suggestions. You get some useful software and I get to carry on making it.  Everybody wins."
+msgstr "Это будет служить стимулом для меня, чтобы продолжать разработку, обеспечивая бесчисленные часы поддержки, в том числе и новые возможности и предложения. Вы получаете некоторые полезные программы, и я получаю возможность их разрабатывать. Выигрывают все."
+
+#: ../view/admin/support.php:13
+msgid "If you are using this plugin in a commercial setup, or feel that it's been particularly useful, then you may want to consider a <strong>commercial donation</strong>.  If you really really want to show your appreciation then there is the <strong>Super Smashing Great</strong> donation which, along with making my day, will earn you a badge of honour (125x125 image of your choosing + nofollow link) to be displayed on the Audit Trail page for a period of two months."
+msgstr "Если вы используете этот плагин в коммерческих целях, или считаете, что это было особенно полезно, то вы можете рассмотреть <strong>коммерческие пожертвования.</strong> Если вы действительно очень хотите, чтобы была показана ваша признательность, то есть статус: <strong>Супер-мега Великое пожертвование</strong . Наряду с призваним, вы будете иметь Знак Почета (125x125 изображение по вашему выбору + NoFollow ссылка), котораяудет отображаться на странице  Audit Trail в течение двух месяцев."
+
+#: ../view/admin/support.php:36
+msgid "Individual<br/>Donation"
+msgstr "Индивидуальные <br/> Пожертвование"
+
+#: ../view/admin/support.php:57
+msgid "Commercial<br/>Donation"
+msgstr "Коммерческие <br/> Пожертвование"
+
+#: ../view/admin/support.php:78
+msgid "Super Smashing<br/>Great Donation"
+msgstr "Супер-мена <br/> Великие Пожертвования"
+
+#: ../view/admin/support.php:82
+msgid "Translations"
+msgstr "Переводы"
+
+#: ../view/admin/support.php:84
+msgid "If you're multi-lingual then you may want to consider donating a translation:"
+msgstr "Если вы полиглот, то можете рассмотреть возможность пожертвования на перевод:"
+
+#: ../view/admin/support.php:92
+msgid "All translators will have a link to their website placed on the plugin homepage at <a href=\"http://urbangiraffe.com/plugins/audit-trail/\">UrbanGiraffe</a> and <a href=\"http://wordpress.org/extend/plugins/audit-trail/\">WordPress.org</a>, in addition to being an individual supporter."
+msgstr "Все переводчики будут иметь ссылку на свой веб-сайт. размещенную на домашней странице модуля на <a href=\"http://urbangiraffe.com/plugins/audit-trail/\">UrbanGiraffe</a> и <a href=\"http://wordpress.org/extend/plugins/audit-trail/\">WordPress.org</a> , в дополнение к отдельным ссылкам."
+
+#: ../view/admin/support.php:93
+msgid "Full details of producing a translation can be found in this <a href=\"http://urbangiraffe.com/articles/translating-wordpress-themes-and-plugins/\">guide to translating WordPress plugins</a>."
+msgstr "Полную информацию о процессе перевода можно найти в этом <a href=\"http://urbangiraffe.com/articles/translating-wordpress-themes-and-plugins/\">руководстве для перевода WordPress плагинов</a> ."
+
+#: ../view/admin/trail.php:16
+msgid "Bulk Actions"
+msgstr "Массовые действия"
+
+#: ../view/admin/trail.php:17
+msgid "Delete"
+msgstr "Удалить"
+
+#: ../view/admin/trail.php:20
+msgid "Apply"
+msgstr "Применить"
+
+#: ../view/admin/trail.php:24
+msgid "Filter"
+msgstr "Фильтр"
+
+#: ../view/admin/trail.php:39
+#: ../view/admin/trail.php:50
+msgid "User"
+msgstr "Пользователь"
+
+#: ../view/admin/trail.php:40
+#: ../view/admin/trail.php:51
+msgid "Action"
+msgstr "Действия"
+
+#: ../view/admin/trail.php:41
+#: ../view/admin/trail.php:52
+msgid "Target"
+msgstr "Цель"
+
+#: ../view/admin/trail.php:42
+#: ../view/admin/trail.php:53
+msgid "Date"
+msgstr "Дата"
+
+#: ../view/admin/trail.php:43
+#: ../view/admin/trail.php:54
+msgid "IP"
+msgstr "IP"
+
+#: ../view/admin/trail.php:76
+msgid "There is nothing to display!"
+msgstr "Нет ничего такого, чтобы можно было показать!"
+
+#: ../view/admin/version.php:2
+msgid "Audit Trail News"
+msgstr "Audit Trail новости"
+
+# ?
+#: ../view/admin/version.php:5
+#, php-format
+msgid "%s ago"
+msgstr "%s мин."
+
+#: ../view/admin/details/edit_category.php:1
+#: ../view/admin/details/edit_link.php:1
+msgid "Name"
+msgstr "Название"
+
+#: ../view/admin/details/edit_category.php:5
+#: ../view/admin/details/edit_link.php:5
+#: ../view/admin/details/profile_update.php:9
+#: ../view/admin/details/save_post.php:5
+msgid "URL"
+msgstr "Ссылка"
+
+#: ../view/admin/details/edit_category.php:9
+#: ../view/admin/details/edit_link.php:9
+msgid "Description"
+msgstr "Описание"
+
+#: ../view/admin/details/edit_comment.php:1
+msgid "Author"
+msgstr "Автор"
+
+#: ../view/admin/details/edit_comment.php:5
+#: ../view/admin/details/save_post.php:9
+msgid "Content"
+msgstr "Содержание"
+
+# ?
+#: ../view/admin/details/profile_update.php:1
+msgid "Login"
+msgstr "Войти"
+
+#: ../view/admin/details/profile_update.php:5
+msgid "Email"
+msgstr "Email"
+
+#: ../view/admin/details/save_post.php:1
+msgid "Title"
+msgstr "Название"
+
+#: ../view/admin/details/save_post.php:15
+msgid "Difference between this and current version"
+msgstr "Разница между этой и текущей версиями"
+

@@ -1,0 +1,226 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/admin-dashboard-site-notes\n"
+"POT-Creation-Date: 2011-09-14 14:31:14+00:00\n"
+"PO-Revision-Date: 2011-09-10 08:06+0100\n"
+"Last-Translator: Peter Luit <peter@luit.nl>\n"
+"Language-Team: Dutch <peter@luit.nl>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: \n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: \n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: dashboard-site-notes.php:73
+#@ dsnmanager
+msgid "Site Notes Configuration"
+msgstr "Site Notes configuratie"
+
+#: dashboard-site-notes.php:74 dashboard-site-notes.php:566
+#@ dsnmanager
+msgid "Site Notes"
+msgstr "Site Notes"
+
+#: dashboard-site-notes.php:149
+#@ dsnmanager
+msgid "Table of Contents"
+msgstr "Inhoudsopgave"
+
+#: dashboard-site-notes.php:196 dashboard-site-notes.php:219
+#@ dsnmanager
+msgid "Error: note output aborted, hierarchy too deep (>64)"
+msgstr "Fout: notitie afgewezen: hiërarchie te diep (>64)"
+
+#: dashboard-site-notes.php:427
+#@ dsnmanager
+msgid "When and where to display this message"
+msgstr "Waar en wanneer deze boodschap tonen"
+
+#: dashboard-site-notes.php:503
+#@ dsnmanager
+msgid "Miscellaneous Options:"
+msgstr "Verschillende opties"
+
+#: dashboard-site-notes.php:505
+#@ dsnmanager
+msgid "Include in the dashboard widget"
+msgstr "Toon als dashboard widget"
+
+#: dashboard-site-notes.php:514
+#@ dsnmanager
+msgid "Exclude from site instruction manual."
+msgstr "Toon niet in site manual"
+
+#: dashboard-site-notes.php:518
+#@ dsnmanager
+msgid "Hide the title of this post for inline notes."
+msgstr "Verberg de titel van dit bericht bij notities."
+
+#: dashboard-site-notes.php:524
+#@ dsnmanager
+msgid "Show for the following roles:"
+msgstr "Pas de volgende regels toe:"
+
+#: dashboard-site-notes.php:532
+#@ dsnmanager
+msgid "Display in the following locations:"
+msgstr "Toon op de volgende locaties:"
+
+#: dashboard-site-notes.php:540
+#@ dsnmanager
+msgid "Everywhere"
+msgstr "Overal"
+
+#: dashboard-site-notes.php:548
+#@ dsnmanager
+msgid "Edit"
+msgstr "Bewerk"
+
+#: dashboard-site-notes.php:549
+#@ dsnmanager
+msgid "New"
+msgstr "Nieuw"
+
+#: dashboard-site-notes.php:550
+#@ dsnmanager
+msgid "Search"
+msgstr "Zoek"
+
+#: dashboard-site-notes.php:551
+#@ dsnmanager
+msgid "All"
+msgstr "Alle"
+
+#: dashboard-site-notes.php:567
+#@ dsnmanager
+msgid "Site Note"
+msgstr "Site Note"
+
+#: dashboard-site-notes.php:568
+#@ dsnmanager
+msgid "Add Site Note"
+msgstr "Voeg toe"
+
+#: dashboard-site-notes.php:569
+#@ dsnmanager
+msgid "Edit Site Note"
+msgstr "Bewerk notitie"
+
+#: dashboard-site-notes.php:570
+#@ dsnmanager
+msgid "New Site Note"
+msgstr "Nieuwe notitie"
+
+#: dashboard-site-notes.php:571
+#@ dsnmanager
+msgid "View Site Note"
+msgstr "Bekijk notitie"
+
+#: dashboard-site-notes.php:601
+#@ dsnmanager
+msgid "Add helpful notes for site admins"
+msgstr "Voeg notitie toe voor administrator(s)"
+
+#: dashboard-site-notes.php:630
+#@ dsnmanager
+msgid "Admin Guide"
+msgstr "Admin handleiding"
+
+#: dashboard-site-notes.php:631
+#@ dsnmanager
+msgid "Site Instruction Manual"
+msgstr "Site gebruiksaanwijzing"
+
+#: dashboard-site-notes.php:632
+#@ dsnmanager
+msgid "Site Instructions"
+msgstr "Site instructies"
+
+#: dashboard-site-notes.php:668
+#@ dsnmanager
+msgid "General Settings"
+msgstr "Algemene instellingen"
+
+#: dashboard-site-notes.php:671
+#@ dsnmanager
+msgid "Permissions"
+msgstr "Toestemmingen"
+
+#: dashboard-site-notes.php:682
+#@ dsnmanager
+msgid "Add custom field support"
+msgstr "Voeg custom field ondersteuning toe"
+
+#: dashboard-site-notes.php:683
+#@ dsnmanager
+msgid "Add revision support"
+msgstr "Voeg revisie ondersteuning toe"
+
+#: dashboard-site-notes.php:684
+#@ dsnmanager
+msgid "Add excerpt support"
+msgstr "Voeg samenvatting ondersteuning toe"
+
+#: dashboard-site-notes.php:685
+#@ dsnmanager
+msgid "Use content filter on excerpts"
+msgstr "Gebruik inhoudsfilter bij excerpts"
+
+#: dashboard-site-notes.php:686
+#@ dsnmanager
+msgid "Use content filter on full notes"
+msgstr "Gebruik inhoudsfilter bij volledige notities"
+
+#: dashboard-site-notes.php:687
+#@ dsnmanager
+msgid "Group notes into one box"
+msgstr "Groep notities in één box"
+
+#: dashboard-site-notes.php:688
+#@ dsnmanager
+msgid "Dashboard widget title"
+msgstr "Dashboard widget titel"
+
+#: dashboard-site-notes.php:689
+#@ dsnmanager
+msgid "Instruction manual page title"
+msgstr "Gebruiksaanwijzing pagina titel"
+
+#: dashboard-site-notes.php:690
+#@ dsnmanager
+msgid "Instruction manual nav title"
+msgstr "Gebruiksaanwijzing navigatie titel"
+
+#: dashboard-site-notes.php:710
+#@ dsnmanager
+msgid "Assign the roles that can create and edit notes. Super-admins can always create and edit notes."
+msgstr "Rollen toekennen voor maken en bewerken notities. Super-admins hebben altijd alle toegang."
+
+#: dashboard-site-notes.php:748
+#@ dsnmanager
+msgid "You don't have permission to access this page."
+msgstr "U heeft geen toegangspermissie tot deze pagina"
+
+#: dashboard-site-notes.php:756
+#@ dsnmanager
+msgid "Save Changes"
+msgstr "Bewaar veranderingen"
+
+#: dashboard-site-notes.php:772
+#@ dsnmanager
+msgid "Flattr"
+msgstr "Flattr"
+
+#: dashboard-site-notes.php:773
+#@ dsnmanager
+msgid "Donate"
+msgstr "Doneer"
+

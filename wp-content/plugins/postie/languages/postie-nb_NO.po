@@ -1,0 +1,815 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-02-12 14:36+0100\n"
+"PO-Revision-Date: 2009-02-19 10:14+0100\n"
+"Last-Translator: HB <nanablag@nanablag.com>\n"
+"Language-Team: Håvard Broberg <nanablag@nanablag.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Norwegian Bokmal\n"
+"X-Poedit-Country: NORWAY\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: config_form.php:73
+msgid "Changing this to yes is NOT RECOMMEDED - anything that gets sent in will automatically be posted. This could make it easier to compromise your server - YOU HAVE BEEN WARNED."
+msgstr "Å sette dette til ja er IKKE ANBEFALT - alt som blir sendt inn vil automatisk bli publisert. Dette kan gjøre det enklere å kompromittere serveren din - DU ER HERVED ADVART."
+
+#: config_form.php:99
+msgid "Put each email address on a single line. Posts from emails in this list will be treated as if they came from the admin. If you would prefer to have users post under their own name - create a WordPress user with the correct access level."
+msgstr "Sett hver e-post-adresse på hver sin linje. Innlegg fra e-post-adresser i denne lista vil behandles som om de kommer fra administrator. Dersom du foretrekker at brukerne publiserer under eget navn, kan du opprette en WordPress-bruker med det riktige tilgangsnivået."
+
+#: config_form.php:192
+msgid "Should be yes in most cases."
+msgstr "Skal i de fleste tilfeller være ja."
+
+#: config_form.php:193
+msgid "Put each type on a single line."
+msgstr "Skriv hver type på egen linje."
+
+#: config_form.php:194
+msgid "Put each file name on a single line.Files matching this list will never be posted to your blog."
+msgstr "Skriv hvert filnavn på egen linje. Filer som står på denne lista vil aldri bli publisert i bloggen din."
+
+#: config_form.php:214
+msgid "Put each pattern on a seperate line and make sure to escape any special characters."
+msgstr "Skriv hvert mønster på egen linje og forsikre deg om at du escaper eventuelle spesialtegn."
+
+#: config_form.php:235
+msgid "No means they will be put before the text of the message."
+msgstr "Nei betyr at bildene vil settes inn før meldingsteksten."
+
+#: config_form.php:272
+msgid "This automatically smart sharpens the images that are posted. This feature is <b>EXPERIMENTAL</b>. It also takes a lot of processing power"
+msgstr "Dette autokorrigerer bildene du publiserer. Denne funksjonen er <b>EKSPERIMENTELL</b> og bruker mye prosessorkraft."
+
+#: config_form.php:326
+msgid "This controls if the video is just a link or embeded in the page using QuickTime"
+msgstr "Dette bestemmer om videoen bare er ei lenke eller inkludert på sida ved hjelp av QuickTime"
+
+#: config_form.php:7
+#: get_mail.php:10
+#: postie_test.php:36
+msgid "Postie only works on WordPress version 2.0 and above"
+msgstr "Postie virker bare under WordPress 2.0 og høyere"
+
+#: config_form.php:7
+#: postie_test.php:26
+#: postie_test.php:35
+#: postie_test.php:45
+msgid "Warning!"
+msgstr "Advarsel!"
+
+#: config_form.php:10
+#: config_form.php:22
+msgid "Postie Options"
+msgstr "Postie-innstillinger"
+
+#: config_form.php:13
+msgid "Configuration successfully updated!"
+msgstr "Konfigurasjon oppdatert!"
+
+#: config_form.php:14
+msgid "Error - unable to save configuration"
+msgstr "Feil - kan ikke lagre konfigurasjon"
+
+#: config_form.php:27
+msgid "If you would like to start over - you can click the button below to reset all configurations to the default."
+msgstr "Hvis du ønsker å starte på nytt, kan du trykke på knappen nedenfor for å sette alle innstillingene tilbake til standardverdiene."
+
+#: config_form.php:29
+msgid "Reset Configs To Default"
+msgstr "Tilbakestiller innstillingene til standardverdiene"
+
+#: config_form.php:35
+msgid "To run the check mail script manually"
+msgstr "For å kjøre skriptet som sjekker mail manuelt"
+
+#: config_form.php:37
+msgid "Run Postie"
+msgstr "Kjør Postie"
+
+#: config_form.php:44
+msgid "If you have problems with Postie this will run a special script to test your configuraiton options"
+msgstr "Hvis du har problemer med Postie vil dette kjøre et spesielt skript som tester opsettet ditt"
+
+#: config_form.php:46
+msgid "Test Config"
+msgstr "Test oppsett"
+
+#: config_form.php:60
+#: config_form.php:107
+#: config_form.php:109
+msgid "Directory Settings"
+msgstr "Kataloginnstillinger"
+
+#: config_form.php:69
+#: config_form.php:71
+msgid "Authorization Settings"
+msgstr "Autorisasjonsinnstillinger"
+
+#: config_form.php:73
+msgid "Allow Anyone To Post Via Email"
+msgstr "Tillat hvem som helst å publisere innlegg via e-post"
+
+#: config_form.php:75
+msgid "Roles That Can Post:"
+msgstr "Roller som kan publisere:"
+
+#: config_form.php:77
+msgid "Administrator role can always post."
+msgstr "Administrator kan alltid publisere."
+
+#: config_form.php:96
+msgid "This allows you to grant access to other users to post if they have the proper access level"
+msgstr "Dette gir deg muligheten til å gi andre brukere tilgang til å publisere hvis de har riktig tilgangsnivå"
+
+#: config_form.php:99
+msgid "Authorized Addresses"
+msgstr "Autoriserte adresser"
+
+#: config_form.php:112
+msgid "Directory For Photos:"
+msgstr "Katalog for bilder:"
+
+#: config_form.php:115
+#: config_form.php:123
+#: config_form.php:156
+#: config_form.php:167
+#: config_form.php:200
+#: config_form.php:209
+#: config_form.php:241
+#: config_form.php:248
+#: config_form.php:255
+#: config_form.php:263
+#: config_form.php:269
+#: config_form.php:279
+#: config_form.php:287
+#: config_form.php:295
+#: config_form.php:303
+#: config_form.php:311
+#: config_form.php:330
+#: config_form.php:337
+#: config_form.php:345
+#: config_form.php:391
+msgid "Recommended"
+msgstr "Anbefalt"
+
+#: config_form.php:120
+msgid "Directory For Files:"
+msgstr "Katalog for filer:"
+
+#: config_form.php:133
+#: config_form.php:135
+msgid "Message Settings"
+msgstr "Meldingsinnstillinger"
+
+#: config_form.php:138
+msgid "Default post by mail category:"
+msgstr "Standardkategori for e-post-innlegg:"
+
+#: config_form.php:153
+msgid "Default Title:"
+msgstr "Standardtittel:"
+
+#: config_form.php:156
+msgid "Live from the field"
+msgstr "Direkte fra felten"
+
+#: config_form.php:161
+msgid "Prefered Text Type (HTML/plain):"
+msgstr "Foretrukket teksttype (HTML/ren tekst):"
+
+#: config_form.php:164
+#: config_form.php:167
+msgid "plain"
+msgstr "ren tekst"
+
+#: config_form.php:171
+msgid "Forward Rejected Mail"
+msgstr "Videresend forkastet e-post"
+
+#: config_form.php:172
+msgid "Allow Subject In Mail"
+msgstr "Tillat emne i e-post"
+
+#: config_form.php:172
+msgid "If this is set to yes you can set the title of the post in the beginning of the mail body like this: #Your title here#."
+msgstr "Hvis denne er satt til ja, kan du sette tittelen til blogginnlegget i begynnelsen av e-post-meldingen slik: #Din tittel#."
+
+#: config_form.php:173
+msgid "Allow HTML In Mail Subject"
+msgstr "Tillat HTML i e-post-emne"
+
+#: config_form.php:174
+msgid "Allow HTML In Mail Body"
+msgstr "Tillat HTML i meldingstekst"
+
+#: config_form.php:176
+msgid "Encoding for pages and feeds:"
+msgstr "Tegnsett for sider og strømmer:"
+
+#: config_form.php:179
+#, php-format
+msgid "Your blog uses %s encoding which postie supports."
+msgstr "Bloggen din bruker %s tegnkoding som postie støtter."
+
+#: config_form.php:182
+#: config_form.php:187
+msgid "UTF-8 is recommended by WordPress. This can be changed under \"Options->Reading->Encoding for pages and feeds:\""
+msgstr "UTF-8 er anbefalt av WordPress. Dette kan endres under \"Innstillinger->Lesing->Tegnkoding for sider og strømmer\""
+
+#: config_form.php:185
+#, php-format
+msgid "Warning! Your blog uses %s encoding which postie does not support."
+msgstr "Advarsel! Bloggen din bruker %s tegnkoding som postie ikke støtter."
+
+#: config_form.php:192
+msgid "Decode Quoted Printable Data"
+msgstr "Dekod \"Quoted Printable\"-data"
+
+#: config_form.php:193
+msgid "Supported File Types"
+msgstr "Støttede filtyper"
+
+#: config_form.php:194
+msgid "Banned File Names"
+msgstr "Forbudte filnavn"
+
+#: config_form.php:196
+msgid "Tag Of Message Start:"
+msgstr "Merkelapp for meldingsslutt:"
+
+#: config_form.php:198
+msgid "This tag can be used to remove any text from a message that the email provider puts at the top of the message"
+msgstr "Denne merkelappen kan bruker til å fjerne all uønsket tekst på starten av en e-post-melding, f.eks tekst satt inn av e-post-leverandøren."
+
+#: config_form.php:205
+msgid "Tag Of Message End:"
+msgstr "Merkelapp for meldingsstart:"
+
+#: config_form.php:207
+msgid "This tag can be used to remove any text from a message that the email provider puts at the bottom of the message"
+msgstr "Denne merkelappen kan bruker til å fjerne all uønsket tekst på slutten av en e-post-melding, f.eks tekst satt inn av e-post-leverandøren."
+
+#: config_form.php:213
+msgid "Drop The Signature From Mail"
+msgstr "Fjern signatur fra e-post"
+
+#: config_form.php:214
+msgid "Signature Patterns"
+msgstr "Signaturmønstre"
+
+#: config_form.php:222
+#: config_form.php:224
+msgid "Image Settings"
+msgstr "Bildeinnstillinger"
+
+#: config_form.php:228
+msgid "No GD Support"
+msgstr "Ingen GD-støtte"
+
+#: config_form.php:229
+msgid "Currently your installation of PHP does not have GD installed so no image resizing can occur."
+msgstr "For øyeblikket har ikke din PHP-installasjon GD installert, så endring av bildestørrelse kan ikke utføres."
+
+#: config_form.php:235
+msgid "Post Images At End"
+msgstr "Legg inn bilder på slutten"
+
+#: config_form.php:236
+msgid "Resize Large Images"
+msgstr "Endre størrelse på store bilder"
+
+#: config_form.php:238
+msgid "Maximum Image Width:"
+msgstr "Maksimal bildebredde:"
+
+#: config_form.php:240
+#: config_form.php:247
+msgid "pixels"
+msgstr "piksler"
+
+#: config_form.php:245
+msgid "Maximum Image Height:"
+msgstr "Maksimal bildehøyde:"
+
+#: config_form.php:248
+msgid "Leave Blank"
+msgstr "La den stå tom"
+
+#: config_form.php:252
+msgid "JPEG quality:"
+msgstr "JPEG-kvalitet:"
+
+#: config_form.php:254
+msgid "%"
+msgstr ""
+
+#: config_form.php:259
+msgid "Use ImageMagick"
+msgstr "Bruk ImageMagick"
+
+#: config_form.php:261
+msgid "convert binary location:"
+msgstr "Plassering av convert:"
+
+#: config_form.php:263
+#: config_form.php:269
+msgid "only needed if you are using ImageMagick"
+msgstr "Behøves bare hvis du vil bruke ImageMagick"
+
+#: config_form.php:263
+#: config_form.php:269
+#: config_form.php:330
+#, php-format
+msgid "should be %s"
+msgstr "Skal normalt være %s"
+
+#: config_form.php:267
+msgid "identify binary location:"
+msgstr "Plassering av identify si binærfil:"
+
+#: config_form.php:272
+msgid "Automatic SmartSharp Mask"
+msgstr "Automatisk bildekorreksjon"
+
+#: config_form.php:274
+msgid "Start Image Count At 0"
+msgstr "Start bildenummerering på 0"
+
+#: config_form.php:276
+msgid "Image Place Holder Tag:"
+msgstr "Plassholder-tag for bilder"
+
+#: config_form.php:284
+msgid "Image CSS Class:"
+msgstr "CSS-klasse for bilder:"
+
+#: config_form.php:292
+msgid "Image CSS Style:"
+msgstr "CSS-stil for bilder:"
+
+#: config_form.php:300
+msgid "Image Div CSS Class:"
+msgstr "CSS-klasse for bildediv:"
+
+#: config_form.php:303
+msgid "This is the CSS class of a div that wraps each image. Can be used to style the post"
+msgstr "Dette er CSS-klassen til en div som omgir hvert bilde. Kan brukes til å endre innleggets stil."
+
+#: config_form.php:308
+msgid "Attachment Div CSS Class:"
+msgstr "CSS-klasse for vedleggsdiv:"
+
+#: config_form.php:311
+msgid "This is the CSS class of a div that wraps each file attachment. Can be used to style the post"
+msgstr "Dette er CSS-klassen til en div som omgir hvert vedlegg. Kan brukes til å endre innleggets stil."
+
+#: config_form.php:322
+#: config_form.php:324
+msgid "3GP settings"
+msgstr "Innstillinger for 3GP"
+
+#: config_form.php:326
+msgid "Embed 3GP videos as QuickTime"
+msgstr "Inkluder 3GP-videoer som QuickTime"
+
+#: config_form.php:328
+msgid "Location of ffmpeg:"
+msgstr "Plassering av ffmpeg:"
+
+#: config_form.php:330
+msgid "only needed if you are on a Linux server and use 3gp video,and don't embed the video. This allows postie to make thumbnail of the very first frame"
+msgstr "Behøves bare dersom du holder til på en Linux-server, bruker 3gp-video og ikke inkluderer videoen i innlegget. Dette tillater postie å lage en miniatyr av videoens første bilde."
+
+#: config_form.php:334
+msgid "3GP CSS Class:"
+msgstr "CSS-klasse for 3GP:"
+
+#: config_form.php:342
+msgid "3GP Div CSS:"
+msgstr "CSS-stil for 3GP-div:"
+
+#: config_form.php:345
+msgid "This is the CSS class of a div that wraps each 3GP video. Can be used to style the post"
+msgstr "Dette er CSS-klassen til en div som omgir hver 3GP-video. Kan brukes til å endre innleggets stil."
+
+#: config_form.php:359
+#: config_form.php:361
+msgid "Mailserver Settings"
+msgstr "Innstillinger for e-post-server"
+
+#: config_form.php:366
+msgid "Mail Protocol:"
+msgstr "E-post-protokoll:"
+
+#: config_form.php:375
+msgid "IMAP/IMAP-SSL/POP3-SSL unavailable"
+msgstr "IMAP/IMAP-SSL/POP3-SSL ikke tilgjengelig"
+
+#: config_form.php:379
+msgid "Standard Ports:"
+msgstr "Standardporter:"
+
+#: config_form.php:387
+msgid "Postie Time Correction:"
+msgstr "Postie-tidskorreksjon:"
+
+#: config_form.php:389
+msgid "hours"
+msgstr "timer"
+
+#: config_form.php:391
+msgid "Should be the same as your normal offset - but this lets you adjust it in cases where that doesn't work."
+msgstr "Bør være det samme som din vanlige tidsforskyving, men dette lar deg justere i de tilfeller det ikke fungerer."
+
+#: config_form.php:398
+#: postie_test.php:102
+#: postie_test.php:130
+msgid "Mail Server:"
+msgstr "E-post-server:"
+
+#: config_form.php:400
+#: postie_test.php:105
+#: postie_test.php:133
+msgid "Port:"
+msgstr ""
+
+#: config_form.php:405
+#: postie_test.php:107
+msgid "Mail Userid:"
+msgstr "E-post-brukernavn:"
+
+#: config_form.php:409
+#: postie_test.php:110
+msgid "Mail Password:"
+msgstr "E-post-passord:"
+
+#: config_form.php:428
+msgid "Update Options"
+msgstr "Oppdater innstillinger"
+
+#: cronless_postie.php:39
+#: postie.php:53
+msgid "Edit Plugins"
+msgstr "Redigere innstikk"
+
+#: get_mail.php:28
+msgid "Dang, message is empty!"
+msgstr "Oisann, meldingen er tom!"
+
+#: get_mail.php:45
+msgid "Ignoring email - not authorized."
+msgstr "Ignorerer e-post da den er sendt fra en adresse som ikke er autorisert."
+
+#: postie-functions.php:17
+#, php-format
+msgid "Message Id is : %s"
+msgstr "Meldings-id er : %s"
+
+#: postie-functions.php:18
+msgid "Email has following attachments:"
+msgstr "E-posten har følgende vedlegg:"
+
+#: postie-functions.php:78
+msgid "Configure Postie"
+msgstr "Konfigurer Postie"
+
+#: postie-functions.php:106
+msgid "Missing Configuration For Mail Server"
+msgstr "Konfigurasjon for e-postserver mangler"
+
+#: postie-functions.php:109
+msgid "MAKE SURE POP IS TURNED ON IN SETTING AT Gmail"
+msgstr "Du bruker Gmail, forsikre deg om at POP er aktivert under innstillinger."
+
+#: postie-functions.php:142
+msgid "There does not seem to be any new mail."
+msgstr "Det ser ikke ut til å være noe nye post."
+
+#: postie-functions.php:150
+#: postie-functions.php:197
+msgid "*************RUNING IN TESTING MODE*************"
+msgstr "*************KJØRER I TESTMODUS*************"
+
+#: postie-functions.php:169
+#: postie-functions.php:214
+#, php-format
+msgid "Connecting to %1$s : %2$s (%3$s)"
+msgstr "Kobler til %1$s : %2$s (%3$s)"
+
+#: postie-functions.php:172
+#: postie-functions.php:219
+msgid ""
+"Mail Connection Time Out\n"
+"Common Reasons:\n"
+"Server Down\n"
+"Network Issue\n"
+"Port/Protocol MisMatch"
+msgstr ""
+"Tidsavbrudd ved tilkobling til e-postserver\n"
+"Vanlige årsaker:\n"
+"Server nede\n"
+"Nettverksproblemer\n"
+"Uoverenstemmelse mellom port og protokoll"
+
+#: postie-functions.php:174
+#: postie-functions.php:221
+#, php-format
+msgid "The Server said: %s"
+msgstr "Serveren sa: %s"
+
+#: postie-functions.php:185
+#: postie-functions.php:246
+msgid "Not deleting messages!"
+msgstr "Sletter ikke meldinger!"
+
+#: postie-functions.php:237
+#, php-format
+msgid "An error occured. The server said : %s"
+msgstr "En feil oppsto. Serveren sa: %s"
+
+#: postie-functions.php:241
+#, php-format
+msgid "Mission complete, message %d deleted."
+msgstr "Oppdrag utført, melding %d slettet."
+
+#: postie-functions.php:259
+#, php-format
+msgid "Sorry but %s is not a valid directory."
+msgstr "Beklager, men %s er ikke en gyldig katalog."
+
+#: postie-functions.php:262
+#, php-format
+msgid "The web server cannot write to %s please correct the permissions"
+msgstr "Webserveren kan ikke skrive til %s, korriger rettighetene"
+
+#: postie-functions.php:292
+#, php-format
+msgid "Ignoring %s - it is on the banned files list."
+msgstr "Ignorerer %s - den er på listen over forbudte filnavn."
+
+#: postie-functions.php:380
+msgid "Unable to find a name for images that does not collide"
+msgstr "Klarer ikke å finne et filnavn som ikke finnes fra før."
+
+#: postie-functions.php:641
+msgid "Invalid Sender - Emtpy!"
+msgstr "Ugyldig avsender - tom!"
+
+#: postie-functions.php:652
+#, php-format
+msgid "%s is authorized to post as the administrator"
+msgstr "%s er autorisert til å publisere som administrator"
+
+#: postie-functions.php:665
+#, php-format
+msgid "Invalid sender: %s! Not adding email!"
+msgstr "Ugyldig avsender: %s! Legger ikke til e-post!"
+
+#: postie-functions.php:669
+msgid "A copy of the message has been forwarded to the administrator."
+msgstr "En kopi av meldingen har blitt videresendt til administrator."
+
+#: postie-functions.php:672
+msgid "The message was unable to be forwarded to the adminstrator."
+msgstr "Meldingen kunne ikke videresendes til administrator."
+
+#: postie-functions.php:1407
+#, php-format
+msgid "%s : Unauthorized Post Attempt"
+msgstr "%s : Uautorisert publiseringsforsøk"
+
+#: postie-functions.php:1416
+#, php-format
+msgid ""
+"An unauthorized message has been sent to %1$s from %2$s. The subject of this message was: %3$s.\n"
+"If you wish to allow posts from this address, please add %2$s to the authorised users list and manually add the content of the e-mail found below.\n"
+"Otherwise, the e-mail has already been deleted from the server and you can ignore this message.\n"
+"If you would like to prevent postie from forwarding mail in the future, please change FORWARD_REJECTED_MAIL to false in postie.\n"
+"The original content of the e-mail has been attached."
+msgstr ""
+"En uatorisert melding har blitt sendt til %1$s fra %2$s. Meldingens emne var: %3$s.\n"
+"Hvis du ønsker å tillate at det publiseres fra denne adressen, legg til %2$s i listen over autoriserte adresser og publiser innholdet i den vedlagte e-posten manuelt.\n"
+"Ellers er e-posten er allerede slettet fra server og du kan se bort fra denne meldingen.\n"
+"Hvos du ikke ønsker at postie skal videresende post i framtiden endrer du FORWARD_REJECTED_MAIL til nei i postie.\n"
+"E-postens originale innhold er vedlagt."
+
+#: postie-functions.php:1680
+msgid "Postie should be in its own directory in wp-content/plugins/postie"
+msgstr "Postie skal være i sin egen katalog (wp-content/plugins/postie)"
+
+#: postie-functions.php:1694
+#: postie_test.php:117
+#: postie_test.php:143
+#: postie_test.php:163
+#: postie_test.php:167
+#: postie_test.php:171
+#: postie_test.php:175
+#: postie_test.php:181
+#: postie_test.php:185
+msgid "Yes"
+msgstr "Ja"
+
+#: postie-functions.php:1695
+#: postie_test.php:163
+#: postie_test.php:167
+#: postie_test.php:171
+#: postie_test.php:175
+#: postie_test.php:181
+#: postie_test.php:185
+msgid "No"
+msgstr "Nei"
+
+#: postie-functions.php:1984
+#, php-format
+msgid "Missing %s"
+msgstr "%s mangler"
+
+#: postie_test.php:8
+msgid "Postie Diagnosis"
+msgstr "Postie-diagnose"
+
+#: postie_test.php:13
+msgid "Sorry only admin can run this file"
+msgstr "Beklager, bare admin kan kjøre denne filen"
+
+#: postie_test.php:23
+msgid "Postie Configuration Test"
+msgstr "Test av postie-innstillinger"
+
+#: postie_test.php:27
+msgid "You currently have the Markdown plugin installed. It will cause problems if you send in HTML email. Please turn it off if you intend to send email using HTML."
+msgstr "Du har \"Markdown\"-innstikket innstallert. Det vil føre til problemer hvis du sender e-post med HTML-koder. Deaktiver den hvis du har tenkt å sende slike e-poster."
+
+#: postie_test.php:46
+msgid "Postie expects to be in its own directory named postie."
+msgstr "Postie forventer å være i sin egen katalog ved navn postie"
+
+#: postie_test.php:50
+#, php-format
+msgid "Postie is in %s"
+msgstr "Postie er i %s"
+
+#: postie_test.php:56
+msgid "GD Library Test"
+msgstr "Test av GD-bibliotek"
+
+#: postie_test.php:58
+msgid "GD is installed"
+msgstr "GD er installert"
+
+#: postie_test.php:60
+msgid "Iconv Library Test"
+msgstr "Test av iconv-bibliotek"
+
+#: postie_test.php:61
+msgid "Only required if you want to support ISO-2022-JP"
+msgstr "Bare nødvendig dersom du ønsker å støtte ISO-2022-JP"
+
+#: postie_test.php:63
+msgid "Iconv is installed"
+msgstr "Iconv er installert"
+
+#: postie_test.php:66
+msgid "Clock Tests"
+msgstr "Klokketester"
+
+#: postie_test.php:67
+msgid "This shows what time it would be if you posted right now"
+msgstr "Dette viser hvilken tid det vil stå på innlegget dersom du publiserer akkurat nå."
+
+#: postie_test.php:73
+msgid "GMT:"
+msgstr ""
+
+#: postie_test.php:74
+msgid "Current:"
+msgstr "Lokal tid:"
+
+#: postie_test.php:75
+msgid "Mail Tests"
+msgstr "E-post-tester"
+
+#: postie_test.php:76
+msgid "These try to confirm that the email configuration is correct."
+msgstr "Disse prøver å bekrefte at e-postkonfigurasjonen er korrekt"
+
+#: postie_test.php:80
+#: postie_test.php:158
+msgid "Test"
+msgstr "Test"
+
+#: postie_test.php:81
+#: postie_test.php:159
+msgid "Result"
+msgstr "Resultat"
+
+#: postie_test.php:84
+msgid "Connect to Mail Host"
+msgstr "Kobler til e-postserver"
+
+#: postie_test.php:92
+msgid "Sorry - you do not have IMAP php module installed - it is required for this mail setting."
+msgstr "Beklager, du har ikke php-modulen for IMAP installert, den er nødvendig for denne innstillingen."
+
+#: postie_test.php:98
+#: postie_test.php:126
+#, php-format
+msgid "Unable to connect. The server said - %s"
+msgstr "Kan ikke koble til. Serveren sa: %s"
+
+#: postie_test.php:100
+#: postie_test.php:128
+msgid "Some of the following settings are probably wrong:"
+msgstr "Sannsynlig er en av følgende innstillinger gale:"
+
+#: postie_test.php:114
+#: postie_test.php:140
+msgid "Try putting in your full email address as a userid and try again."
+msgstr "Prøv å fylle inn hele e-postadressen din som brukernavn og prøv igjen."
+
+#: postie_test.php:138
+#, php-format
+msgid "Unable to log in. The server said - %s"
+msgstr "Kan ikke logge innl. Serveren sa: %s"
+
+#: postie_test.php:154
+msgid "File Tests"
+msgstr "Filtester"
+
+#: postie_test.php:162
+msgid "Photos Directory Exists"
+msgstr "Katalogen for bilder eksisterer"
+
+#: postie_test.php:166
+msgid "Files Directory Exists"
+msgstr "Katalogen for filer eksisterer"
+
+#: postie_test.php:170
+msgid "Photos Directory Writable"
+msgstr "Katalogen for bilder er skrivbar"
+
+#: postie_test.php:174
+msgid "Files Directory Writable"
+msgstr "Katalogen for filer er skrivbar"
+
+#: postie_test.php:180
+msgid "Convert exists"
+msgstr "Convert eksisterer"
+
+#: postie_test.php:184
+msgid "Identify exists"
+msgstr "Identify eksisterer"
+
+#: postie_test.php:194
+msgid "Image Tests"
+msgstr "Bildetester"
+
+#: postie_test.php:195
+msgid "Three images should be here - they are the test files"
+msgstr "Her skal det være tre bilder, de er testfilene"
+
+#: postie_test.php:204
+msgid "Plain Images"
+msgstr "Ubehandlede bilder"
+
+#: postie_test.php:215
+msgid "AutoSharpened"
+msgstr "Autokorrigert"
+
+#: postie_test.php:215
+msgid "WARNING-This feature takes a lot of processing power."
+msgstr "Advarsel! Denne funksjonen bruker mye prosessorkraft"
+
+#: postie_test.php:230
+msgid "Scaled & Rotated"
+msgstr "Skalert og rotert"
+
+#~ msgid "it should handle ISO-8859-1 as well"
+#~ msgstr "skal også kunne håndtere ISO-8859-1"
+#~ msgid "JPEG Compression:"
+#~ msgstr "JPEG-komprimering:"
+#~ msgid "Image Div CSS:"
+#~ msgstr "CSS-stil for bilde-div:"
+#~ msgid "Postie only works on on Word Press version 2.0 and above"
+#~ msgstr "Postie virker bare under WordPress 2.0 og høyere"
+
+#, fuzzy
+#~ msgid "Postie only works on Word Press 2.0 and above."
+#~ msgstr "Postie virker bare under WordPress 2.0 og høyere"
+#~ msgid "Minimum Access Level Required To Post:"
+#~ msgstr "Minimum tilgangsnivå for å få lov til å poste:"
+#~ msgid "html"
+#~ msgstr "HTML"
+#~ msgid "should be /usr/bin/convert"
+#~ msgstr "burde være /usr/bin/convert"
+#~ msgid "should be /usr/bin/ffmpeg"
+#~ msgstr "burde være /usr/bin/ffmpeg"
+#~ msgid "should be /usr/bin/identify"
+#~ msgstr "burde være /usr/bin/identify"
+

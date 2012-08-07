@@ -1,0 +1,31 @@
+div input.button {
+margin: 3px 0px 3px 0px;
+}
+
+.wrap h2 img {
+vertical-align:middle;
+margin-right: 10px;
+}
+
+#w3c {
+margin-top: 50px;
+}
+
+table.form-table  {
+  background: #E5F3FF;
+}
+table.form-table td {line-height:1em;
+                     margin:0;
+                     padding:0;
+                     font-size:1em;}
+table.form-table th {width:40%;
+                     font-weight:bold;}
+span.recommendation {font-size:.7em;
+                     font-weight:normal;
+                     color:#222;
+                    }
+div.simpleTabs-content ul {margin-left:1em}
+div.simpleTabs-content li {list-style-type:disc;
+                           margin-left:1em;}
+div.simpleTabs-content li li {list-style-type:square;}
+div.simpleTabs-content li li li {list-style-type:circle;}

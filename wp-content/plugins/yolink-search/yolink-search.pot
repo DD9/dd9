@@ -1,0 +1,127 @@
+# Copyright (C) 2010 yolink Search for WordPress
+# This file is distributed under the same license as the yolink Search for WordPress package.
+msgid ""
+msgstr ""
+"Project-Id-Version: yolink Search for WordPress 1.0.0\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/yolink-search\n"
+"POT-Creation-Date: 2011-04-25 21:04:10+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: yolink-search.php:240 yolink-search.php:708
+msgid "Search"
+msgstr ""
+
+#: yolink-search.php:241
+msgid "yolink Account Integration"
+msgstr ""
+
+#: yolink-search.php:273
+msgid ""
+"<p>By clicking Agree, the administrative email for this blog %s, will be "
+"shared with TigerLogic.</p>"
+msgstr ""
+
+#: yolink-search.php:276
+msgid "Agree"
+msgstr ""
+
+#: yolink-search.php:285
+msgid "<p> The API key for this blog is <strong>%s</strong>.</p>"
+msgstr ""
+
+#: yolink-search.php:330
+msgid "Crawl Content"
+msgstr ""
+
+#: yolink-search.php:331
+msgid ""
+"Default selection is both posts and pages.  Please uncheck a type if you do "
+"not want it crawled."
+msgstr ""
+
+#: yolink-search.php:334
+msgid "Search which post types"
+msgstr ""
+
+#: yolink-search.php:357
+msgid "Crawl"
+msgstr ""
+
+#: yolink-search.php:361
+msgid "yolink Sharing Services"
+msgstr ""
+
+#: yolink-search.php:364
+msgid ""
+"Please select the sharing service(s) to include with yolink search results."
+msgstr ""
+
+#: yolink-search.php:368
+msgid "Share"
+msgstr ""
+
+#: yolink-search.php:369
+msgid "Google Docs"
+msgstr ""
+
+#: yolink-search.php:370
+msgid "Facebook Like Button"
+msgstr ""
+
+#: yolink-search.php:371
+msgid "Twitter"
+msgstr ""
+
+#: yolink-search.php:398
+msgid "Save Settings"
+msgstr ""
+
+#: yolink-search.php:490
+msgid ""
+"<strong>yolink Notice:</strong> The content selected has been submitted. "
+"Processing time will vary depending on the amount of content."
+msgstr ""
+
+#: yolink-search.php:607
+msgid "yolink Search"
+msgstr ""
+
+#: yolink-search.php:706
+msgid "Search for:"
+msgstr ""
+
+#: yolink-search.php:709
+msgid "Powered by "
+msgstr ""
+
+#: yolink-search.php:709
+msgid "Powered by yolink"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "yolink Search for WordPress"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://yolink.com/wordpress"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Drop-in replacement for WordPress search that actually provides relevant "
+"results. Cloud-based service allows for fast indexing and searching, even on "
+"large sites. Users can share directly from search results."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "WP Engine"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://wpengine.com"
+msgstr ""

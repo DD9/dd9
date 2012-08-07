@@ -1,0 +1,120 @@
+.dsn_meta_box .meta_item {
+	padding:2px 0;
+}
+#dsn_meta_locations {
+	clear:both;
+}
+#dsn_meta_roles {
+	float:right;
+	width:47%;
+	margin-left:2em;
+}
+.dsn_meta_box tr.odd label,
+.dsn_meta_box tr.odd td,
+.dsn_meta_box tr.odd {
+	background-color:#ddd;
+}
+.dsn_meta_box tr.even td,
+.dsn_meta_box tr.even label,
+.dsn_meta_box tr.even {
+	background-color:#eee;
+}
+
+.dsn_meta_box table {
+	margin-top:0.5em;
+	margin-bottom:0.5em;
+	padding:0.2em;
+}
+.dsn_meta_box table .label {
+	font-weight:bold;
+	font-size:110%;
+	width:100px;
+}
+.dsn_meta_box table,
+.dsn_meta_box tr,
+.dsn_meta_box td {
+	border-collapse: collapse !important;
+	border:none;
+}
+.dsn_meta_box td {
+	padding:0.6em 0.3em;
+}
+
+.dsn_meta_box .checkbox {
+	background-color:transparent;
+}
+.updated .note {
+	margin:0.1em 0;
+	padding:0.1em 0;
+	border-top:1px dotted #ccc;
+}
+.updated .note:first-child {
+	border-top:none;
+}
+.updated.dsn .title {
+	font-weight:bold;
+	margin:0;
+	padding:0;
+}
+#dsn_instructions ul.depth-0.notes,
+#dsn_dashboard ul.depth-0 {
+	margin:0;
+	padding:0;
+	border-bottom:2px solid #bbb;
+	margin-bottom:1em;
+}
+#dsn_instructions .site_note li.site_note,
+#dsn_dashboard .site_note li.site_note {
+	margin-left:1em;
+	padding-top:0.5em;
+	border-top:2px dotted #ccc;
+}
+
+#dsn_instructions .index ol.notes,
+#dsn_instructions .index ul.notes,
+#dsn_instructions .index li.site_note,
+#dsn_instructions .index h4 {
+	margin:0;
+	padding:0;
+}
+#dsn_instructions ul.index li.site_note {
+	margin-top:0.1em;
+	margin-left:1em;
+}
+
+#dsn_instructions .instruction_content,
+#dsn_instructions .instruction_index {
+	margin:20px 0;
+}
+#dsn_instructions .instruction_index {
+	border-top:4px solid #bbb;
+	border-bottom:4px solid #bbb;
+	padding:20px 0;
+}
+#dsn_instructions .instruction_index h3 {
+	margin-top:0;
+}
+#dsn_instructions .instruction_index ul.child {
+	margin-left:1em;
+}
+.dsn_meta_box h4 {
+	margin:0;
+	padding:0;
+	margin-top:1em;
+	margin-bottom:0.2em;
+}
+#dsn_meta_roles h4 {
+	margin-top:0;
+}
+ /* emulate default WP <p> styles for when we don't have one (like plain text excerpts) */
+.dsn.updated .note .content p {
+	padding:0;
+ }
+.dsn.updated .note .content {
+	margin-top:0.5em;
+	margin-bottom:0.5em;
+}
+.dsn .note .content {
+	margin-top:1em;
+	margin-bottom:1em;
+}
