@@ -9,7 +9,7 @@ On Windows you got a copy with RailsInstaller, but alternately you could get a c
 
 ### 2) You know how to use git
 
-Well out of the scope of this document. I wrote some instructions that are out there, or you can use [GitRef.org](http://gitref.org/index.html), my preferred reference.
+Well out of the scope of this document. I wrote [some simple instructions](http://dd9.com/2012/07/git-primer/), or you can use [GitRef.org](http://gitref.org/index.html), my preferred reference for the tricky stuff.
 
 Installation
 ------------
@@ -34,9 +34,9 @@ For example, if you wanted to get the code for dd9.com, you’d run:
 
 `git clone git@github.com:DD9/dd9.git .`
 
-Don’t forget the period at the end; that clones it directly into your project directory (the same place you installed wordpress) instead of into a subdirectory where it won’t do anything.
+Don’t forget the period at the end; that clones it directly into your project directory (the same place you installed wordpress) instead of into a subdirectory where it won’t do anything. I recommend running this command after installing Wordpress, because git is better at adding files without overwriting things than your operating system probably is. I think.
 
-If we’re working on a project hosted by a third party (like HRT), you’ll need to run “svn checkout” instead of “git clone”, but the rest of the process should be more or less the same.
+Note that if we’re working on a project hosted by a third party (like HRT), you may need to run “svn checkout” instead of “git clone”, but the rest of the process should be more or less the same.
 
 ### 4) Tell MAMP/XAMPP to serve up your application
 
