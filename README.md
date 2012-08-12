@@ -54,6 +54,7 @@ Note that an imported database won't work if you haven't [changed the site URL](
 `define('WP_SITEURL','http://localhost:8888');`
 
 If your MAMP/XAMPP's Apache isn't configured to serve on port 8888, you'll need to change the port above.
+Note: Port specification not required on XAMPP.
 
 ### 6) Does it work?
 
@@ -75,12 +76,12 @@ Your ssh key (in ~/.ssh/id_rsa.pub) needs to be sent in a support ticket to wpen
 
 From within your project, run:
 
-`git remote add wpengine git@git.wpengine.com:production/<<project name>>.git`  
+`git remote add production git@git.wpengine.com:production/<<project name>>.git`  
 `git remote add staging git@git.wpengine.com:staging/<<project name>>.git`
 
 For example, if you’re working on dd9.com, those commands would look like this:
 
-`git remote add wpengine git@git.wpengine.com:production/dd9.git`  
+`git remote add production git@git.wpengine.com:production/dd9.git`  
 `git remote add staging git@git.wpengine.com:staging/dd9.git`
 
 ### 3) Deploy
