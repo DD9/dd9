@@ -53,6 +53,8 @@
 
 <a href="http://www.flickr.com/photos/dd9inc/"><img src="<?php bloginfo('template_url'); ?>/images/flickr.png" alt="DD9 On Flickr" width="16" height="16" /></a>
 
+<a href="https://github.com/organizations/DD9" title="DD9 on GitHub"><img src="<?php bloginfo('template_url'); ?>/img/github_icon.png" alt="DD9 On GitHub" width="16" height="16" /></a>
+
 <div id="fb-root" style="display:inline"></div>
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
