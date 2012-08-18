@@ -20,7 +20,7 @@
 			?>
 
 			<div id="site-generator">
-				<p>Copyright &copy; 2001 - 2012 DD9, Inc. All rights reserved. <a href="/wp-admin/" style="color:#CCC; font-size:8px; float:right" >Admin Login</a></p>
+				<p>Copyright &copy; 2001 - 2012 DD9, Inc. All rights reserved. <a href="/wp-admin/" style="color:#CCC; font-size:8px; float:right" rel="nofollow">Admin Login</a></p>
 
 <div itemscope itemtype="http://data-vocabulary.org/Organization" id="microformat_block"> 
     <span itemprop="name">DD9</span>  &#8226; 
@@ -53,7 +53,7 @@
 
 <a href="http://www.flickr.com/photos/dd9inc/"><img src="<?php bloginfo('template_url'); ?>/images/flickr.png" alt="DD9 On Flickr" width="16" height="16" /></a>
 
-<a href="https://github.com/organizations/DD9" title="DD9 on GitHub"><img src="<?php bloginfo('template_url'); ?>/img/github_icon.png" alt="DD9 On GitHub" width="16" height="16" /></a>
+<a href="https://github.com/DD9" title="DD9 on GitHub"><img src="<?php bloginfo('template_url'); ?>/img/github_icon.png" alt="DD9 On GitHub" width="16" height="16" /></a>
 
 <div id="fb-root" style="display:inline"></div>
 <script>(function(d, s, id) {

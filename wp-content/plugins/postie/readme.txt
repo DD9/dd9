@@ -4,8 +4,8 @@ Donate link: http://blog.robfelty.com/plugins/postie
 Plugin URI: http://blog.robfelty.com/plugins/postie
 Tags: e-mail, email
 Requires at least: 2.8
-Tested up to: 3.3
-Stable tag: 1.4.3
+Tested up to: 3.4.1
+Stable tag: 1.4.4
 
 The Postie plugin allows you to blog via e-mail, including many advanced
 features not found in wordpress's default post by e-mail feature.
@@ -18,6 +18,9 @@ imap and pop3, with the option for ssl with both.  For usage notes, see the
 [other notes](other_notes) page
 
 = What's new? = 
+
+* 1.4.4 (2012.08.10)
+    * Fixed possible XSS attack vulnerability 
 
 * 1.4.3 (2011.12.12)
     * Removed get_user_by function to make compatible with wp 3.3 - now requires
@@ -354,11 +357,14 @@ option to convert url into links turned on)
 
 == CHANGELOG ==
 
-= 1.4.4 = 
+= 1.4.5 = 
 * TODO - fix corruption of rtf attachments
 * TODO - add port checking in tests
 * TODO - non-image uploads get ignored in content when using autogallery - see
   replaceimageplaceholders
+
+= 1.4.4 (2012.08.10) =
+* Fixed possible XSS attack vulnerability 
 
 = 1.4.3 =
 * Removed get_user_by function to make compatible with wp 3.3 - now requires

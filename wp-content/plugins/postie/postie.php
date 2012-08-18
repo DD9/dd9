@@ -3,13 +3,13 @@
 Plugin Name: Postie
 Plugin URI: http://blog.robfelty.com/plugins/postie
 Description: Signifigantly upgrades the posting by mail features of Word Press (See <a href='options-general.php?page=postie/postie.php'>Settings and options</a>) to configure your e-mail settings. See the <a href='http://wordpress.org/extend/plugins/postie/other_notes'>Readme</a> for usage. Visit the <a href='http://forum.robfelty.com/forum/postie'>postie forum</a> for support.
-Version: 1.4.3
+Version: 1.4.4
 Author: Robert Felty
 Author URI: http://blog.robfelty.com/
 */
 
 /*
-$Id: postie.php 474355 2011-12-13 04:28:29Z robfelty $
+$Id: postie.php 584135 2012-08-11 04:02:39Z robfelty $
 * -= Requests Pending =-
 * German Umlats don't work
 * Problems under PHP5 

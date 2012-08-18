@@ -56,10 +56,10 @@ $project = $projects ? $projects[0] : null;
             
 
             <?php if($project): ?>
-                <p><a href="<?= get_permalink($project->ID) ?>">View Project Case Study</a></p>
+                <p><em><a href="<?= get_permalink($project->ID) ?>">View Project Case Study</a></em></p>
               
                 <?php if($full_url = get_post_meta($project->ID, 'full_url', true)): ?>
-                    <p><a href="<?= $full_url ?>">Launch the Site</a></p>
+              <p><em><a href="<?= $full_url ?>" class="external_link" target="_blank" title="<?php get_post_meta($project->ID, 'full_url', true); ?>">Launch the Site</a></em></p>
                 <?php endif; ?>
             <?php endif; ?>
           

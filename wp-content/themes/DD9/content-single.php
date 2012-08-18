@@ -65,7 +65,7 @@ $project = $projects ? $projects[0] : null;
                    </a>
                  </li>
                  <li>
-                   <a class="email" href="mailto:type email address here?subject=I wanted to share this post with you from <?php bloginfo('name'); ?>&body=<?php the_title('','',true); ?>&#32;&#32;<?php the_permalink(); ?>" title="Email to a friend/colleague" target="_blank">
+                   <a class="email" href="mailto:type email address here?subject=I wanted to share this link from <?php bloginfo('name'); ?>&body=<?php the_title('','',true); ?>&#32;&#32;<?php the_permalink(); ?>" title="Email to a friend/colleague" target="_blank">
                      Email
                    </a>
                  </li>
@@ -110,23 +110,15 @@ $project = $projects ? $projects[0] : null;
 	  <div class="content_right single">
         <article class="post">
           <div class="entry_content">
-          <?php /*?><?php 
-           $content = strip_shortcodes($post->post_content);
-           $content = str_replace(']]>', ']]>', $content);
-           $content = strip_tags($content);
-           $content = apply_filters('the_content', $content);
-           echo $content; ?><?php */?>
-           
-           
+         
            
             <?php if($project): ?>
-                <p><a href="<?= get_permalink($project->ID) ?>">View Project Case Study</a></p>
+                <p><em><a href="<?= get_permalink($project->ID) ?>">View Project Case Study</a></em></p>
               
                 <?php if($full_url = get_post_meta($project->ID, 'full_url', true)): ?>
-                    <p><a href="<?= $full_url ?>">Launch the Site</a></p>
+              <p><em><a href="<?= $full_url ?>" class="external_link" target="_blank" title="<?php get_post_meta($project->ID, 'full_url', true); ?>">Launch the Site</a></em></p>
                 <?php endif; ?>
-            <?php endif; ?>     
-                    
+            <?php endif; ?>
             
             <?php the_content(); ?>
              

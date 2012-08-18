@@ -1897,7 +1897,7 @@ body.page-id-3650 .services li.child_service {
 
 /* Home */
 #posts_container {
-    height: 414px; /* 342 orig */
+    height: 450px; /* 342 orig */
     overflow: hidden;
 	width:990px;
 }
@@ -1919,7 +1919,7 @@ ul#launch_posts li {
     margin: 18px 0 0 18px;
     padding: 0 0 18px;
     width: 234px;
-	height:378px;  /* 306 orig */
+	height:396px;  /* 306 orig */
 	position:relative;
 }
 ul#launch_posts li h5 {
@@ -1947,6 +1947,10 @@ ul#launch_posts li h5 a:hover {
 
 ul#launch_posts .preview_thumbnail {
 	margin-bottom:18px;
+}
+
+ul#launch_posts .preview_thumbnail a:hover img {
+    opacity:.8;
 }
 .launch_post_content {
 	padding:0 10px;

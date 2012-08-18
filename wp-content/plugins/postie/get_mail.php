@@ -33,6 +33,12 @@ foreach ($emails as $email) {
       "\n";
       continue;
     }
+ // check for XSS attacks - we disallow any javascript, meta, onload, or base64
+    if (preg_match("/.*(script|onload|meta|base64).*/is", $email)) {
+      echo "possible XSS attack - ignoring email\n";
+      continue;
+    }
+
     $message='';
     $mimeDecodedEmail = DecodeMIMEMail($email, true);
     $from = RemoveExtraCharactersInEmailAddress(trim($mimeDecodedEmail->headers["from"]));
