@@ -182,6 +182,8 @@ class P2P_Connection_Type {
 
 			return $direction;
 		}
+
+		return false;
 	}
 
 	public function direction_from_object_type( $current ) {
@@ -322,7 +324,20 @@ class P2P_Connection_Type {
 			$extra_qv['post_type'] = 'any';
 		}
 
-		$direction = $this->find_direction_multiple( $post_types );
+		$possible_directions = array();
+
+		foreach ( array( 'from', 'to' ) as $direction ) {
+			if ( 'post' == $this->object[$direction] ) {
+				foreach ( $post_types as $post_type ) {
+					if ( $this->side[ $direction ]->recognize_post_type( $post_type ) ) {
+						$possible_directions[] = $direction;
+					}
+				}
+			}
+		}
+
+		$direction = _p2p_compress_direction( $possible_directions );
+
 		if ( !$direction )
 			return false;
 
@@ -341,33 +356,12 @@ class P2P_Connection_Type {
 		p2p_distribute_connected( $items, $q->items, $prop_name );
 	}
 
-	// Used in each_connected()
-	private function find_direction_multiple( $post_types ) {
-		$possible_directions = array();
-
-		foreach ( array( 'from', 'to' ) as $direction ) {
-			if ( 'post' == $this->object[$direction] ) {
-				foreach ( $post_types as $post_type ) {
-					if ( !$this->side[ $direction ]->item_recognize( $post_type ) ) {
-						$possible_directions[] = $direction;
-						break;
-					}
-				}
-			}
-		}
-
-		return _p2p_compress_direction( $possible_directions );
-	}
-
 	public function get_desc() {
 		foreach ( array( 'from', 'to' ) as $key ) {
 			$$key = $this->side[ $key ]->get_desc();
 		}
 
-		if ( $this->indeterminate )
-			$arrow = '&harr;';
-		else
-			$arrow = '&rarr;';
+		$arrow = $this->indeterminate ? '&harr;' : '&rarr;';
 
 		$label = "$from $arrow $to";
 

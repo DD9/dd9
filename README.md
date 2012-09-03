@@ -92,6 +92,6 @@ To deploy to staging, run:
 
 And to deploy to production run:
 
-`git push wpengine`
+`git push production`
 
 This will upload the latest code on your computer to wpengine and tell them to deploy it.
