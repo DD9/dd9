@@ -33,10 +33,7 @@ $about_children = array(
                     <div class="block_link subheading"><a href="/about/team/">The Team</a></div>
                 	
                     <ul id="preview_team">
-                    	<li>
-                        	<h3 class="arrow_red_large">Meet <br />your Team</h3>
-                        	<a class="more_link" href="/about/team/">...view all</a>
-                        </li>
+
 						<?php foreach($users['team'] as $user): ?>
                 
                         
@@ -48,6 +45,11 @@ $about_children = array(
                    
                   
                         <?php endforeach; ?>
+                            <li>
+                        	<h3 class="arrow_red_large">Meet your Team</h3>
+                        	<a class="more_link" href="/about/team/">...view all</a>
+                        </li>
+          
                     </ul><!-- #preview_team -->
                     
            		</li><!-- .preview_content_block.wide -->
