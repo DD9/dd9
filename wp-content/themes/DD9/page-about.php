@@ -46,7 +46,7 @@ $about_children = array(
                   
                         <?php endforeach; ?>
                             <li>
-                        	<h3 class="arrow_red_large">Meet your Team</h3>
+                        	<!--h3 class="arrow_red_large">Meet your Team</h3-->
                         	<a class="more_link" href="/about/team/">...view all</a>
                         </li>
           
