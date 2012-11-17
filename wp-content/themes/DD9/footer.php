@@ -51,7 +51,7 @@
 
 <a href="https://www.twitter.com/DD9inc" title="Follow DD9 on Twitter"><img src="https://twitter-badges.s3.amazonaws.com/t_mini-b.png" alt="Follow DD9 on Twitter"/></a>
 
-<a href="http://www.flickr.com/photos/dd9inc/"><img src="<?php bloginfo('template_url'); ?>/images/flickr.png" alt="DD9 On Flickr" width="16" height="16" /></a>
+<a href="http://www.flickr.com/photos/dd9inc/"><img src="<?php bloginfo('template_url'); ?>/images/flickr.png" alt="DD9 On Flickr" width="16" height="16" style="width:16px; height:16px;" /></a>
 
 <a href="https://github.com/DD9" title="DD9 on GitHub"><img src="<?php bloginfo('template_url'); ?>/img/github_icon.png" alt="DD9 On GitHub" width="16" height="16" /></a>
 

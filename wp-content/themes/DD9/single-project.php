@@ -208,7 +208,7 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
        <div class="block_container breadcrumbs extra_bottom">    
          <div id="secondary">    
           <div class="two_column clearfix">
-            <h4 class="subheading breadcrumbs">Services</a></h4>     
+            <h4 class="subheading breadcrumbs">Services</h4>     
              
              <div class="block_content border_top">
                             
@@ -250,8 +250,9 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
           
         <?php if($related_projects): ?>          
             <div class="two_column">
-                <div class="block_content thin_border">
-                    <h4> Related Projects</h4> 
+                <div class="block_content">
+                    <p class="top_line"><em></em></p>
+                    <h4 class="black">Related Projects</h4> 
                     <ul class="related_projects">
                         <?php foreach($related_projects as $related_project): ?>  
                             <?php

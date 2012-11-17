@@ -113,7 +113,7 @@ nav, figure, section, footer					{ display: block; }
 .debug											{ outline: solid gold 1px; }
 .debug-background								{ background: rgba(255, 215, 0, 0.2) !important; }
 
-
+.black {color:#000};
 
 
 /******************** Baseline grid: 13/18px ********************/
@@ -674,8 +674,14 @@ a.external_link {
 }
 
 a#home_link {
-	border-style: none;
-	margin-left:-3px;
+    border-style: none;
+    margin-left: -3px;
+    height: 80px;
+    width: 132px;
+}
+a#home_link img {
+    height: 80px;
+    width: 132px;
 }
 a#home_link:hover img {
 	-moz-opacity:.8;
@@ -1699,6 +1705,7 @@ form.wpcf7-form textarea[type="textarea"]:focus, form.wpcf7-form textarea:focus 
     	margin-bottom: 16px;
 }
 #microformat_block {
+    font-size:13px;
     	margin-bottom: 8px;
 }
 #site-generator a {
@@ -1927,7 +1934,9 @@ margin:0px;
 body.page-id-3650 .services li.child_service img,
 body.home .services li.child_service img {
     display: block;
-    margin-left: 68px;    
+    margin-left: 68px;
+    width:100px;
+    height:69px;    
 }
 
 body.page-id-3650 .attachment-full.wp-post-image,
@@ -2214,6 +2223,10 @@ a.plain {
 .flexslider.project .flex-control-nav li a:hover {
 	background-color: transparent;
 }
+
+.flexslider.project .flex-control-nav li a.active:hover {
+	background-color: white;
+}
 .flexslider.project .flex-control-nav li a.active {
 	cursor: default;
 }
@@ -2249,6 +2262,7 @@ a.plain {
     text-align: right;
     top: -10px;
     width: 150px;
+    font-size:12px;
 }
 
 /* Handles animation of b*w to color */  
