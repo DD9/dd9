@@ -22,6 +22,11 @@ Plugin by [Vladimir Prelovac](http://www.prelovac.com/vladimir/ "Vladimir Prelov
 If you like what I do in WordPress, you will also like [ManageWP](http://managewp.com "Manage WordPress sites") service.
 
 == Changelog ==
+= 2.7.3 =
+* reverted change from 2.7.2 as it broke article view on some installations
+
+= 2.7.2 =
+* Fixed incompatiblity with mapping plugin [Leaflet Maps Marker](http://www.mapsmarker.com)
 
 = 2.7.1 =
 * Minor issues fixed (thanks Dewey Bushaw)

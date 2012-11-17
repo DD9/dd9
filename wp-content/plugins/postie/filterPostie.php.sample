@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Postie Filter
-Plugin URI: http://blog.robfelty.com/plugins/postie
+Plugin URI: http://PostiePlugin.com/
 Description: Adds my own custom filter to messages posted by postie
 Version: 1.4
 Author: Robert Felty
-Author URI: http://blog.robfelty.com/
+Author URI: http://robfelty.com/
 */
 
 /* 

@@ -1,569 +1,415 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# Copyright (C) 2012 
+# This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-25 22:42-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/src\n"
+"POT-Creation-Date: 2012-11-14 22:30:13+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2012-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: 8bit\n"
 
-#: config_form.php:156
-msgid ""
-"Changing this to yes is NOT RECOMMEDED - anything that gets sent in will "
-"automatically be posted. This could make it easier to compromise your server "
-"- YOU HAVE BEEN WARNED."
-msgstr ""
-
-#: config_form.php:196
-msgid ""
-"Put each email address on a single line. Posts from emails in this list will "
-"be treated as if they came from the admin. If you would prefer to have users "
-"post under their own name - create a WordPress user with the correct access "
-"level."
-msgstr ""
-
-#: config_form.php:269
-msgid "Set to no if using markdown or textitle syntax"
-msgstr ""
-
-#: config_form.php:285
-msgid "Put each type on a single line."
-msgstr ""
-
-#: config_form.php:286
-msgid ""
-"Put each file name on a single line.Files matching this list will never be "
-"posted to your blog. You can use wildcards such as *.xls, or *.* for all "
-"files"
-msgstr ""
-
-#: config_form.php:288
-msgid ""
-"Put each pattern on a separate line and make sure to escape any special "
-"characters."
-msgstr ""
-
-#: config_form.php:290
-msgid ""
-"Only allow messages which have been sent throught the following smtp "
-"servers. Put each server on a separate line. Leave blank to not check stmp "
-"servers."
-msgstr ""
-
-#: config_form.php:299
-msgid "No means they will be put before the text of the message."
-msgstr ""
-
-#: config_form.php:347
-msgid ""
-"When true, images will not appear in the post. Instead the url to the image "
-"will be input into a custom field named 'image'."
-msgstr ""
-
-#: config_form.php:4 config_form.php:41
+#: config_form.php:4 config_form.php:35
 msgid "Postie Options"
 msgstr ""
 
-#: config_form.php:44
+#: config_form.php:55
 msgid "Configuration successfully updated!"
 msgstr ""
 
-#: config_form.php:45
+#: config_form.php:56
 msgid "Error - unable to save configuration"
 msgstr ""
 
-#: config_form.php:53
+#: config_form.php:63
 msgid "Reset Settings To Defaults"
 msgstr ""
 
-#: config_form.php:57
+#: config_form.php:67
 msgid "Run Postie"
 msgstr ""
 
-#: config_form.php:58
+#: config_form.php:68
 msgid "(To run the check mail script manually)"
 msgstr ""
 
-#: config_form.php:62
+#: config_form.php:72
 msgid "Test Config"
 msgstr ""
 
-#: config_form.php:63
+#: config_form.php:73
 msgid "this will run a special script to test your configuration options"
 msgstr ""
 
-#: config_form.php:69
+#: config_form.php:81
 msgid "Mailserver"
 msgstr ""
 
-#: config_form.php:70
+#: config_form.php:82
 msgid "User"
 msgstr ""
 
-#: config_form.php:71
+#: config_form.php:83
 msgid "Message"
 msgstr ""
 
-#: config_form.php:72
+#: config_form.php:84
 msgid "Image"
 msgstr ""
 
-#: config_form.php:73
+#: config_form.php:85
 msgid "Video and Audio"
 msgstr ""
 
-#: config_form.php:74
+#: config_form.php:86
 msgid "Attachments"
 msgstr ""
 
-#: config_form.php:75
+#: config_form.php:87
 msgid "Help"
 msgstr ""
 
-#: config_form.php:76
+#: config_form.php:88
 msgid "FAQ"
 msgstr ""
 
-#: config_form.php:84
-msgid "Cronless postie should check for mail"
-msgstr ""
-
-#: config_form.php:86
-msgid "Once weekly"
-msgstr ""
-
-#: config_form.php:87
-msgid "daily"
-msgstr ""
-
-#: config_form.php:88
-msgid "hourly"
-msgstr ""
-
-#: config_form.php:89
-msgid "twice per hour"
-msgstr ""
-
-#: config_form.php:90
-msgid "every ten minutes"
-msgstr ""
-
-#: config_form.php:99
+#: config_form.php:95
 msgid "Mail Protocol:"
 msgstr ""
 
-#: config_form.php:108
-msgid "IMAP/IMAP-SSL/POP3-SSL unavailable"
-msgstr ""
-
-#: config_form.php:114
+#: config_form.php:111
 msgid "Port:"
 msgstr ""
 
-#: config_form.php:115
+#: config_form.php:112
 msgid "Standard Ports:"
 msgstr ""
 
-#: config_form.php:116
+#: config_form.php:113
 msgid "POP3"
 msgstr ""
 
-#: config_form.php:117
+#: config_form.php:114
 msgid "IMAP"
 msgstr ""
 
-#: config_form.php:118
+#: config_form.php:115
 msgid "IMAP-SSL"
 msgstr ""
 
-#: config_form.php:119
+#: config_form.php:116
 msgid "POP3-SSL"
 msgstr ""
 
-#: config_form.php:127
+#: config_form.php:124
 msgid "Postie Time Correction:"
 msgstr ""
 
-#: config_form.php:129
-msgid ""
-"Should be the same as your normal offset - but this lets you adjust it in "
-"cases where that doesn't work."
+#: config_form.php:126
+msgid "Should be the same as your normal offset - but this lets you adjust it in cases where that doesn't work."
 msgstr ""
 
-#: config_form.php:132
+#: config_form.php:129
 msgid "hours"
 msgstr ""
 
-#: config_form.php:137
+#: config_form.php:134
 msgid "Mail Server:"
 msgstr ""
 
-#: config_form.php:142
+#: config_form.php:139
 msgid "Mail Userid:"
 msgstr ""
 
-#: config_form.php:146
+#: config_form.php:143
 msgid "Mail Password:"
 msgstr ""
 
-#: config_form.php:156
-msgid "Allow Anyone To Post Via Email"
+#: config_form.php:149
+msgid "Check for mail every"
 msgstr ""
 
-#: config_form.php:158
-msgid "Roles That Can Post:"
+#: config_form.php:157
+msgid "Once weekly"
 msgstr ""
 
-#: config_form.php:160
-msgid ""
-"This allows you to grant access to other users to post if they have the "
-"proper access level"
+#: config_form.php:162
+msgid "daily"
+msgstr ""
+
+#: config_form.php:167
+msgid "hourly"
+msgstr ""
+
+#: config_form.php:172
+msgid "twice per hour"
+msgstr ""
+
+#: config_form.php:177
+msgid "every ten minutes"
 msgstr ""
 
 #: config_form.php:183
+msgid "check manually"
+msgstr ""
+
+#: config_form.php:195
+msgid "Roles That Can Post:"
+msgstr ""
+
+#: config_form.php:197
+msgid "This allows you to grant access to other users to post if they have the proper access level"
+msgstr ""
+
+#: config_form.php:221
 msgid "Post status:"
 msgstr ""
 
-#: config_form.php:196
-msgid "Authorized Addresses"
-msgstr ""
-
-#: config_form.php:199
+#: config_form.php:253
 msgid "Admin username:"
 msgstr ""
 
-#: config_form.php:209
+#: config_form.php:263
 msgid "Default post by mail category:"
 msgstr ""
 
-#: config_form.php:217
+#: config_form.php:272
 msgid "Default post by mail tag(s)"
 msgstr ""
 
-#: config_form.php:218
+#: config_form.php:274
 msgid "separated by commas"
 msgstr ""
 
-#: config_form.php:226
+#: config_form.php:282
 msgid "Default Title:"
 msgstr ""
 
-#: config_form.php:233
-msgid ""
-"Preferred\n"
-"                Text Type:"
-msgstr ""
-
-#: config_form.php:242
-msgid "Forward Rejected Mail"
-msgstr ""
-
-#: config_form.php:243
-msgid "Allow Subject In Mail"
-msgstr ""
-
-#: config_form.php:244
-msgid "Allow HTML In Mail Subject"
-msgstr ""
-
-#: config_form.php:245
-msgid "Allow HTML In Mail Body"
-msgstr ""
-
-#: config_form.php:247
-msgid ""
-"Tag Of\n"
-"                Message Start:"
-msgstr ""
-
-#: config_form.php:249
-msgid ""
-"Use to remove any text from a message that the email provider puts at the "
-"top of the message"
-msgstr ""
-
-#: config_form.php:255
-msgid ""
-"Tag Of\n"
-"                Message End:"
-msgstr ""
-
-#: config_form.php:257
-msgid ""
-"Use to remove any text from a message that the email provider puts at the "
-"end of the message"
-msgstr ""
-
-#: config_form.php:266
-msgid "Wrap content in pre tags"
-msgstr ""
-
-#: config_form.php:267
-msgid "Filter newlines"
-msgstr ""
-
-#: config_form.php:270
-msgid ""
-"Replace newline characters with\n"
-"            html line breaks (&lt;br\n"
-"            /&gt;)"
-msgstr ""
-
-#: config_form.php:273
-msgid "Return rejected mail to sender"
-msgstr ""
-
-#: config_form.php:274
-msgid "Send post confirmation e-mail to sender"
-msgstr ""
-
-#: config_form.php:275
-msgid "Automatically convert urls to links"
-msgstr ""
-
-#: config_form.php:276
-msgid "Use shortcode for embedding video (youtube and others)"
-msgstr ""
-
-#: config_form.php:278
-msgid "Encoding for pages and feeds:"
-msgstr ""
-
-#: config_form.php:281
-msgid "should handle ISO-8859-1 as well"
-msgstr ""
-
-#: config_form.php:284
-msgid "Decode Quoted Printable Data"
-msgstr ""
-
-#: config_form.php:285
-msgid "Supported File Types"
-msgstr ""
-
-#: config_form.php:286
-msgid "Banned File Names"
-msgstr ""
-
-#: config_form.php:287
-msgid "Drop The Signature From Mail"
-msgstr ""
-
-#: config_form.php:288
-msgid "Signature Patterns"
-msgstr ""
-
 #: config_form.php:289
-msgid ""
-"Allowed SMTP\n"
-"            servers"
-msgstr ""
-
-#: config_form.php:298
-msgid ""
-"Post Images At\n"
-"            End"
-msgstr ""
-
-#: config_form.php:300
-msgid "Start Image Count At 0"
+msgid "Preferred Text Type:"
 msgstr ""
 
 #: config_form.php:302
-msgid "Image Place Holder Tag:"
+msgid "Tag Of Message Start:"
 msgstr ""
 
-#: config_form.php:308
-msgid ""
-"Image\n"
-"            Template"
+#: config_form.php:303
+msgid "Use to remove any text from a message that the email provider puts at the top of the message"
+msgstr ""
+
+#: config_form.php:309
+msgid "Tag Of Message End:"
 msgstr ""
 
 #: config_form.php:310
-msgid ""
-"Choose a default template,\n"
-"            then customize to your liking in the text box"
+msgid "Use to remove any text from a message that the email provider puts at the end of the message"
 msgstr ""
 
-#: config_form.php:313
-msgid ""
-"Sizes for thumbnail, medium, and large images can be chosen in the <a href="
-"\"options-media.php\">Media Settings</a>. The samples here use the default "
-"sizes, and will not reflect the sizes you have chosen."
+#: config_form.php:327
+msgid "Send post confirmation e-mail to"
 msgstr ""
 
-#: config_form.php:340 config_form.php:385 config_form.php:427
-#: config_form.php:471 config_form.php:545
+#: config_form.php:332
+msgid "sender"
+msgstr ""
+
+#: config_form.php:333
+msgid "administrator"
+msgstr ""
+
+#: config_form.php:334
+msgid "sender and administrator"
+msgstr ""
+
+#: config_form.php:335
+msgid "none"
+msgstr ""
+
+#: config_form.php:345
+msgid "Encoding for pages and feeds:"
+msgstr ""
+
+#: config_form.php:348
+msgid "should handle ISO-8859-1 as well"
+msgstr ""
+
+#: config_form.php:369
+msgid "Image Place Holder Tag:"
+msgstr ""
+
+#: config_form.php:375
+msgid "Image Template"
+msgstr ""
+
+#: config_form.php:376 config_form.php:425 config_form.php:468
+#: config_form.php:512
+msgid "Choose a default template, then customize to your liking in the text box"
+msgstr ""
+
+#: config_form.php:377
+msgid "Sizes for thumbnail, medium, and large images can be chosen in the <a href=\"options-media.php\">Media Settings</a>. The samples here use the default sizes, and will not reflect the sizes you have chosen."
+msgstr ""
+
+#: config_form.php:405 config_form.php:452 config_form.php:494
+#: config_form.php:539 config_form.php:614
 msgid "Preview"
 msgstr ""
 
-#: config_form.php:347
-msgid "Use custom image field"
-msgstr ""
-
-#: config_form.php:358
+#: config_form.php:424
 msgid "Video template 1"
 msgstr ""
 
-#: config_form.php:359 config_form.php:402 config_form.php:444
-msgid ""
-"Choose a default template, then customize to your liking in the text box"
-msgstr ""
-
-#: config_form.php:394
+#: config_form.php:461
 msgid "Video 1 file types:"
 msgstr ""
 
-#: config_form.php:395
-msgid ""
-"Use the video template 1 for these files types (separated by\n"
-"        commas)"
+#: config_form.php:462
+msgid "Use the video template 1 for these files types (separated by commas)"
 msgstr ""
 
-#: config_form.php:401
+#: config_form.php:467
 msgid "Video template 2"
 msgstr ""
 
-#: config_form.php:436
+#: config_form.php:505
 msgid "Video 2 file types:"
 msgstr ""
 
-#: config_form.php:437
-msgid ""
-"Use the video template 2 for these files types (separated by\n"
-"        commas)"
+#: config_form.php:506
+msgid "Use the video template 2 for these files types (separated by commas)"
 msgstr ""
 
-#: config_form.php:443
+#: config_form.php:511
 msgid "Audio template"
 msgstr ""
 
-#: config_form.php:480
+#: config_form.php:548
 msgid "Audio file types:"
 msgstr ""
 
-#: config_form.php:481
-msgid ""
-"Use the audio template for these files types (separated by\n"
-"        commas)"
+#: config_form.php:550
+msgid "Use the audio template for these files types (separated by commas)"
 msgstr ""
 
-#: config_form.php:495
+#: config_form.php:563
 msgid "Attachment icon set"
 msgstr ""
 
-#: config_form.php:519
+#: config_form.php:590
 msgid "Attachment icon size (in pixels)"
 msgstr ""
 
-#: config_form.php:560
-msgid "Update Options"
+#: config_form.php:635
+msgid "Save Changes"
 msgstr ""
 
-#: cronless_postie.php:37 postie.php:66
-msgid "Edit Plugins"
-msgstr ""
-
-#: get_mail.php:29
+#: get_mail.php:21
 msgid "Dang, message is empty!"
 msgstr ""
 
-#: get_mail.php:32 postie-functions.php:382
+#: get_mail.php:24 postie-functions.php:449
 msgid "There does not seem to be any new mail."
 msgstr ""
 
-#: postie-functions.php:1327
-msgid ""
-"The uploaded file exceeds the <code>upload_max_filesize</code> directive in "
-"<code>php.ini</code>."
+#: postie-functions.php:1387
+msgid "The uploaded file exceeds the <code>upload_max_filesize</code> directive in <code>php.ini</code>."
 msgstr ""
 
-#: postie-functions.php:1328
-msgid ""
-"The uploaded file exceeds the <em>MAX_FILE_SIZE</em> directive that was "
-"specified in the HTML form."
+#: postie-functions.php:1388
+msgid "The uploaded file exceeds the <em>MAX_FILE_SIZE</em> directive that was specified in the HTML form."
 msgstr ""
 
-#: postie-functions.php:1329
+#: postie-functions.php:1389
 msgid "The uploaded file was only partially uploaded."
 msgstr ""
 
-#: postie-functions.php:1330
+#: postie-functions.php:1390
 msgid "No file was uploaded."
 msgstr ""
 
-#: postie-functions.php:1332
+#: postie-functions.php:1392
 msgid "Missing a temporary folder."
 msgstr ""
 
-#: postie-functions.php:1333
+#: postie-functions.php:1393
 msgid "Failed to write file to disk."
 msgstr ""
 
-#: postie-functions.php:1349
+#: postie-functions.php:1409
 msgid "Invalid form submission."
 msgstr ""
 
-#: postie-functions.php:1357
-msgid ""
-"File is empty. Please upload something more substantial. This error could "
-"also be caused by uploads being disabled in your php.ini."
+#: postie-functions.php:1417
+msgid "File is empty. Please upload something more substantial. This error could also be caused by uploads being disabled in your php.ini."
 msgstr ""
 
-#: postie-functions.php:1361
+#: postie-functions.php:1421
 msgid "Specified file failed upload test."
 msgstr ""
 
-#: postie-functions.php:1369
+#: postie-functions.php:1429
 msgid "File type does not meet security guidelines. Try another."
 msgstr ""
 
-#: postie-functions.php:1387
-#, php-format
+#: postie-functions.php:1449
 msgid "The uploaded file could not be moved to %s."
 msgstr ""
 
-#: postie-functions.php:1986
+#: postie-functions.php:2059
 msgid "Yes"
 msgstr ""
 
-#: postie-functions.php:1988
+#: postie-functions.php:2061
 msgid "No"
 msgstr ""
 
-#: postie.php:97
+#: postie.php:82
+msgid "Edit Plugins"
+msgstr ""
+
+#: postie.php:161
 msgid "Postie is almost ready."
 msgstr ""
 
-#: postie.php:98
-#, php-format
+#: postie.php:162
 msgid "You must <a href=\"%1$s\">enter your email settings</a> for it to work."
 msgstr ""
 
-#: postie.php:105
+#: postie.php:172
 msgid "Warning: the IMAP php extension is not installed."
 msgstr ""
 
-#: postie.php:106
-msgid ""
-"Postie may not function correctly without this extension (especially for non-"
-"English messages)."
+#: postie.php:173
+msgid "Postie may not function correctly without this extension (especially for non-English messages)."
 msgstr ""
 
-#: postie.php:109
-#, php-format
+#: postie.php:176
 msgid "Please see the <a href=\"%1$s\">FAQ </a> for more information."
 msgstr ""
 
-#: postie_test.php:8
+#: postie_test.php:10
 msgid "Postie Diagnosis"
+msgstr ""
+
+#: postie_test.php:41
+msgid "Only required for international character set support"
+msgstr ""
+
+#: postie_test.php:45 postie_test.php:49
+msgid "yes"
+msgstr ""
+
+#: util/wp-i18n/pomo/sample/app.php:56
+msgid "Welcome %s!"
+msgstr ""
+
+#: util/wp-i18n/pomo/sample/app.php:60
+msgid "A string with low priority!"
+msgstr ""
+
+#: util/wp-i18n/pomo/sample/app.php:62
+msgid "Bye\n"
 msgstr ""

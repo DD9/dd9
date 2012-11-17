@@ -3,7 +3,7 @@ Contributors: scribu, ciobi
 Tags: connections, custom post types, relationships, many-to-many, users
 Requires at least: 3.4
 Tested up to: 3.4
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,13 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
+= 1.4.2 =
+* fixed each_connected() returning wrapped objects
+* fixed issue with user queries and get_current_screen()
+* fixed "Delete all connections" button
+* fixed bugs with reciprocal and non-reciprocal indeterminate connection types
+* added Dutch translation
+
 = 1.4.1 =
 * fixed errors in admin box
 * fixed each_connected()
@@ -63,6 +70,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 * improved usability of connection candidate UI
 * fixed issues related to auto-drafts
 * show columns on the admin user list screen
+* [more info](http://scribu.net/wordpress/posts-to-posts/p2p-1-4.html)
 
 = 1.3.1 =
 * sanitize connection fields values on save, preventing security exploits

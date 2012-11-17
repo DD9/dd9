@@ -141,7 +141,7 @@ $wd_services = get_posts(array(
 <div class="block_container full_width clearfix">
 
   <div class="two_column">
-  	<h4 class="subheading_full_width"><a href="/blog">Recent News</a></h4>
+  	<h4 class="subheading_full_width"><a href="/blog">Recent News...</a></h4>
 	  <div class="block_content">
 	    <h3> Latest Website Launches </h3>
 	    <p class="top_line"><a target="_blank" class="viewmore" href="/category/news/site_launches/">view archives</a></p>

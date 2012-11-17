@@ -134,8 +134,11 @@ class P2P_Connection_Type {
 		if ( !in_array( $direction, array( 'from', 'to', 'any' ) ) )
 			return false;
 
-		if ( $instantiate )
-			return new P2P_Directed_Connection_Type( $this, $direction );
+		if ( $instantiate ) {
+			$class = $this->indeterminate ? 'P2P_Indeterminate_Connection_Type' : 'P2P_Directed_Connection_Type';
+
+			return new $class( $this, $direction );
+		}
 
 		return $direction;
 	}
@@ -353,7 +356,11 @@ class P2P_Connection_Type {
 
 		$q = $directed->get_connected( $items, $extra_qv, 'abstract' );
 
-		p2p_distribute_connected( $items, $q->items, $prop_name );
+		$raw_connected = array();
+		foreach ( $q->items as $item )
+			$raw_connected[] = $item->get_object();
+
+		p2p_distribute_connected( $items, $raw_connected, $prop_name );
 	}
 
 	public function get_desc() {

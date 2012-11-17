@@ -25,7 +25,7 @@ class P2P_Box {
 
 		$this->ctype = $ctype;
 
-		$this->labels = $this->ctype->get_opposite( 'labels' );
+		$this->labels = $this->ctype->get( 'opposite', 'labels' );
 	}
 
 	public function init_scripts() {
@@ -60,7 +60,7 @@ class P2P_Box {
 		$data_attr = array(
 			'p2p_type' => $this->ctype->name,
 			'duplicate_connections' => $this->ctype->duplicate_connections,
-			'cardinality' => $this->ctype->get_opposite( 'cardinality' ),
+			'cardinality' => $this->ctype->get( 'opposite', 'cardinality' ),
 			'direction' => $this->ctype->get_direction()
 		);
 
@@ -98,7 +98,7 @@ class P2P_Box {
 			'label' => $this->labels->create,
 		);
 
-		if ( 'one' == $this->ctype->get_opposite( 'cardinality' ) ) {
+		if ( 'one' == $this->ctype->get( 'opposite', 'cardinality' ) ) {
 			if ( !empty( $this->connected_items ) )
 				$data['hide'] = 'style="display:none"';
 		}
@@ -161,7 +161,7 @@ class P2P_Box {
 			'p2p:per_page' => 5
 		) );
 
-		$candidate = $this->ctype->get_connectable( $current_post_id, $extra_qv );
+		$candidate = $this->ctype->get_connectable( $current_post_id, $extra_qv, 'abstract' );
 
 		if ( empty( $candidate->items ) ) {
 			return html( 'div class="p2p-notice"', $this->labels->not_found );
@@ -207,7 +207,7 @@ class P2P_Box {
 		$args = array(
 			'post_title' => $_POST['post_title'],
 			'post_author' => get_current_user_id(),
-			'post_type' => $this->ctype->get_opposite( 'side' )->first_post_type()
+			'post_type' => $this->ctype->get( 'opposite', 'side' )->first_post_type()
 		);
 
 		$from = absint( $_POST['from'] );
@@ -230,22 +230,15 @@ class P2P_Box {
 
 		$p2p_id = $this->ctype->connect( $from, $to );
 
-		if ( is_wp_error( $p2p_id ) ) {
-			$r = array(
-				'error' => sprintf(
-					__( "Can't create connection: %s", P2P_TEXTDOMAIN ),
-					$p2p_id->get_error_message()
-				)
-			);
-		} else {
-			$item = $this->ctype->get_opposite('side')->item_recognize( $to );
+		self::maybe_send_error( $p2p_id );
 
-			$r = array(
-				'row' => $this->connection_row( $p2p_id, $item, true )
-			);
-		}
+		$item = $this->ctype->get( 'opposite','side')->item_recognize( $to );
 
-		die( json_encode( $r ) );
+		$out = array(
+			'row' => $this->connection_row( $p2p_id, $item, true )
+		);
+
+		die( json_encode( $out ) );
 	}
 
 	public function ajax_disconnect() {
@@ -255,9 +248,22 @@ class P2P_Box {
 	}
 
 	public function ajax_clear_connections() {
-		$this->ctype->disconnect( $_POST['from'], 'any' );
+		$r = $this->ctype->disconnect( $_POST['from'], 'any' );
+
+		self::maybe_send_error( $r );
 
 		$this->refresh_candidates();
+	}
+
+	protected static function maybe_send_error( $r ) {
+		if ( !is_wp_error( $r ) )
+			return;
+
+		$out = array(
+			'error' => $r->get_error_message()
+		);
+
+		die( json_encode( $out ) );
 	}
 
 	public function ajax_search() {
@@ -276,7 +282,7 @@ class P2P_Box {
 		if ( !$this->args->can_create_post )
 			return false;
 
-		$side = $this->ctype->get_opposite( 'side' );
+		$side = $this->ctype->get( 'opposite', 'side' );
 
 		return $side->can_create_item();
 	}

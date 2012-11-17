@@ -93,7 +93,9 @@ $wd_services = get_posts(array(
 		  </li>
 		  <?php foreach($wd_services as $service): ?>
 			<li  class="child_service">
-			  <a href="<?= get_permalink($service->ID) ?>"><?= $service->post_title ?></a>
+			  <a href="<?= get_permalink($service->ID) ?>" title="<?= $service->post_title ?>">
+			  <?php echo get_the_post_thumbnail($service->ID, array(100,100)); ?>
+			  <?= $service->post_title ?></a>
 			</li>
 		  <?php endforeach; ?>
 		</ul><!-- .services -->	
@@ -109,7 +111,9 @@ $wd_services = get_posts(array(
 		  </li>
 		  <?php foreach($gd_services as $service): ?>
 			<li  class="child_service">
-			  <a href="<?= get_permalink($service->ID) ?>"><?= $service->post_title ?></a>
+			  <a href="<?= get_permalink($service->ID) ?>" title="<?= $service->post_title ?>">
+			  <?php echo get_the_post_thumbnail($service->ID, array(100,100)); ?>
+			  <?= $service->post_title ?></a>
 			</li>
 		  <?php endforeach; ?>
 		</ul><!-- .services -->	

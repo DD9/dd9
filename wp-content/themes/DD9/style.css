@@ -1422,7 +1422,7 @@ ul.blog_categories ul.children {
 ul#social_links {
     list-style: none outside none;
     margin: 0 0 18px 0;
-    overflow: auto;
+    overflow: hidden;
     padding: 0;
     top: 0;
 }
@@ -1434,6 +1434,14 @@ ul#social_links li {
 	padding:0 3px;	
 }
 
+ul#social_links li a {
+    font-size: 18px;
+    color: #999;    
+}
+ul#social_links li a:hover {
+      color: #E4311F;
+}
+/*
 ul#social_links li a {
 	background:url("images/social_sprite.jpg") no-repeat 0 0 transparent;
 	display:block;
@@ -1448,7 +1456,7 @@ ul#social_links li a.twitter {
 
 ul#social_links li a.email {
 	background-position:0 -36px;
-}
+}*/
 
 /* Comments */
 
@@ -1890,10 +1898,50 @@ ul.services {
 	/* [disabled]border-bottom:1px solid #000; */
 	/* [disabled]margin:0 10px; */
 }
-/* services page */
-body.page-id-3650 .services li.child_service {
+/* services & home page */
+body.page-id-3650 .services li.child_service,
+body.home .services li.child_service {
     margin-bottom: 18px;
+    height: 89px;
+    border: 1px dotted #CCC;
+    margin-left: 0px;
+    margin-right: 16px;
+    text-align: center;    
 }
+body.page-id-3650 .services li.child_service:hover,
+body.home .services li.child_service:hover {
+
+    border: 1px dotted #E6311F;
+   
+}
+body.page-id-3650 ul.services li:nth-child(2n+1),
+body.home ul.services li:nth-child(2n+1){
+    /* [disabled]background-color: #86B486; */
+    margin-right: 0px;    
+}
+
+body.page-id-3650 .services li.child_service a,
+body.home .services li.child_service a{
+margin:0px;
+}
+body.page-id-3650 .services li.child_service img,
+body.home .services li.child_service img {
+    display: block;
+    margin-left: 68px;    
+}
+
+body.page-id-3650 .attachment-full.wp-post-image,
+body.home .attachment-full.wp-post-image {
+    float:left;
+    clear:left;
+    margin-right:18px;
+
+}
+
+body.page-id-3650 .services li.parent_service {
+    min-height: 322px;
+}
+
 
 /* Home */
 #posts_container {

@@ -1,14 +1,17 @@
 === Postie ===
-Contributors: robfelty, 
-Donate link: http://blog.robfelty.com/plugins/postie
-Plugin URI: http://blog.robfelty.com/plugins/postie
+Contributors: WayneAllen
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=HPK99BJ88V4C2
+Author URI: http://allens-home.com/
+Plugin URI: http://PostiePlugin.com/
 Tags: e-mail, email
 Requires at least: 2.8
-Tested up to: 3.4.1
-Stable tag: 1.4.4
+Tested up to: 3.4.2
+Stable tag: 1.4.5
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 The Postie plugin allows you to blog via e-mail, including many advanced
-features not found in wordpress's default post by e-mail feature.
+features not found in WordPress's default post by e-mail feature.
 
 == Description ==
 Postie offers many advanced features for posting to your blog via e-mail,
@@ -18,6 +21,12 @@ imap and pop3, with the option for ssl with both.  For usage notes, see the
 [other notes](other_notes) page
 
 = What's new? = 
+
+* 1.4.5 (2012.11.14)
+    * Fixed bug in XSS attack vulnerability code. Thanks to R Reid http://blog.strictly-software.com/2012/03/fixing-postie-plugin-for-wordpress-to.html
+    * Fixed bug where emails with multiple categories has the incorrect title
+    * Fixed bugs where PHP setting were not being changed correctly - thanks to Peter Chester http://tri.be/author/peter/
+    * New maintainer
 
 * 1.4.4 (2012.08.10)
     * Fixed possible XSS attack vulnerability 
@@ -167,10 +176,10 @@ different one if you wish.
   You can also specify a custom image template. I use the following custom
 template:
 
-  &lt;div class='imageframe alignleft'&gt;&lt;a href='{IMAGE}'&gt;&lt;img src="{THUMBNAIL}"
+  <div class='imageframe alignleft'><a href='{IMAGE}'><img src="{THUMBNAIL}"
   alt="{CAPTION}" title="{CAPTION}" 
-  class="attachment" /&gt;&lt;/a&gt;&lt;div
-class='imagecaption'&gt;{CAPTION}&lt;/div&gt;&lt;/div&gt;
+  class="attachment" /></a><div
+class='imagecaption'>{CAPTION}</div></div>
      
     * {THUMBNAIL} gets replaced with the url to the thumbnail image
     * {MEDIUM} gets replaced with the url to the medium-sized image
@@ -524,7 +533,7 @@ option to convert url into links turned on)
   * Got rid of stupid version checking
   * Improved cronless postie instructions and configuration
   * Internationalization is working now
-  * Dutch localization (thanks to gvmelle http://gvmelle.com)
+  * Dutch localization (thanks to gvmelle http://gvmelle.com )
   * Fixed caption bug when using image magick
   * Added option to not filter new lines (when using markdown syntax)
   * Fixed autoplay option
@@ -569,7 +578,7 @@ option to convert url into links turned on)
   * Can now set administrator name. Authorized e-mail addresses which don't
     have a user get posted under this name
   * Will use IPTC captions if available
-  * Added option to replace newline characters with &lt;br /&gt;
+  * Added option to replace newline characters with <br />
 
 =  1.1.4 (2009.03.06) =
   * Added more image options (open in new window, custom image template)
@@ -587,16 +596,24 @@ option to convert url into links turned on)
   * replying to an e*mail adds a comment to a post
   * fixed category handling to work with taxonomy
   * fixed one syntax error
-  * added option to wrap posts and comments in &lt;pre%gt; tags
+  * added option to wrap posts and comments in <pre%gt; tags
 
 
 =  1.1.1 =
 
-Below is all the of the version information. As far as I can tell there once was a guy named John Blade. He took some of the orignal wp-mail.php code and started hacking away on it. He actually got pretty far. About the time I discovered WordPress and his little hack - called WP-Mail at the time - he went on a vacation or something. There were some problems with the script, and it was missing some features I wanted. I hacked away at it and got it into a place where it did what I wanted. I started posting about it since I figured other people might want the features. 
+Below is all the of the version information. As far as I can tell there once was a guy named John Blade. He took some of the original wp-mail.php code 
+and started hacking away on it. He actually got pretty far. About the time I discovered WordPress and his little hack - called WP-Mail at the time - he 
+went on a vacation or something. There were some problems with the script, and it was missing some features I wanted. I hacked away at it and got it 
+into a place where it did what I wanted. I started posting about it since I figured other people might want the features. 
 
-John didn't release any more versions at least up til July 2005. So I started accepting submissions and feature requests from people to help make the code better. In June/July 2005 I discovered a little plugin by Chris J Davis (http://www.chrisjdavis.org/cjd-notepad/) called notepad. I added a small feature to it (basically a bookmarklet).  In the process I started looking at his code and realized how much you could do with the plugin system available in Word Press.
+John didn't release any more versions at least up til July 2005. So I started accepting submissions and feature requests from people to help make the 
+code better. In June/July 2005 I discovered a little plugin by Chris J Davis (http://www.chrisjdavis.org/cjd-notepad/) called notepad. I added a small 
+feature to it (basically a bookmarklet).  In the process I started looking at his code and realized how much you could do with the plugin system 
+available in Word Press.
 
-So I decided to make an offical fork. I put up an article on my blog asking for new names. I picked Postie.  I then modified the code to be a proper plugin.  And the rest is history :)
+So I decided to make an offical fork. I put up an article on my blog asking for new names. I picked Postie.  I then modified the code to be a proper 
+plugin.  And the rest is history :)
+
 * BUGFIX -problem with subject
 * BUGFIX -cronless postie typo
 
@@ -651,7 +668,7 @@ So I decided to make an offical fork. I put up an article on my blog asking for 
 * BUGFIX: Posting updates the category counts.
 
 =  0.9.8.6 =
-* BUGFIX: Fixed problems with config page &lt;%php became &lt;?php
+* BUGFIX: Fixed problems with config page <%php became <?php
 * 
 =  0.9.8.5 =
 * BUGFIX: onClick changed to onclick
@@ -881,3 +898,8 @@ So I decided to make an offical fork. I put up an article on my blog asking for 
 * 
 =  0.1 - 2004-06 =
 * First release
+
+== Upgrade Notice ==
+
+= 1.4.4 =
+Fixed possible XSS attack vulnerability

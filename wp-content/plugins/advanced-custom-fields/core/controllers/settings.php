@@ -48,11 +48,38 @@ class acf_settings
 	{
 		$page = add_submenu_page('edit.php?post_type=acf', __('Settings','acf'), __('Settings','acf'), 'manage_options','acf-settings',array($this,'html'));
 		
+		add_action('load-' . $page, array($this,'load'));
+		
 		add_action('admin_print_scripts-' . $page, array($this, 'admin_print_scripts'));
 		add_action('admin_print_styles-' . $page, array($this, 'admin_print_styles'));
 		
 		add_action('admin_head-' . $page, array($this,'admin_head'));
 		
+	}
+	
+	
+	/*
+	*  load
+	*
+	*  @description: 
+	*  @since 3.5.2
+	*  @created: 16/11/12
+	*/
+	
+	function load()
+	{
+		// vars
+		$defaults = array(
+			'action' => ''
+		);
+		$options = array_merge($defaults, $_POST);
+		
+
+		if( $options['action'] == "export_xml" )
+		{
+			include_once($this->parent->path . 'core/actions/export.php');
+			die;
+		}
 	}
 	
 	
@@ -329,7 +356,8 @@ class acf_settings
 				</div>
 			</th>
 			<td>
-				<form class="acf-export-form" method="post" action="<?php echo $this->parent->dir; ?>/core/actions/export.php">
+				<form class="acf-export-form" method="post">
+					<input type="hidden" name="action" value="export_xml" />
 					<?php
 
 					$this->parent->create_field(array(
@@ -379,7 +407,7 @@ class acf_settings
 					
 					?>
 					<ul class="hl clearfix">
-						<li class="right"><input type="submit" class="acf-button" value="<?php _e("Create PHP",'acf'); ?>" /></li>
+						<li class="right"><input type="submit" class="acf-button" value="<?php esc_attr_e("Create PHP",'acf'); ?>" /></li>
 					</ul>
 				</form>
 			</td>
@@ -483,7 +511,7 @@ class acf_settings
 			<td valign="top">
 				<div class="wp-box">
 					<div class="inner">
-						<pre><?php
+						<textarea class="pre" readonly="true" onclick="this.focus();this.select()"><?php
 		
 		$acfs = array();
 		
@@ -556,13 +584,30 @@ if(function_exists("register_field_group"))
 		{
 			_e("No field groups were selected",'acf');
 		}
-						?></pre>
+						?></textarea>
 					</div>
 				</div>
 			</td>
 		</tr>
 	</tbody>
 </table>
+<script type="text/javascript">
+(function($){
+	
+	$('textarea.pre').live( 'keyup', function (){
+	    $(this).height( 0 );
+	    $(this).height( this.scrollHeight );
+	});
+
+	
+	$(document).ready(function(){
+		
+		$('textarea.pre').trigger('keyup');
+
+	});
+
+})(jQuery);
+</script>
 	<?php
 	}
 	
@@ -577,11 +622,12 @@ if(function_exists("register_field_group"))
 	
 	function html()
 	{
-	
 		// vars
-		$action = isset($_POST['action']) ? $_POST['action'] : "";
-
-		
+		$defaults = array(
+			'action' => ''
+		);
+		$options = array_merge($defaults, $_POST);
+				
 		?>
 <div class="wrap">
 
@@ -589,7 +635,7 @@ if(function_exists("register_field_group"))
 	<h2 style="margin: 4px 0 25px;"><?php _e("Advanced Custom Fields Settings",'acf'); ?></h2>
 		<?php
 		
-		if($action == "export_php")
+		if( $options['action'] == "export_php" )
 		{
 			$this->html_php();
 		}
@@ -601,7 +647,6 @@ if(function_exists("register_field_group"))
 		?>
 </div>
 		<?php
-		
 		
 		return;
 		
