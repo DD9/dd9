@@ -53,23 +53,7 @@ $project = $projects ? $projects[0] : null;
 					<?php endif; // End if $tags_list ?>    
                
               <p class="top_line"><em></em></p> 
-               <ul id="social_links">
-                 <li>
-                   <a class="facebook" rel="nofollow" href="http://www.facebook.com/sharer.php?u=<?php the_permalink();?>&amp;t=<?php echo urlencode(get_the_title($id)); ?>" title="Share this post on Facebook" target="_blank">
-                     Facebook
-                   </a>
-                 </li>
-                 <li>
-                   <a class="twitter" rel="nofollow" href="http://twitter.com/home?status=<?php echo urlencode("Currently reading: "); ?><?php the_permalink(); ?>" title="Share this article with your Twitter followers" target="_blank">
-                     Twitter
-                   </a>
-                 </li>
-                 <li>
-                   <a class="email" href="mailto:type email address here?subject=I wanted to share this link from <?php bloginfo('name'); ?>&body=<?php the_title('','',true); ?>&#32;&#32;<?php the_permalink(); ?>" title="Email to a friend/colleague" target="_blank">
-                     Email
-                   </a>
-                 </li>
-               </ul>
+                <?php include('social.php'); ?>
                
                <ul class="post_details">
                       

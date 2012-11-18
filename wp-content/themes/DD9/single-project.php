@@ -106,26 +106,7 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
              <h1 class="secondary"> <?php the_title(); ?></h1>
              <p class="top_line"><em></em></p>
              
-             <ul id="social_links">
-                 <li>
-                   <a class="facebook" rel="nofollow" href="http://www.facebook.com/sharer.php?u=<?php the_permalink();?>&amp;t=<?php echo urlencode(get_the_title($id)); ?>" title="Share this post on Facebook" target="_blank">
-                    <i class="icon-facebook-sign"></i>
-
-                   </a>
-                 </li>
-                 <li>
-                   <a class="twitter" rel="nofollow" href="http://twitter.com/home?status=<?php echo urlencode("Currently reading: "); ?><?php the_permalink(); ?>" title="Share this article with your Twitter followers" target="_blank">
-                     <i class="icon-twitter-sign"></i>
-
-                   </a>
-                 </li>
-                 <li>
-                   <a class="email" href="mailto:type email address here?subject=I wanted to share this post with you from <?php bloginfo('name'); ?>&body=<?php the_title('','',true); ?>&#32;&#32;<?php the_permalink(); ?>" title="Email to a friend/colleague" target="_blank">
-                     <i class="icon-envelope-alt"></i>
-
-                   </a>
-                 </li>
-               </ul>
+                <?php include('social.php'); ?>
              
            </div><!-- .block_content -->
         </div><!-- .two_column -->
@@ -151,15 +132,9 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
                 <?php if($start_work): ?>
                 <li>
                     
-                  <h4 class="title">Dates:</h4>          
+                  <h4 class="title">Date:</h4>          
                   <?= $start_work; ?>  
-                  
-                  <?php if($end_work): ?>
-                      - <?= $end_work ?>
-                  <?php else: ?>
-                      
-                  <?php endif; ?>
-        
+                
                 </li>
                 <?php endif; ?>                
                 
@@ -290,8 +265,9 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
               
         <?php if($posts): ?>        
             <div class="two_column">
-                <div class="block_content thin_border">
-                    <h4> Related Posts</h4> 
+                <div class="block_content">
+                   <p class="top_line"><em></em></p>
+                    <h4 class="black">Related Projects</h4> 
                     <ul class="related_posts">
                         <?php foreach($posts as $project_post): ?>
                             <li>

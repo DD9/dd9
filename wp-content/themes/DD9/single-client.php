@@ -123,14 +123,8 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
                     <?php if($start_work): ?>
                     <li>
                         
-                      <h4 class="title">Dates:</h4>          
-                      <?= $start_work; ?> - 
-                      
-                      <?php if($end_work): ?>
-                        <?= $end_work ?>
-                      <?php else: ?>
-                        present
-                      <?php endif; ?>
+                      <h4 class="title">Date:</h4>          
+                      <?= $start_work; ?> 
                     
                     </li>
                     <?php endif; ?>                
