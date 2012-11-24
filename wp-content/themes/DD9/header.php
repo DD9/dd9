@@ -128,21 +128,14 @@
    <a href="tel:3034176369" id="header_tel">(303)417-6369</a> &nbsp; <a href="http://go.dd9.com/" title="DD9 Client Extranet Login" rel="nofollow" id="client_login">Client Portal</a> &nbsp; <a href="http://basecamp.com/1922309" title="DD9 on Basecamp" rel="nofollow" id="basecamp_login">Active Projects</a> 
    </div>
   
-    		<a href="/" title="DD9 Home" id="home_link"><img src="<?php bloginfo('template_url'); ?>/img/DD9_logo_v2.png" width="132" height="80" alt="New DD9 Logo"></a>
+    		<a href="/" title="DD9 Home" id="home_link"><img src="<?php bloginfo('template_url'); ?>/img/DD9_logo_v2.png" width="132" height="80" alt="DD9 Logo"></a>
 
 
 
 				<?php //get_search_form(); ?>
 
 
-			    <nav id="access" role="navigation" class="clearfix">
-				<h3 class="assistive-text">
-				  <?php _e( 'Main menu', 'twentyeleven' ); ?>
-				</h3>
-				<div class="skip-link"><a class="assistive-text" href="#content" title="<?php esc_attr_e( 'Skip to primary content', 'twentyeleven' ); ?>"><?php _e( 'Skip to primary content', 'twentyeleven' ); ?>
-</a></div>
-				<div class="skip-link"><a class="assistive-text" href="#secondary" title="<?php esc_attr_e( 'Skip to secondary content', 'twentyeleven' ); ?>"><?php _e( 'Skip to secondary content', 'twentyeleven' ); ?>
-</a></div>
+			 <nav id="access" role="navigation" class="clearfix">
 				<?php wp_nav_menu( array( 'theme_location' => 'primary' ) ); ?>
 			</nav>
 			    <!-- #access -->

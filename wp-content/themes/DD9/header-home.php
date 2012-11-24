@@ -29,6 +29,13 @@
 <?php wp_title(''); ?>
 </title>
 <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="57x57" href="<?php bloginfo('template_url'); ?>/img/DD9_114x114_white.png" />
+<link rel="apple-touch-icon" sizes="72x72" href="<?php bloginfo('template_url'); ?>/img/DD9_144x144_white.pngg" />
+<link rel="apple-touch-icon" sizes="114x114" href="<?php bloginfo('template_url'); ?>/img/DD9_114x114_white.png" />
+<link rel="apple-touch-icon" sizes="144x144" href="<?php bloginfo('template_url'); ?>/img/DD9_144x144_white.png" />
+<meta name="application-name" content="DD9.com" />
+<meta name="msapplication-TileColor" content="#540d0d" />
+<meta name="msapplication-TileImage" content="<?php bloginfo('template_url'); ?>/img/DD9_144x144.png" />
 <meta name="google-site-verification" content="jV9HcFOm5nSF-iidDOCEeIpjkIgGGYxKkc0E30FCyLE" />
 <meta name="google-site-verification" content="mniubP5QuKqY3c9zhYIaQTcWdw6J3B12tSty5Ia4ADA" />
 <meta name="Author" content="DD9 | dd9.com" />
@@ -64,11 +71,11 @@
   $(window).load(function() {
     $('.flexslider').flexslider({
           animation: "fade",
-		  slideshowSpeed: 9000,           //Integer: Set the speed of the slideshow cycling, in milliseconds
-		  animationDuration: 600,         //Integer: Set the speed of animations, in milliseconds
-		  directionNav: true,             //Boolean: Create navigation for previous/next navigation? (true/false)
-		  controlNav: true,               //Boolean: Create navigation for paging control of each clide? Note: Leave true for manualControls usage
-		  controlsContainer: ".controls_holder",          //Selector: Declare which container the navigation elements should be appended too. Default container is the flexSlider element. Example use would be ".flexslider-container", "#container", etc. If the given element is not found, the default action will be taken.
+		  slideshowSpeed: 9000,
+		  animationDuration: 600,
+		  directionNav: true,
+		  controlNav: true, 
+		  controlsContainer: ".controls_holder",
 		  keyboardNav: true,
 		 
     });
