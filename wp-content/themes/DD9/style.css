@@ -1735,6 +1735,11 @@ ul#menu-footer01 li.client_login {
 	float: right;
 	margin-right:0px;
 }
+
+#wpstats {
+    display:none !important;
+    
+    }
 /* =Contact
 ----------------------------------------------- */ 
 #wufoo-z7x3w7,
