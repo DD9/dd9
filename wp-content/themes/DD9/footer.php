@@ -12,7 +12,54 @@
 
 	</div><!-- #main -->
 
-	<footer id="colophon" role="contentinfo" class="content_right thin_border">
+
+
+	<footer id="colophon" role="contentinfo" >
+ 
+ 
+<div class="block_container full_width clearfix">
+ 
+ <div id="social" class="two_column thin_border">			
+
+<ul id="social_links" class="social_icons">
+
+ <li>
+   <a href="https://www.twitter.com/DD9inc" title="DD9 on Twitter" target="_blank">
+     <i class="icon-twitter-sign"></i>
+   </a>
+ </li>
+ <li>
+   <a href="https://www.facebook.com/DD9inc" title="DD9 On Facebook" target="_blank">
+    <i class="icon-facebook-sign"></i>
+   </a>
+ </li>
+
+ <li>
+    <a href="http://www.flickr.com/photos/dd9inc/" title="DD9 On Flickr" target="_blank">
+     <i class="icon-flickr-sign"></i>   
+    </a>
+ </li>
+
+ <li>
+    <a href="https://github.com/DD9" title="DD9 on GitHub" target="_blank">
+      <i class="icon-github-sign"></i> 
+    </a>
+ </li>
+
+ <li>
+    <a href="http://www.linkedin.com/company/dd9" title="DD9 on LinkedIn" target="_blank">
+      <i class="icon-linkedin-sign"></i> 
+    </a>
+ </li>
+
+
+ 
+</ul> 
+
+</div><!-- #social -->
+ 
+    
+    <div class="content_right thin_border">
 
 			<?php
 
@@ -38,42 +85,18 @@
 </div>
 
 
-<div id="social">			
 
-<g:plusone size="small" count="false" href="https://dd9.com"></g:plusone>
-<script type="text/javascript">
-  (function() {
-    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-    po.src = 'https://apis.google.com/js/plusone.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-  })();
-</script>
-
-<a href="https://www.twitter.com/DD9inc" title="Follow DD9 on Twitter"><img src="https://twitter-badges.s3.amazonaws.com/t_mini-b.png" alt="Follow DD9 on Twitter"/></a>
-
-<a href="http://www.flickr.com/photos/dd9inc/"><img src="<?php bloginfo('template_url'); ?>/images/flickr.png" alt="DD9 On Flickr" width="16" height="16" style="width:16px; height:16px;" /></a>
-
-<a href="https://github.com/DD9" title="DD9 on GitHub"><img src="<?php bloginfo('template_url'); ?>/img/github_icon.png" alt="DD9 On GitHub" width="16" height="16" /></a>
-
-<div id="fb-root" style="display:inline"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-<div class="fb-like" style="display:inline" data-href="https://www.facebook.com/DD9inc" data-send="false" data-layout="button_count" data-width="80" data-show-faces="false" data-font="tahoma"></div>
-
-
-
-</div><!-- #social -->
             
             </div>
+            
+            </div><!-- .content_right -->
+    
+    </div><!-- .block_containter -->
+            
 	</footer><!-- #colophon -->
     
-   
-</div><!-- #page -->
+ </div><!-- #page -->  
+
 
 <?php wp_footer(); ?>
 

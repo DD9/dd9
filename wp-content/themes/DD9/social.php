@@ -1,4 +1,4 @@
-<ul id="social_links">
+<ul id="share_links" class="social_icons">
  <li>
    <a class="facebook" rel="nofollow" href="http://www.facebook.com/sharer.php?u=<?php the_permalink();?>&amp;t=<?php echo urlencode(get_the_title($id)); ?>" title="Share this post on Facebook" target="_blank">
     <i class="icon-facebook-sign"></i>
@@ -17,4 +17,10 @@
 
    </a>
  </li>
+  <li>
+   <a href="https://plus.google.com/share?url=<?php the_permalink(); ?>" title="Share DD9.com on Google+" target="_blank">
+    <i class="icon-google-plus-sign"></i>
+   </a>
+ </li>
+ 
 </ul> 

@@ -1425,26 +1425,26 @@ ul.blog_categories ul.children {
     margin: 5px 0 15px 0;
 }
 
-ul#social_links {
+ul.social_icons {
     list-style: none outside none;
-    margin: 0 0 18px 0;
+    margin: 0px 0px 18px -7px;
     overflow: hidden;
     padding: 0;
     top: 0;
 }
 
-ul#social_links li {
+ul.social_icons li {
 	float:left;
 	width:18px;
 	height:18px;
 	padding:0 3px;	
 }
 
-ul#social_links li a {
+ul.social_icons li a {
     font-size: 18px;
     color: #999;    
 }
-ul#social_links li a:hover {
+ul.social_icons li a:hover {
       color: #E4311F;
 }
 /*
@@ -1704,6 +1704,10 @@ form.wpcf7-form textarea[type="textarea"]:focus, form.wpcf7-form textarea:focus 
 #social{
     	margin-bottom: 16px;
 }
+#social ul.social_icons {
+    margin-top: 18px;
+}
+
 #microformat_block {
     font-size:13px;
     	margin-bottom: 8px;
@@ -1712,13 +1716,14 @@ form.wpcf7-form textarea[type="textarea"]:focus, form.wpcf7-form textarea:focus 
 	color: #555;
 }
 ul#menu-footer01 {
-	list-style-type: none;
-	display: block;
-	clear: both;
-	float: none;
-	padding: 0px;
-	margin-right: 0px;
-	margin-left: 0px;
+    list-style-type: none;
+    display: block;
+    /* [disabled]clear: both; */
+    float: none;
+    padding: 0px;
+    margin-right: 0px;
+    margin-left: 0px;
+    top:0px;
 }
 ul#menu-footer01 li {
 	display: inline-block;
