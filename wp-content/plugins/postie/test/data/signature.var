@@ -1,0 +1,52 @@
+s:2635:"Delivered-To: postie-test@devzing.com
+Received: by 10.220.23.143 with SMTP id r15csp1132018vcb;
+        Thu, 29 Nov 2012 13:05:22 -0800 (PST)
+Received: by 10.50.171.4 with SMTP id aq4mr27187358igc.68.1354223122465;
+        Thu, 29 Nov 2012 13:05:22 -0800 (PST)
+Return-Path: <wayne@allens-home.com>
+Received: from mail-ie0-f177.google.com (mail-ie0-f177.google.com [209.85.223.177])
+        by mx.google.com with ESMTPS id g8si2814683icx.82.2012.11.29.13.05.22
+        (version=TLSv1/SSLv3 cipher=OTHER);
+        Thu, 29 Nov 2012 13:05:22 -0800 (PST)
+Received-SPF: neutral (google.com: 209.85.223.177 is neither permitted nor denied by best guess record for domain of wayne@allens-home.com) client-ip=209.85.223.177;
+Authentication-Results: mx.google.com; spf=neutral (google.com: 209.85.223.177 is neither permitted nor denied by best guess record for domain of wayne@allens-home.com) smtp.mail=wayne@allens-home.com
+Received: by mail-ie0-f177.google.com with SMTP id k13so14440466iea.22
+        for <postie-test@devzing.com>; Thu, 29 Nov 2012 13:05:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20120113;
+        h=mime-version:date:message-id:subject:from:to:content-type
+         :x-gm-message-state;
+        bh=EHTapfyJ5uPmNlFZWJKqOCdhrBBZ9rswcVv+mkG5c9c=;
+        b=W+b7qFC4WeiZ8DLHJD4zPQVwoEwwLahCNVUgLDKAXGRL3XatRBrjAX0PK3QaT9aHf/
+         H79Ln1aTic+0QbyDNliUp02eE9Y7Sq3i5Q0LFxLEUOSiK70adq1kNI8TgKwLdEeVCl59
+         n0IV8fivMotjFIbNvXbppjGRf3KnJdeQeiW45V6ZikzYLHfQch4ym5ysf8Xdpu4AzHOC
+         awNxQIVemYnsflFeZpKg6dD5G6knoUmze4L41lt20tKcrbPOzNCxkjt5tUj6WSytNMQZ
+         drSiQvXFaMA64x1fRGr0no3CfM6NH/NoEs4eF8F3Vbe+OQB1FSoSS2A3qyUOC59ioW6s
+         78Zw==
+MIME-Version: 1.0
+Received: by 10.50.77.230 with SMTP id v6mr26798822igw.11.1354223122096; Thu,
+ 29 Nov 2012 13:05:22 -0800 (PST)
+Received: by 10.231.82.14 with HTTP; Thu, 29 Nov 2012 13:05:22 -0800 (PST)
+Date: Thu, 29 Nov 2012 13:05:22 -0800
+Message-ID: <CACOA_7ZstC4Hd4VeS+WgQNr8iR7YVVEnO2pQB+h8gPioOEwiWQ@mail.gmail.com>
+Subject: signature
+From: Wayne Allen <wayne@allens-home.com>
+To: postie-test@devzing.com
+Content-Type: multipart/alternative; boundary=e89a8f3ba87f23a3d204cfa8a4cf
+X-Gm-Message-State: ALoCoQmSau5nVHcRvH33cOOK/N5nchyWkmIxr2tQfVwxZwsqgLnXyLgw2PYtc8Url634ZMQSSo/q
+
+--e89a8f3ba87f23a3d204cfa8a4cf
+Content-Type: text/plain; charset=ISO-8859-1
+
+test content
+
+--
+signature
+
+--e89a8f3ba87f23a3d204cfa8a4cf
+Content-Type: text/html; charset=ISO-8859-1
+
+test content<div><br></div><div>--</div><div>signature</div>
+
+--e89a8f3ba87f23a3d204cfa8a4cf--
+";

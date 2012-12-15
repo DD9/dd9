@@ -6,7 +6,8 @@ var acf = {
 		'conditional_no_fields' : 'No "toggle" fields avilable'
 	},
 	fields : [],
-	sortable_helper : null
+	sortable_helper : null,
+	nonce : ''
 	
 };
 
@@ -97,8 +98,8 @@ var acf = {
 		  return retId;
 
     }
-	
-	
+    
+    
 	/*
 	*  Place Confirm message on Publish trash button
 	*  
@@ -191,44 +192,58 @@ var acf = {
 	$.fn.update_names = function()
 	{
 		var field = $(this),
-			old_id = field.attr('data-id'),
-			new_id = 'field_' + uniqid();
+			old_id = field.attr('data-id');
 		
 		
-		// give field a new id
-		field.attr('data-id', new_id);
-		
-		
-		// update class
-		var new_class = field.attr('class');
-		new_class = new_class.replace(old_id, new_id);
-		field.attr('class', new_class);
-		
-		
-		// update field key column
-		field.find('.field_meta td.field_key').text( new_id );
-		
-		
-		// update inputs
-		field.find('[name]').each(function()
-		{	
-			
-			var name = $(this).attr('name');
-			var id = $(this).attr('id');
+		// load location html
+		$.ajax({
+			url: ajaxurl,
+			data: {
+				'action' : 'acf_next_field_id',
+				'nonce' : acf.nonce
+			},
+			type: 'post',
+			dataType: 'html',
+			success: function( new_id ){
 
-			if(name && name.indexOf('[' + old_id + ']') != -1)
-			{
-				name = name.replace('[' + old_id + ']','[' + new_id + ']');
+				// give field a new id
+				field.attr('data-id', new_id);
+				
+				
+				// update class
+				var new_class = field.attr('class');
+				new_class = new_class.replace(old_id, new_id);
+				field.attr('class', new_class);
+				
+				
+				// update field key column
+				field.find('.field_meta td.field_key').text( new_id );
+				
+				
+				// update inputs
+				field.find('[name]').each(function()
+				{	
+					
+					var name = $(this).attr('name');
+					var id = $(this).attr('id');
+		
+					if(name && name.indexOf('[' + old_id + ']') != -1)
+					{
+						name = name.replace('[' + old_id + ']','[' + new_id + ']');
+					}
+					if(id && id.indexOf('[' + old_id + ']') != -1)
+					{
+						id = id.replace('[' + old_id + ']','[' + new_id + ']');
+					}
+					
+					$(this).attr('name', name);
+					$(this).attr('id', id);
+					
+				});
+
 			}
-			if(id && id.indexOf('[' + old_id + ']') != -1)
-			{
-				id = id.replace('[' + old_id + ']','[' + new_id + ']');
-			}
-			
-			$(this).attr('name', name);
-			$(this).attr('id', id);
-			
 		});
+		
 	}
 	
 	
@@ -345,7 +360,7 @@ var acf = {
 		
 		// update names
 		new_field.update_names();
-		
+
 		
 		// add new field
 		field.after( new_field );
@@ -382,6 +397,10 @@ var acf = {
 		
 		// update names
 		new_field.update_names();
+		
+		
+		// show (update_names will remove the field_clone field, but not for a few seconds)
+		new_field.show();
 		
 		
 		// append to table
@@ -663,7 +682,8 @@ var acf = {
 		// vars
 		var tr = $(this).closest('tr.field_option_flexible_content'),
 			new_tr = tr.clone(false),
-			id = new_tr.attr('data-id');
+			id = new_tr.attr('data-id'),
+			new_id = uniqid();
 		
 		
 		// remove sub fields
@@ -674,11 +694,9 @@ var acf = {
 		
 		// reset layout meta values
 		new_tr.find('.acf_cf_meta input[type="text"]').val('');
-		new_tr.find('.acf_cf_meta select').val('table');
+		new_tr.find('.acf_cf_meta select').val('row').trigger('change');
 		
 		// update id / names
-		var new_id = uniqid();
-		
 		new_tr.find('[name]').each(function(){
 		
 			var name = $(this).attr('name').replace('[layouts]['+id+']','[layouts]['+new_id+']');
@@ -693,6 +711,48 @@ var acf = {
 		// add new tr
 		tr.after(new_tr);
 		
+		
+		return false;
+	});
+	
+	
+	/*----------------------------------------------------------------------
+	*
+	*	Duplicate Layout
+	*
+	*---------------------------------------------------------------------*/
+	
+	$('#acf_fields .acf_fc_duplicate').live('click', function(){
+		
+		// vars
+		var tr = $(this).closest('tr.field_option_flexible_content'),
+			new_tr = tr.clone(false),
+			id = new_tr.attr('data-id'),
+			new_id = uniqid();
+		
+		
+		// reset layout meta values
+		new_tr.find('.acf_cf_meta input[type="text"]').val('');
+		new_tr.find('.acf_cf_meta select').val('row').trigger('change');
+		
+		
+		// update id / names
+		new_tr.find('[name]').each(function(){
+		
+			var name = $(this).attr('name').replace('[layouts]['+id+']','[layouts]['+new_id+']');
+			$(this).attr('name', name);
+			$(this).attr('id', name);
+			
+		});
+		
+		
+		// update data-id
+		new_tr.attr('data-id', new_id);
+		
+		
+		// add new tr
+		tr.after(new_tr);
+	
 		
 		return false;
 	});

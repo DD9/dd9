@@ -1,0 +1,105 @@
+== Usage ==
+* If you put in :start - the message processing won't start until it sees that string
+* If you put in :end - the message processing will stop once it sees that string
+* Posts can be delayed by adding a line with delayXdXhXm where X is a number.
+  *    delay:1d - 1 day
+  *    delay:1h - 1 hour
+  *    delay:1m - 1 minute
+  *    delay:1d2h4m - 1 day 2 hours 4m
+* By putting comments:X in your message you can control if comments are allowed
+   *   comments:0 - means closed
+   *   comments:1 - means open
+   *   comments:2 - means registered only
+* Replying to an e-mail gets posted as a comment. 
+  * For example, you e-mailed a post with the subject line "foo".
+    If you then send an e-mail with the subject line "Re: foo", it will
+    get posted as a comment to the "foo" post. This works by the subject
+    line, so if you have two posts with titles "foo", then the comment
+    will get placed in the more recent post.
+* Custom excerpt
+  * You can include a custom excerpt of an e-mail by putting it between
+    :excerptstart and :excerptend
+    * You can include images in the excerpt by using the shortcode #eimg1#,
+      #eimg2# etc.
+
+= Post type =
+  You can specify the post type by including it as the first part of the subject
+  E.g. <post type>//<real subject>
+
+= Category and tag handling =
+* If you put a category name in the subject with a : it will be used
+  as the category for the post
+* If you put a category id number in the subject with a : it will
+  be used as the category for the post
+* If you put the first part of a category name it will be posted in
+  the first category that the system finds that matches - so if you put
+
+  Subject: Gen: New News
+
+  The system will post that in General.
+
+* All of the above also applies if you put the category in brackets []
+* Using [] or you can post to multiple categories at once
+
+  Subject: [1] [Mo] [Br] My Subject
+
+  On my blog it would post to General (Id 1), Moblog, and Brewing all at one time
+
+* Using - or you can post to multiple categories at once
+
+  Subject: -1- -Mo- -Br- My Subject
+
+  On my blog it would post to General (Id 1), Moblog, and Brewing all at one time
+
+= Tags =
+* You can add tags by adding a line in the body of the message like so:
+  tags: foo, bar
+* You can also set a default tag to be applied if no tags are included.
+
+= Image Handling =
+* Allows you to attach images to your email and automatically post
+  them to your blog
+* You can publish images in the text of your message by using #img1#
+  #img2# - each one will be replaced with the HTML for the image
+  you attached
+* Captions - you can also add a caption like so:
+
+    * #img1 caption='foo'#
+    * #img2 caption='bar'#
+  
+  Or, if you use IPTC captions, this caption will be used  (adding a caption
+  in many photo editing programs (for example Picasa), will add an IPTC caption)
+
+  Note that the images are processed in the order they are attached as of version
+  1.4.6.
+
+* Image templates
+  Postie now uses the default wordpress image template, but you can specify a
+different one if you wish.
+
+  You can also specify a custom image template. I use the following custom
+template:
+
+  `<div class='imageframe alignleft'><a href='{IMAGE}'><img src="{THUMBNAIL}"
+  alt="{CAPTION}" title="{CAPTION}" 
+  class="attachment" /></a><div
+  class='imagecaption'>{CAPTION}</div></div>`
+     
+    * {THUMBNAIL} gets replaced with the url to the thumbnail image
+    * {MEDIUM} gets replaced with the url to the medium-sized image
+    * {LARGE} gets replaced with the url to the large-sized image
+    * {FULL} gets replaced with the url to the full-sized image
+    * {FILENAME} gets replaced with the absolute path to the full-size image
+    * {RELFILENAME} gets replaced with the relative path to the full-size image
+    * {CAPTION} gets replaced with the caption you specified (if any)
+    * {WIDTH} gets replaced with width of the photo
+    * {HEIGHT} gets replaced with the height of the photo
+
+= Interoperability =
+* If your mail client doesn't support setting the subject (nokia) you
+  can do so by putting #your title here# at the beginning of your message
+* POP3,POP3-SSL,IMAP,IMAP-SSL now supported - last three require
+  php-imap support
+* The program understands enough about mime to not duplicate post
+  if you send an HTML and plain text message
+* Automatically confirms that you are installed correctly

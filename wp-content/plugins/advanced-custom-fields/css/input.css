@@ -363,6 +363,10 @@ ul.checkbox_list {
 	background: transparent !important;
 }
 
+#createuser ul.checkbox_list input {
+    width: auto;
+}
+
 
 /*---------------------------------------------------------------------------------------------
 *

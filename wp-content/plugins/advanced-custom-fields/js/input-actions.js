@@ -387,7 +387,7 @@ var acf = {
 		window.acf_div = div;
 			
 		// show the thickbox
-		tb_show( acf.text.file_tb_title_add , acf.admin_url + 'media-upload.php?post_id=' + acf.post_id + '&type=file&acf_type=file&TB_iframe=1');
+		tb_show( acf.text.file_tb_title_add , acf.admin_url + 'media-upload.php?post_id=' + acf.post_id + '&post_ID=' + acf.post_id + '&type=file&acf_type=file&TB_iframe=1');
 	
 		return false;
 	});
@@ -443,7 +443,7 @@ var acf = {
 		window.acf_div = div;
 			
 		// show the thickbox
-		tb_show( acf.text.image_tb_title_add , acf.admin_url + 'media-upload.php?post_id=' + acf.post_id + '&type=image&acf_type=image&acf_preview_size=' + preview_size + 'TB_iframe=1');
+		tb_show( acf.text.image_tb_title_add , acf.admin_url + 'media-upload.php?post_id=' + acf.post_id + '&post_ID=' + acf.post_id + '&type=image&acf_type=image&acf_preview_size=' + preview_size + 'TB_iframe=1');
 	
 		return false;
 	});
@@ -894,6 +894,12 @@ var acf = {
 		
 		//console.log( 'sortstart' );
 		
+		// validate tinymce
+		if( typeof(tinyMCE) != "object" )
+		{
+			return;
+		}
+		
 		$(div).find('.acf_wysiwyg textarea').each(function(){
 			
 			// vars
@@ -929,6 +935,12 @@ var acf = {
 	$(document).live('acf/sortable_stop', function(e, div) {
 		
 		//console.log( 'sortstop' );
+		
+		// validate tinymce
+		if( typeof(tinyMCE) != "object" )
+		{
+			return;
+		}
 		
 		$(div).find('.acf_wysiwyg textarea').each(function(){
 			
@@ -1757,6 +1769,42 @@ var acf = {
 		});
 	
 	});
+	
+	
+	// gallery ajax
+	acf.gallery_update_tile = function(){
+	
+		// vars
+		var div = window.acf_edit_attachment,
+			attachment_id = div.attr('data-id');
+		
+		
+		// ajax find new list data
+		$.ajax({
+			url: ajaxurl,
+			data : {
+				'action' : 'acf_get_gallery_list_data',
+				'attachment_id' : attachment_id
+			},
+			cache: false,
+			dataType: "html",
+			success: function( html ) {
+		    	
+	
+				// validate
+				if(!html)
+				{
+					return false;
+				}
+				
+				
+				// update list-item html
+				div.find('.list-data').html( html ); 	
+	 	
+			}
+		});
+		
+	};
 	
 	
 	/*

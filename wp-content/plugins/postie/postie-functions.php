@@ -1,5 +1,49 @@
 <?php
 
+/*
+  $Id: postie-functions.php 639439 2012-12-14 22:03:09Z WayneAllen $
+ */
+
+/* TODO 
+ * html purify
+ * USE built-in php message decoding to improve speed
+ * Add custom fields
+ * support for flexible upload plugin
+ * iso 8859-2 support
+ * add private post function
+  http://forum.robfelty.com/topic/how-to-private-posts-from-postie?replies=2#post-1515
+ * category per e-mail address
+ */
+
+//to turn on debug output add the following line to wp-config.php
+//define('POSTIE_DEBUG', true);
+
+if (!function_exists('mb_str_replace')) {
+
+    function mb_str_replace($search, $replace, $subject, &$count = 0) {
+        if (!is_array($subject)) {
+            // Normalize $search and $replace so they are both arrays of the same length
+            $searches = is_array($search) ? array_values($search) : array($search);
+            $replacements = is_array($replace) ? array_values($replace) : array($replace);
+            $replacements = array_pad($replacements, count($searches), '');
+
+            foreach ($searches as $key => $search) {
+                $parts = mb_split(preg_quote($search), $subject);
+                $count += count($parts) - 1;
+                $subject = implode($replacements[$key], $parts);
+            }
+        } else {
+            // Call mb_str_replace for each subject in array, recursively
+            foreach ($subject as $key => $value) {
+                $subject[$key] = mb_str_replace($search, $replace, $value, $count);
+            }
+        }
+
+        return $subject;
+    }
+
+}
+
 function postie_disable_revisions($restore = false) {
     global $_wp_post_type_features, $_postie_revisions;
 
@@ -37,24 +81,6 @@ function postie_increase_memory($restore = false) {
     }
 }
 
-//include_once (dirname(dirname(dirname(dirname(__FILE__)))) .  DIRECTORY_SEPARATOR."wp-admin" . DIRECTORY_SEPARATOR . "upgrade-functions.php");
-/*
-  $Id: postie-functions.php 625325 2012-11-14 19:29:41Z WayneAllen $
- */
-
-/* TODO 
- * html purify
- * USE built-in php message decoding to improve speed
- * Add custom fields
- * support for flexible upload plugin
- * iso 8859-2 support
- * add private post function
-  http://forum.robfelty.com/topic/how-to-private-posts-from-postie?replies=2#post-1515
- * category per e-mail address
- */
-
-//include_once (dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . "wp-config.php");
-
 /* this function is necessary for wildcard matching on non-posix systems */
 if (!function_exists('fnmatch')) {
 
@@ -66,6 +92,36 @@ if (!function_exists('fnmatch')) {
         );
     }
 
+}
+
+function LogInfo($v) {
+    error_log("Postie: $v");
+}
+
+function EchoInfo($v) {
+    if (headers_sent()) {
+        echo("<p>$v</p>\n");
+    }
+    LogInfo($v);
+}
+
+function DebugDump($v) {
+    if (IsDebugMode()) {
+        $o = print_r($v, true);
+        if (headers_sent()) {
+            echo "<pre>\n";
+        }
+        EchoInfo(htmlspecialchars($o));
+        if (headers_sent()) {
+            echo "</pre>\n";
+        }
+    }
+}
+
+function DebugEcho($v) {
+    if (IsDebugMode()) {
+        EchoInfo($v);
+    }
 }
 
 /**
@@ -82,50 +138,41 @@ function PostEmail($poster, $mimeDecodedEmail, $config) {
         "cids" => array(), //holds the cids for HTML email
         "image_files" => array() //holds the files for each image
     );
-    print("<p>Message Id is :" .
-            htmlentities($mimeDecodedEmail->headers["message-id"]) . "</p><br/>\n");
-    if (defined('POSTIE_DEBUG')) {
-        foreach ($mimeDecodedEmail->parts as $parts) {
-            print("<p>" . $parts->ctype_primary . " " . $parts->ctype_secondary) . "</p>\n";
-        }
-        echo "<p>Email is:</p>";
-        var_dump($mimeDecodedEmail);
-    }
+    EchoInfo("Message Id is :" . htmlentities($mimeDecodedEmail->headers["message-id"]));
+
     FilterTextParts($mimeDecodedEmail, $prefer_text_type);
-    $tmpPost = array('post_title' => 'tmptitle',
-        'post_content' => 'tmpPost');
+    $tmpPost = array('post_title' => 'tmptitle', 'post_content' => 'tmpPost');
     /* in order to do attachments correctly, we need to associate the
       attachments with a post. So we add the post here, then update it
      */
     $post_id = wp_insert_post($tmpPost);
-    if (defined('POSTIE_DEBUG')) {
-        echo "the id is $post_id\n";
-    }
+    EchoInfo("new post id is $post_id");
+
     $content = GetContent($mimeDecodedEmail, $attachments, $post_id, $poster, $config);
-    if (defined('POSTIE_DEBUG')) {
-        echo "the content is $content\n";
-    }
+    //DebugEcho("the content is $content");
+
     $subject = GetSubject($mimeDecodedEmail, $content, $config);
-    if (defined('POSTIE_DEBUG')) {
-        echo "the subject is $subject, right after calling GetSubject\n";
-    }
+
     $customImages = SpecialMessageParsing($content, $attachments, $config);
     $post_excerpt = GetPostExcerpt($content, $filternewlines, $convertnewline);
     $postAuthorDetails = getPostAuthorDetails($subject, $content, $mimeDecodedEmail);
     $message_date = NULL;
-    if (array_key_exists("date", $mimeDecodedEmail->headers)
-            && !empty($mimeDecodedEmail->headers["date"])) {
-        $message_date = HandleMessageEncoding(
-                $mimeDecodedEmail->headers["content-transfer-encoding"], $mimeDecodedEmail->ctype_parameters["charset"], $mimeDecodedEmail->headers["date"], $message_encoding, $message_dequote);
-        //$message_date = $mimeDecodedEmail->headers['date'];
+    if (array_key_exists("date", $mimeDecodedEmail->headers) && !empty($mimeDecodedEmail->headers["date"])) {
+        $cte = "";
+        $cs = "";
+        if (array_key_exists('content-transfer-encoding', $mimeDecodedEmail->headers)) {
+            $cte = $mimeDecodedEmail->headers["content-transfer-encoding"];
+        }
+        if (array_key_exists('charset', $mimeDecodedEmail->ctype_parameters)) {
+            $cs = $mimeDecodedEmail->ctype_parameters["charset"];
+        }
+        $message_date = HandleMessageEncoding($cte, $cs, $mimeDecodedEmail->headers["date"], $message_encoding, $message_dequote);
     }
     list($post_date, $post_date_gmt, $delay) = DeterminePostDate($content, $message_date, $time_offset);
     ubb2HTML($content);
 
     if ($converturls)
         $content = clickableLink($content, $shortcode);
-
-    //$content = FixEmailQuotes($content);
 
     $id = checkReply($subject);
     $post_categories = GetPostCategories($subject, $default_post_category);
@@ -149,14 +196,12 @@ function PostEmail($poster, $mimeDecodedEmail, $config) {
             }
         }
     } else {
+        EchoInfo("Reply detected");
         $isReply = true;
         // strip out quoted content
         $lines = explode("\n", $content);
-        //$lines=preg_split('/([\r\n]|<br \/>)/',$content);
         $newContents = '';
         foreach ($lines as $line) {
-            //$match=preg_match("/^>.*/i",$line);
-            //echo "line=$line,  match=$match";
             if (preg_match("/^>.*/i", $line) == 0 &&
                     preg_match("/^(from|subject|to|date):.*?/i", $line) == 0 &&
                     preg_match("/^-+.*?(from|subject|to|date).*?/i", $line) == 0 &&
@@ -171,13 +216,14 @@ function PostEmail($poster, $mimeDecodedEmail, $config) {
     if ($filternewlines)
         $content = FilterNewLines($content, $convertnewline);
 
-
     if ($delay != 0 && $post_status == 'publish') {
         $post_status = 'future';
     } else {
         $post_status = $post_status;
     }
-    // DEBUG
+
+    $post_type = GetPostType($subject);
+
     $details = array(
         'post_author' => $poster,
         'comment_author' => $postAuthorDetails['author'],
@@ -185,12 +231,10 @@ function PostEmail($poster, $mimeDecodedEmail, $config) {
         'user_ID' => $postAuthorDetails['user_ID'],
         'email_author' => $postAuthorDetails['email'],
         'post_date' => $post_date,
-        //   'post_date_gmt'  => $post_date_gmt,
-        //    'post_content'  => apply_filters('content_save_pre',$content),
+        'post_date_gmt' => $post_date_gmt,
         'post_content' => $content,
         'post_title' => $subject,
-        //   'post_modified'  => $post_date,
-        //   'post_modified_gmt' => $post_date_gmt,
+        'post_type' => $post_type, /* Added by Raam Dev <raam@raamdev.com> */
         'ping_status' => get_option('default_ping_status'),
         'post_category' => $post_categories,
         'tags_input' => $post_tags,
@@ -226,12 +270,46 @@ function PostEmail($poster, $mimeDecodedEmail, $config) {
     }
     postie_disable_revisions(true);
     postie_increase_memory(true);
+    DebugEcho("Done");
 }
 
 /** FUNCTIONS * */
+/*
+ * Added by Raam Dev <raam@raamdev.com>
+ * Adds support for handling Custom Post Types by adding the
+ * Custom Post Type name to the email subject separated by
+ * $custom_post_type_delim, e.g. "Movies // My Favorite Movie"
+ */
+function GetPostType(&$subject) {
+
+    $custom_post_type_delim = "//";
+    if (strpos($subject, $custom_post_type_delim) !== FALSE) {
+
+        // Captures the custom post type in the subject before $custom_post_type_delim
+        $separated_subject = explode($custom_post_type_delim, $subject);
+        $custom_post_type = $separated_subject[0];
+        $subject = trim($separated_subject[1]);
+
+        $custom_post_type = trim(strtolower($custom_post_type));
+
+        // Check if custom post type exists, if not, set default post type of 'post'
+        $known_post_types = get_post_types();
+
+        if (in_array($custom_post_type, array_map('strtolower', $known_post_types))) {
+            $post_type = $custom_post_type;
+        } else {
+            $post_type = 'post';
+        }
+    } else {
+        $post_type = 'post';
+    }
+
+    return $post_type;
+}
+
 function clickableLink($text, $shortcode = false) {
-    # this functions deserves credit to the fine folks at phpbb.com
-    # It turns urls into links, and video urls into embedded players
+# this functions deserves credit to the fine folks at phpbb.com
+# It turns urls into links, and video urls into embedded players
 
     $text = preg_replace('#(script|about|applet|activex|chrome):#is', "\\1:", $text);
 
@@ -251,7 +329,7 @@ function clickableLink($text, $shortcode = false) {
 
     if (strpos($ret, 'vimeo') !== false) {
         // try to embed vimeo videos
-#    : http://vimeo.com/6348141
+        #    : http://vimeo.com/6348141
         $vimeo = "#(^|[\n ]|>)[\w]+?://(www\.)?vimeo\.com/([_a-zA-Z0-9-]+).*?([ \n]|$|<)#is";
         #$youtube="#(^|[\n ]|<p[^<]*>)[\w]+?://(www\.)?youtube\.com/watch\?v=([_a-zA-Z0-9]+).*?([ \n]|$|</p>)#is";
         if ($shortcode) {
@@ -296,6 +374,20 @@ function getPostAuthorDetails(&$subject, &$content, &$mimeDecodedEmail) {
      * Otherwise we get them from the headers    
      */
     global $wpdb;
+
+    $theDate = $mimeDecodedEmail->headers['date'];
+    $theEmail = RemoveExtraCharactersInEmailAddress(trim($mimeDecodedEmail->headers["from"]));
+    $regAuthor = get_user_by('email', $theEmail);
+    if ($regAuthor) {
+        $theAuthor = $regAuthor->user_login;
+        $theUrl = $regAuthor->user_url;
+        $theID = $regAuthor->ID;
+    } else {
+        $theAuthor = GetNameFromEmail($mimeDecodedEmail->headers['from']);
+        $theUrl = '';
+        $theID = '';
+    }
+
     // see if subject starts with Fwd:
     if (preg_match("/(^Fwd:) (.*)/", $subject, $matches)) {
         $subject = trim($matches[2]);
@@ -307,28 +399,13 @@ function getPostAuthorDetails(&$subject, &$content, &$mimeDecodedEmail) {
             $theDate = $matches[1];
             $mimeDecodedEmail->headers['date'] = $theDate;
         }
-    } else {
-        $theDate = $mimeDecodedEmail->headers['date'];
-        $theEmail = RemoveExtraCharactersInEmailAddress(trim(
-                        $mimeDecodedEmail->headers["from"]));
-        $regAuthor = get_user_by('email', $theEmail);
-        if ($regAuthor) {
-            $theAuthor = $regAuthor->user_login;
-            $theUrl = $regAuthor->user_url;
-            $theID = $regAuthor->ID;
-        } else {
-            $theAuthor = GetNameFromEmail($mimeDecodedEmail->headers['from']);
-            $theUrl = '';
-            $theID = '';
-        }
     }
+
     // now get rid of forwarding info in the content
     $lines = preg_split("/\r\n/", $content);
     $newContents = '';
     foreach ($lines as $line) {
-        if (preg_match("/^(from|subject|to|date):.*?/i", $line, $matches) == 0 &&
-                //    preg_match("/^$/i",$line,$matches)==0 &&
-                preg_match("/^-+\s*forwarded\s*message\s*-+/i", $line, $matches) == 0) {
+        if (preg_match("/^(from|subject|to|date):.*?/i", $line, $matches) == 0 && preg_match("/^-+\s*forwarded\s*message\s*-+/i", $line, $matches) == 0) {
             $newContents.=preg_replace("/\r/", "", $line) . "\n";
         }
     }
@@ -355,6 +432,9 @@ function checkReply(&$subject) {
      */
 
     global $wpdb;
+
+    $id = NULL;
+
     // see if subject starts with Re:
     if (preg_match("/(^Re:) (.*)/i", $subject, $matches)) {
         $subject = trim($matches[2]);
@@ -370,17 +450,14 @@ function checkReply(&$subject) {
             preg_match("/-(.[^-]*)$/", $tmpSubject, $tmpSubject_matches);
             $tmpSubject = trim($tmpSubject_matches[1]);
         }
-        $checkExistingPostQuery = "SELECT ID FROM $wpdb->posts WHERE 
-        '$tmpSubject' = post_title";
-        if ($id = $wpdb->get_var($wpdb->prepare($checkExistingPostQuery))) {
+        $checkExistingPostQuery = "SELECT ID FROM $wpdb->posts WHERE '$tmpSubject' = post_title";
+        if ($id = $wpdb->get_var($wpdb->prepare($checkExistingPostQuery, array()))) {
             if (is_array($id)) {
                 $id = $id[count($id) - 1];
             }
-        } else {
-            $id = NULL;
         }
     }
-    return($id);
+    return $id;
 }
 
 function postie_read_me() {
@@ -393,7 +470,7 @@ function postie_read_me() {
 function PostieMenu() {
     if (function_exists('add_options_page')) {
         if (current_user_can('manage_options')) {
-            add_options_page("Postie", "Postie", 0, POSTIE_ROOT . "/postie.php", "ConfigurePostie");
+            add_options_page("Postie", "Postie", 'manage_options', POSTIE_ROOT . "/postie.php", "ConfigurePostie");
         }
     }
 }
@@ -412,10 +489,11 @@ function ConfigurePostie() {
 function FetchMail($server = NULL, $port = NULL, $email = NULL, $password = NULL, $protocol = NULL, $offset = NULL, $test = NULL, $deleteMessages = true) {
     $emails = array();
     if (!$server || !$port || !$email) {
-        die("Missing Configuration For Mail Server\n");
+        EchoInfo("Missing Configuration For Mail Server");
+        return $emails;
     }
     if ($server == "pop.gmail.com") {
-        print("\nMAKE SURE POP IS TURNED ON IN SETTING AT Gmail\n");
+        EchoInfo("MAKE SURE POP IS TURNED ON IN SETTING AT Gmail");
     }
     switch (strtolower($protocol)) {
         case 'smtp': //direct 
@@ -430,36 +508,18 @@ function FetchMail($server = NULL, $port = NULL, $email = NULL, $password = NULL
         case 'imap':
         case 'imap-ssl':
         case 'pop3-ssl':
-            HasIMAPSupport(false);
-            if ($test) {
-                $emails = TestIMAPMessageFetch();
+            if (!HasIMAPSupport()) {
+                EchoInfo("Sorry - you do not have IMAP php module installed - it is required for this mail setting.");
             } else {
                 $emails = IMAPMessageFetch($server, $port, $email, $password, $protocol, $offset, $test, $deleteMessages);
             }
             break;
         case 'pop3':
         default:
-            if ($test) {
-                $emails = TestPOP3MessageFetch();
-            } else {
-                $emails = POP3MessageFetch($server, $port, $email, $password, $protocol, $offset, $test, $deleteMessages);
-            }
+            $emails = POP3MessageFetch($server, $port, $email, $password, $protocol, $offset, $test, $deleteMessages);
     }
-    if (!$emails)
-        die("\n" . __('There does not seem to be any new mail.', 'postie') . "\n");
-    return($emails);
-}
 
-/**
- * Handles fetching messages from an imap server
- */
-function TestIMAPMessageFetch() {
-    print("**************RUNING IN TESTING MODE************\n");
-    $config = get_postie_config();
-    extract($config);
-    $email = $test_email_account;
-    $password = $test_email_password;
-    return(IMAPMessageFetch($mail_server, $mail_server_port, $email, $password, $input_protocol, $time_offset, $test_email));
+    return $emails;
 }
 
 /**
@@ -467,20 +527,18 @@ function TestIMAPMessageFetch() {
  */
 function IMAPMessageFetch($server = NULL, $port = NULL, $email = NULL, $password = NULL, $protocol = NULL, $offset = NULL, $test = NULL, $deleteMessages = true) {
     require_once("postieIMAP.php");
-
-    $mail_server = &PostieIMAP::Factory($protocol);
-    print("\nConnecting to $server:$port ($protocol) \n");
-    if (!$mail_server->connect($server, $port, $email, $password)) {
-        print("Mail Connection Time Out\n
-                Common Reasons: \n
-                Server Down \n
-                Network Issue \n
-                Port/Protocol MisMatch \n
-                ");
-        die("The Server said:" . $mail_server->error() . "\n");
-    }
-    $msg_count = $mail_server->getNumberOfMessages();
     $emails = array();
+    $mail_server = &PostieIMAP::Factory($protocol);
+    EchoInfo("Connecting to $server:$port ($protocol)");
+    if ($mail_server->connect($server, $port, $email, $password)) {
+        $msg_count = $mail_server->getNumberOfMessages();
+    } else {
+        EchoInfo("Mail Connection Time Out");
+        EchoInfo("Common Reasons: Server Down, Network Issue, Port/Protocol MisMatch ");
+        EchoInfo("The Server said:" . $mail_server->error());
+        $msg_count = 0;
+    }
+
     // loop through messages 
     for ($i = 1; $i <= $msg_count; $i++) {
         $emails[$i] = $mail_server->fetchEmail($i);
@@ -496,42 +554,28 @@ function IMAPMessageFetch($server = NULL, $port = NULL, $email = NULL, $password
     return $emails;
 }
 
-function TestPOP3MessageFetch() {
-    print("**************RUNING IN TESTING MODE************\n");
-    $config = get_postie_config();
-    extract($config);
-    $email = $test_email_account;
-    $password = $test_email_password;
-    return(POP3MessageFetch($mail_server, $mail_server_port, $email, $password, $input_protocol, $time_offset, $test_email));
-}
-
 /**
  * Retrieves email via POP3
  */
 function POP3MessageFetch($server = NULL, $port = NULL, $email = NULL, $password = NULL, $protocol = NULL, $offset = NULL, $test = NULL, $deleteMessages = true) {
     require_once(ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'class-pop3.php');
-    $pop3 = &new POP3();
-    print("\nConnecting to $server:$port ($protocol))  \n");
-    if (!$pop3->connect($server, $port)) {
-        if (strpos($pop3->ERROR, "POP3: premature NOOP OK, NOT an RFC 1939 Compliant server") === false) {
-            print("Mail Connection Time Out\n
-                    Common Reasons: \n
-                    Server Down \n
-                    Network Issue \n
-                    Port/Protocol MisMatch \n
-                    ");
-            die("The Server Said $pop3->ERROR \n");
-        }
-    }
 
-    //Check to see if there is any mail, if not die
-    $msg_count = $pop3->login($email, $password);
-    if ($msg_count === false) {
-        $pop3->quit();
-        // we should die if $msg_count is false, but the core wordpress pop3 needs
-        // to be fixed before we can do that
-        //  die("there was a problem logging in. Please check username and password.");
-        return(array());
+    $emails = array();
+    $pop3 = new POP3();
+
+    EchoInfo("Connecting to $server:$port ($protocol))");
+
+    if ($pop3->connect($server, $port)) {
+        $msg_count = $pop3->login($email, $password);
+        if ($msg_count === false) {
+            $msg_count = 0;
+        }
+    } else {
+        if (strpos($pop3->ERROR, "POP3: premature NOOP OK, NOT an RFC 1939 Compliant server") === false) {
+            EchoInfo("Mail Connection Time Out. Common Reasons: Server Down, Network Issue, Port/Protocol MisMatch");
+        }
+        EchoInfo("The Server said: $pop3->ERROR");
+        $msg_count = 0;
     }
 
     // loop through messages 
@@ -539,14 +583,10 @@ function POP3MessageFetch($server = NULL, $port = NULL, $email = NULL, $password
         $emails[$i] = implode('', $pop3->get($i));
         if ($deleteMessages) {
             if (!$pop3->delete($i)) {
-                echo 'Oops ' . $pop3->ERROR . '\n';
+                EchoInfo('pop3 cannot delete message ' . $pop3->ERROR);
                 $pop3->reset();
                 exit;
-            } else {
-                echo "Mission complete, message $i deleted.\n";
             }
-        } else {
-            print("Not deleting messages!\n");
         }
     }
     //clean up
@@ -561,9 +601,12 @@ function POP3MessageFetch($server = NULL, $port = NULL, $email = NULL, $password
  */
 function PostToDB($details, $isReply, $postToDb = true, $customImageField = false) {
     if ($postToDb) {
-        //$_POST['publish'] = true; //Added to make subscribe2 work - it will only handle it if the global varilable _POST is set
         if (!$isReply) {
-            $post_ID = wp_insert_post($details);
+            $post_ID = wp_insert_post($details, true);
+            if (is_wp_error($post_ID)) {
+                EchoInfo("Error: " . $post_ID->get_error_message());
+                wp_delete_post($details['ID']);
+            }
         } else {
             $comment = array(
                 'comment_author' => $details['comment_author'],
@@ -583,15 +626,16 @@ function PostToDB($details, $isReply, $postToDb = true, $customImageField = fals
 
             $post_ID = wp_insert_comment($comment);
         }
-        if ($customImageField) {
+        if ($customImageField && $post_ID) {
+            DebugEcho("Saving custom image fields");
+            //DebugDump($details['customImages']);
+
             if (count($details['customImages']) > 1) {
                 $imageField = 1;
                 foreach ($details['customImages'] as $image) {
                     add_post_meta($post_ID, 'image' . $imageField, $image);
                     $imageField++;
                 }
-            } else {
-                add_post_meta($post_ID, 'image', $details['customImages'][0]);
             }
         }
     }
@@ -607,28 +651,28 @@ function BannedFileName($filename, $bannedFiles) {
         return false;
     foreach ($bannedFiles as $bannedFile) {
         if (fnmatch($bannedFile, $filename)) {
-            print("<p>Ignoring $filename - it is on the banned files list.");
-            return(true);
+            EchoInfo("Ignoring attachment: $filename - it is on the banned files list.");
+            return true;
         }
     }
-    return(false);
+    return false;
 }
 
-//tear apart the meta part for useful information
 function GetContent($part, &$attachments, $post_id, $poster, $config) {
     extract($config);
     global $charset, $encoding;
-    /*
-      if (!function_exists(imap_mime_header_decode))
-      echo "you need to install the php-imap extension for full functionality, including mime header decoding\n";
-     */
-    $meta_return = NULL;
-    echo "primary= " . $part->ctype_primary . ", secondary = " . $part->ctype_secondary . "\n";
+
+    $meta_return = '';
+    DebugEcho("primary= " . $part->ctype_primary . ", secondary = " . $part->ctype_secondary);
+
     DecodeBase64Part($part);
-    if (BannedFileName($part->ctype_parameters['name'], $banned_files_list))
-        return(NULL);
-    if ($part->ctype_primary == "application"
-            && $part->ctype_secondary == "octet-stream") {
+
+    //look for banned file names
+    if (is_array($part->ctype_parameters) && array_key_exists('name', $part->ctype_parameters))
+        if (BannedFileName($part->ctype_parameters['name'], $banned_files_list))
+            return NULL;
+
+    if ($part->ctype_primary == "application" && $part->ctype_secondary == "octet-stream") {
         if ($part->disposition == "attachment") {
             $image_endings = array("jpg", "png", "gif", "jpeg", "pjpeg");
             foreach ($image_endings as $type) {
@@ -646,8 +690,8 @@ function GetContent($part, &$attachments, $post_id, $poster, $config) {
             }
         }
     }
-    if ($part->ctype_primary == "multipart"
-            && $part->ctype_secondary == "appledouble") {
+
+    if ($part->ctype_primary == "multipart" && $part->ctype_secondary == "appledouble") {
         $mimeDecodedEmail = DecodeMIMEMail("Content-Type: multipart/mixed; boundary=" . $part->ctype_parameters["boundary"] . "\n" . $part->body);
         FilterTextParts($mimeDecodedEmail, $prefer_text_type);
         FilterAppleFile($mimeDecodedEmail);
@@ -655,57 +699,78 @@ function GetContent($part, &$attachments, $post_id, $poster, $config) {
             $meta_return .= GetContent($section, $attachments, $post_id, $poster, $config);
         }
     } else {
-        // fix filename (remove non-standard characters)
-        $filename = preg_replace("/[^\x9\xA\xD\x20-\x7F]/", "", $part->ctype_parameters['name']);
+        $filename = "";
+        if (is_array($part->ctype_parameters) && array_key_exists('name', $part->ctype_parameters)) {
+            // fix filename (remove non-standard characters)
+            $filename = preg_replace("/[^\x9\xA\xD\x20-\x7F]/", "", $part->ctype_parameters['name']);
+            DebugEcho("Filename: $filename");
+        }
         switch (strtolower($part->ctype_primary)) {
             case 'multipart':
+                //DebugDump($part);
                 FilterTextParts($part, $prefer_text_type);
                 foreach ($part->parts as $section) {
                     $meta_return .= GetContent($section, $attachments, $post_id, $poster, $config);
                 }
                 break;
-            case 'text':
-                $tmpcharset = trim($part->ctype_parameters['charset']);
-                if ($tmpcharset != '')
-                    $charset = $tmpcharset;
-                $tmpencoding = trim($part->headers['content-transfer-encoding']);
-                if ($tmpencoding != '')
-                    $encoding = $tmpencoding;
 
-                $part->body = HandleMessageEncoding($part->headers["content-transfer-encoding"], $part->ctype_parameters["charset"], $part->body, $message_encoding, $message_dequote);
+            case 'text':
+                DebugDump($part);
+                if (array_key_exists('charset', $part->ctype_parameters) && !empty($part->ctype_parameters['charset'])) {
+                    $charset = $part->ctype_parameters['charset'];
+                    DebugEcho("charset: $charset");
+                }
+
+                if (array_key_exists('content-transfer-encoding', $part->headers) && !empty($part->headers['content-transfer-encoding'])) {
+                    $encoding = $part->headers['content-transfer-encoding'];
+                    DebugEcho("encoding: $encoding");
+                }
+
+                if (array_key_exists('content-transfer-encoding', $part->headers)) {
+                    //DebugDump($part);
+                    $part->body = HandleMessageEncoding($encoding, $charset, $part->body, $message_encoding, $message_dequote);
+                    //DebugDump($part);
+                }
 
                 //go through each sub-section
                 if ($part->ctype_secondary == 'enriched') {
                     //convert enriched text to HTML
+                    DebugEcho("enriched");
                     $meta_return .= etf2HTML($part->body) . "\n";
                 } elseif ($part->ctype_secondary == 'html') {
                     //strip excess HTML
-                    //$meta_return .= HTML2HTML($part->body ) . "\n";
-                    $meta_return .= $part->body . "\n";
+                    DebugEcho("html");
+                    $meta_return .= HTML2HTML($part->body) . "\n";
                 } else {
                     //regular text, so just strip the pgp signature
-                    if (ALLOW_HTML_IN_BODY) {
-                        $meta_return .= $part->body . "\n";
+                    DebugEcho("plain text");
+                    if ($allow_html_in_body) {
+                        $meta_return .= $part->body;
                     } else {
-                        $meta_return .= htmlentities($part->body) . "\n";
+                        $meta_return .= htmlentities($part->body);
                     }
                     $meta_return = StripPGP($meta_return);
+                    $meta_return = "<div>$meta_return</div>\n";
                 }
                 break;
 
             case 'image':
                 $file_id = postie_media_handle_upload($part, $post_id, $poster);
                 $file = wp_get_attachment_url($file_id);
+                $cid = "";
+                if (array_key_exists('content-id', $part->headers)) {
+                    $cid = trim($part->headers["content-id"], "<>");
+                }
 
-                $cid = trim($part->headers["content-id"], "<>");
-                ; //cids are in <cid>
                 $the_post = get_post($file_id);
+                DebugEcho("Html Attachement: $filename");
                 $attachments["html"][$filename] = parseTemplate($file_id, $part->ctype_primary, $imagetemplate);
                 if ($cid) {
-                    $attachments["cids"][$cid] = array($file,
-                        count($attachments["html"]) - 1);
+                    $attachments["cids"][$cid] = array($file, count($attachments["html"]) - 1);
+                    DebugEcho("CID Attachement: $cid");
                 }
                 break;
+
             case 'audio':
                 $file_id = postie_media_handle_upload($part, $post_id, $poster);
                 $file = wp_get_attachment_url($file_id);
@@ -719,6 +784,7 @@ function GetContent($part, &$attachments, $post_id, $poster, $config) {
                 }
                 $attachments["html"][$filename] = parseTemplate($file_id, $part->ctype_primary, $audioTemplate);
                 break;
+
             case 'video':
                 $file_id = postie_media_handle_upload($part, $post_id, $poster);
                 $file = wp_get_attachment_url($file_id);
@@ -743,24 +809,24 @@ function GetContent($part, &$attachments, $post_id, $poster, $config) {
                         break;
                     $file_id = postie_media_handle_upload($part, $post_id, $poster);
                     $file = wp_get_attachment_url($file_id);
-                    $cid = trim($part->headers["content-id"], "<>");
-                    ; //cids are in <cid>
-                    $icon = chooseAttachmentIcon($file, $part->ctype_primary, $part->ctype_secondary, $icon_set, $icon_size);
-                    $attachments["html"][$filename] = "<a href='$file'>" .
-                            $icon . $filename . '</a>' . "\n";
-                    if ($cid) {
-                        $attachments["cids"][$cid] = array($file,
-                            count($attachments["html"]) - 1);
+                    if (array_key_exists('content-id', $part->headers)) {
+                        $cid = trim($part->headers["content-id"], "<>");
+                        //cids are in <cid>
+                        $icon = chooseAttachmentIcon($file, $part->ctype_primary, $part->ctype_secondary, $icon_set, $icon_size);
+                        $attachments["html"][$filename] = "<a href='$file'>" . $icon . $filename . '</a>' . "\n";
+                        if ($cid) {
+                            $attachments["cids"][$cid] = array($file, count($attachments["html"]) - 1);
+                        }
                     }
                 }
                 break;
         }
     }
-    return($meta_return);
+    return $meta_return;
 }
 
 function ubb2HTML(&$text) {
-    // Array of tags with opening and closing
+// Array of tags with opening and closing
     $tagArray['img'] = array('open' => '<img src="', 'close' => '">');
     $tagArray['b'] = array('open' => '<b>', 'close' => '</b>');
     $tagArray['i'] = array('open' => '<i>', 'close' => '</i>');
@@ -772,7 +838,7 @@ function ubb2HTML(&$text) {
     $tagArray['color=(.*)'] = array('open' => '<font color="', 'close' => '">\\2</font>');
     $tagArray['size=(.*)'] = array('open' => '<font size="', 'close' => '">\\2</font>');
     $tagArray['font=(.*)'] = array('open' => '<font face="', 'close' => '">\\2</font>');
-    // Array of tags with only one part
+// Array of tags with only one part
     $sTagArray['br'] = array('tag' => '<br>');
     $sTagArray['hr'] = array('tag' => '<hr>');
 
@@ -826,46 +892,26 @@ function etf2HTML($content) {
         '',
         ''
     );
-    // strip extra line breaks
+// strip extra line breaks
     $content = preg_replace($search, $replace, $content);
     return trim($content);
 }
 
 // This function cleans up HTML in the e-mail
 function HTML2HTML($content) {
-    $search = array(
-        '/<html [^<]*>/is',
-        '/<\/html>/i',
-        '/<\/?title>/i',
-        '/<body[^<]*>/i',
-        '/<\/body>/i',
-        '/<\/?head>/i',
-        '/<meta[^<]*>/i',
-        '/<style[^<]*>.*<\/style>/is',
-        '/<!--.*?-->/is',
-        '/<\/?o:[^<]*>/i',
-        '/<!DOCTYPE[^<]*>/',
-            //'/<img src=[\'"][^<]*>/'
-//		'/<img src="cid:(.*)" .*>/'
-    );
+    $html = str_get_html($content);
+    if ($html) {
+//        foreach ($html->find('script, style') as $node) {
+//            $node->outertext = '';
+//        }
+//        $html->load($html->save());
 
-    $replace = array(
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        ''
-    );
-    // strip extra line breaks
-    $content = preg_replace($search, $replace, trim($content));
-    return ($content);
+        $b = $html->find('body');
+        if ($b) {
+            $content = "<div>" . $b[0]->innertext . "</div>\n";
+        }
+    }
+    return $content;
 }
 
 /**
@@ -873,70 +919,68 @@ function HTML2HTML($content) {
  * @return integer|NULL
  */
 function ValidatePoster(&$mimeDecodedEmail, $config) {
+    $test_email = '';
     extract($config);
     global $wpdb;
     $poster = NULL;
     $from = RemoveExtraCharactersInEmailAddress(trim($mimeDecodedEmail->headers["from"]));
-    $resentFrom = RemoveExtraCharactersInEmailAddress(trim($mimeDecodedEmail->headers["resent-from"]));
-    /*
-      if ( empty($from) ) {
-      echo 'Invalid Sender - Emtpy! ';
-      return;
-      }
-     */
+
+    $resentFrom = "";
+    if (array_key_exists('resent-from', $mimeDecodedEmail->headers)) {
+        $resentFrom = RemoveExtraCharactersInEmailAddress(trim($mimeDecodedEmail->headers["resent-from"]));
+    }
 
     //See if the email address is one of the special authorized ones
-    print("Confirming Access For $from \n");
+    EchoInfo("Confirming Access For $from ");
     $sql = 'SELECT id FROM ' . $wpdb->users . ' WHERE user_email=\'' . addslashes($from) . "' LIMIT 1;";
     $user_ID = $wpdb->get_var($sql);
     if (!empty($user_ID)) {
         $user = new WP_User($user_ID);
         if ($user->has_cap("post_via_postie")) {
             $poster = $user_ID;
-            echo "posting as user $poster";
+            EchoInfo("posting as user $poster");
         } else {
-            $poster = $wpdb->get_var("SELECT ID FROM $wpdb->users WHERE
-            user_login  = '$admin_username'");
+            $poster = $wpdb->get_var("SELECT ID FROM $wpdb->users WHERE user_login  = '$admin_username'");
         }
-    } elseif ($turn_authorization_off ||
-            CheckEmailAddress($from, $authorized_addresses) ||
-            CheckEmailAddress($resentFrom, $authorized_addresses)) {
-        $poster = $wpdb->get_var("SELECT ID FROM $wpdb->users WHERE
-          user_login  = '$admin_username'");
+    } elseif ($turn_authorization_off || CheckEmailAddress($from, $authorized_addresses) || CheckEmailAddress($resentFrom, $authorized_addresses)) {
+        $poster = $wpdb->get_var("SELECT ID FROM $wpdb->users WHERE user_login  = '$admin_username'");
     }
+
     $validSMTP = checkSMTP($mimeDecodedEmail, $smtp);
     if (!$poster || !$validSMTP) {
-        echo 'Invalid sender: ' . htmlentities($from) . "! Not adding email!\n";
+        EchoInfo('Invalid sender: ' . htmlentities($from) . "! Not adding email!");
         if ($forward_rejected_mail) {
             $admin_email = get_option("admin_email");
             if (MailToRecipients($mimeDecodedEmail, $test_email, array($admin_email), $return_to_sender)) {
-                echo "A copy of the message has been forwarded to the administrator.\n";
+                EchoInfo("A copy of the message has been forwarded to the administrator.");
             } else {
-                echo "The message was unable to be forwarded to the adminstrator.\n";
+                EchoInfo("The message was unable to be forwarded to the adminstrator.");
             }
         }
-        return;
+        return '';
     }
     return $poster;
 }
 
 function post_as_admin($admin_username) {
-    print("$from is authorized to post as the administrator\n");
-    //$from = get_option("admin_email");
-    //$adminUser=$admin_username;
-    //echo "adminUser='$adminUser'";
+    EchoInfo("$from is authorized to post as the administrator");
     return $poster;
 }
 
 function checkSMTP($mimeDecodedEmail, $smtpservers) {
     if (empty($smtpservers))
         return true;
+
     foreach ((array) $mimeDecodedEmail->headers['received'] as $received) {
         foreach ($smtpservers as $smtp) {
-            if (stristr($received, $smtp) !== false)
+            if (stristr($received, $smtp) !== false) {
+                EchoInfo("Sent from valid SMTP server.");
                 return true;
+            }
         }
     }
+
+    EchoInfo("Sent from invalid SMTP server.");
     return false;
 }
 
@@ -946,12 +990,13 @@ function checkSMTP($mimeDecodedEmail, $smtpservers) {
  * @param string
  * @param string
  */
-function StartFilter(&$content, $start) {
+function StartFilter($content, $start) {
     $pos = strpos($content, $start);
     if ($pos === false) {
-        return($content);
+        return $content;
     }
-    $content = substr($content, $pos + strlen($start), strlen($content));
+    DebugEcho("start filter $start");
+    return substr($content, $pos + strlen($start), strlen($content));
 }
 
 /**
@@ -966,12 +1011,9 @@ function remove_signature($content, $filterList) {
     $arrcontent = explode("\n", $content);
     $strcontent = '';
     $pattern = '/^(' . implode('|', $filterList) . ')/';
-    for ($i = 0; $i <= count($arrcontent); $i++) {
+    for ($i = 0; $i < count($arrcontent); $i++) {
         $line = trim($arrcontent[$i]);
-        $nextline = $arrcontent[$i + 1];
         if (preg_match($pattern, trim($line))) {
-            //if (!strpos(trim($line), $pattern)==0) {
-            //print("<p>Found in $line");
             break;
         }
         $strcontent .= $line . "\n";
@@ -985,10 +1027,11 @@ function remove_signature($content, $filterList) {
  * @param string
  * @param filter
  */
-function EndFilter(&$content, $end) {
+function EndFilter($content, $end) {
     $pos = strpos($content, $end);
     if ($pos === false)
         return $content;
+    DebugEcho("end filter $end");
     return $content = substr($content, 0, $pos);
 }
 
@@ -1008,41 +1051,15 @@ function FilterNewLines($content, $convertNewLines = false) {
         'ACTUAL_NEW_LINE',
         'LINEBREAK'
     );
-    // strip extra line breaks, and replace double line breaks with paragraph
-    // tags
-    $result = preg_replace($search, $replace, $content);
-    //$newContent='<p>' . preg_replace('/ACTUAL_NEW_LINE/',"</p>\n<p>",$result);
 
-    $newContent = preg_replace('/(ACTUAL_NEW_LINE|LINEBREAK\s*LINEBREAK)/', "\n\n", $result);
-    //$newContent=preg_replace('/<p>LINEBREAK$/', '', $newContent);
+    $result = preg_replace($search, $replace, $content);
+
     if ($convertNewLines) {
-        $newContent = preg_replace('/LINEBREAK/', "<br />\n", $newContent);
-        if (defined('POSTIE_DEBUG')) {
-            echo "converting newlines\n";
-        }
+        $newContent = preg_replace('/(ACTUAL_NEW_LINE|LINEBREAK)/', "<br />\n", $result);
     } else {
-        $newContent = preg_replace('/LINEBREAK/', " ", $newContent);
-        if (defined('POSTIE_DEBUG')) {
-            echo "not converting newlines\n";
-        }
+        $newContent = preg_replace('/(ACTUAL_NEW_LINE|LINEBREAK)/', " ", $result);
     }
-    return($newContent);
-}
-
-function FixEmailQuotes($content) {
-    # place e-mails quotes (indicated with >) in blockquote and pre tags
-    $search = array(
-        "/^>/"
-    );
-    $replace = array(
-        '<br />&gt;'
-    );
-    // strip extra line breaks, and replace double line breaks with paragraph
-    // tags
-    $result = preg_replace($search, $replace, $content);
-    //return('<p>' . preg_replace('/ACTUAL_NEW_LINE/',"<\/p>\n<p>",$result)
-    //. '</p>');
-    return($result);
+    return $newContent;
 }
 
 //strip pgp stuff
@@ -1055,130 +1072,66 @@ function StripPGP($content) {
         ' ',
         ''
     );
-    // strip extra line breaks
-    $return = preg_replace($search, $replace, $content);
-    return $return;
+    return preg_replace($search, $replace, $content);
 }
 
-function ConvertToISO_8859_1($encoding, $charset, $body, $blogEncoding) {
-    $charset = strtolower($charset);
-    $encoding = strtolower($encoding);
-    if (strtolower($blogEncoding == "iso-8859-1") && (strtolower($charset) != 'iso-8859-1')) {
-        if ($encoding == 'base64' || $encoding == 'quoted-printable') {
+function ConvertUTF8ToISO_8859_1($contenttransferencoding, $currentcharset, $body) {
+    if ((strtolower($currentcharset) != 'iso-8859-1')) {
+        $contenttransferencoding = strtolower($contenttransferencoding);
+        if ($contenttransferencoding == 'base64') {
             $body = utf8_decode($body);
         }
+        if ($contenttransferencoding == 'quoted-printable') {
+            $body = iconv($currentcharset, "UTF-8//TRANSLIT", quoted_printable_decode($body));
+        }
     }
-    return($body);
+    return $body;
 }
 
-function HandleMessageEncoding($encoding, $charset, $body, $blogEncoding = 'utf-8', $dequote = true) {
+function HandleMessageEncoding($contenttransferencoding, $charset, $body, $blogEncoding = 'utf-8', $dequote = true) {
     $charset = strtolower($charset);
-    $encoding = strtolower($encoding);
-    /*
-      if ($encoding == '') {
-      $encoding = '7bit';
-      }
-     */
-    if ($dequote && strtolower($encoding) == 'quoted-printable') {
-        //echo "handling quoted printable";
+    $contenttransferencoding = strtolower($contenttransferencoding);
+
+    DebugEcho("before HandleMessageEncoding");
+    DebugEcho("charset: $charset");
+    DebugEcho("encoding: $contenttransferencoding");
+    //DebugDump($body);
+
+    if ($contenttransferencoding == 'base64') {
+        DebugEcho("HandleMessageEncoding: base64 detected");
+        $body = base64_decode($body);
+    }
+    if ($dequote && $contenttransferencoding == 'quoted-printable') {
+        DebugEcho("quoted-printable detected");
         $body = quoted_printable_decode($body);
-        //echo "now body is:\n\n $body\n\n";
     }
-    //HandleQuotedPrintable($encoding, $body, $dequote);
-    if ($blogEncoding == 'iso-8859-1') {
-        $text = ConvertToISO_8859_1($encoding, $charset, $body, $blogEncoding);
-    } else {
-        $text = ConvertToUTF_8($encoding, $charset, $body);
-    }
-    return($text);
+
+    DebugEcho("after HandleMessageEncoding");
+    if (strtolower($charset) != 'default')
+        $body = iconv($charset, $blogEncoding . '//TRANSLIT', $body);
+    return $body;
 }
 
-function ConvertToUTF_8($encoding, $charset, $body) {
-    $charset = strtolower($charset);
-    $encoding = strtolower($encoding);
-
-    switch ($charset) {
-        case "iso-8859-1":
-            $body = utf8_encode($body);
-            break;
-        case "iso-2022-jp":
-            $body = iconv("ISO-2022-JP", "UTF-8//TRANSLIT", $body);
-            break;
-        case ($charset == "windows-1252" || $charset == "cp-1252" ||
-        $charset == "cp 1252"):
-            $body = cp1252_to_utf8($body);
-            break;
-        case ($charset == "windows-1256" || $charset == "cp-1256" ||
-        $charset == "cp 1256"):
-            $body = iconv("Windows-1256", "UTF-8//TRANSLIT", $body);
-            break;
-        case 'koi8-r':
-            $body = iconv("koi8-r", "UTF-8//TRANSLIT", $body);
-            break;
-        case 'iso-8859-2':
-            $body = iconv("iso-8859-2", "UTF-8//TRANSLIT", $body);
-            break;
-        case "big5":
-            $body = iconv("BIG5", "UTF-8//TRANSLIT", $body);
-            break;
-        case "gb2312":
-            $body = iconv("GB2312", "UTF-8//TRANSLIT", $body);
-            break;
-        case "iso-8859-15":
-            $body = iconv("iso-8859-15", "UTF-8//TRANSLIT", $body);
-            break;
-    }
-    return($body);
-}
-
-/* this function will convert windows-1252 (also known as cp-1252 to utf-8 */
-
-function cp1252_to_utf8($str) {
-    $cp1252_map = array(
-        "\xc2\x80" => "\xe2\x82\xac",
-        "\xc2\x82" => "\xe2\x80\x9a",
-        "\xc2\x83" => "\xc6\x92",
-        "\xc2\x84" => "\xe2\x80\x9e",
-        "\xc2\x85" => "\xe2\x80\xa6",
-        "\xc2\x86" => "\xe2\x80\xa0",
-        "\xc2\x87" => "\xe2\x80\xa1",
-        "\xc2\x88" => "\xcb\x86",
-        "\xc2\x89" => "\xe2\x80\xb0",
-        "\xc2\x8a" => "\xc5\xa0",
-        "\xc2\x8b" => "\xe2\x80\xb9",
-        "\xc2\x8c" => "\xc5\x92",
-        "\xc2\x8e" => "\xc5\xbd",
-        "\xc2\x91" => "\xe2\x80\x98",
-        "\xc2\x92" => "\xe2\x80\x99",
-        "\xc2\x93" => "\xe2\x80\x9c",
-        "\xc2\x94" => "\xe2\x80\x9d",
-        "\xc2\x95" => "\xe2\x80\xa2",
-        "\xc2\x96" => "\xe2\x80\x93",
-        "\xc2\x97" => "\xe2\x80\x94",
-        "\xc2\x98" => "\xcb\x9c",
-        "\xc2\x99" => "\xe2\x84\xa2",
-        "\xc2\x9a" => "\xc5\xa1",
-        "\xc2\x9b" => "\xe2\x80\xba",
-        "\xc2\x9c" => "\xc5\x93",
-        "\xc2\x9e" => "\xc5\xbe",
-        "\xc2\x9f" => "\xc5\xb8"
-    );
-    return strtr(utf8_encode($str), $cp1252_map);
+function ConvertToUTF_8($charset, $body) {
+    return iconv($charset, "UTF-8//TRANSLIT", $body);
 }
 
 /**
  * This function handles decoding base64 if needed
  */
 function DecodeBase64Part(&$part) {
-    if (strtolower($part->headers['content-transfer-encoding']) == 'base64') {
-        $part->body = base64_decode($part->body);
-    }
-}
-
-function HandleQuotedPrintable($encoding, &$body, $dequote = true) {
-    if ($dequote && strtolower($encoding) == 'quoted-printable') {
-        echo "handling quoted printable";
-        $body = quoted_printable_decode($body);
+    if (array_key_exists('content-transfer-encoding', $part->headers)) {
+        if (strtolower($part->headers['content-transfer-encoding']) == 'base64') {
+            DebugEcho("DecodeBase64Part: base64 detected");
+            //DebugDump($part);
+            if (is_array($part->ctype_parameters) && array_key_exists('charset', $part->ctype_parameters)) {
+                $part->body = iconv($part->ctype_parameters['charset'], 'UTF-8//TRANSLIT', base64_decode($part->body));
+                $part->ctype_parameters['charset'] = 'default'; //so we don't double decode
+            } else {
+                $part->body = base64_decode($part->body);
+            }
+            $part->headers['content-transfer-encoding'] = '';
+        }
     }
 }
 
@@ -1187,9 +1140,10 @@ function HandleQuotedPrintable($encoding, &$body, $dequote = true) {
  * @return boolean
  */
 function AllowCommentsOnPost(&$content) {
-    $comments_allowed = get_option('default_comment_status');
-    if (eregi("comments:([0|1|2])", $content, $matches)) {
-        $content = ereg_replace("comments:$matches[1]", "", $content);
+    $comments_allowed = get_option('default_comment_status'); // 'open' or 'closed'
+
+    if (preg_match("/comments:([0|1|2])/i", $content, $matches)) {
+        $content = preg_replace("/comments:$matches[1]/i", "", $content);
         if ($matches[1] == "1") {
             $comments_allowed = "open";
         } else if ($matches[1] == "2") {
@@ -1198,7 +1152,7 @@ function AllowCommentsOnPost(&$content) {
             $comments_allowed = "closed";
         }
     }
-    return($comments_allowed);
+    return $comments_allowed;
 }
 
 /**
@@ -1206,28 +1160,30 @@ function AllowCommentsOnPost(&$content) {
  */
 function DeterminePostDate(&$content, $message_date = NULL, $offset = 0) {
     $delay = 0;
-    if (defined('POSTIE_DEBUG')) {
-        echo "inside Determine Post Date, message_date = $message_date\n";
-    }
-    if (eregi("delay:(-?[0-9dhm]+)", $content, $matches)
-            && trim($matches[1])) {
-        if (eregi("(-?[0-9]+)d", $matches[1], $dayMatches)) {
+
+    if (preg_match("/delay:(-?[0-9dhm]+)/i", $content, $matches) && trim($matches[1])) {
+        $days = 0;
+        $hours = 0;
+        $minutes = 0;
+        if (preg_match("/(-?[0-9]+)d/i", $matches[1], $dayMatches)) {
             $days = $dayMatches[1];
         }
-        if (eregi("(-?[0-9]+)h", $matches[1], $hourMatches)) {
+        if (preg_match("/(-?[0-9]+)h/i", $matches[1], $hourMatches)) {
             $hours = $hourMatches[1];
         }
-        if (eregi("(-?[0-9]+)m", $matches[1], $minuteMatches)) {
+        if (preg_match("/(-?[0-9]+)m/i", $matches[1], $minuteMatches)) {
             $minutes = $minuteMatches[1];
         }
         $delay = (($days * 24 + $hours) * 60 + $minutes) * 60;
-        $content = ereg_replace("delay:$matches[1]", "", $content);
+        $content = preg_replace("/delay:$matches[1]/i", "", $content);
     }
-    if (!empty($message_date) && $delay == 0) {
-        $dateInSeconds = strtotime($message_date);
+    if (empty($message_date)) {
+        $dateInSeconds = time();
     } else {
-        $dateInSeconds = time() + $delay;
+        $dateInSeconds = strtotime($message_date);
     }
+    $dateInSeconds += $delay;
+
     $post_date = gmdate('Y-m-d H:i:s', $dateInSeconds + ($offset * 3600));
     $post_date_gmt = gmdate('Y-m-d H:i:s', $dateInSeconds);
 
@@ -1237,24 +1193,26 @@ function DeterminePostDate(&$content, $message_date = NULL, $offset = 0) {
       echo "post_date=$post_date\n";
       echo "--------------------DELAY------------\n";
      */
-    return(array($post_date, $post_date_gmt, $delay));
+    return array($post_date, $post_date_gmt, $delay);
 }
 
 /**
  * This function takes the content of the message - looks for a subject at the begining surrounded by # and then removes that from the content
  */
 function ParseInMessageSubject($content, $defaultTitle) {
+    DebugEcho("Looking for subject in email body");
     if (substr($content, 0, 1) != "#") {
-        //print("<p>Didn't start with # '".substr(ltrim($content),0,10)."'");
+        DebugEcho("No subject found, using default [1]");
         return(array($defaultTitle, $content));
     }
     $subjectEndIndex = strpos($content, "#", 1);
     if (!$subjectEndIndex > 0) {
+        DebugEcho("No subject found, using default [2]");
         return(array($defaultTitle, $content));
     }
     $subject = substr($content, 1, $subjectEndIndex - 1);
     $content = substr($content, $subjectEndIndex + 1, strlen($content));
-    return(array($subject, $content));
+    return array($subject, $content);
 }
 
 /**
@@ -1268,6 +1226,7 @@ function FilterAppleFile(&$mimeDecodedEmail) {
     for ($i = 0; $i < count($mimeDecodedEmail->parts); $i++) {
         if ($mimeDecodedEmail->parts[$i]->ctype_secondary == "applefile") {
             $found = true;
+            LogInfo("Removing 'applefile'");
         } else {
             $newParts[] = &$mimeDecodedEmail->parts[$i];
         }
@@ -1279,35 +1238,40 @@ function FilterAppleFile(&$mimeDecodedEmail) {
 
 function postie_media_handle_upload($part, $post_id, $poster, $post_data = array()) {
     $overrides = array('test_form' => false);
-    //$overrides = array('test_form'=>false, 'test_size'=>false,
-    //                  'test_type'=>false);
     $tmpFile = tempnam(getenv('TEMP'), 'postie');
+    DebugEcho("tmpfile: $tmpFile");
     if (!is_writable($tmpFile)) {
         $uploadDir = wp_upload_dir();
         $tmpFile = tempnam($uploadDir['path'], 'postie');
+        DebugEcho("tmpfile not writeable, using: $tmpFile");
     }
+
     $fp = fopen($tmpFile, 'w');
     if ($fp) {
         fwrite($fp, $part->body);
         fclose($fp);
     } else {
-        echo "could not write to temp file: '$tmpFile' ";
+        EchoInfo("could not write to temp file: '$tmpFile' ");
     }
-    if ($part->ctype_parameters['name'] == '') {
+
+    $name = 'postie-media.' . $part->ctype_secondary;
+    if (!is_array($part->ctype_parameters) || $part->ctype_parameters['name'] == '') {
         if ($part->d_parameters['filename'] != '') {
             $name = $part->d_parameters['filename'];
-        } else {
-            $name = 'postie-media.' . $part->ctype_secondary;
         }
     } else {
         $name = $part->ctype_parameters['name'];
     }
+    DebugEcho("name: $name, size: " . filesize($tmpFile));
+
     $the_file = array('name' => $name,
         'tmp_name' => $tmpFile,
         'size' => filesize($tmpFile),
         'error' => ''
     );
+
     if (stristr('.zip', $name)) {
+        DebugEcho("exploding zip file");
         $parts = explode('.', $name);
         $ext = $parts[count($parts) - 1];
         $type = $part->primary . '/' . $part->secondary;
@@ -1317,16 +1281,20 @@ function postie_media_handle_upload($part, $post_id, $poster, $post_data = array
     }
 
     $time = current_time('mysql');
-    if ($post = get_post($post_id)) {
-        if (substr($post->post_date, 0, 4) > 0)
-            $time = $post->post_date;
+    $post = get_post($post_id);
+    if (substr($post->post_date, 0, 4) > 0) {
+        DebugEcho("using post date");
+        $time = $post->post_date;
     }
 
     $file = postie_handle_upload($the_file, $overrides, $time);
     //unlink($tmpFile);
 
-    if (isset($file['error']))
+    if (isset($file['error'])) {
+        DebugDump($file['error']);
+        throw new Exception($file['error']);
         return new WP_Error('upload_error', $file['error']);
+    }
 
     $url = $file['url'];
     $type = $file['type'];
@@ -1337,10 +1305,14 @@ function postie_media_handle_upload($part, $post_id, $poster, $post_data = array
     // use image exif/iptc data for title and caption defaults if possible
     include_once(ABSPATH . '/wp-admin/includes/image.php');
     if ($image_meta = @wp_read_image_metadata($file)) {
-        if (trim($image_meta['title']))
+        if (trim($image_meta['title'])) {
             $title = $image_meta['title'];
-        if (trim($image_meta['caption']))
+            DebugEcho("Using metadata title: $title");
+        }
+        if (trim($image_meta['caption'])) {
             $content = $image_meta['caption'];
+            DebugEcho("Using metadata caption: $caption");
+        }
     }
 
     // Construct the attachment array
@@ -1358,6 +1330,8 @@ function postie_media_handle_upload($part, $post_id, $poster, $post_data = array
     $id = wp_insert_attachment($attachment, $file, $post_id);
     if (!is_wp_error($id)) {
         wp_update_attachment_metadata($id, wp_generate_attachment_metadata($id, $file));
+    } else {
+        EchoInfo("There was an error adding the attachement: " . $id->get_error_message());
     }
 
     return $id;
@@ -1446,6 +1420,7 @@ function postie_handle_upload(&$file, $overrides = false, $time = null) {
     // Move the file to the uploads dir
     $new_file = $uploads['path'] . "/$filename";
     if (false === @ rename($file['tmp_name'], $new_file)) {
+        DebugDump($file);
         return $upload_error_handler($file, sprintf(__('The uploaded file could not be moved to %s.'), $uploads['path']));
     }
 
@@ -1502,6 +1477,7 @@ function FilterTextParts(&$mimeDecodedEmail, $preferTextType) {
     }
     if ($found && $newParts) {
         //This is now the filtered list of just the preferred type.
+        DebugEcho(count($newParts) . " parts");
         $mimeDecodedEmail->parts = $newParts;
     }
 }
@@ -1519,7 +1495,7 @@ function MailToRecipients(&$mail_content, $testEmail = false, $recipients = arra
     $myemailadd = get_option("admin_email");
     $blogname = get_option("blogname");
     $blogurl = get_option("siteurl");
-    //array_push($recipients, $myemailadd);
+//array_push($recipients, $myemailadd);
     if (count($recipients) == 0) {
         return false;
     }
@@ -1563,9 +1539,7 @@ function MailToRecipients(&$mail_content, $testEmail = false, $recipients = arra
         $message .= "Subject: $subject\n";
         $message .= "\n\nIf you wish to allow posts from this address, please add " . $from . " to the registered users list and manually add the content of the e-mail found below.";
         $message .= "\n\nOtherwise, the e-mail has already been deleted from the server and you can ignore this message.";
-        $message .= "\n\nIf you would like to prevent postie from forwarding mail
-    in the future, please change the FORWARD_REJECTED_MAIL setting in the Postie
-    settings panel";
+        $message .= "\n\nIf you would like to prevent postie from forwarding mail in the future, please change the FORWARD_REJECTED_MAIL setting in the Postie settings panel";
         $message .= "\n\nThe original content of the e-mail has been attached.\n\n";
         $mailtext = "--$boundary\r\n";
         $mailtext .= "Content-Type: text/plain;format=flowed;charset=\"iso-8859-1\";reply-type=original\n";
@@ -1579,22 +1553,24 @@ function MailToRecipients(&$mail_content, $testEmail = false, $recipients = arra
         }
         foreach ($mailparts as $part) {
             $mailtext .= "--$boundary\r\n";
-            $mailtext .= "Content-Type: " . $part->headers["content-type"] . "\n";
-            $mailtext .= "Content-Transfer-Encoding: " . $part->headers["content-transfer-encoding"] . "\n";
-            if (isset($part->headers["content-disposition"])) {
+            if (array_key_exists('content-type', $part->headers))
+                $mailtext .= "Content-Type: " . $part->headers["content-type"] . "\n";
+            if (array_key_exists('content-transfer-encoding', $part->headers))
+                $mailtext .= "Content-Transfer-Encoding: " . $part->headers["content-transfer-encoding"] . "\n";
+            if (array_key_exists('content-disposition', $part->headers)) {
                 $mailtext .= "Content-Disposition: " . $part->headers["content-disposition"] . "\n";
             }
             $mailtext .= "\n";
-            $mailtext .= $part->body;
+            if (property_exists($part, 'body'))
+                $mailtext .= $part->body;
         }
     } else {
         $alert_subject = "Successfully posted to $blogname";
-        $mailtext = "Your post '$subject' has been successfully published to " .
-                "$blogname <$blogurl>.\n";
+        $mailtext = "Your post '$subject' has been successfully published to $blogname <$blogurl>.\n";
     }
 
 
-    // Send message
+// Send message
     mail($myemailadd, $alert_subject, $mailtext, $headers);
 
     return true;
@@ -1611,8 +1587,8 @@ function DecodeMIMEMail($email, $decodeHeaders = false) {
     $params['decode_bodies'] = false;
     $params['decode_headers'] = $decodeHeaders;
     $params['input'] = $email;
-    //$decoded = imap_mime_header_decode($email);
-    $decoded = Mail_mimeDecode::decode($params);
+    $md = new Mail_mimeDecode($email);
+    $decoded = $md->decode($params);
     if (empty($decoded->parts))
         $decoded->parts = array(); // have an empty array at minimum, so that it is safe for "foreach"
     return $decoded;
@@ -1623,7 +1599,7 @@ function DecodeMIMEMail($email, $decodeHeaders = false) {
  */
 function DisplayMIMEPartTypes($mimeDecodedEmail) {
     foreach ($mimeDecodedEmail->parts as $part) {
-        print("<p>" . $part->ctype_primary . " / " . $part->ctype_secondary . "/ " . $part->headers['content-transfer-encoding'] . "\n");
+        EchoInfo($part->ctype_primary . " / " . $part->ctype_secondary . "/ " . $part->headers['content-transfer-encoding']);
     }
 }
 
@@ -1633,12 +1609,19 @@ function DisplayMIMEPartTypes($mimeDecodedEmail) {
  * @return boolean
  */
 function CheckEmailAddress($address, $authorized) {
-    $isAuthorized = in_array(strtolower($address), $authorized);
-    return $isAuthorized;
+    $r = false;
+    if (is_array($authorized)) {
+        $a = strtolower(trim($address));
+        if (!empty($a)) {
+            $isAuthorized = in_array(strtolower($a), array_map('strtolower', $authorized));
+            $r = $isAuthorized;
+        }
+    }
+    return $r;
 }
 
 /**
- * This method works around a problemw with email address with extra <> in the email address
+ * This method works around a problem with email address with extra <> in the email address
  * @param string
  * @return string
  */
@@ -1658,14 +1641,17 @@ function RemoveExtraCharactersInEmailAddress($address) {
  * it just returns the username (everything before @)
  */
 function GetNameFromEmail($address) {
+    $name = "";
     $matches = array();
     if (preg_match('/^([^<>]+)<([^<> ()]+)>$/', $address, $matches)) {
         $name = $matches[1];
     } else if (preg_match('/<([^<>@ ()]+)>/', $address, $matches)) {
         $name = $matches[1];
+    } else if (preg_match('/(.+?)@(.+)/', $address, $matches)) {
+        $name = $matches[1];
     }
 
-    return($name);
+    return trim($name);
 }
 
 /**
@@ -1784,7 +1770,7 @@ function parseTemplate($id, $type, $template, $size = 'medium') {
     } elseif (!preg_match("/$attachment->post_title/i", $fileName)) {
         $template = str_replace('{CAPTION}', $attachment->post_title, $template);
     } else {
-        //$template=str_replace('{CAPTION}', '', $template);
+//$template=str_replace('{CAPTION}', '', $template);
     }
     return($template . '<br />');
 }
@@ -1796,6 +1782,7 @@ function parseTemplate($id, $type, $template, $size = 'medium') {
  * @param array - array of HTML for images for post
  */
 function ReplaceImageCIDs(&$content, &$attachments) {
+    DebugEcho("ReplaceImageCIDs");
     $used = array();
     foreach ($attachments["cids"] as $key => $info) {
         $key = str_replace('/', '\/', $key);
@@ -1805,13 +1792,28 @@ function ReplaceImageCIDs(&$content, &$attachments) {
             $used[] = $info[1]; //Index of html to ignore
         }
     }
+    //DebugEcho("# cid attachments: " . count($used));
+
     $html = array();
-    for ($i = 0; $i < count($attachments["html"]); $i++) {
-        if (!in_array($i, $used)) {
-            $html[] = $attachments["html"][$i];
+//    $att = array_values($attachments["html"]); //make sure there are numeric indexes
+//    DebugEcho('$attachments');
+//    DebugDump($attachments);
+//    DebugEcho('$used');
+//    DebugDump($used);
+//    for ($i = 0; $i < count($attachments["html"]); $i++) {
+//        if (!in_array($i, $used)) {
+//            $html[] = $att[$i];
+//        }
+//    }
+
+    foreach ($attachments['html'] as $key => $value) {
+        if (!in_array($value, $used)) {
+            $html[$key] = $value;
         }
     }
+
     $attachments["html"] = $html;
+    //DebugDump($attachments);
 }
 
 /**
@@ -1821,49 +1823,62 @@ function ReplaceImageCIDs(&$content, &$attachments) {
  */
 function ReplaceImagePlaceHolders(&$content, $attachments, $config) {
     extract($config);
-    ($start_image_count_at_zero ? $startIndex = 0 : $startIndex = 1);
+    $startIndex = $start_image_count_at_zero ? 0 : 1;
     if (!empty($attachments) && $auto_gallery) {
-        $value = '[gallery]';
+        $imageTemplate = '[gallery]';
         if ($images_append) {
-            $content .= $value;
+            $content .= $imageTemplate;
         } else {
-            $content = "$value\n" . $content;
+            $content = "$imageTemplate\n" . $content;
         }
+        DebugEcho("Auto gallery");
         return;
     }
-    $pictures = array();
-    ksort($attachments);
-    foreach ($attachments as $i => $value) {
+
+    $pics = "";
+    $i = 0;
+    foreach ($attachments as $attachementName => $imageTemplate) {
         // looks for ' #img1# ' etc... and replaces with image
         $img_placeholder_temp = str_replace("%", intval($startIndex + $i), $image_placeholder);
-        $eimg_placeholder_temp = str_replace("%", intval($startIndex + $i), "#eimg%#");
         $img_placeholder_temp = rtrim($img_placeholder_temp, '#');
+
+        $eimg_placeholder_temp = str_replace("%", intval($startIndex + $i), "#eimg%#");
         $eimg_placeholder_temp = rtrim($eimg_placeholder_temp, '#');
-        if (stristr($content, $img_placeholder_temp) ||
-                stristr($content, $eimg_placeholder_temp)) {
+
+        DebugEcho("img_placeholder_temp: $img_placeholder_temp");
+        if (stristr($content, $img_placeholder_temp) || stristr($content, $eimg_placeholder_temp)) {
             // look for caption
+            DebugEcho("Found $img_placeholder_temp or $eimg_placeholder_temp");
             $caption = '';
             $content = preg_replace("/&#0?39;/", "'", $content);
             $content = preg_replace("/&(#0?34|quot);/", "\"", $content);
-            if (preg_match("/$img_placeholder_temp caption=['\"]?(.*?)['\"]?#/", $content, $matches)) {
+            if (preg_match("/$img_placeholder_temp caption=['\"]?(.*?)['\"]?#/i", $content, $matches)) {
                 $caption = $matches[1];
+                DebugEcho("found caption: $caption");
                 $img_placeholder_temp = substr($matches[0], 0, -1);
                 $eimg_placeholder_temp = substr($matches[0], 0, -1);
+            } else {
+                DebugEcho("No caption found");
             }
-            $value = str_replace('{CAPTION}', $caption, $value);
+            //DebugEcho("parameterize templete: " . htmlentities($imageTemplate));
+            $imageTemplate = mb_str_replace('{CAPTION}', $caption, $imageTemplate);
+            //DebugEcho("populated templete: " . htmlentities($imageTemplate));
+
             $img_placeholder_temp.='#';
             $eimg_placeholder_temp.='#';
-            $content = str_replace($img_placeholder_temp, $value, $content);
-            $content = str_replace($eimg_placeholder_temp, $value, $content);
-            //print(htmlspecialchars("value=$value\n",ENT_QUOTES));
-            //print(htmlspecialchars("content=\n***\n$content\n***\n",ENT_QUOTES));
+
+            //DebugEcho("replacing " . htmlentities($img_placeholder_temp) . " with template");
+            $content = str_ireplace($img_placeholder_temp, $imageTemplate, $content);
+            $content = str_ireplace($eimg_placeholder_temp, $imageTemplate, $content);
         } else {
-            $value = str_replace('{CAPTION}', '', $value);
+            DebugEcho("No $img_placeholder_temp or $eimg_placeholder_temp found");
+            $imageTemplate = str_replace('{CAPTION}', '', $imageTemplate);
             /* if using the gallery shortcode, don't add pictures at all */
             if (!preg_match("/\[gallery[^\[]*\]/", $content, $matches)) {
-                $pics .= $value;
+                $pics .= $imageTemplate;
             }
         }
+        $i++;
     }
     if ($images_append) {
         $content .= $pics;
@@ -1880,57 +1895,57 @@ function GetSubject(&$mimeDecodedEmail, &$content, $config) {
     extract($config);
     global $charset;
     //assign the default title/subject
-    if ($mimeDecodedEmail->headers['subject'] == NULL) {
+    if (!array_key_exists('subject', $mimeDecodedEmail->headers) || empty($mimeDecodedEmail->headers['subject'])) {
+        DebugEcho("No subject in email");
         if ($allow_subject_in_mail) {
-            list($subject, $content) =
-                    ParseInMessageSubject($content, $default_title);
+            list($subject, $content) = ParseInMessageSubject($content, $default_title);
         } else {
+            DebugEcho("Using default subject");
             $subject = $default_title;
         }
         $mimeDecodedEmail->headers['subject'] = $subject;
     } else {
         $subject = $mimeDecodedEmail->headers['subject'];
-        if ($mimeDecodedEmail->headers["content-transfer-encoding"] != '') {
+        DebugEcho(("Predecoded subject: $subject"));
+        if (array_key_exists('content-transfer-encoding', $mimeDecodedEmail->headers)) {
             $encoding = $mimeDecodedEmail->headers["content-transfer-encoding"];
-        } else if ($mimeDecodedEmail->ctype_parameters["content-transfer-encoding"] != '') {
+        } else if (array_key_exists("content-transfer-encoding", $mimeDecodedEmail->ctype_parameters)) {
             $encoding = $mimeDecodedEmail->ctype_parameters["content-transfer-encoding"];
         } else {
             $encoding = '7bit';
         }
-        if (function_exists(imap_mime_header_decode)) {
+        DebugEcho("Subject encoding: $encoding");
+
+        if (function_exists('imap_mime_header_decode')) {
             $subject = '';
-            //$elements=imap_mime_header_decode($mimeDecodedEmail->headers['subject']);
-            //$text = "=?utf-8?b?w6XDpMO2?= unicode";
             $text = $mimeDecodedEmail->headers['subject'];
-            //$text="test emails with ISO 8859-2 cahracters ąęśćółńżźĄĘŚÓŁŃŻŹ";
-            //echo "text='$text'\n";
+
             $elements = imap_mime_header_decode($text);
+            //DebugEcho("MIME Header");
+            //DebugDump($elements);
+
             for ($i = 0; $i < count($elements); $i++) {
                 $thischarset = $elements[$i]->charset;
-                if ($thischarset == 'default')
-                    $thischarset = $charset;
-                //echo "Charset: {$thischarset}\n";
-                //echo "Text: ". utf8_encode($elements[$i]->text). "\n\n";
+//                if ($thischarset == 'default')
+//                    $thischarset = $charset;
+
                 $subject.=HandleMessageEncoding($encoding, $thischarset, $elements[$i]->text, $message_encoding, $message_dequote);
-                //echo "subject=$subject\n";
             }
-            //echo "now subject= $subject\n";
-            //if ($element->charset!='') {
-            //$charset = $element[0]->charset;
-            //echo "charset='$charset'\n";
-            // }
         }
         if (!$allow_html_in_subject) {
-            $subject = htmlentities($subject);
+            DebugEcho("subject before htmlentities: $subject");
+            $subject = htmlentities($subject, ENT_COMPAT | ENT_HTML401, $message_encoding);
+            DebugEcho("subject after htmlentities: $subject");
         }
     }
     //This is for ISO-2022-JP - Can anyone confirm that this is still neeeded?
     // escape sequence is 'ESC $ B' == 1b 24 42 hex.
     if (strpos($subject, "\x1b\x24\x42") !== false) {
         // found iso-2022-jp escape sequence in subject... convert!
-        $subject = iconv("ISO-2022-JP//TRANSLIT", "UTF-8", $subject);
+        DebugEcho("extra parsing for ISO-2022-JP");
+        $subject = iconv("ISO-2022-JP", "UTF-8//TRANSLIT", $subject);
     }
-    return($subject);
+    return $subject;
 }
 
 /**
@@ -1940,14 +1955,18 @@ function GetSubject(&$mimeDecodedEmail, &$content, $config) {
 function postie_get_tags(&$content, $defaultTags) {
     $post_tags = array();
     //try and determine tags
-    if (preg_match('/tags: ?(.*)\n/i', $content, $matches)) {
-        $content = str_replace($matches[0], "", $content);
-        $post_tags = preg_split("/,\s*/", $matches[1]);
+    if (preg_match('/tags: ?(.*)$/im', $content, $matches)) {
+        if (!empty($matches[1])) {
+            DebugEcho("Found tags: $matches[1]");
+            $content = str_replace($matches[0], "", $content);
+            $post_tags = preg_split("/,\s*/", $matches[1]);
+            //DebugDump($post_tags);
+        }
     }
-    if (!count($post_tags) && !empty($defaultTags)) {
+    if (count($post_tags) == 0 && is_array($defaultTags)) {
         $post_tags = $defaultTags;
     }
-    return($post_tags);
+    return $post_tags;
 }
 
 /**
@@ -1955,7 +1974,6 @@ function postie_get_tags(&$content, $defaultTags) {
  *
  */
 function GetPostExcerpt(&$content, $filterNewLines, $convertNewLines) {
-    global $wpdb;
     $post_excerpt = '';
     if (preg_match('/:excerptstart ?(.*):excerptend/s', $content, $matches)) {
         $content = str_replace($matches[0], "", $content);
@@ -1963,7 +1981,7 @@ function GetPostExcerpt(&$content, $filterNewLines, $convertNewLines) {
         if ($filterNewLines)
             $post_excerpt = FilterNewLines($post_excerpt, $convertNewLines);
     }
-    return($post_excerpt);
+    return $post_excerpt;
 }
 
 /**
@@ -1972,16 +1990,17 @@ function GetPostExcerpt(&$content, $filterNewLines, $convertNewLines) {
  */
 function GetPostCategories(&$subject, $defaultCategory) {
     global $wpdb;
+    $original_subject = $subject;
     $post_categories = array();
     $matches = array();
     //try and determine category
-    if (preg_match('/(.+): (.*)/', $subject, $matches)) {
+    if (preg_match('/(.+): (.*)/', $subject, $matches)) { // <category>:<Subject>
         $subject = trim($matches[2]);
         $matches[1] = array($matches[1]);
-    } else if (preg_match_all('/\[(.[^\[]*)\]/', $subject, $matches)) {
+    } else if (preg_match_all('/\[(.[^\[]*)\]/', $subject, $matches)) { // [<category1>] [<category2>] <Subject>
         preg_match("/]([^\[]*)$/", $subject, $subject_matches);
         $subject = trim($subject_matches[1]);
-    } else if (preg_match_all('/-(.[^-]*)-/', $subject, $matches)) {
+    } else if (preg_match_all('/-(.[^-]*)-/', $subject, $matches)) { // -<category>- -<category2>- <Subject>
         preg_match("/-(.[^-]*)$/", $subject, $subject_matches);
         $subject = trim($subject_matches[1]);
     }
@@ -1989,7 +2008,7 @@ function GetPostCategories(&$subject, $defaultCategory) {
         foreach ($matches[1] as $match) {
             $match = trim($match);
             $category = NULL;
-            print("Working on $match\n");
+            //EchoInfo("Categories - Working on $match");
 
             $sql_name = 'SELECT term_id 
                          FROM ' . $wpdb->terms . ' 
@@ -2008,41 +2027,37 @@ function GetPostCategories(&$subject, $defaultCategory) {
             } elseif ($category = $wpdb->get_var($sql_sub_name)) {
                 //then cateogry is a start of a name and found
             }
-            if ($category) {
+            if (!empty($category)) {
                 $post_categories[] = $category;
             }
         }
     }
     if (!count($post_categories)) {
         $post_categories[] = $defaultCategory;
+        $subject = $original_subject;
     }
-    return($post_categories);
+    return $post_categories;
 }
 
 /**
  * This function just outputs a simple html report about what is being posted in
  */
 function DisplayEmailPost($details) {
-    if (defined('POSTIE_DEBUG')) {
-        print_r($config);
-        print_r($details);
-    }
-    $theFinalContent = $details['post_content'];
+    //DebugDump($details);
     // Report
-    print '</pre><p><b>Post Author</b>: ' . $details["post_author"] . '<br />' . "\n";
-    print '<b>Date</b>: ' . $details["post_date"] . '<br />' . "\n";
+    EchoInfo('Post Author: ' . $details["post_author"]);
+    EchoInfo('Date: ' . $details["post_date"]);
     foreach ($details["post_category"] as $category) {
-        print '<b>Category</b>: ' . $category . '<br />' . "\n";
+        EchoInfo('Category: ' . $category);
     }
-    print '<b>Ping Status</b>: ' . $details["ping_status"] . '<br />' . "\n";
-    print '<b>Comment Status</b>: ' . $details["comment_status"] . '<br />' . "\n";
-    print '<b>Subject</b>: ' . $details["post_title"] . '<br />' . "\n";
-    print '<b>Postname</b>: ' . $details["post_name"] . '<br />' . "\n";
-    print '<b>Post Id</b>: ' . $details["ID"] . '<br />' . "\n";
-    print '<b>Posted content:</b></p><hr />' .
-            $details["post_content"] . '<hr /><pre>';
-    //if (function_exists('memory_get_peak_usage'))
-    // echo  "Memory used: ". memory_get_peak_usage(). "\n";
+    EchoInfo('Ping Status: ' . $details["ping_status"]);
+    EchoInfo('Comment Status: ' . $details["comment_status"]);
+    EchoInfo('Subject: ' . $details["post_title"]);
+    EchoInfo('Postname: ' . $details["post_name"]);
+    EchoInfo('Post Id: ' . $details["ID"]);
+    EchoInfo('Post Type: ' . $details["post_type"]); /* Added by Raam Dev <raam@raamdev.com> */
+//    EchoInfo('Posted content:');
+//    EchoInfo($details["post_content"]);
 }
 
 /**
@@ -2053,18 +2068,17 @@ function DisplayEmailPost($details) {
  * @param string
  */
 function BuildBooleanSelect($label, $id, $current_value, $recommendation = NULL) {
-    $string = "<tr>
-	<th scope=\"row\">" . __($label, 'postie') . ":</th>
-	<td><select name=\"$id\" id=\"$id\">
-    <option value=\"1\">" . __("Yes", 'postie') . "</option>
-    <option value=\"0\" " . (!$current_value ? "SELECTED" : NULL) .
-            ">" . __("No", 'postie') . '</option>
-	</select>';
-    if ($recommendation != NULL) {
-        $string.='<span class="recommendation">' . __($recommendation, 'postie') . '</span>';
+    $html = "<tr>
+	<th scope='row'>" . $label . ":</th>
+	<td><select name='$id' id='$id'>
+            <option value='1'>" . __("Yes", 'postie') . "</option>
+            <option value='0' " . (!$current_value ? "selected='selected'" : "") . ">" . __("No", 'postie') . '</option>
+    </select>';
+    if (!empty($recommendation)) {
+        $html.='<span class = "recommendation">' . $recommendation . '</span>';
     }
-    $string.="</td>\n</tr>";
-    return($string);
+    $html.="</td>\n</tr>";
+    return $html;
 }
 
 /**
@@ -2075,22 +2089,21 @@ function BuildBooleanSelect($label, $id, $current_value, $recommendation = NULL)
  * @param string
  */
 function BuildTextArea($label, $id, $current_value, $recommendation = NULL) {
-    $string = "<tr> <th scope=\"row\">" . __($label, 'postie') . ":";
+    $html = "<tr> <th scope='row'>" . $label . ":";
     if ($recommendation) {
-        $string.="<br /><span class='recommendation'>" . __($recommendation, 'postie') . "</span>";
+        $html.="<br /><span class='recommendation'>" . $recommendation . "</span>";
     }
-    $string.="</th>";
+    $html.="</th>";
 
-    $string .="<td><textarea cols=40 rows=3 name=\"$id\" id=\"$id\">";
+    $html .="<td><textarea cols=40 rows=3 name='$id' id='$id'>";
     $current_value = preg_split("/[,\r\n]+/", trim($current_value));
     if (is_array($current_value)) {
         foreach ($current_value as $item) {
-            $string .= "$item\n";
+            $html .= "$item\n";
         }
     }
-    $string .= "</textarea></td>
-	</tr>";
-    return($string);
+    $html .= "</textarea></td></tr>";
+    return $html;
 }
 
 /**
@@ -2113,7 +2126,7 @@ function ResetPostieConfig() {
  */
 function UpdatePostieConfig($data) {
     UpdatePostiePermissions($data["role_access"]);
-    // We also update the cron settings
+// We also update the cron settings
     if ($data['interval'] != '') {
         postie_decron();
         if ($data['interval'] != 'manual') {
@@ -2179,7 +2192,7 @@ function get_postie_config_defaults() {
         'selected_video1template' => 'simple_link',
         'selected_video2template' => 'simple_link',
         'shortcode' => false,
-        'sig_pattern_list' => array('--', '- --'),
+        'sig_pattern_list' => array('--', '---'),
         'smtp' => array(),
         'start_image_count_at_zero' => false,
         'supported_file_types' => array('video', 'application'),
@@ -2191,7 +2204,9 @@ function get_postie_config_defaults() {
         'video2types' => array('x-flv'),
         'video1templates' => $video1Templates,
         'video2templates' => $video2Templates,
-        'wrap_pre' => 'no'
+        'wrap_pre' => 'no
+
+    '
     );
 }
 
@@ -2213,17 +2228,22 @@ function GetListOfArrayConfig() {
 function ReadDBConfig() {
     $config = array();
     global $wpdb;
-    $data = $wpdb->get_results("SELECT label,value FROM " . $GLOBALS["table_prefix"] . "postie_config;");
-    if (is_array($data)) {
-        foreach ($data as $row) {
-            if (in_array($row->label, GetListOfArrayConfig())) {
-                $config[$row->label] = unserialize($row->value);
-            } else {
-                $config[$row->label] = $row->value;
+    $wpdb->query("SHOW TABLES LIKE  '
+
+    " . $GLOBALS["table_prefix"] . "postie_config'");
+    if ($wpdb->num_rows > 0) {
+        $data = $wpdb->get_results("SELECT label,value FROM " . $GLOBALS["table_prefix"] . "postie_config;");
+        if (is_array($data)) {
+            foreach ($data as $row) {
+                if (in_array($row->label, GetListOfArrayConfig())) {
+                    $config[$row->label] = unserialize($row->value);
+                } else {
+                    $config[$row->label] = $row->value;
+                }
             }
         }
     }
-    return($config);
+    return $config;
 }
 
 /**
@@ -2245,15 +2265,18 @@ function GetDBConfig() {
         $config["IMAGE_PLACEHOLDER"] = "#img%#";
     if (!isset($config["IMAGES_APPEND"]))
         $config["IMAGES_APPEND"] = true;
+
     if (!isset($config["ALLOW_SUBJECT_IN_MAIL"]))
         $config["ALLOW_SUBJECT_IN_MAIL"] = true;
     if (!isset($config["DROP_SIGNATURE"]))
         $config["DROP_SIGNATURE"] = true;
     if (!isset($config["MESSAGE_START"]))
         $config["MESSAGE_START"] = ":start";
+
     if (!isset($config["MESSAGE_END"]))
         $config["MESSAGE_END"] = ":end";
-    if (!isset($config["FORWARD_REJECTED_MAIL"]))
+    if
+    (!isset($config["FORWARD_REJECTED_MAIL"]))
         $config["FORWARD_REJECTED_MAIL"] = true;
     if (!isset($config["RETURN_TO_SENDER"]))
         $config["RETURN_TO_SENDER"] = false;
@@ -2269,14 +2292,16 @@ function GetDBConfig() {
         $config["MESSAGE_ENCODING"] = "UTF-8";
     if (!isset($config["MESSAGE_DEQUOTE"]))
         $config["MESSAGE_DEQUOTE"] = true;
+
     if (!isset($config["TURN_AUTHORIZATION_OFF"]))
         $config["TURN_AUTHORIZATION_OFF"] = false;
     if (!isset($config["CUSTOM_IMAGE_FIELD"]))
-        $config["CUSTOM_IMAGE_FIELD"] = false;
+        $config["CUSTOM_IMAGE_
+        FIELD"] = false;
     if (!isset($config["CONVERTNEWLINE"]))
         $config["CONVERTNEWLINE"] = false;
     if (!isset($config["SIG_PATTERN_LIST"]))
-        $config["SIG_PATTERN_LIST"] = array('--', '- --');
+        $config["SIG_PATTERN_LIST"] = array('--', '---');
     if (!isset($config["BANNED_FILES_LIST"]))
         $config["BANNED_FILES_LIST"] = array();
     if (!isset($config["SUPPORTED_FILE_TYPES"]))
@@ -2285,17 +2310,22 @@ function GetDBConfig() {
         $config["AUTHORIZED_ADDRESSES"] = array();
     if (!isset($config["MAIL_SERVER"]))
         $config["MAIL_SERVER"] = NULL;
-    if (!isset($config["MAIL_SERVER_PORT"]))
+    if (!isset($config["MAIL_SERVER
+        _PORT"]))
         $config["MAIL_SERVER_PORT"] = NULL;
-    if (!isset($config["MAIL_USERID"]))
+    if (!isset($config["MAIL_USERID"]
+    ))
         $config["MAIL_USERID"] = NULL;
     if (!isset($config["MAIL_PASSWORD"]))
         $config["MAIL_PASSWORD"] = NULL;
-    if (!isset($config["DEFAULT_POST_CATEGORY"]))
+    if (!isset($config["DEFAULT_POST_CATEGO
+        RY"]))
         $config["DEFAULT_POST_CATEGORY"] = NULL;
-    if (!isset($config["DEFAULT_POST_TAGS"]))
+    if (!isset($config["D
+        EFAULT_POST_TAGS"]))
         $config["DEFAULT_POST_TAGS"] = NULL;
-    if (!isset($config["TIME_OFFSET"]))
+    if (!isset($config["T
+        IME_OFFSET"]))
         $config["TIME_OFFSET"] = get_option('gmt_offset');
     if (!isset($config["WRAP_PRE"]))
         $config["WRAP_PRE"] = 'no';
@@ -2311,29 +2341,31 @@ function GetDBConfig() {
     $config['ICON_SIZES'] = array(32, 48, 64);
     if (!isset($config["ICON_SIZE"]))
         $config["ICON_SIZE"] = 32;
-    if (!isset($config["AUDIOTEMPLATE"]))
-        $config["AUDIOTEMPLATE"] = $simple_link;
+
+
+//audio
+    include('templates/audio_templates.php');
     if (!isset($config["SELECTED_AUDIOTEMPLATE"]))
         $config['SELECTED_AUDIOTEMPLATE'] = 'simple_link';
-    include('templates/audio_templates.php');
     $config['AUDIOTEMPLATES'] = $audioTemplates;
     if (!isset($config["SELECTED_VIDEO1TEMPLATE"]))
         $config['SELECTED_VIDEO1TEMPLATE'] = 'simple_link';
-    include('templates/video1_templates.php');
-    $config['VIDEO1TEMPLATES'] = $video1Templates;
-    if (!isset($config["VIDEO1TEMPLATE"]))
-        $config["VIDEO1TEMPLATE"] = $simple_link;
+    if (!isset($config["AUDIOTEMPLATE"]))
+        $config["AUDIOTEMPLATE"] = $simple_link;
+
+//video1
     if (!isset($config["VIDEO1TYPES"]))
-        $config['VIDEO1TYPES'] = array('mp4', 'mpeg4', '3gp', '3gpp', '3gpp2',
-            '3gp2', 'mov', 'mpeg');
+        $config['VIDEO1TYPES'] = array('mp4', 'mpeg4', '3gp', '3gpp', '3gpp2', '3gp2', 'mov', 'mpeg');
     if (!isset($config["AUDIOTYPES"]))
         $config['AUDIOTYPES'] = array('m4a', 'mp3', 'ogg', 'wav', 'mpeg');
     if (!isset($config["SELECTED_VIDEO2TEMPLATE"]))
         $config['SELECTED_VIDEO2TEMPLATE'] = 'simple_link';
-    include('templates/video2_templates.php');
-    $config['VIDEO2TEMPLATES'] = $video2Templates;
-    if (!isset($config["VIDEO2TEMPLATE"]))
-        $config["VIDEO2TEMPLATE"] = $simple_link;
+    include('templates/video1_templates.php');
+    $config['VIDEO1TEMPLATES'] = $video1Templates;
+    if (!isset($config["VIDEO1TEMPLATE"]))
+        $config["VIDEO1TEMPLATE"] = $simple_link;
+
+//video2
     if (!isset($config["VIDEO2TYPES"]))
         $config['VIDEO2TYPES'] = array('x-flv');
     if (!isset($config["POST_STATUS"]))
@@ -2342,24 +2374,32 @@ function GetDBConfig() {
         $config["IMAGE_NEW_WINDOW"] = false;
     if (!isset($config["FILTERNEWLINES"]))
         $config["FILTERNEWLINES"] = true;
-    include('templates/image_templates.php');
-    $config['IMAGETEMPLATES'] = $imageTemplates;
+    include('templates/video2_templates.php');
+    $config['VIDEO2TEMPLATES'] = $video2Templates;
+    if (!isset($config["VIDEO2TEMPLATE"]))
+        $config["VIDEO2TEMPLATE"] = $simple_link;
+
+//image
     if (!isset($config["SELECTED_IMAGETEMPLATE"]))
         $config['SELECTED_IMAGETEMPLATE'] = 'wordpress_default';
-    if (!isset($config["IMAGETEMPLATE"]))
-        $config["IMAGETEMPLATE"] = $wordpress_default;
     if (!isset($config["SMTP"]))
         $config["SMTP"] = array();
+    include('templates/image_templates.php');
+    if (!isset($config["IMAGETEMPLATE"]))
+        $config["IMAGETEMPLATE"] = $wordpress_default;
+    $config['IMAGETEMPLATES'] = $imageTemplates;
+
     return($config);
 }
 
 /**
- * This function returns the old-format config (pre 1.4)
+ * This function returns the old
+  -format config (pre 1.4)
  * @return array
  */
 function GetConfig() {
     $config = GetDBConfig();
-    //These should only be modified if you are testing
+//These should only be modified if you are testing
     $config["DELETE_MAIL_AFTER_PROCESSING"] = true;
     $config["POST_TO_DB"] = true;
     $config["TEST_EMAIL"] = false;
@@ -2368,8 +2408,8 @@ function GetConfig() {
     if (file_exists(POSTIE_ROOT . '/postie_test_variables.php')) {
         include(POSTIE_ROOT . '/postie_test_variables.php');
     }
-    //include(POSTIE_ROOT . "/../postie-test.php");
-    // These are computed
+//include(POSTIE_ROOT . "/../postie-test.php");
+// These are computed
     $config["TIME_OFFSET"] = get_option('gmt_offset');
     $config["POSTIE_ROOT"] = POSTIE_ROOT;
     for ($i = 0; $i < count($config["AUTHORIZED_ADDRESSES"]); $i++) {
@@ -2379,7 +2419,7 @@ function GetConfig() {
 }
 
 /**
- * end of functions used to retrieve the old (pre 1.4) config
+ * end of functions u sed to retrieve the old (pre 1.4) config
  * =======================================================
  */
 
@@ -2392,7 +2432,7 @@ function get_postie_config() {
     if (file_exists(POSTIE_ROOT . '/postie_test_variables.php')) {
         include(POSTIE_ROOT . '/postie_test_variables.php');
     }
-    // These are computed
+// These are computed
     $config["time_offset"] = get_option('gmt_offset');
     $config["postie_root"] = POSTIE_ROOT;
     return $config;
@@ -2404,9 +2444,8 @@ function get_postie_config() {
  */
 function get_arrayed_settings() {
     return array(
-        ',' => array('audiotypes', 'video1types', 'video2types', 'default_post_tags'),
-        "\n" => array('smtp', 'authorized_addresses', 'supported_file_types',
-            'banned_files_list', 'sig_pattern_list'));
+        ', ' => array('audiotypes', 'video1types', 'video2types', 'default_post_tags'),
+        "\n" => array('smtp', 'authorized_addresses', 'supported_file_types', 'banned_files_list', 'sig_pattern_list'));
 }
 
 /**
@@ -2436,12 +2475,12 @@ function HasFunctions($function_list, $display = true) {
     foreach ($function_list as $function) {
         if (!function_exists($function)) {
             if ($display) {
-                print("<p>Missing $function");
+                EchoInfo("Missing $function");
             }
-            return(false);
+            return false;
         }
     }
-    return(true);
+    return true;
 }
 
 /**
@@ -2461,9 +2500,9 @@ function TestPostieDirectory() {
  */
 function TestForMarkdown() {
     if (in_array("markdown.php", get_option("active_plugins"))) {
-        return(true);
+        return true;
     }
-    return(false);
+    return false;
 }
 
 /**
@@ -2471,20 +2510,19 @@ function TestForMarkdown() {
  * and ensures that arrayed items are stored as such
  */
 function postie_validate_settings($in) {
-    if (defined('POSTIE_DEBUG'))
-        var_dump($in);
+//DebugDump($in);
     $out = array();
 
-    // use the default as a template: 
-    // if a field is present in the defaults, we want to store it; otherwise we discard it
+// use the default as a template: 
+// if a field is present in the defaults, we want to store it; otherwise we discard it
     $allowed_keys = get_postie_config_defaults();
     foreach ($allowed_keys as $key => $default)
         $out[$key] = array_key_exists($key, $in) ? $in[$key] : $default;
 
-    // some fields are always forced to lower case:
+// some fields are always forced to lower case:
     $lowercase = array('authorized_addresses', 'smtp', 'supported_file_types', 'video1types', 'video2types', 'audiotypes');
     foreach ($lowercase as $field) {
-        $out[$field] = ( is_array($out[$field]) ) ? array_map(strtolower, $out[$field]) : strtolower($out[$field]);
+        $out[$field] = ( is_array($out[$field]) ) ? array_map("strtolower", $out[$field]) : strtolower($out[$field]);
     }
     $arrays = get_arrayed_settings();
 
@@ -2494,7 +2532,8 @@ function postie_validate_settings($in) {
                 $out[$field] = explode($sep, trim($out[$field]));
             foreach ($out[$field] as $key => $val) {
                 $tst = trim($val);
-                if (empty($tst)) {
+                if
+                (empty($tst)) {
                     unset($out[$field][$key]);
                 } else {
                     $out[$field][$key] = $tst;
@@ -2522,28 +2561,55 @@ function UpdatePostiePermissions($role_access) {
     $admin = $wp_roles->get_role("administrator");
     $admin->add_cap("config_postie");
     $admin->add_cap("post_via_postie");
+
     if (!is_array($role_access)) {
         $role_access = array();
     }
     foreach ($wp_roles->role_names as $roleId => $name) {
         $role = &$wp_roles->get_role($roleId);
         if ($roleId != "administrator") {
-            if ($role_access[$roleId]) {
+            if (array_key_exists($roleId, $role_access)) {
                 $role->add_cap("post_via_postie");
+                //DebugEcho("added $roleId");
             } else {
                 $role->remove_cap("post_via_postie");
+                //DebugEcho("removed $roleId");
             }
         }
     }
 }
 
+function IsDebugMode() {
+    return (defined('POSTIE_DEBUG') && POSTIE_DEBUG == true);
+}
+
+function SafeFileName($filename) {
+    return str_replace(array('\\', '/', ':', '*', '?', '"', '<', '>', '|'), array('', '', '', '', '', '', '', '', ''), $filename);
+}
+
 function DebugEmailOutput(&$email, &$mimeDecodedEmail) {
-    $file = fopen("test_emails/" . $mimeDecodedEmail->headers["message-id"] . ".txt", "w");
-    fwrite($file, $email);
-    fclose($file);
-    $file = fopen("test_emails/" . $mimeDecodedEmail->headers["message-id"] . "-mime.txt", "w");
-    fwrite($file, print_r($mimeDecodedEmail, true));
-    fclose($file);
+    if (IsDebugMode()) {
+        //DebugDump($email);
+        //DebugDump($mimeDecodedEmail);
+
+        $dname = POSTIE_ROOT . DIRECTORY_SEPARATOR . "test_emails" . DIRECTORY_SEPARATOR;
+        if (is_dir($dname)) {
+            $fname = $dname . SafeFileName($mimeDecodedEmail->headers["message-id"]);
+            $file = fopen($fname . ".txt ", "w");
+            fwrite($file, $email);
+            fclose($file);
+
+            $file = fopen($fname . "-mime.txt ", "w");
+            fwrite($file, print_r($mimeDecodedEmail, true));
+            fclose($file);
+
+            $file = fopen($fname . ".php ", "w");
+            fwrite($file, serialize($email));
+            fclose($file);
+        } else {
+            DebugEcho("The directory $dname does not exist, creating this optional directory will allow saving copies of emails for debugging purposes.");
+        }
+    }
 }
 
 /**
@@ -2553,34 +2619,40 @@ function DebugEmailOutput(&$email, &$mimeDecodedEmail) {
 function SpecialMessageParsing(&$content, &$attachments, $config) {
     extract($config);
     if (preg_match('/You have been sent a message from Vodafone mobile/', $content)) {
-        VodafoneHandler($content, $attachments); //Everything for this type of message is handled below
+        DebugEcho("Vodafone message");
+        VodafoneHandler($content, $attachments);
         return;
     }
     if ($message_start) {
-        StartFilter($content, $message_start);
+        $content = StartFilter($content, $message_start);
     }
     if ($message_end) {
-        EndFilter($content, $message_end);
+        $content = EndFilter($content, $message_end);
     }
     if ($drop_signature) {
         $content = remove_signature($content, $sig_pattern_list);
     }
-    if ($prefer_text_type == "html"
-            && count($attachments["cids"])) {
+    if ($prefer_text_type == "html" && count($attachments["cids"])) {
         ReplaceImageCIDs($content, $attachments);
     }
     if (!$custom_image_field) {
         ReplaceImagePlaceHolders($content, $attachments["html"], $config);
     } else {
         $customImages = array();
-        foreach ($attachments["html"] as $value) {
-            preg_match("/src=['\"]([^'\"]*)['\"]/", $value, $matches);
-            array_push($customImages, $matches[1]);
+        DebugEcho("Looking for custom images");
+        //DebugDump($attachments["html"]);
+
+        foreach ($attachments["html"] as $key => $value) {
+            //DebugEcho("checking " . htmlentities($value));
+            if (preg_match("/src\s*=\s*['\"]([^'\"]*)['\"]/i", $value, $matches)) {
+                DebugEcho("found custom image: " . $matches[1]);
+                array_push($customImages, $matches[1]);
+            }
         }
 
-        return($customImages);
+        return $customImages;
     }
-    return(NULL);
+    return NULL;
 }
 
 /**
@@ -2594,7 +2666,9 @@ function VodafoneHandler(&$content, &$attachments) {
             //The content is now just the text of the message
             $content = $matches[1];
             //Now to clean up the attachments
-            $vodafone_images = array("live.gif", "smiley.gif", "border_left_txt.gif", "border_top.gif", "border_bot.gif", "border_right.gif", "banner1.gif", "i_text.gif", "i_picture.gif",);
+            $vodafone_images = array("live.gif"
+                , "smiley.gif", "border_left_txt.gif", "border_top.gif",
+                "border_bot.gif", "border_right.gif", "banner1.gif", "i_text.gif", "i_picture.gif",);
             while (list($key, $value) = each($attachments['cids'])) {
                 if (!in_array($key, $vodafone_images)) {
                     $content .= "<br/>" . $attachments['html'][$attachments['cids'][$key][1]];

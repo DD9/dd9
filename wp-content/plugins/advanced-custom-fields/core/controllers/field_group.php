@@ -31,10 +31,6 @@ class acf_field_group
 		$this->parent = $parent;
 		
 		
-		// filters
-		add_filter('name_save_pre', array($this, 'save_name'));
-		
-		
 		// actions
 		add_action('admin_print_scripts', array($this,'admin_print_scripts'));
 		add_action('admin_print_styles', array($this,'admin_print_styles'));
@@ -42,9 +38,15 @@ class acf_field_group
 		add_action('save_post', array($this, 'save_post'));
 		
 		
+		// filters
+		add_filter('name_save_pre', array($this, 'save_name'));
+		//add_filter('acf_save_field', array($this, 'acf_save_field'));
+		
+		
 		// ajax
 		add_action('wp_ajax_acf_field_options', array($this, 'ajax_acf_field_options'));
 		add_action('wp_ajax_acf_location', array($this, 'ajax_acf_location'));
+		add_action('wp_ajax_acf_next_field_id', array($this, 'ajax_acf_next_field_id'));
 	}
 	
 	
@@ -82,8 +84,7 @@ class acf_field_group
 		// return
 		return $return;
 	}
-	
-	
+		
 	
 	/*
 	*  admin_print_scripts
@@ -98,7 +99,17 @@ class acf_field_group
 		// validate page
 		if( ! $this->validate_page() ) return;
 		
+		
+		// no autosave
 		wp_dequeue_script( 'autosave' );
+		
+		
+		// custom scripts
+		wp_enqueue_script(array(
+			'acf-fields',
+		));
+		
+		
 		do_action('acf_print_scripts-fields');
 	}
 	
@@ -116,7 +127,16 @@ class acf_field_group
 		// validate page
 		if( ! $this->validate_page() ) return;
 		
+		
+		// custom styles
+		wp_enqueue_style(array(
+			'acf-global',
+			'acf-fields',
+		));
+		
+		
 		do_action('acf_print_styles-fields');
+		
 	}
 	
 	
@@ -134,13 +154,10 @@ class acf_field_group
 		if( ! $this->validate_page() ) return;
 		
 		
-		// add acf fields js + css
-		echo '<script type="text/javascript" src="' . $this->parent->dir . '/js/fields.js?ver=' . $this->parent->version . '" ></script>';
-		echo '<link rel="stylesheet" type="text/css" href="' . $this->parent->dir . '/css/global.css?ver=' . $this->parent->version . '" />';
-		echo '<link rel="stylesheet" type="text/css" href="' . $this->parent->dir . '/css/fields.css?ver=' . $this->parent->version . '" />';
+		// add js vars
+		echo '<script type="text/javascript">acf.nonce = "' . wp_create_nonce( 'acf_nonce' ) . '";</script>';
 		
 		
-		// add user js + css
 		do_action('acf_head-fields');
 		
 		
@@ -467,12 +484,13 @@ class acf_field_group
 			
 			case "options_page" :
 				
+				$defaults = $this->parent->defaults['options_page'];
+				
 				$choices = array(
-					'acf-options' => apply_filters( 'acf_options_page_title', __('Options','acf') )
+					'acf-options' => $defaults['title']
 				);
 				
-				
-				$titles = apply_filters( 'acf_register_options_page', array() );
+				$titles = $defaults['pages'];
 				if( !empty($titles) )
 				{
 					$choices = array();
@@ -599,33 +617,45 @@ class acf_field_group
 		*/
 		
 
-		// get all keys to find fields
+		// vars
 		$dont_delete = array();
+		
+		
 		
 		if( $_POST['fields'] )
 		{
 			$i = -1;
 			
+
 			// remove clone field
 			unset( $_POST['fields']['field_clone'] );
 			
+
 			// loop through and save fields
 			foreach( $_POST['fields'] as $key => $field )
 			{
 				$i++;
 				
-				// add to dont delete array
-				$dont_delete[] = $key;
 				
-				// order
+				// order + key
 				$field['order_no'] = $i;
 				$field['key'] = $key;
 				
 				
-				// update field
-				$this->parent->update_field($post_id, $field);
+				// apply filters
+				$field = apply_filters('acf_save_field', $field );
+				$field = apply_filters('acf_save_field-' . $field['type'], $field );
+				
+				
+				// save it!
+				update_post_meta($post_id, $field['key'], $field);
+				
+				
+				// add to dont delete array
+				$dont_delete[] = $field['key'];
 			}
 		}
+		
 		
 		// delete all other field
 		$keys = get_post_custom_keys($post_id);
@@ -644,11 +674,6 @@ class acf_field_group
 		*/
 		
 		$location = $_POST['location'];
-		
-		if( ! isset($location['allorany']) )
-		{
-			$location['allorany'] = 'all';
-		}
 		update_post_meta($post_id, 'allorany', $location['allorany']);
 		
 		delete_post_meta($post_id, 'rule');
@@ -679,8 +704,43 @@ class acf_field_group
 	
 		
 	}
+		
 	
+	/*
+	*  ajax_next_field_id
+	*
+	*  @description: 
+	*  @since: 2.0.4
+	*  @created: 5/12/12
+	*/
 	
+	function ajax_acf_next_field_id()
+	{
+		// vars
+		$options = array(
+			'nonce' => '',
+		);
+		$options = array_merge($options, $_POST);
+		
+		
+		// verify nonce
+		if( ! wp_verify_nonce($options['nonce'], 'acf_nonce') )
+		{
+			die('0');
+		}
+		
+		
+		// get next id
+		$next_id = (int) get_option('acf_next_field_id', 1);
+		
+		
+		// update the acf_next_field_id
+		update_option('acf_next_field_id', ($next_id + 1) );
+		
+		
+		// return id
+		die('field_' . $next_id);
+	}
 
 }
 

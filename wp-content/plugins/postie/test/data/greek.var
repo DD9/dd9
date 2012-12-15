@@ -1,0 +1,51 @@
+s:2725:"Delivered-To: postie-test@devzing.com
+Received: by 10.220.227.198 with SMTP id jb6csp7585vcb;
+        Sat, 1 Dec 2012 22:01:23 -0800 (PST)
+Received: by 10.50.152.194 with SMTP id va2mr3076277igb.25.1354428082745;
+        Sat, 01 Dec 2012 22:01:22 -0800 (PST)
+Return-Path: <wayne@allens-home.com>
+Received: from mail-ie0-f173.google.com (mail-ie0-f173.google.com [209.85.223.173])
+        by mx.google.com with ESMTPS id 16si4308218ige.4.2012.12.01.22.01.22
+        (version=TLSv1/SSLv3 cipher=OTHER);
+        Sat, 01 Dec 2012 22:01:22 -0800 (PST)
+Received-SPF: neutral (google.com: 209.85.223.173 is neither permitted nor denied by best guess record for domain of wayne@allens-home.com) client-ip=209.85.223.173;
+Authentication-Results: mx.google.com; spf=neutral (google.com: 209.85.223.173 is neither permitted nor denied by best guess record for domain of wayne@allens-home.com) smtp.mail=wayne@allens-home.com
+Received: by mail-ie0-f173.google.com with SMTP id e13so3052717iej.32
+        for <postie-test@devzing.com>; Sat, 01 Dec 2012 22:01:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20120113;
+        h=mime-version:date:message-id:subject:from:to:content-type
+         :x-gm-message-state;
+        bh=S/ndwZBwTR6ONzipKKSDuVJwYg2/W1DQTwun5yF9Ogw=;
+        b=B/u1kvkvieG/Ow1bBoQujjCxsVxC++a9Gb2jRwlr8EP7y0yxYIImxWnt4BWJ+56mVk
+         SzcCdt5el37M0bDdO6AIUeSW4gzrmXF/L1WaconU4UwFPPcFvDAaWo0Z1HiFnDd91mw2
+         EUkwsZ4ghv2ottN7oQL2qHAzLuHOyngSu9wz4vIk0vIH5wPxbcS+RgnTT3+xskhfqJMz
+         VHuXQRoPeNh9len+Ntv0HRebq4NMM3cTnHt+ySkl/1aFvtBJr9WJMfoIzvBp8v12rWjL
+         4STlSocKRzer/jRbAygQZQEx/cGA4XF44YYR4vDQ5V436p7ABfZyUnzsymlt4fXRdbOd
+         I66Q==
+MIME-Version: 1.0
+Received: by 10.43.125.133 with SMTP id gs5mr4962648icc.54.1354428082489; Sat,
+ 01 Dec 2012 22:01:22 -0800 (PST)
+Received: by 10.231.82.14 with HTTP; Sat, 1 Dec 2012 22:01:22 -0800 (PST)
+Date: Sat, 1 Dec 2012 22:01:22 -0800
+Message-ID: <CACOA_7bdyOEd5V7bt-8hvfEc+Zk_tp6t+cVWiMfJ6n8AWMYZTA@mail.gmail.com>
+Subject: greek test
+From: Wayne Allen <wayne@allens-home.com>
+To: postie-test@devzing.com
+Content-Type: multipart/alternative; boundary=bcaec517cbe0bb0ae204cfd85c4b
+X-Gm-Message-State: ALoCoQlF0sbc9qqGwJYcyICAYM4dXpRnr1a8QqejtZsnMc7PC6F+qenAXRNp+YGADf7QK5sSynvW
+
+--bcaec517cbe0bb0ae204cfd85c4b
+Content-Type: text/plain; charset=ISO-8859-7
+Content-Transfer-Encoding: base64
+
+QUJDw8TOQUJDCg==
+--bcaec517cbe0bb0ae204cfd85c4b
+Content-Type: text/html; charset=ISO-8859-7
+Content-Transfer-Encoding: quoted-printable
+
+<span style=3D"font-family:arial,sans-serif;font-size:13px">ABC=C3=C4=CEABC=
+</span><br>
+
+--bcaec517cbe0bb0ae204cfd85c4b--
+";

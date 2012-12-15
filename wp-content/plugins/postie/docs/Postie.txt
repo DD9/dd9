@@ -1,0 +1,25 @@
+=== Postie ===
+Contributors: WayneAllen
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=HPK99BJ88V4C2
+Author URI: http://allens-home.com/
+Plugin URI: http://PostiePlugin.com/
+Tags: e-mail, email
+Requires at least: 3.0
+Tested up to: 3.5
+Stable tag: 1.4.11
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
+The Postie plugin allows you to blog via e-mail, including many advanced
+features not found in WordPress's default post by e-mail feature.
+
+== Description ==
+Postie offers many advanced features for posting to your blog via e-mail,
+including the ability to assign categories by name, included pictures and
+videos, and automatically strip off signatures. It also has support for both
+imap and pop3, with the option for ssl with both.  For usage notes, see the
+[other notes](other_notes) page
+
+== Screenshots ==
+
+1. Postie options (showing video and audio templates)

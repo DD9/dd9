@@ -55,12 +55,18 @@ class acf_Post_object extends acf_Field
 
 		$field = array_merge($defaults, $field);
 		
+		// validate taxonomy
+		if( !is_array($field['taxonomy']) )
+		{
+			$field['taxonomy'] = array('all');
+		}
 		
 		// load all post types by default
 		if( !$field['post_type'] || !is_array($field['post_type']) || $field['post_type'][0] == "" )
 		{
 			$field['post_type'] = get_post_types( array('public' => true) );
 		}
+		
 
 		
 		// create tax queries

@@ -1,0 +1,39 @@
+== Installation ==
+* Either:
+    * Put the postie.zip file in wp-content/plugins/ and unzip it
+* Or:
+    * Use the automatic installer (WP 2.7+)
+* Login to WordPress as an administrator
+* Goto the Plugins tab in the WordPress Admin Site
+* Activate "Postie"
+* Goto to the "Settings" tab and click on the sub-tab "Postie" to configure it.
+* Make sure you enter the mailserver information correctly, including the type
+  of connection and the port number. Common port configurations:
+  * pop3: 110 
+  * pop3-ssl: 995
+  * imap: 143
+  * imap-ssl: 993
+* (Postie ignores the settings under Settings->Writing->Writing-by-Email)
+
+= Automating checking e-mail =
+
+By default, postie checks for new e-mail every 30 minutes. You can select from
+a number of different checking intervals in the settings page, under the
+mailserver tab.
+
+If you would prefer to have more fine-grained control of how postie checks
+for mail, you can also set up a crontab. This is for advanced users only.
+If your site runs on a UNIX/linux server, and you have shell access, you can
+enable mail checking using cron; if you don't know anything about cron, skip
+to the cronless postie section.
+
+Setup a cronjob to pull down the get\_mail.php
+Examples:
+
+*/5 * * * * /usr/bin/lynx --source http://blog.robfelty.com/wp-content/plugins/postie/get\_mail.php >/dev/null 2>&1
+
+This fetches the mail every five minutes with lynx 
+
+*/10 * * * * /usr/bin/wget -O /dev/null http://blog.robfelty.com/wp-content/plugins/postie/get\_mail.php >/dev/null 2>&1
+
+This fetches the mail every ten minutes with wget 

@@ -4,9 +4,9 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Author URI: http://allens-home.com/
 Plugin URI: http://PostiePlugin.com/
 Tags: e-mail, email
-Requires at least: 2.8
-Tested up to: 3.4.2
-Stable tag: 1.4.5
+Requires at least: 3.0
+Tested up to: 3.5
+Stable tag: 1.4.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,49 +20,9 @@ videos, and automatically strip off signatures. It also has support for both
 imap and pop3, with the option for ssl with both.  For usage notes, see the
 [other notes](other_notes) page
 
-= What's new? = 
+== Screenshots ==
 
-* 1.4.5 (2012.11.14)
-    * Fixed bug in XSS attack vulnerability code. Thanks to R Reid http://blog.strictly-software.com/2012/03/fixing-postie-plugin-for-wordpress-to.html
-    * Fixed bug where emails with multiple categories has the incorrect title
-    * Fixed bugs where PHP setting were not being changed correctly - thanks to Peter Chester http://tri.be/author/peter/
-    * New maintainer
-
-* 1.4.4 (2012.08.10)
-    * Fixed possible XSS attack vulnerability 
-
-* 1.4.3 (2011.12.12)
-    * Removed get_user_by function to make compatible with wp 3.3 - now requires
- 2.8+
-
-* 1.4.2 (2011.01.29)
-    * Fixed mailto link bug (thanks to Jason McNeil) 
-    * Fixed bug with attachments with non-ascii characters in filename (thanks to
-      mtakada)
-    * checking for socket errors when checking mail (thanks elysian)
-    * fixed issue with multiple files not being inserted correctly
-    * Added support for ISO 8859-15 (thanks paolog)
-    * fixed sql injection problem (thanks Jose P. Espinal for pointing it out)
-
-* 1.4.1 (2010.06.18)
-    * Images appear in correct order when using images append = false
-    * Images are sorted in order of filename before inserting into post
-    * Fixed formatting problem with wordpress_default image template
-    * Captions now correctly work with wordpress >3.0 and <3.0
-    * Fixed auto_gallery feature
-    * Default port is now 110
-    * Added more configuration tests
-    * Added background color to settings page to make input boxes more visible
-    * Removed extra quote character in captions from #img# placeholders (thanks
-      SteelD for pointing out the error)
-    * Added support for big5 and gb-1232 encodings (thanks Chow)
-    * Fixed issue with configurations items stored as arrays, which caused
-      problems with validating authorized addresses
-    * Fixed bug with replaceImageCIDs function
-    * On hosts which allow it, we set max execution time to 300 seconds and
-      memory_limit to infinity to allow processing of large e-mails (especially
-      with large attachments)
-
+1. Postie options (showing video and audio templates)
 == Installation ==
 * Either:
     * Put the postie.zip file in wp-content/plugins/ and unzip it
@@ -102,7 +62,6 @@ This fetches the mail every five minutes with lynx
 */10 * * * * /usr/bin/wget -O /dev/null http://blog.robfelty.com/wp-content/plugins/postie/get\_mail.php >/dev/null 2>&1
 
 This fetches the mail every ten minutes with wget 
-
 == Usage ==
 * If you put in :start - the message processing won't start until it sees that string
 * If you put in :end - the message processing will stop once it sees that string
@@ -126,6 +85,10 @@ This fetches the mail every ten minutes with wget
     :excerptstart and :excerptend
     * You can include images in the excerpt by using the shortcode #eimg1#,
       #eimg2# etc.
+
+= Post type =
+  You can specify the post type by including it as the first part of the subject
+  E.g. <post type>//<real subject>
 
 = Category and tag handling =
 * If you put a category name in the subject with a : it will be used
@@ -151,6 +114,8 @@ This fetches the mail every ten minutes with wget
   Subject: -1- -Mo- -Br- My Subject
 
   On my blog it would post to General (Id 1), Moblog, and Brewing all at one time
+
+= Tags =
 * You can add tags by adding a line in the body of the message like so:
   tags: foo, bar
 * You can also set a default tag to be applied if no tags are included.
@@ -169,6 +134,9 @@ This fetches the mail every ten minutes with wget
   Or, if you use IPTC captions, this caption will be used  (adding a caption
   in many photo editing programs (for example Picasa), will add an IPTC caption)
 
+  Note that the images are processed in the order they are attached as of version
+  1.4.6.
+
 * Image templates
   Postie now uses the default wordpress image template, but you can specify a
 different one if you wish.
@@ -176,10 +144,10 @@ different one if you wish.
   You can also specify a custom image template. I use the following custom
 template:
 
-  <div class='imageframe alignleft'><a href='{IMAGE}'><img src="{THUMBNAIL}"
+  `<div class='imageframe alignleft'><a href='{IMAGE}'><img src="{THUMBNAIL}"
   alt="{CAPTION}" title="{CAPTION}" 
   class="attachment" /></a><div
-class='imagecaption'>{CAPTION}</div></div>
+  class='imagecaption'>{CAPTION}</div></div>`
      
     * {THUMBNAIL} gets replaced with the url to the thumbnail image
     * {MEDIUM} gets replaced with the url to the medium-sized image
@@ -193,17 +161,12 @@ class='imagecaption'>{CAPTION}</div></div>
 
 = Interoperability =
 * If your mail client doesn't support setting the subject (nokia) you
-  can do so by putting #your title here# at the begining of your message
+  can do so by putting #your title here# at the beginning of your message
 * POP3,POP3-SSL,IMAP,IMAP-SSL now supported - last three require
   php-imap support
 * The program understands enough about mime to not duplicate post
   if you send an HTML and plain text message
 * Automatically confirms that you are installed correctly
-
-== Screenshots ==
-
-1. Postie options (showing video and audio templates)
-
 == Frequently Asked Questions ==
 
 = Postie won't connect to my mailserver. Why Not? =
@@ -213,7 +176,7 @@ ports 993 and 995 (for pop3-ssl and imap-ssl) by default. I have heard that
 you can request that they open them for you ( you might have to pay extra). 
 
 You can check for open ports with the following command on your server:
-netstat -ln|grep -E ':::(993|995|143)'
+`netstat -ln|grep -E ':::(993|995|143)'`
 
 If nothing shows up, then the ports are not open.
 
@@ -304,7 +267,7 @@ post with :end
 
 Simply upload the icons you want to the postie/icons/custom directory. You
 must name the icons according to the following scheme:
-{filetype}-{size}.png
+`{filetype}-{size}.png`
 
 For example, for word documents, you could use:
 
@@ -351,10 +314,10 @@ installing the IMAP extension. If you have control over your server, it is
 often not hard to install. 
 
 On Ubuntu, try
-sudo apt-get install php5-imap
+`sudo apt-get install php5-imap`
 
 On Fedora, try
-sudo yuminstall php-imap
+`sudo yuminstall php-imap`
 
 The IMAP extension is known to be installed on the following popular webhosts:
 * Dreamhost
@@ -364,13 +327,92 @@ The IMAP extension is known to be installed on the following popular webhosts:
 Simply put the url in the body of your e-mail. (Make sure that you have the
 option to convert url into links turned on)
 
-== CHANGELOG ==
+= Something is going wrong, how do I see what is happening? = 
 
-= 1.4.5 = 
-* TODO - fix corruption of rtf attachments
-* TODO - add port checking in tests
-* TODO - non-image uploads get ignored in content when using autogallery - see
-  replaceimageplaceholders
+Add the following lines to your wp-config.php file
+`define('WP_DEBUG', true);
+define('WP_DEBUG_LOG', true);
+define('POSTIE_DEBUG', true);`
+
+Various errors, warning and informational will be written to the wp-content\debug.log
+file. There may also be all sorts of warnings and messages in your site as well
+depending on how well behaved your other plugins and themes are, so you will not
+want to leave these settings set to true all the time.
+
+= Why doesn't Postie automatically publish my emails when running manually works =
+
+WordPress cron (which Postie relies on) doesn't run unless a page is accessed on the 
+site. So if you send an email, but nobody accesses the site for 3 days Postie won't 
+be given the chance to fetch the email and publish the post.
+
+To ensure that Postie runs smoothly on a low or no volume site you need to ensure that 
+a page gets hit (any page is fine). Use something like cron + curl on Linux or install 
+curl on Windows and use the Scheduled Tasks control panel. If you are using a hosting company
+that doesn't allow you access to cron you can use a service like 
+<a href="https://www.setcronjob.com/" target="_blank">SetCronJob</a>.
+
+It is also possible to turn the WordPress cron off. Please make sure something like
+`define('DISABLE_WP_CRON', true);` is not in your wp-config.php file.
+== Upgrade Notice ==
+* Attachments are now processed in the order they were attached.
+* All script, style and body tags are stripped from html emails.
+
+== CHANGELOG ==
+= 1.4.11.(2012.12.14) =
+* Fixed bug where having a colon in the subject caused the subject to get truncated
+* Added donation link to admin screen
+* Fixed bug where #img# captions with double-byte characters were not working
+* Fixed bug where default settings were corrupt
+* Fixed several bugs in tag detection logic
+* Fixed bug where non-base64 and non-quoted-printable sections were not converted to utf-8
+* Fixed bug where the end filter wasn't removed from the post
+* Add additional logging to attachment upload process
+* Changes to support WP 3.5
+
+= 1.4.10 (2012.12.11) =
+* Fixed warning when there is no subject
+* Removed all script and style tags from HTML content in place of XSS warning
+* Removed XSS warning
+* Fixed bug where post type was not being detected if only case is different
+* Fixed bug with custom post type and leading spaces in the subject
+* Fixed bug where custom fields were not being populated for images
+
+= 1.4.9 (2012.12.10) =
+* Fixed bug where date, author, etc didn't get set.
+* Fixed bug where Postie was treating attached images as strings
+* Fixed bug where inline images were not being attached correctly
+* Fixed bug where the subject was not being decoded correctly if the charset was different from the system charset
+* Fixed bug where base64 strings were being double decoded.
+
+= 1.4.8 (2012.12.09) =
+* Fixed collisions with simple_html_dom
+* Fixed bug when trying to get file name from MIME part
+* Fixed bug causing Cannot modify header information warning 
+
+= 1.4.7 (2012.12.07) =
+* Fixed bug in cron setup that was preventing Weekly, twice an hour and every ten minute schedules from running.
+
+= 1.4.6 (2012.12.06) =
+* Changed XSS check to only emit warning until a better solution can be developed
+* Fixed bug where authorized addresses were being checked with case sensitive rather than insensitive.
+* Started using PHP Simple HTML DOM Parser http://simplehtmldom.sourceforge.net/
+* Started process of logging all error messages to the log as well as the page (where appropriate)
+* Fixed bug where "Preferred Text Type" was not displaying the saved value in settings page.
+* Fixed bug where Postie was wiping out all other cron schedules.
+* Fixed a number of missing internationalization strings (no translations added however)
+* Added documentation for the comments: command
+* Added feature to specify a custom post type in the subject line. Thanks to Raam Dev http://raamdev.com for his code.
+* Removed a number of deprecated WordPress functions.
+* Fixed numerous warning messages
+* Added phpUnit tests
+* Allow wp-config.php to be in alternate location as described here: http://codex.wordpress.org/Hardening_WordPress#Securing_wp-config.php
+* Fixed a bug that didn't replace the #img# tags correctly.
+
+= 1.4.5 (2012.11.14) =
+* Fixed bug in XSS attack vulnerability code. Thanks to R Reid http://blog.strictly-software.com/2012/03/fixing-postie-plugin-for-wordpress-to.html
+* Fixed bug where emails with multiple categories has the incorrect title
+* Fixed bugs where PHP setting were not being changed correctly - thanks to Peter Chester http://tri.be/author/peter/
+* New maintainer
 
 = 1.4.4 (2012.08.10) =
 * Fixed possible XSS attack vulnerability 
@@ -897,9 +939,4 @@ plugin.  And the rest is history :)
 *  Cleaned up some pear stuff in install
 * 
 =  0.1 - 2004-06 =
-* First release
-
-== Upgrade Notice ==
-
-= 1.4.4 =
-Fixed possible XSS attack vulnerability
+* First release

@@ -123,7 +123,14 @@ class acf_input
 		// validate page
 		if( ! $this->validate_page() ) return;
 		
+		
 		do_action('acf_print_scripts-input');
+		
+		
+		// only "edit post" input pages need the ajax
+		wp_enqueue_script(array(
+			'acf-input-ajax',	
+		));
 	}
 	
 	
@@ -185,15 +192,11 @@ class acf_input
 		
 
 		// Style
-		echo '<link rel="stylesheet" type="text/css" href="' . $this->parent->dir . '/css/global.css?ver=' . $this->parent->version . '" />';
-		echo '<link rel="stylesheet" type="text/css" href="' . $this->parent->dir . '/css/input.css?ver=' . $this->parent->version . '" />';
 		echo '<style type="text/css">.acf_postbox, .postbox[id*="acf_"] { display: none; }</style>';
 		
 		
 		// Javascript
-		echo '<script type="text/javascript" src="' . $this->parent->dir . '/js/input-actions.js?ver=' . $this->parent->version . '" ></script>';
-		echo '<script type="text/javascript" src="' . $this->parent->dir . '/js/input-ajax.js?ver=' . $this->parent->version . '" ></script>';
-		echo '<script type="text/javascript">acf.post_id = ' . $post_id . ';</script>';
+		echo '<script type="text/javascript">acf.post_id = ' . $post_id . '; acf.nonce = "' . wp_create_nonce( 'acf_nonce' ) . '";</script>';
 		
 		
 		// add user js + css
@@ -569,9 +572,6 @@ acf.text.gallery_tb_title_edit = "<?php _e("Edit Image",'acf'); ?>";
 	
 	function acf_print_scripts_input()
 	{
-		
-		wp_register_script('acf-datepicker', $this->parent->dir . '/core/fields/date_picker/jquery.ui.datepicker.js', false, $this->parent->version);
-    
 		wp_enqueue_script(array(
 			'jquery',
 			'jquery-ui-core',
@@ -580,6 +580,7 @@ acf.text.gallery_tb_title_edit = "<?php _e("Edit Image",'acf'); ?>";
 			'farbtastic',
 			'thickbox',
 			'media-upload',
+			'acf-input-actions',
 			'acf-datepicker',	
 		));
 
@@ -602,11 +603,11 @@ acf.text.gallery_tb_title_edit = "<?php _e("Edit Image",'acf'); ?>";
 	
 	function acf_print_styles_input()
 	{
-		wp_register_style('acf-datepicker', $this->parent->dir . '/core/fields/date_picker/style.date_picker.css', false, $this->parent->version);
-		
 		wp_enqueue_style(array(
 			'thickbox',
 			'farbtastic',
+			'acf-global',
+			'acf-input',
 			'acf-datepicker',	
 		));
 		

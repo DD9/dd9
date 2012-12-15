@@ -3,7 +3,7 @@
 Plugin Name: Advanced Custom Fields
 Plugin URI: http://www.advancedcustomfields.com/
 Description: Fully customise WordPress edit screens with powerful fields. Boasting a professional interface and a powerfull API, it’s a must have for any web developer working with WordPress. Field types include: Wysiwyg, text, textarea, image, file, select, checkbox, page link, post object, date picker, color picker, repeater, flexible content, gallery and more!
-Version: 3.5.3.1
+Version: 3.5.4.1
 Author: Elliot Condon
 Author URI: http://www.elliotcondon.com/
 License: GPL
@@ -22,6 +22,8 @@ class Acf
 		$upgrade_version,
 		$fields,
 		$cache,
+		$defaults,
+		
 		
 		// controllers
 		$upgrade,
@@ -42,15 +44,28 @@ class Acf
 	*  @created: 23/06/12
 	*/
 	
-	function Acf()
+	function __construct()
 	{
 
 		// vars
 		$this->path = plugin_dir_path(__FILE__);
 		$this->dir = plugins_url('',__FILE__);
-		$this->version = '3.5.3.1';
+		$this->version = '3.5.4.1';
 		$this->upgrade_version = '3.4.1'; // this is the latest version which requires an upgrade
 		$this->cache = array(); // basic array cache to hold data throughout the page load
+		$this->defaults = array(
+			'options_page' => array(
+				'capability' => 'edit_posts', // capability to view options page
+				'title' => __('Options','acf'), // title / menu name ('Site Options')
+				'pages' => array(), // an array of sub pages ('Header, Footer, Home, etc')
+			),
+			'activation_codes' => array(
+				'repeater'			=> '', // activation code for the repeater add-on (XXXX-XXXX-XXXX-XXXX)
+				'options_page'		=> '', // activation code for the options page add-on (XXXX-XXXX-XXXX-XXXX)
+				'flexible_content'	=> '', // activation code for the flexible content add-on (XXXX-XXXX-XXXX-XXXX)
+				'gallery'			=> '', // activation code for the gallery add-on (XXXX-XXXX-XXXX-XXXX)
+			),
+		);
 		
 		
 		// set text domain
@@ -63,20 +78,105 @@ class Acf
 		
 		// actions
 		add_action('init', array($this, 'init'));
-		add_filter('post_updated_messages', array($this, 'post_updated_messages'));
-		add_filter('manage_edit-acf_columns', array($this, 'acf_columns_filter'));
-		
 		add_action('admin_menu', array($this,'admin_menu'));
 		add_action('admin_head', array($this,'admin_head'));
 		add_action('acf_save_post', array($this, 'acf_save_post'), 10); // save post, called from many places (api, input, everything, options)
 		
+		
+		// filters
 		add_filter('acf_load_field', array($this, 'acf_load_field_defaults'), 5);
+		add_filter('post_updated_messages', array($this, 'post_updated_messages'));
+		
 		
 		// ajax
 		add_action('wp_ajax_get_input_metabox_ids', array($this, 'get_input_metabox_ids'));
 		
 		
 		return true;
+	}
+	
+	
+	/*
+	*  Init
+	*
+	*  @description: 
+	*  @since 1.0.0
+	*  @created: 23/06/12
+	*/
+	
+	function init()
+	{
+		// setup defaults
+		$this->defaults = apply_filters('acf_settings', $this->defaults);
+		
+		
+		// allow for older filters
+		$this->defaults['options_page']['title'] = apply_filters('acf_options_page_title', $this->defaults['options_page']['title']);
+		
+		
+		// setup fields
+		$this->setup_fields();
+		
+
+		// Create ACF post type
+		$labels = array(
+		    'name' => __( 'Field&nbsp;Groups', 'acf' ),
+			'singular_name' => __( 'Advanced Custom Fields', 'acf' ),
+		    'add_new' => __( 'Add New' , 'acf' ),
+		    'add_new_item' => __( 'Add New Field Group' , 'acf' ),
+		    'edit_item' =>  __( 'Edit Field Group' , 'acf' ),
+		    'new_item' => __( 'New Field Group' , 'acf' ),
+		    'view_item' => __('View Field Group', 'acf'),
+		    'search_items' => __('Search Field Groups', 'acf'),
+		    'not_found' =>  __('No Field Groups found', 'acf'),
+		    'not_found_in_trash' => __('No Field Groups found in Trash', 'acf'), 
+		);
+		
+		register_post_type('acf', array(
+			'labels' => $labels,
+			'public' => false,
+			'show_ui' => true,
+			'_builtin' =>  false,
+			'capability_type' => 'page',
+			'hierarchical' => true,
+			'rewrite' => false,
+			'query_var' => "acf",
+			'supports' => array(
+				'title',
+			),
+			'show_in_menu'	=> false,
+		));
+		
+		
+		// register acf scripts
+		$scripts = array(
+			'acf-fields' => $this->dir . '/js/fields.js',
+			'acf-input-actions' => $this->dir . '/js/input-actions.js',
+			'acf-input-ajax' => $this->dir . '/js/input-ajax.js',
+			'acf-datepicker' => $this->dir . '/core/fields/date_picker/jquery.ui.datepicker.js',
+		);
+		
+		foreach( $scripts as $k => $v )
+		{
+			wp_register_script( $k, $v, array('jquery'), $this->version );
+		}
+		
+		
+		// register acf styles
+		$styles = array(
+			'acf' => $this->dir . '/css/acf.css',
+			'acf-fields' => $this->dir . '/css/fields.css',
+			'acf-global' => $this->dir . '/css/global.css',
+			'acf-input' => $this->dir . '/css/input.css',
+			'acf-datepicker' => $this->dir . '/core/fields/date_picker/style.date_picker.css',
+		);
+		
+		foreach( $styles as $k => $v )
+		{
+			wp_register_style( $k, $v, false, $this->version ); 
+		}
+		
+		
 	}
 	
 	
@@ -139,10 +239,6 @@ class Acf
 	
 	function setup_fields()
 	{
-		// vars
-		$return = array();
-		
-		
 		// include parent field
 		include_once('core/fields/acf_field.php');
 		
@@ -167,29 +263,29 @@ class Acf
 		
 		
 		// add child fields
-		$return['none'] = new acf_Field($this); 
-		$return['text'] = new acf_Text($this); 
-		$return['textarea'] = new acf_Textarea($this); 
-		$return['wysiwyg'] = new acf_Wysiwyg($this); 
-		$return['image'] = new acf_Image($this); 
-		$return['file'] = new acf_File($this); 
-		$return['number'] = new acf_Number($this); 
-		$return['select'] = new acf_Select($this); 
-		$return['checkbox'] = new acf_Checkbox($this);
-		$return['radio'] = new acf_Radio($this);
-		$return['true_false'] = new acf_True_false($this);
-		$return['page_link'] = new acf_Page_link($this);
-		$return['post_object'] = new acf_Post_object($this);
-		$return['relationship'] = new acf_Relationship($this);
-		$return['date_picker'] = new acf_Date_picker($this);
-		$return['color_picker'] = new acf_Color_picker($this);
+		$this->fields['none'] = new acf_Field($this); 
+		$this->fields['text'] = new acf_Text($this); 
+		$this->fields['textarea'] = new acf_Textarea($this); 
+		$this->fields['wysiwyg'] = new acf_Wysiwyg($this); 
+		$this->fields['image'] = new acf_Image($this); 
+		$this->fields['file'] = new acf_File($this); 
+		$this->fields['number'] = new acf_Number($this); 
+		$this->fields['select'] = new acf_Select($this); 
+		$this->fields['checkbox'] = new acf_Checkbox($this);
+		$this->fields['radio'] = new acf_Radio($this);
+		$this->fields['true_false'] = new acf_True_false($this);
+		$this->fields['page_link'] = new acf_Page_link($this);
+		$this->fields['post_object'] = new acf_Post_object($this);
+		$this->fields['relationship'] = new acf_Relationship($this);
+		$this->fields['date_picker'] = new acf_Date_picker($this);
+		$this->fields['color_picker'] = new acf_Color_picker($this);
 		
 		
 		// add repeater
 		if($this->is_field_unlocked('repeater'))
 		{
 			include_once('core/fields/repeater.php');
-			$return['repeater'] = new acf_Repeater($this);
+			$this->fields['repeater'] = new acf_Repeater($this);
 		}
 		
 		
@@ -197,7 +293,7 @@ class Acf
 		if($this->is_field_unlocked('flexible_content'))
 		{
 			include_once('core/fields/flexible_content.php');
-			$return['flexible_content'] = new acf_Flexible_content($this);
+			$this->fields['flexible_content'] = new acf_Flexible_content($this);
 		}
 		
 		
@@ -205,7 +301,7 @@ class Acf
 		if($this->is_field_unlocked('gallery'))
 		{
 			include_once('core/fields/gallery.php');
-			$return['gallery'] = new acf_Gallery($this);
+			$this->fields['gallery'] = new acf_Gallery($this);
 		}
 		
 		
@@ -219,13 +315,10 @@ class Acf
 				include($v['url']);
 				$name = $v['class'];
 				$custom_field = new $name($this);
-				$return[$custom_field->name] = $custom_field;
+				$this->fields[$custom_field->name] = $custom_field;
 			}
 		}
 		
-		
-		// set all the fields
-		$this->fields = $return;
 	}
 	
 	
@@ -297,52 +390,6 @@ class Acf
 	
 	
 	/*
-	*  Init
-	*
-	*  @description: 
-	*  @since 1.0.0
-	*  @created: 23/06/12
-	*/
-	
-	function init()
-	{	
-		// setup fields
-		$this->setup_fields();
-		
-
-		// Create ACF post type
-		$labels = array(
-		    'name' => __( 'Field&nbsp;Groups', 'acf' ),
-			'singular_name' => __( 'Advanced Custom Fields', 'acf' ),
-		    'add_new' => __( 'Add New' , 'acf' ),
-		    'add_new_item' => __( 'Add New Field Group' , 'acf' ),
-		    'edit_item' =>  __( 'Edit Field Group' , 'acf' ),
-		    'new_item' => __( 'New Field Group' , 'acf' ),
-		    'view_item' => __('View Field Group', 'acf'),
-		    'search_items' => __('Search Field Groups', 'acf'),
-		    'not_found' =>  __('No Field Groups found', 'acf'),
-		    'not_found_in_trash' => __('No Field Groups found in Trash', 'acf'), 
-		);
-		
-		register_post_type('acf', array(
-			'labels' => $labels,
-			'public' => false,
-			'show_ui' => true,
-			'_builtin' =>  false,
-			'capability_type' => 'page',
-			'hierarchical' => true,
-			'rewrite' => false,
-			'query_var' => "acf",
-			'supports' => array(
-				'title',
-			),
-			'show_in_menu'	=> false,
-		));
-
-	}
-	
-	
-	/*
 	*  post_updated_messages
 	*
 	*  @description: messages for saving a field group
@@ -370,26 +417,7 @@ class Acf
 		);
 	
 		return $messages;
-	}
-	
-	
-	/*
-	*  acf_columns_filter
-	*
-	*  @description: Custom Columns for ACF
-	*  @since 1.0.0
-	*  @created: 23/06/12
-	*/
-	
-	function acf_columns_filter($columns)
-	{
-		$columns = array(
-			'cb'	 	=> '<input type="checkbox" />',
-			'title' 	=> __("Title"),
-		);
-		return $columns;
-	}
-	
+	}	
 	
 	
 	/*--------------------------------------------------------------------------------------
@@ -403,10 +431,6 @@ class Acf
 	
 	function admin_head()
 	{
-		// vars
-		global $post, $pagenow;
-		
-		
 		// hide upgrade page from nav
 		echo '<style type="text/css"> 
 			#toplevel_page_edit-post_type-acf a[href="edit.php?post_type=acf&page=acf-upgrade"]{ display:none; }
@@ -414,7 +438,6 @@ class Acf
 			#toplevel_page_edit-post_type-acf:hover .wp-menu-image { background-position: 0 -1px; }
 			#toplevel_page_edit-post_type-acf .wp-menu-image img { display:none; }
 		</style>';
-		
 	}
 	
 
@@ -604,7 +627,7 @@ class Acf
 
 
 		// hook to load in registered field groups
-		$acfs = apply_filters('acf_register_field_group', array());
+		$acfs = $this->get_field_groups();
 		
 		if($acfs)
 		{
@@ -954,28 +977,6 @@ class Acf
 	}
 	
 	
-	/*--------------------------------------------------------------------------------------
-	*
-	*	update_field
-	*
-	*	@author Elliot Condon
-	*	@since 3.0.0
-	* 
-	*-------------------------------------------------------------------------------------*/
-	
-	function update_field($post_id, $field)
-	{
-		// apply filters
-		$field = apply_filters('acf_save_field', $field );
-		$field = apply_filters('acf_save_field-' . $field['type'], $field );
-		
-		// format the field (select, repeater, etc)
-		//$field = $this->pre_save_field($field);
-		
-		// save it!
-		update_post_meta($post_id, $field['key'], $field);
-	}
-	
 	
 	/*--------------------------------------------------------------------------------------
 	*
@@ -1028,7 +1029,11 @@ class Acf
 				
 				
 				// set value
-				$field['value'] = $this->get_value($post_id, $field);
+				if( ! isset($field['value']) )
+				{	
+					$field['value'] = $this->get_value($post_id, $field);
+				}
+				
 				
 				$required_class = "";
 				$required_label = "";
@@ -1331,22 +1336,22 @@ class Acf
 		        
 		        if( $rule['value'] == 'parent')
 		        {
-		        	$post_parent = $post->post_parent;
-		        	if( isset($overrides['page_parent']) )
-		        	{
-			        	$post_parent = (int) $overrides['page_parent'];
-		        	}
+		        	$children = get_pages(array(
+		        		'post_type' => $post->post_type,
+		        		'child_of' =>  $post->ID,
+		        	));
+		        	
 			        
 			        if( $rule['operator'] == "==" )
 			        {
-			        	if( $post_parent == 0 )
+			        	if( count($children) > 0 )
 			        	{
 				        	return true;
 			        	}
 			        }
 			        elseif( $rule['operator'] == "!=" )
 			        {
-			        	if( $post_parent != 0 )
+			        	if( count($children) == 0 )
 			        	{
 				        	return true;
 			        	}
@@ -1544,7 +1549,14 @@ class Acf
 		    	global $plugin_page;
 		    	
 		    	
-				// value has changed in 3.5.1 to a acf-options-$title
+				// older location rules may be "options-pagename"
+				if( substr($rule['value'], 0, 8) == 'options-' )
+				{
+					$rule['value'] = 'acf-' . $rule['value'];
+				}
+				
+				
+				// older location ruels may be "Pagename"
 				if( substr($rule['value'], 0, 11) != 'acf-options' )
 				{
 					$rule['value'] = 'acf-options-' . sanitize_title( $rule['value'] );
@@ -1804,7 +1816,19 @@ class Acf
 	
 	function get_license_key($field_name)
 	{
-		return get_option('acf_' . $field_name . '_ac');
+		$value = '';
+		
+		if( isset( $this->defaults['activation_codes'][ $field_name ] ) )
+		{
+			$value = $this->defaults['activation_codes'][ $field_name ];
+		}
+		
+		if( !$value )
+		{
+			$value = get_option('acf_' . $field_name . '_ac');
+		}
+
+		return $value;
 	}
 	
 	

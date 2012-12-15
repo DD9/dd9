@@ -564,24 +564,36 @@ class acf_Repeater extends acf_Field
 			// remove dummy field
 			unset( $field['sub_fields']['field_clone'] );
 			
+			
 			// loop through and save fields
 			$i = -1;
-
+			$sub_fields = array();
+			
+			
 			foreach( $field['sub_fields'] as $key => $f )
 			{
 				$i++;
+				
 				
 				// order
 				$f['order_no'] = $i;
 				$f['key'] = $key;
 				
+				
 				// apply filters
 				$f = apply_filters('acf_save_field', $f );
 				$f = apply_filters('acf_save_field-' . $f['type'], $f );
 				
-				$field['sub_fields'][ $key ] = $f;
+				
+				// add
+				$sub_fields[ $f['key'] ] = $f;
 			}
+			
+			
+			// update sub fields
+			$field['sub_fields'] = $sub_fields;
 		}
+		
 		
 		// return updated repeater field
 		return $field;

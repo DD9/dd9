@@ -382,8 +382,12 @@ class acf_Flexible_content extends acf_Field
 		<label><?php _e("Layout",'acf'); ?></label>
 		<p class="desription">
 			<span><a class="acf_fc_reorder" title="<?php _e("Reorder Layout",'acf'); ?>" href="javascript:;"><?php _e("Reorder",'acf'); ?></a> | </span>
-			<span><a class="acf_fc_add" title="<?php _e("Add New Layout",'acf'); ?>" href="javascript:;"><?php _e("Add New",'acf'); ?></a> | </span>
 			<span><a class="acf_fc_delete" title="<?php _e("Delete Layout",'acf'); ?>" href="javascript:;"><?php _e("Delete",'acf'); ?></a>
+			
+			<br />
+			
+			<span><a class="acf_fc_add" title="<?php _e("Add New Layout",'acf'); ?>" href="javascript:;"><?php _e("Add New",'acf'); ?></a> | </span>
+			<span><a class="acf_fc_duplicate" title="<?php _e("Duplicate Layout",'acf'); ?>" href="javascript:;"><?php _e("Duplicate",'acf'); ?></a></span>
 		</p>
 	</td>
 	<td>
@@ -688,28 +692,38 @@ class acf_Flexible_content extends acf_Field
 			// loop through and save fields
 			foreach($field['layouts'] as $layout_key => $layout)
 			{				
-				// remove dummy field
-				unset( $layout['sub_fields']['field_clone'] );
-				
-				// loop through and save fields
-				$i = -1;
-				
+			
 				if( $layout['sub_fields'] )
 				{
+					// remove dummy field
+					unset( $layout['sub_fields']['field_clone'] );
+				
+				
+					// loop through and save fields
+					$i = -1;
+					$sub_fields = array();
+					
+					
 					foreach( $layout['sub_fields'] as $key => $f )
 					{
 						$i++;
+						
 						
 						// order
 						$f['order_no'] = $i;
 						$f['key'] = $key;
 						
+						
 						// apply filters
 						$f = apply_filters('acf_save_field', $f );
 						$f = apply_filters('acf_save_field-' . $f['type'], $f );
 						
-						$layout['sub_fields'][ $key ] = $f;
+						
+						$sub_fields[ $f['key'] ] = $f;
+						
 					}
+					
+					$layout['sub_fields'] = $sub_fields;
 				}
 				
 				// update $layout

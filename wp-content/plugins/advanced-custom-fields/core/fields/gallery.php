@@ -145,34 +145,10 @@ class acf_Gallery extends acf_Field
 (function($){
 	
 	// vars
-	var div = self.parent.acf_edit_attachment,
-		attachment_id = div.attr('data-id');
+	var div = self.parent.acf_edit_attachment;
 	
 	
-	// ajax find new list data
-	$.ajax({
-		url: ajaxurl,
-		data : {
-			'action' : 'acf_get_gallery_list_data',
-			'attachment_id' : attachment_id
-		},
-		cache: false,
-		dataType: "html",
-		success: function( html ) {
-	    	
-
-			// validate
-			if(!html)
-			{
-				return false;
-			}
-			
-			
-			// update list-item html
-			div.find('.list-data').html( html ); 	
- 	
-		}
-	});
+	self.parent.acf.gallery_update_tile();
 	
 	
 	// add message
@@ -309,6 +285,7 @@ class acf_Gallery extends acf_Field
 	{
 		// get value
 		$value = parent::get_value($post_id, $field);
+		$new_value = array();
 		
 		
 		// empty?
@@ -341,9 +318,12 @@ class acf_Gallery extends acf_Field
 		
 		
 		// override value array with attachments
-		foreach( $value as $k => $v)
+		foreach( $value as $v)
 		{
-			$value[ $k ] = $ordered_attachments[ $v ];
+			if( isset($ordered_attachments[ $v ]) )
+			{
+				$new_value[] = $ordered_attachments[ $v ];
+			}
 		}
 		
 		
@@ -375,7 +355,7 @@ class acf_Gallery extends acf_Field
 		*/
 		
 		// return value
-		return $value;	
+		return $new_value;	
 	}
 	
 	

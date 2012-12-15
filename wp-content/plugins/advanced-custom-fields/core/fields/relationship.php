@@ -362,6 +362,14 @@ class acf_Relationship extends acf_Field
 		
 		$field = array_merge($defaults, $field);
 		
+		
+		// validate taxonomy
+		if( !is_array($field['taxonomy']) )
+		{
+			$field['taxonomy'] = array('all');
+		}
+		
+		
 		?>
 		<tr class="field_option field_option_<?php echo $this->name; ?>">
 			<td class="label">

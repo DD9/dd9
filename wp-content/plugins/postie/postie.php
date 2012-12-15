@@ -4,7 +4,7 @@
   Plugin Name: Postie
   Plugin URI: http://PostiePlugin.com/
   Description: Signifigantly upgrades the posting by mail features of Word Press (See <a href='options-general.php?page=postie/postie.php'>Settings and options</a>) to configure your e-mail settings. See the <a href='http://wordpress.org/extend/plugins/postie/other_notes'>Readme</a> for usage. Visit the <a href='http://wordpress.org/support/plugin/postie'>postie forum</a> for support.
-  Version: 1.4.5
+  Version: 1.4.11
   Author: Wayne Allen
   Author URI: http://allens-home.com/
   License: GPL2
@@ -27,10 +27,8 @@
  */
 
 /*
-  $Id: postie.php 625416 2012-11-14 22:18:55Z WayneAllen $
+  $Id: postie.php 639546 2012-12-15 05:05:41Z WayneAllen $
  * -= Requests Pending =-
- * German Umlats don't work
- * Problems under PHP5 
  * Problem with some mail server
  * Multiple emails should tie to a single account
  * Each user should be able to have a default category
@@ -52,17 +50,17 @@
  *    www.cdavies.org/permalink/watchingbrowserembeddedgpvideosinlinux.php
  * Support private posts
  * Make it possible to post without a script at all
+ * TODO - fix corruption of rtf attachments
+ * TODO - add port checking in tests
+ * TODO - non-image uploads get ignored in content when using autogallery - see replaceimageplaceholders
+ * TODO - code to set featured image
  */
-
-//Older Version History is in the HISTORY file
-//error_reporting(E_ALL  & ~E_NOTICE);
-//ini_set("display_errors", 1);
 
 define("POSTIE_ROOT", dirname(__FILE__));
 define("POSTIE_URL", WP_PLUGIN_URL . '/' . basename(dirname(__FILE__)));
 
 function postie_loadjs_add_page() {
-    $postiepage = add_options_page('Postie', 'Postie', 8, POSTIE_ROOT . '/postie.php', 'postie_loadjs_options_page');
+    $postiepage = add_options_page('Postie', 'Postie', 'manage_options', POSTIE_ROOT . '/postie.php', 'postie_loadjs_options_page');
     add_action("admin_print_scripts-$postiepage", 'postie_loadjs_admin_head');
 }
 
@@ -71,7 +69,7 @@ function postie_loadjs_options_page() {
 }
 
 function postie_loadjs_admin_head() {
-    $plugindir = get_settings('siteurl') . '/wp-content/plugins/' . dirname(plugin_basename(__FILE__));
+    $plugindir = get_option('siteurl') . '/wp-content/plugins/' . dirname(plugin_basename(__FILE__));
     wp_enqueue_script('loadjs', $plugindir . '/js/simpleTabs.jquery.js');
     echo '<link type="text/css" rel="stylesheet" href="' . get_bloginfo('wpurl') . '/wp-content/plugins/postie/css/style.css" />' . "\n";
     echo '<link type="text/css" rel="stylesheet" href="' . get_bloginfo('wpurl') . '/wp-content/plugins/postie/css/simpleTabs.css" />' . "\n";
@@ -88,10 +86,10 @@ if (isset($_GET["postie_read_me"])) {
 //Add Menu Configuration
 if (is_admin()) {
     require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "postie-functions.php");
-    //add_action("admin_menu","PostieMenu");
     add_action('admin_init', 'postie_admin_settings');
     add_action('admin_menu', 'postie_loadjs_add_page');
     if (function_exists('load_plugin_textdomain')) {
+
         function postie_load_domain() {
             $plugin_dir = WP_PLUGIN_DIR . '/' . basename(dirname(__FILE__));
             load_plugin_textdomain('postie', $plugin_dir . "/languages/", basename(dirname(__FILE__)) . '/languages/');
@@ -103,25 +101,21 @@ if (is_admin()) {
 }
 
 function activate_postie() {
+    LogInfo("activiated");
+
     static $init = false;
     $options = get_option('postie-settings');
 
-    if ($init)
+    if ($init) {
         return;
+    }
 
     if (!$options) {
         $options = array();
     }
     $default_options = get_postie_config_defaults();
     $old_config = array();
-    $updated = false;
-    $migration = false;
 
-    /*
-      global $wpdb;
-      $GLOBALS["table_prefix"]. "postie_config";
-      $result = $wpdb->get_results("SELECT label,value FROM $postietable ;");
-     */
     $result = GetConfig();
     if (is_array($result)) {
         foreach ($result as $key => $val) {
@@ -135,7 +129,7 @@ function activate_postie() {
     $options = postie_validate_settings($options);
     update_option('postie-settings', $options);
     $init = true;
-    // $wpdb->query("DROP TABLE IF EXISTS $postietable"); // safely updated options, so we can remove the old table
+    DebugEcho("activate completed");
     return $options;
 }
 
@@ -156,16 +150,15 @@ function postie_warnings() {
             ) && !isset($_POST['submit'])) {
 
         function postie_enter_info() {
-            echo "
-      <div id='postie-info-warning' class='updated fade'><p><strong>" .
-            __('Postie is almost ready.', 'postie') . "</strong> "
-            . sprintf(__('You must <a href="%1$s">enter your email settings</a> for it to work.', 'postie'), "options-general.php?page=postie/postie.php") . "</p></div> ";
+            echo "<div id='postie-info-warning' class='updated fade'><p><strong>" . __('Postie is almost ready.', 'postie') . "</strong> "
+            . sprintf(__('You must <a href="%1$s">enter your email settings</a> for it to work.', 'postie'), "options-general.php?page=postie/postie.php")
+            . "</p></div> ";
         }
 
         add_action('admin_notices', 'postie_enter_info');
     }
 
-    if (!function_exists('imap_mime_header_decode') && $_GET['activate'] == true) {
+    if (!function_exists('imap_mime_header_decode') && array_key_exists('activate', $_GET) && $_GET['activate'] == true) {
 
         function postie_imap_warning() {
             echo "<div id='postie-imap-warning' class='error'><p><strong>";
@@ -196,7 +189,7 @@ add_filter('whitelist_options', 'postie_whitelist');
 
 function check_postie() {
     $host = get_option('siteurl');
-    preg_match("/https?:\/\/(.[^\/]*)(.*)/", $host, $matches);
+    preg_match("/https?:\/\/(.[^\/]*)(.*)/i", $host, $matches);
     $host = $matches[1];
     $url = "";
     if (isset($matches[2])) {
@@ -216,10 +209,7 @@ function check_postie() {
         }
         fclose($fp);
     } else {
-        echo "Cannot connect to server on port $port. Please check to make sure
-    that this port is open on your webhost.
-    Additional information:
-    $errno: $errstr";
+        EchoInfo("Cannot connect to server on port $port. Please check to make sure that this port is open on your webhost. Additional information: $errno: $errstr");
     }
 }
 
@@ -233,7 +223,10 @@ function postie_cron($interval = false) {
     if ($interval == 'manual') {
         wp_clear_scheduled_hook('check_postie_hook');
     } else {
-        wp_schedule_event(time(), $interval, 'check_postie_hook');
+        DebugEcho("Setting $interval cron schedule");
+        if (false === wp_schedule_event(time(), $interval, 'check_postie_hook')) {
+            EchoInfo("Failed to set up cron task.");
+        }
     }
 }
 
@@ -241,17 +234,17 @@ function postie_decron() {
     wp_clear_scheduled_hook('check_postie_hook');
 }
 
-/* here we add some more options for how often to check for e-mail */
+/* here we add some more cron options for how often to check for e-mail */
 
-function more_reccurences() {
-    return array(
-        'weekly' => array('interval' => 604800, 'display' => 'Once Weekly'),
-        'twiceperhour' => array('interval' => 1800, 'display' => 'Twice per hour '),
-        'tenminutes' => array('interval' => 600, 'display' => 'Every 10 minutes')
-    );
+function postie_more_reccurences($schedules) {
+    $schedules['weekly'] = array('interval' => (60 * 60 * 24 * 7), 'display' => __('Once Weekly'));
+    $schedules['twiceperhour'] = array('interval' => 60 * 30, 'display' => __('Twice per hour '));
+    $schedules['tenminutes'] = array('interval' => 60 * 10, 'display' => __('Every 10 minutes'));
+
+    return $schedules;
 }
 
-add_filter('cron_schedules', 'more_reccurences');
+add_filter('cron_schedules', 'postie_more_reccurences');
 register_activation_hook(__FILE__, 'postie_cron');
 register_deactivation_hook(__FILE__, 'postie_decron');
 add_action('check_postie_hook', 'check_postie');

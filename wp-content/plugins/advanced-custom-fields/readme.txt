@@ -13,7 +13,7 @@ Fully customise WordPress edit screens with powerful fields. Boasting a professi
 Advanced Custom Fields is the perfect solution for any wordpress website which needs more flexible data like other Content Management Systems. 
 
 * Visually create your Fields
-* Select from multiple input types (text, textarea, wysiwyg, image, file, page link, post object, relationship, select, checkbox, radio buttons, repeater, more to come)
+* Select from multiple input types (text, textarea, wysiwyg, image, file, page link, post object, relationship, select, checkbox, radio buttons, date picker, true / false, repeater, flexible content, gallery and more to come!)
 * Assign your fields to multiple edit pages (via custom location rules)
 * Easily load data through a simple and friendly API
 * Uses the native WordPress custom post type for ease of use and fast processing
@@ -31,9 +31,11 @@ Advanced Custom Fields is the perfect solution for any wordpress website which n
 * Post Object (select 1 or more page, post or custom post types, api returns post objects)
 * Date Picker (jquery date picker, options for format, api returns string)
 * True / False (tick box with message, api returns true or false)
-* Repeater (ability to create repeatable blocks of fields!)
 * Relationship	(select and order post objects with a tidy interface)
 * Color Picker (Farbtastic!)
+* Repeater (ability to create repeatable blocks of fields!)
+* Flexible Content (ability to create flexible blocks of fields!)
+* Gallery (Add, edit and order multiple images in 1 simple field)
 
 = Tested on =
 * Mac Firefox 	:)
@@ -86,6 +88,25 @@ http://support.advancedcustomfields.com/
 
 
 == Changelog ==
+
+= 3.5.4.1 =
+* [Fixed] Fix bug preventing options pages from appearing in the field group's location rules 
+
+= 3.5.4 =
+* [Added] Add new filter for ACF settings - http://www.advancedcustomfields.com/docs/filters/acf_settings/
+* [Updated] Updated field keys to look nicer. eg field_12
+* [Added] Update admin_head to use hooks / enque all scripts / styles
+* [Added] Add duplicate function for flexible content layouts
+* [Fixed] Fix $post_id bug - http://support.advancedcustomfields.com/discussion/3852/acf_form-uses-global-post_id-instead-of-argument
+* [Fixed] Fix WYSIWYG JS issue - http://support.advancedcustomfields.com/discussion/3644/flexible-layout-field-reordering-breaks-when-visual-editor-disabled
+* [Fixed] Fix Gallery PHP error - http://support.advancedcustomfields.com/discussion/3856/undefined-index-error-gallery-on-options-page
+* [Added] Add compatibility for Shopp categories - http://support.advancedcustomfields.com/discussion/3647/custom-fields-not-showing-up-in-shopp-catalog-categories
+* [Fixed] Fix "Parent Page" location rule - http://support.advancedcustomfields.com/discussion/3885/parent-page-type-check
+* [Fixed] Fix options page backwards compatibility - support.advancedcustomfields.com/discussion/3908/acf-options-page-groups-are-not-backward-compatible
+* [Fixed] Fix update_field for content - http://support.advancedcustomfields.com/discussion/3916/add-flexible-layout-row-with-update_field
+* [Added] Add new filter for acf_defaults! - http://support.advancedcustomfields.com/discussion/3947/options-page-plugin-user-capabilites-limitation
+* [Fixed] Fix gallery detail update after edit - http://support.advancedcustomfields.com/discussion/3899/gallery-image-attributes-not-updating-after-change
+* [Fixed] Fix front end uploading issue - http://support.advancedcustomfields.com/discussion/comment/10502#Comment_10502
 
 = 3.5.3.1 =
 * Minor bug fixes for 3.5.3
