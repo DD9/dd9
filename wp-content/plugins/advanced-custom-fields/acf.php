@@ -3,7 +3,7 @@
 Plugin Name: Advanced Custom Fields
 Plugin URI: http://www.advancedcustomfields.com/
 Description: Fully customise WordPress edit screens with powerful fields. Boasting a professional interface and a powerfull API, it’s a must have for any web developer working with WordPress. Field types include: Wysiwyg, text, textarea, image, file, select, checkbox, page link, post object, date picker, color picker, repeater, flexible content, gallery and more!
-Version: 3.5.4.1
+Version: 3.5.6.3
 Author: Elliot Condon
 Author URI: http://www.elliotcondon.com/
 License: GPL
@@ -50,7 +50,7 @@ class Acf
 		// vars
 		$this->path = plugin_dir_path(__FILE__);
 		$this->dir = plugins_url('',__FILE__);
-		$this->version = '3.5.4.1';
+		$this->version = '3.5.6.3';
 		$this->upgrade_version = '3.4.1'; // this is the latest version which requires an upgrade
 		$this->cache = array(); // basic array cache to hold data throughout the page load
 		$this->defaults = array(
@@ -84,8 +84,9 @@ class Acf
 		
 		
 		// filters
-		add_filter('acf_load_field', array($this, 'acf_load_field_defaults'), 5);
+		add_filter('acf_load_field', array($this, 'acf_load_field'), 5);
 		add_filter('post_updated_messages', array($this, 'post_updated_messages'));
+		add_filter('acf_parse_value', array($this, 'acf_parse_value'));
 		
 		
 		// ajax
@@ -131,6 +132,7 @@ class Acf
 		    'not_found' =>  __('No Field Groups found', 'acf'),
 		    'not_found_in_trash' => __('No Field Groups found in Trash', 'acf'), 
 		);
+		
 		
 		register_post_type('acf', array(
 			'labels' => $labels,
@@ -245,6 +247,7 @@ class Acf
 		
 		// include child fields
 		include_once('core/fields/acf_field.php');
+		include_once('core/fields/tab.php');
 		include_once('core/fields/text.php');
 		include_once('core/fields/textarea.php');
 		include_once('core/fields/wysiwyg.php');
@@ -264,6 +267,7 @@ class Acf
 		
 		// add child fields
 		$this->fields['none'] = new acf_Field($this); 
+		$this->fields['tab'] = new acf_Tab($this); 
 		$this->fields['text'] = new acf_Text($this); 
 		$this->fields['textarea'] = new acf_Textarea($this); 
 		$this->fields['wysiwyg'] = new acf_Wysiwyg($this); 
@@ -433,10 +437,10 @@ class Acf
 	{
 		// hide upgrade page from nav
 		echo '<style type="text/css"> 
-			#toplevel_page_edit-post_type-acf a[href="edit.php?post_type=acf&page=acf-upgrade"]{ display:none; }
-			#toplevel_page_edit-post_type-acf .wp-menu-image { background: url("../wp-admin/images/menu.png") no-repeat scroll 0 -33px transparent; }
-			#toplevel_page_edit-post_type-acf:hover .wp-menu-image { background-position: 0 -1px; }
-			#toplevel_page_edit-post_type-acf .wp-menu-image img { display:none; }
+			#adminmenu #toplevel_page_edit-post_type-acf a[href="edit.php?post_type=acf&page=acf-upgrade"]{ display:none; }
+			#adminmenu #toplevel_page_edit-post_type-acf .wp-menu-image { background-position: 1px -33px; }
+			#adminmenu #toplevel_page_edit-post_type-acf:hover .wp-menu-image,
+			#adminmenu #toplevel_page_edit-post_type-acf.wp-menu-open .wp-menu-image { background-position: 1px -1px; }
 		</style>';
 	}
 	
@@ -673,14 +677,14 @@ class Acf
 	
 	
 	/*
-	*  acf_load_field_defaults
+	*  acf_load_field
 	*
 	*  @description: 
 	*  @since 3.5.1
 	*  @created: 14/10/12
 	*/
 	
-	function acf_load_field_defaults( $field )
+	function acf_load_field( $field )
 	{
 		if( !is_array($field) )
 		{
@@ -692,20 +696,60 @@ class Acf
 			'label' => '',
 			'name' => '',
 			'type' => 'text',
-			'order_no' =>	'1',
+			'order_no' =>	1,
 			'instructions' =>	'',
-			'required' => '0',
+			'required' => 0,
 			'conditional_logic' => array(
-				'status' => '0',
+				'status' => 0,
 				'allorany' => 'all',
-				'rules' => false
+				'rules' => 0
 			),
 		);
 		
 		$field = array_merge($defaults, $field);
 		
+		
+		// Parse Values
+		$field = apply_filters( 'acf_parse_value', $field );
+		
+		
 		return $field;
 	}
+	
+	
+	/*
+	*  acf_parse_value
+	*
+	*  @description: 
+	*  @since: 2.0.4
+	*  @created: 9/12/12
+	*/
+	
+	function acf_parse_value( $value )
+	{
+		
+		// is value another array?
+		if( is_array($value) )
+		{
+			foreach( $value as $k => $v )
+			{
+				$value[ $k ] = apply_filters( 'acf_parse_value', $v );
+			}	
+		}
+		else
+		{
+			// numbers
+			if( is_numeric($value) )
+			{
+				$value = (int) $value;
+			}
+		}
+		
+		
+		// return
+		return $value;
+	}
+	
 	
 	/*--------------------------------------------------------------------------------------
 	*
@@ -727,24 +771,23 @@ class Acf
 		
 		
 		// defaults - class
-		if( !isset($field['class']) )
+		if( ! isset($field['class']) )
 		{
 			$field['class'] = $field['type'];
 		}
 		
 		
 		// defaults - id
-		// - isset is needed for the edit field group page where fields are created without many parameters
-		if( !isset($field['id']) )
+		if( ! isset($field['id']) )
 		{
-			if( isset($field['key']) )
-			{
-				$field['id'] = 'acf-' . $field['key'];
-			}
-			else
-			{
-				$field['id'] = 'acf-' . $field['name'];
-			}
+			$id = $field['name'];
+			$id = str_replace('][', '_', $id);
+			$id = str_replace('fields[', '', $id);
+			$id = str_replace('[', '-', $id); // location rules (select) does'nt have "fields[" in it
+			$id = str_replace(']', '', $id);
+			
+			
+			$field['id'] = 'acf-' . $id;
 		}
 		
 		
@@ -753,7 +796,7 @@ class Acf
 
 		// conditional logic
 		// - isset is needed for the edit field group page where fields are created without many parameters
-		if( isset($field['conditional_logic']) && $field['conditional_logic']['status'] == '1' ):
+		if( isset($field['conditional_logic']['status']) && $field['conditional_logic']['status'] ):
 		
 			$join = ' && ';
 			if( $field['conditional_logic']['allorany'] == "any" )
@@ -780,11 +823,11 @@ class Acf
 ?>
 		if(<?php echo implode( $join, $if ); ?>)
 		{
-			field.show();
+			field.removeClass('acf-conditional_logic-hide').addClass('acf-conditional_logic-show');
 		}
 		else
 		{
-			field.hide();
+			field.removeClass('acf-conditional_logic-show').addClass('acf-conditional_logic-hide');
 		}
 		
 	});
@@ -977,6 +1020,26 @@ class Acf
 	}
 	
 	
+	/*--------------------------------------------------------------------------------------
+	*
+	*	update_field
+	*
+	*	@author Elliot Condon
+	*	@since 3.0.0
+	* 
+	*-------------------------------------------------------------------------------------*/
+	
+	function update_field($post_id, $field)
+	{
+		// apply filters
+		$field = apply_filters('acf_save_field', $field );
+		$field = apply_filters('acf_save_field-' . $field['type'], $field );
+		
+		
+		// save
+		update_post_meta($post_id, $field['key'], $field);
+	}
+	
 	
 	/*--------------------------------------------------------------------------------------
 	*
@@ -1038,13 +1101,13 @@ class Acf
 				$required_class = "";
 				$required_label = "";
 				
-				if($field['required'] == "1")
+				if( $field['required'] )
 				{
 					$required_class = ' required';
 					$required_label = ' <span class="required">*</span>';
 				}
 				
-				echo '<div id="acf-' . $field['name'] . '" class="field field-' . $field['type'] . ' field-'.$field['key'] . $required_class . '">';
+				echo '<div id="acf-' . $field['name'] . '" class="field field-' . $field['type'] . ' field-' . $field['key'] . $required_class . '" data-field_name="' . $field['name'] . '" data-field_key="' . $field['key'] . '">';
 
 					echo '<p class="label">';
 						echo '<label for="fields[' . $field['key'] . ']">' . $field['label'] . $required_label . '</label>';
@@ -1102,6 +1165,10 @@ class Acf
 			}
 
 		}
+		
+		
+		// Parse values
+		$overrides = apply_filters( 'acf_parse_value', $overrides );
 		
 
 		// WPML
@@ -1594,10 +1661,15 @@ class Acf
 		    // Post Format
 		    case "post_format":
 		        
-		       	
+
 		       	$post_format = isset($overrides['post_format']) ? $overrides['post_format'] : get_post_format( $post->ID );
-		        if($post_format == "0") $post_format = "standard";
-		        
+		       
+		        if( is_numeric($post_format) && $post_format == 0 )
+		        {
+		        	$post_format = "standard";
+		        }
+		       
+		       	
 		        if($rule['operator'] == "==")
 		        {
 		        	if($post_format == $rule['value'])
@@ -2015,5 +2087,47 @@ class Acf
 		
 		return ' (' . $lang . ')';
 	}*/
+	
+	
+	/*
+	*  get_post_types
+	*
+	*  @description: 
+	*  @since: 3.5.5
+	*  @created: 16/12/12
+	*/
+	
+	function get_post_types( $exclude = array(), $include = array() )
+	{
+		// get all custom post types
+		$post_types = get_post_types();
+		
+		
+		// core include / exclude
+		$acf_includes = array_merge( array(), $include );
+		$acf_excludes = array_merge( array( 'acf', 'revision', 'nav_menu_item' ), $exclude );
+	 
+		
+		// include
+		foreach( $acf_includes as $p )
+		{					
+			if( post_type_exists($p) )
+			{							
+				$post_types[ $p ] = $p;
+			}
+		}
+		
+		
+		// exclude
+		foreach( $acf_excludes as $p )
+		{
+			unset( $post_types[ $p ] );
+		}
+	 
+		return $post_types;
+		
+	}
+	
+	
 }
 ?>

@@ -3,6 +3,13 @@
 * All script, style and body tags are stripped from html emails.
 
 == CHANGELOG ==
+1.4.13 (2012.12.26) =
+* Fixed bug that was truncating content at the first html encoded character. 
+
+1.4.12 (2012.12.17) =
+* Added feature to limit the number of emails processed
+* Fixed bug where #img# was not processing the caption correctly
+
 = 1.4.11.(2012.12.14) =
 * Fixed bug where having a colon in the subject caused the subject to get truncated
 * Added donation link to admin screen

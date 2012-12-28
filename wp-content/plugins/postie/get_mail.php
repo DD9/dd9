@@ -10,7 +10,7 @@ if (file_exists($wp_config_path . DIRECTORY_SEPARATOR . "wp-config.php")) {
 
 require_once (dirname(__FILE__) . DIRECTORY_SEPARATOR . 'mimedecode.php');
 require_once (dirname(__FILE__) . DIRECTORY_SEPARATOR . 'postie-functions.php');
-if(!function_exists('file_get_html')) 
+if (!function_exists('file_get_html'))
     require_once (dirname(__FILE__) . DIRECTORY_SEPARATOR . 'simple_html_dom.php');
 
 if (!ini_get('safe_mode')) {
@@ -26,7 +26,10 @@ include('Revision');
 $test_email = null;
 $config = get_option('postie-settings');
 extract($config);
-$emails = FetchMail($mail_server, $mail_server_port, $mail_userid, $mail_password, $input_protocol, $time_offset, $test_email, $delete_mail_after_processing);
+if (!isset($maxemails))
+    $maxemails = 0;
+
+$emails = FetchMail($mail_server, $mail_server_port, $mail_userid, $mail_password, $input_protocol, $time_offset, $test_email, $delete_mail_after_processing, $maxemails);
 $message = 'Done.';
 
 EchoInfo(sprintf(__("There are %d messages to process", "postie"), count($emails)));
@@ -59,6 +62,7 @@ foreach ($emails as $email) {
     } else {
         EchoInfo("Ignoring email - not authorized.");
     }
+    flush();
 }
 
 if (function_exists('memory_get_usage'))

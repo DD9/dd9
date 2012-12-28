@@ -488,13 +488,13 @@ class acf_everything_fields
 					// required
 					if(!isset($field['required']))
 					{
-						$field['required'] = "0";
+						$field['required'] = 0;
 					}
 					
 					$required_class = "";
 					$required_label = "";
 					
-					if($field['required'] == "1")
+					if( $field['required'] )
 					{
 						$required_class = ' required';
 						$required_label = ' <span class="required">*</span>';

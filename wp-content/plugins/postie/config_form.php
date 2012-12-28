@@ -60,6 +60,10 @@
         }
     }
     extract($config);
+    if (!isset($maxemails)) {
+        DebugEcho("New setting: maxemails");
+        $maxemails = 0;
+    }
 
     if ($interval == 'manual') {
         wp_clear_scheduled_hook('check_postie_hook');
@@ -164,7 +168,8 @@
                             <input name='postie-settings[mail_password]' type="password" id='postie-settings-mail_password' value="<?php echo $mail_password; ?>" size="40" />
                         </td>
                     </tr>
-                    <tr><th>
+                    <tr>
+                        <th>
                             <?php _e('Check for mail every', 'postie') ?>
                         </th>
                         <td>
@@ -196,10 +201,23 @@
                             ?>><?php _e('every ten minutes', 'postie') ?></option>
                                 <option value="manual" <?php
                                         if ($interval == "manual") {
-                                            echo
-                                            "selected='selected'";
+                                            echo "selected='selected'";
                                         }
                             ?>><?php _e('check manually', 'postie') ?></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <?php _e('Maximum number of emails to process', 'postie'); ?>
+                        </th>
+                        <td>
+                            <select name='postie-settings[maxemails]' id='postie-settings-maxemails'>
+                                <option value="0" <?php if ($maxemails == '0') echo "selected='selected'" ?>>All</option>
+                                <option value="5" <?php if ($maxemails == '5') echo "selected='selected'" ?>>5</option>
+                                <option value="10" <?php if ($maxemails == '10') echo "selected='selected'" ?>>10</option>
+                                <option value="25" <?php if ($maxemails == '25') echo "selected='selected'" ?>>25</option>
+                                <option value="50" <?php if ($maxemails == '50') echo "selected='selected'" ?>>50</option>
                             </select>
                         </td>
                     </tr>

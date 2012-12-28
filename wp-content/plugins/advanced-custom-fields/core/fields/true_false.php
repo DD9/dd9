@@ -97,7 +97,7 @@ class acf_True_false extends acf_Field
 		// get value
 		$value = parent::get_value($post_id, $field);
 		
-		if($value == '1')
+		if($value == 1)
 		{
 			return true;
 		}

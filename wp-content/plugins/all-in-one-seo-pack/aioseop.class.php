@@ -255,11 +255,11 @@ class All_in_One_SEO_Pack {
 			}
 		}
 		
-		echo "\n<!-- All in One SEO Pack $this->version by Michael Torbert of Semper Fi Web Design";
+		echo "\n<!-- ";
 		if ($this->ob_start_detected) {
 			echo "ob_start_detected ";
 		}
-		echo "[$this->title_start,$this->title_end] ";
+
 		echo "-->\n";
 		$is_front_page = ( ( is_home() && $aioseop_options['aiosp_home_keywords'] && !$this->is_static_posts_page() ) || $this->is_static_front_page() );
 		if ( $is_front_page ) {
@@ -398,7 +398,6 @@ class All_in_One_SEO_Pack {
 
 			}
 		
-			echo "<!-- /all in one seo pack -->\n";
 		}
 			
 function aiosp_google_analytics(){
@@ -1292,7 +1291,7 @@ function aiosp_google_analytics(){
 	    $aiosp_menulabel = htmlspecialchars(stripcslashes(get_post_meta($post_id, '_aioseop_menulabel', true)));		
 	
 		?>
-		<SCRIPT LANGUAGE="JavaScript">
+		<script language="JavaScript">
 		<!-- Begin
 		function countChars(field,cntfield) {
 		cntfield.value = field.value.length;
@@ -1318,7 +1317,7 @@ function aiosp_google_analytics(){
 					</tr>
 					<tr>
 						<th scope="row" style="text-align:right;"><?php _e('Description:', 'all_in_one_seo_pack') ?></th>
-						<td><textarea name="aiosp_description" rows="1" cols="60" onKeyDown="countChars(document.post.aiosp_description,document.post.length1)"	onKeyUp="countChars(document.post.aiosp_description,document.post.length1)"><?php echo $description ?>
+						<td><textarea name="aiosp_description" rows="1" cols="60" onkeydown="countChars(document.post.aiosp_description,document.post.length1)"	onkeyup="countChars(document.post.aiosp_description,document.post.length1)"><?php echo $description ?>
 							</textarea><br />
 							<input readonly type="text" name="length1" size="3" maxlength="3" value="<?php echo strlen($description);?>" />
 							<?php _e(' characters. Most search engines use a maximum of 160 chars for the description.', 'all_in_one_seo_pack') ?>
@@ -2107,7 +2106,7 @@ _e('Check this if you want your enable AIOSEOP support for Custom Post Types on 
 <a style="cursor:pointer;" title="<?php _e('Click for Help!', 'all_in_one_seo_pack')?>" onclick="toggleVisibility('123_tip');">
 <?php _e('Custom Post Types for SEO Column Support:', 'all_in_one_seo_pack')?>
 </td>
-<td><select name="aiosp_posttypecolumns[]" MULTIPLE style="height:70px;width:300px;">
+<td><select name="aiosp_posttypecolumns[]" multiple style="height:70px;width:300px;">
 <?php
 $typeswehave = array('post,revision'); //$aioseop_options['aiosp_posttypecolumns'];
 $post_types=get_post_types('','names'); 

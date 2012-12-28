@@ -2,7 +2,7 @@
 Contributors: Elliot Condon
 Tags: custom, field, custom field, advanced, simple fields, magic fields, more fields, repeater, matrix, post, type, text, textarea, file, image, edit, admin
 Requires at least: 3.0.0
-Tested up to: 3.4.2
+Tested up to: 3.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,6 +20,7 @@ Advanced Custom Fields is the perfect solution for any wordpress website which n
 * Uses the native WordPress metadata for ease of use and fast processing
 
 = Field Types =
+* Tab (Group fields into tabs)
 * Text (type text, api returns text)
 * Text Area (type text, api returns text with `<br />` tags)
 * WYSIWYG (a wordpress wysiwyg editor, api returns html)
@@ -89,8 +90,38 @@ http://support.advancedcustomfields.com/
 
 == Changelog ==
 
+= 3.5.6.3 =
+* [Fixed] Fix bug with 3.5.6 not showing front end form
+
+= 3.5.6.2 =
+* [Fixed] Fix WYSIWYG webkit browser issues.
+
+= 3.5.6.1 =
+* [Fixed] Fix bug causing field groups to not display on the options page.
+
+= 3.5.6 =
+* [Fixed] Fix content editor double in webkit browser - http://support.advancedcustomfields.com/discussion/4223/duplicate-editor-box-safari-bug-has-returned
+* [Fixed] Fix bug with post format location rule not working - http://support.advancedcustomfields.com/discussion/4264/not-recognizing-post-type-formats-following-upgrade-to-version-3-5-5
+* [Fixed] Fix conditional logic with tabs - http://support.advancedcustomfields.com/discussion/4201/tabs-and-logical-condition
+* [Fixed] Fix missing icons for conditional logic / menu in older WP
+* [Added] Add PHP fix for new lines in field key - http://support.advancedcustomfields.com/discussion/4087/can039t-add-new-field
+
+= 3.5.5 =
+* [Added] Add new Tab field
+* [Fixed] Improve WYSIWYG code for better compatibility
+* [Fixed] Fix PHP / AJAX error during database update for older versions
+* [Fixed] WYSIWYG insert attachment focus bug - http://support.advancedcustomfields.com/discussion/4076/problem-with-upload-in-wysiwyg-editors-in-combination-with-flexible-content
+* [Fixed] Fix JS coma issues for IE - http://support.advancedcustomfields.com/discussion/4064/ie-javascript-issues-on-editing-field-group
+* [Added] Add no cache to relationship field results - http://support.advancedcustomfields.com/discussion/2325/serious-memory-issue-using-post-objectrelationship-field-with-only-5000-posts
+* [Added] Add retina support
+* [Fixed] Fix WYSIWYG validation for preview post - http://support.advancedcustomfields.com/discussion/4055/validation-failing-on-required-wysiwyg-field
+* [Fixed] Fix undefined index error in field's conditional logic - http://support.advancedcustomfields.com/discussion/4165/undefined-index-notice-on-php-export
+* [Updated] Update post types in field options - http://support.advancedcustomfields.com/discussion/3656/acf-for-custom-post-type
+* [Added] Add filters to relationship field results
+* [Added] Add file name bellow title in popup for selecting a file
+
 = 3.5.4.1 =
-* [Fixed] Fix bug preventing options pages from appearing in the field group's location rules 
+* [Fixed] Fix bug preventing options pages from appearing in the field group's location rules
 
 = 3.5.4 =
 * [Added] Add new filter for ACF settings - http://www.advancedcustomfields.com/docs/filters/acf_settings/

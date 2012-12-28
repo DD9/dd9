@@ -4,7 +4,7 @@
   Plugin Name: Postie
   Plugin URI: http://PostiePlugin.com/
   Description: Signifigantly upgrades the posting by mail features of Word Press (See <a href='options-general.php?page=postie/postie.php'>Settings and options</a>) to configure your e-mail settings. See the <a href='http://wordpress.org/extend/plugins/postie/other_notes'>Readme</a> for usage. Visit the <a href='http://wordpress.org/support/plugin/postie'>postie forum</a> for support.
-  Version: 1.4.11
+  Version: 1.4.13
   Author: Wayne Allen
   Author URI: http://allens-home.com/
   License: GPL2
@@ -27,7 +27,7 @@
  */
 
 /*
-  $Id: postie.php 639546 2012-12-15 05:05:41Z WayneAllen $
+  $Id: postie.php 644775 2012-12-26 19:43:03Z WayneAllen $
  * -= Requests Pending =-
  * Problem with some mail server
  * Multiple emails should tie to a single account

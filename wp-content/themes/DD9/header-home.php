@@ -30,7 +30,7 @@
 </title>
 <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
 <link rel="apple-touch-icon" sizes="57x57" href="<?php bloginfo('template_url'); ?>/img/DD9_114x114_white.png" />
-<link rel="apple-touch-icon" sizes="72x72" href="<?php bloginfo('template_url'); ?>/img/DD9_144x144_white.pngg" />
+<link rel="apple-touch-icon" sizes="72x72" href="<?php bloginfo('template_url'); ?>/img/DD9_144x144_white.png" />
 <link rel="apple-touch-icon" sizes="114x114" href="<?php bloginfo('template_url'); ?>/img/DD9_114x114_white.png" />
 <link rel="apple-touch-icon" sizes="144x144" href="<?php bloginfo('template_url'); ?>/img/DD9_144x144_white.png" />
 <meta name="application-name" content="DD9.com" />

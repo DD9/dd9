@@ -1,14 +1,14 @@
 var acf = {
-	
+	post_id : 0,
 	text : {
 		'move_to_trash' : "Move to trash. Are you sure?",
 		'checked' : 'checked',
-		'conditional_no_fields' : 'No "toggle" fields avilable'
+		'conditional_no_fields' : 'No "toggle" fields available',
+		'flexible_content_no_fields' : 'Flexible Content requires at least 1 layout'
 	},
 	fields : [],
 	sortable_helper : null,
 	nonce : ''
-	
 };
 
 (function($){
@@ -47,56 +47,13 @@ var acf = {
 	*  uniqid
 	*  
 	*  @since			3.1.6
-	*  @description		Returns a unique ID (http://phpjs.org/functions/uniqid/)
+	*  @description		Returns a unique ID (secconds of time)
 	*/
 	
-	function uniqid(prefix, more_entropy)
+	function uniqid()
     {
-    	  // +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-		  // +    revised by: Kankrelune (http://www.webfaktory.info/)
-		  // %        note 1: Uses an internal counter (in php_js global) to avoid collision
-		  // *     example 1: uniqid();
-		  // *     returns 1: 'a30285b160c14'
-		  // *     example 2: uniqid('foo');
-		  // *     returns 2: 'fooa30285b1cd361'
-		  // *     example 3: uniqid('bar', true);
-		  // *     returns 3: 'bara20285b23dfd1.31879087'
-		  if (typeof prefix == 'undefined') {
-		    prefix = "";
-		  }
-		
-		  var retId;
-		  var formatSeed = function (seed, reqWidth) {
-		    seed = parseInt(seed, 10).toString(16); // to hex str
-		    if (reqWidth < seed.length) { // so long we split
-		      return seed.slice(seed.length - reqWidth);
-		    }
-		    if (reqWidth > seed.length) { // so short we pad
-		      return Array(1 + (reqWidth - seed.length)).join('0') + seed;
-		    }
-		    return seed;
-		  };
-		
-		  // BEGIN REDUNDANT
-		  if (!this.php_js) {
-		    this.php_js = {};
-		  }
-		  // END REDUNDANT
-		  if (!this.php_js.uniqidSeed) { // init seed with big random int
-		    this.php_js.uniqidSeed = Math.floor(Math.random() * 0x75bcd15);
-		  }
-		  this.php_js.uniqidSeed++;
-		
-		  retId = prefix; // start with prefix, add current milliseconds hex string
-		  retId += formatSeed(parseInt(new Date().getTime() / 1000, 10), 8);
-		  retId += formatSeed(this.php_js.uniqidSeed, 5); // add seed hex string
-		  if (more_entropy) {
-		    // for more entropy we add a float lower to 10
-		    retId += (Math.random() * 10).toFixed(8).toString();
-		  }
-		
-		  return retId;
-
+    	var newDate = new Date;
+    	return newDate.getTime();
     }
     
     
@@ -127,16 +84,29 @@ var acf = {
 	
 	$('#acf_fields tr.field_type select').live('change', function(){
 		
-		var tbody = $(this).closest('tbody');
-
+		// vars
+		var select = $(this),
+			tbody = select.closest('tbody'),
+			field = tbody.closest('.field'),
+			field_type = field.attr('data-type'),
+			field_key = field.attr('data-id'),
+			val = select.val();
+			
+		
+		
+		// update data atts
+		field.removeClass('field-' + field_type).addClass('field-' + val);
+		field.attr('data-type', val);
+		
+		
 		// show field options if they already exist
-		if(tbody.children('tr.field_option_'+$(this).val()).exists())
+		if( tbody.children( 'tr.field_option_' + val ).exists() )
 		{
 			// hide + disable options
 			tbody.children('tr.field_option').hide().find('[name]').attr('disabled', 'true');
 			
 			// show and enable options
-			tbody.children('tr.field_option_'+$(this).val()).show().find('[name]').removeAttr('disabled');
+			tbody.children( 'tr.field_option_' + val ).show().find('[name]').removeAttr('disabled');
 		}
 		else
 		{
@@ -159,10 +129,11 @@ var acf = {
 			
 			
 			var ajax_data = {
-				action : "acf_field_options",
-				post_id : $('#post_ID').val(),
-				field_key : $(this).attr('name'),
-				field_type : $(this).val()
+				'action' : 'acf_field_options',
+				'post_id' : acf.post_id,
+				'field_key' : select.attr('name'),
+				'field_type' : val,
+				'nonce' : acf.nonce
 			};
 			
 			$.ajax({
@@ -171,7 +142,12 @@ var acf = {
 				type: 'post',
 				dataType: 'html',
 				success: function(html){
-
+					
+					if( ! html )
+					{
+						alert('Error: Could not load field options');
+					}
+					
 					tr.replaceWith(html);
 					
 				}
@@ -205,7 +181,11 @@ var acf = {
 			type: 'post',
 			dataType: 'html',
 			success: function( new_id ){
-
+				
+				// remove phantom new lines...
+				new_id = new_id.replace(/(\r\n|\n|\r)/gm,"");
+				
+				
 				// give field a new id
 				field.attr('data-id', new_id);
 				
@@ -579,7 +559,7 @@ var acf = {
 	*  @created: 15/10/12
 	*/
 	
-	$('#location_rules a.add').live('click',function(){
+	$('#location_rules a.acf-button-add').live('click',function(){
 			
 		// vars
 		var old_tr = $(this).closest('tr'),
@@ -622,7 +602,7 @@ var acf = {
 	*  @created: 15/10/12
 	*/
 	
-	$('#location_rules a.remove').live('click',function(){
+	$('#location_rules a.acf-button-remove').live('click',function(){
 			
 		var table = $(this).closest('table');
 		
@@ -694,7 +674,7 @@ var acf = {
 		
 		// reset layout meta values
 		new_tr.find('.acf_cf_meta input[type="text"]').val('');
-		new_tr.find('.acf_cf_meta select').val('row').trigger('change');
+		
 		
 		// update id / names
 		new_tr.find('[name]').each(function(){
@@ -710,6 +690,9 @@ var acf = {
 		
 		// add new tr
 		tr.after(new_tr);
+		
+		// display
+		new_tr.find('.acf_cf_meta select').val('row').trigger('change');
 		
 		
 		return false;
@@ -766,12 +749,12 @@ var acf = {
 	
 	$('#acf_fields .acf_fc_delete').live('click', function(){
 
-		var tr = $(this).closest('tr.field_option_flexible_content');
-		var tr_count = tr.siblings('tr.field_option.field_option_flexible_content').length;
+		var tr = $(this).closest('tr.field_option_flexible_content'),
+			tr_count = tr.siblings('tr.field_option.field_option_flexible_content').length;
 
-		if(tr_count == 0)
+		if( tr_count <= 1 )
 		{
-			alert('Flexible Content requires at least 1 layout');
+			alert( acf.text.flexible_content_no_fields );
 			return false;
 		}
 		
@@ -901,7 +884,7 @@ var acf = {
 	
 	$('#adv-settings input[name="show-field_key"]').live('change', function(){
 		
-		if( $(this).val() == 1 )
+		if( $(this).val() == "1" )
 		{
 			$('#acf_fields table.acf').addClass('show-field_key');
 		}
@@ -1065,7 +1048,7 @@ var acf = {
 		if( type == "true_false" )
 		{
 			choices = [
-				{ value : '1', label : acf.text.checked },
+				{ value : 1, label : acf.text.checked }
 			];
 						
 		}
@@ -1155,7 +1138,7 @@ var acf = {
 	*  @created: 15/10/12
 	*/
 	
-	$('tr.conditional-logic a.add').live('click',function(){
+	$('tr.conditional-logic .acf-button-add').live('click',function(){
 		
 		// vars
 		var old_tr = $(this).closest('tr'),
@@ -1198,7 +1181,7 @@ var acf = {
 	*  @created: 15/10/12
 	*/
 	
-	$('tr.conditional-logic a.remove').live('click',function(){
+	$('tr.conditional-logic .acf-button-remove').live('click',function(){
 		
 		var table = $(this).closest('table');
 		

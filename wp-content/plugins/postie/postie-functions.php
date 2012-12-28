@@ -1,7 +1,7 @@
 <?php
 
 /*
-  $Id: postie-functions.php 639439 2012-12-14 22:03:09Z WayneAllen $
+  $Id: postie-functions.php 644775 2012-12-26 19:43:03Z WayneAllen $
  */
 
 /* TODO 
@@ -99,8 +99,12 @@ function LogInfo($v) {
 }
 
 function EchoInfo($v) {
-    if (headers_sent()) {
-        echo("<p>$v</p>\n");
+    if (php_sapi_name() == "cli") {
+        echo "$v\n";
+    } else {
+        if (headers_sent()) {
+            echo "<p>" . htmlspecialchars($v) . "</p>\n";
+        }
     }
     LogInfo($v);
 }
@@ -108,12 +112,14 @@ function EchoInfo($v) {
 function DebugDump($v) {
     if (IsDebugMode()) {
         $o = print_r($v, true);
-        if (headers_sent()) {
-            echo "<pre>\n";
-        }
-        EchoInfo(htmlspecialchars($o));
-        if (headers_sent()) {
-            echo "</pre>\n";
+        if (php_sapi_name() == "cli") {
+            echo "$o\n";
+        } else {
+            if (headers_sent()) {
+                echo "<pre>\n";
+                EchoInfo($o);
+                echo "</pre>\n";
+            }
         }
     }
 }
@@ -152,10 +158,17 @@ function PostEmail($poster, $mimeDecodedEmail, $config) {
     //DebugEcho("the content is $content");
 
     $subject = GetSubject($mimeDecodedEmail, $content, $config);
+    //DebugEcho("post subject: $content");
 
     $customImages = SpecialMessageParsing($content, $attachments, $config);
+    //DebugEcho("post special message: $content");
+
     $post_excerpt = GetPostExcerpt($content, $filternewlines, $convertnewline);
+    //DebugEcho("post exerpt: $content");
+
     $postAuthorDetails = getPostAuthorDetails($subject, $content, $mimeDecodedEmail);
+    //DebugEcho("post author: $content");
+
     $message_date = NULL;
     if (array_key_exists("date", $mimeDecodedEmail->headers) && !empty($mimeDecodedEmail->headers["date"])) {
         $cte = "";
@@ -169,15 +182,23 @@ function PostEmail($poster, $mimeDecodedEmail, $config) {
         $message_date = HandleMessageEncoding($cte, $cs, $mimeDecodedEmail->headers["date"], $message_encoding, $message_dequote);
     }
     list($post_date, $post_date_gmt, $delay) = DeterminePostDate($content, $message_date, $time_offset);
-    ubb2HTML($content);
+    //DebugEcho("post date: $content");
 
-    if ($converturls)
+    ubb2HTML($content);
+    //DebugEcho("post ubb: $content");
+
+    if ($converturls) {
         $content = clickableLink($content, $shortcode);
+        //DebugEcho("post clickable: $content");
+    }
 
     $id = checkReply($subject);
     $post_categories = GetPostCategories($subject, $default_post_category);
     $post_tags = postie_get_tags($content, $default_post_tags);
+    //DebugEcho("post tags: $content");
+
     $comment_status = AllowCommentsOnPost($content);
+    //DebugEcho("post comment: $content");
 
     if ((empty($id) || is_null($id))) {
         $id = $post_id;
@@ -213,8 +234,10 @@ function PostEmail($poster, $mimeDecodedEmail, $config) {
         $content = $newContents;
         wp_delete_post($post_id);
     }
-    if ($filternewlines)
+    if ($filternewlines) {
         $content = FilterNewLines($content, $convertnewline);
+        //DebugEcho("post filter newlines: $content");
+    }
 
     if ($delay != 0 && $post_status == 'publish') {
         $post_status = 'future';
@@ -486,7 +509,7 @@ function ConfigurePostie() {
  * This function handles determining the protocol and fetching the mail
  * @return array
  */
-function FetchMail($server = NULL, $port = NULL, $email = NULL, $password = NULL, $protocol = NULL, $offset = NULL, $test = NULL, $deleteMessages = true) {
+function FetchMail($server = NULL, $port = NULL, $email = NULL, $password = NULL, $protocol = NULL, $offset = NULL, $test = NULL, $deleteMessages = true, $maxemails = 0) {
     $emails = array();
     if (!$server || !$port || !$email) {
         EchoInfo("Missing Configuration For Mail Server");
@@ -511,12 +534,12 @@ function FetchMail($server = NULL, $port = NULL, $email = NULL, $password = NULL
             if (!HasIMAPSupport()) {
                 EchoInfo("Sorry - you do not have IMAP php module installed - it is required for this mail setting.");
             } else {
-                $emails = IMAPMessageFetch($server, $port, $email, $password, $protocol, $offset, $test, $deleteMessages);
+                $emails = IMAPMessageFetch($server, $port, $email, $password, $protocol, $offset, $test, $deleteMessages, $maxemails);
             }
             break;
         case 'pop3':
         default:
-            $emails = POP3MessageFetch($server, $port, $email, $password, $protocol, $offset, $test, $deleteMessages);
+            $emails = POP3MessageFetch($server, $port, $email, $password, $protocol, $offset, $test, $deleteMessages, $maxemails);
     }
 
     return $emails;
@@ -525,7 +548,7 @@ function FetchMail($server = NULL, $port = NULL, $email = NULL, $password = NULL
 /**
  * Handles fetching messages from an imap server
  */
-function IMAPMessageFetch($server = NULL, $port = NULL, $email = NULL, $password = NULL, $protocol = NULL, $offset = NULL, $test = NULL, $deleteMessages = true) {
+function IMAPMessageFetch($server = NULL, $port = NULL, $email = NULL, $password = NULL, $protocol = NULL, $offset = NULL, $test = NULL, $deleteMessages = true, $maxemails = 0) {
     require_once("postieIMAP.php");
     $emails = array();
     $mail_server = &PostieIMAP::Factory($protocol);
@@ -545,6 +568,10 @@ function IMAPMessageFetch($server = NULL, $port = NULL, $email = NULL, $password
         if ($deleteMessages) {
             $mail_server->deleteMessage($i);
         }
+        if ($maxemails != 0 && $i >= $maxemails) {
+            DebugEcho("Max emails ($maxemails)");
+            break;
+        }
     }
     if ($deleteMessages) {
         $mail_server->expungeMessages();
@@ -557,7 +584,7 @@ function IMAPMessageFetch($server = NULL, $port = NULL, $email = NULL, $password
 /**
  * Retrieves email via POP3
  */
-function POP3MessageFetch($server = NULL, $port = NULL, $email = NULL, $password = NULL, $protocol = NULL, $offset = NULL, $test = NULL, $deleteMessages = true) {
+function POP3MessageFetch($server = NULL, $port = NULL, $email = NULL, $password = NULL, $protocol = NULL, $offset = NULL, $test = NULL, $deleteMessages = true, $maxemails = 0) {
     require_once(ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'class-pop3.php');
 
     $emails = array();
@@ -587,6 +614,10 @@ function POP3MessageFetch($server = NULL, $port = NULL, $email = NULL, $password
                 $pop3->reset();
                 exit;
             }
+        }
+        if ($maxemails != 0 && $i >= $maxemails) {
+            DebugEcho("Max emails ($maxemails)");
+            break;
         }
     }
     //clean up
@@ -660,7 +691,7 @@ function BannedFileName($filename, $bannedFiles) {
 
 function GetContent($part, &$attachments, $post_id, $poster, $config) {
     extract($config);
-    global $charset, $encoding;
+    //global $charset, $encoding;
 
     $meta_return = '';
     DebugEcho("primary= " . $part->ctype_primary . ", secondary = " . $part->ctype_secondary);
@@ -715,12 +746,16 @@ function GetContent($part, &$attachments, $post_id, $poster, $config) {
                 break;
 
             case 'text':
-                DebugDump($part);
+                DebugEcho("ctype_primary: text");
+                //DebugDump($part);
+
+                $charset = "";
                 if (array_key_exists('charset', $part->ctype_parameters) && !empty($part->ctype_parameters['charset'])) {
                     $charset = $part->ctype_parameters['charset'];
                     DebugEcho("charset: $charset");
                 }
 
+                $encoding = "";
                 if (array_key_exists('content-transfer-encoding', $part->headers) && !empty($part->headers['content-transfer-encoding'])) {
                     $encoding = $part->headers['content-transfer-encoding'];
                     DebugEcho("encoding: $encoding");
@@ -751,7 +786,9 @@ function GetContent($part, &$attachments, $post_id, $poster, $config) {
                     }
                     $meta_return = StripPGP($meta_return);
                     $meta_return = "<div>$meta_return</div>\n";
+                    //DebugEcho($meta_return);
                 }
+                DebugEcho("----");
                 break;
 
             case 'image':
@@ -901,15 +938,19 @@ function etf2HTML($content) {
 function HTML2HTML($content) {
     $html = str_get_html($content);
     if ($html) {
-//        foreach ($html->find('script, style') as $node) {
-//            $node->outertext = '';
-//        }
-//        $html->load($html->save());
+        DebugEcho("Looking for invalid tags");
+        foreach ($html->find('script, style, head') as $node) {
+            DebugEcho("Removing: " . $node->outertext);
+            $node->outertext = '';
+        }
+        $html->load($html->save());
 
         $b = $html->find('body');
         if ($b) {
             $content = "<div>" . $b[0]->innertext . "</div>\n";
         }
+    } else {
+        DebugEcho("No HTML found");
     }
     return $content;
 }
@@ -1823,6 +1864,10 @@ function ReplaceImageCIDs(&$content, &$attachments) {
  */
 function ReplaceImagePlaceHolders(&$content, $attachments, $config) {
     extract($config);
+    if (!$allow_html_in_body) {
+        $content = html_entity_decode($content, ENT_QUOTES);
+    }
+
     $startIndex = $start_image_count_at_zero ? 0 : 1;
     if (!empty($attachments) && $auto_gallery) {
         $imageTemplate = '[gallery]';
@@ -1850,24 +1895,22 @@ function ReplaceImagePlaceHolders(&$content, $attachments, $config) {
             // look for caption
             DebugEcho("Found $img_placeholder_temp or $eimg_placeholder_temp");
             $caption = '';
-            $content = preg_replace("/&#0?39;/", "'", $content);
-            $content = preg_replace("/&(#0?34|quot);/", "\"", $content);
-            if (preg_match("/$img_placeholder_temp caption=['\"]?(.*?)['\"]?#/i", $content, $matches)) {
-                $caption = $matches[1];
-                DebugEcho("found caption: $caption");
+            if (preg_match("/$img_placeholder_temp caption=(.*?)#/i", $content, $matches)) {
+                $caption = trim($matches[1]);
+                $caption = substr($caption, 1, strlen($caption) - 2);
+                DebugEcho("caption: $caption");
                 $img_placeholder_temp = substr($matches[0], 0, -1);
                 $eimg_placeholder_temp = substr($matches[0], 0, -1);
             } else {
                 DebugEcho("No caption found");
             }
             //DebugEcho("parameterize templete: " . htmlentities($imageTemplate));
-            $imageTemplate = mb_str_replace('{CAPTION}', $caption, $imageTemplate);
-            //DebugEcho("populated templete: " . htmlentities($imageTemplate));
+            $imageTemplate = mb_str_replace('{CAPTION}', htmlspecialchars($caption, ENT_QUOTES), $imageTemplate);
+            //DebugEcho("populated templete: " . $imageTemplate);
 
             $img_placeholder_temp.='#';
             $eimg_placeholder_temp.='#';
 
-            //DebugEcho("replacing " . htmlentities($img_placeholder_temp) . " with template");
             $content = str_ireplace($img_placeholder_temp, $imageTemplate, $content);
             $content = str_ireplace($eimg_placeholder_temp, $imageTemplate, $content);
         } else {
@@ -1934,7 +1977,7 @@ function GetSubject(&$mimeDecodedEmail, &$content, $config) {
         }
         if (!$allow_html_in_subject) {
             DebugEcho("subject before htmlentities: $subject");
-            $subject = htmlentities($subject, ENT_COMPAT | ENT_HTML401, $message_encoding);
+            $subject = htmlentities($subject, ENT_COMPAT, $message_encoding);
             DebugEcho("subject after htmlentities: $subject");
         }
     }
@@ -2056,8 +2099,7 @@ function DisplayEmailPost($details) {
     EchoInfo('Postname: ' . $details["post_name"]);
     EchoInfo('Post Id: ' . $details["ID"]);
     EchoInfo('Post Type: ' . $details["post_type"]); /* Added by Raam Dev <raam@raamdev.com> */
-//    EchoInfo('Posted content:');
-//    EchoInfo($details["post_content"]);
+    //EchoInfo('Posted content: '.$details["post_content"]);
 }
 
 /**
@@ -2179,6 +2221,7 @@ function get_postie_config_defaults() {
         'mail_server_port' => 110,
         'mail_userid' => NULL,
         'mail_password' => NULL,
+        'maxemails' => 0,
         'message_start' => ":start",
         'message_end' => ":end",
         'message_encoding' => "UTF-8",
@@ -2275,8 +2318,7 @@ function GetDBConfig() {
 
     if (!isset($config["MESSAGE_END"]))
         $config["MESSAGE_END"] = ":end";
-    if
-    (!isset($config["FORWARD_REJECTED_MAIL"]))
+    if (!isset($config["FORWARD_REJECTED_MAIL"]))
         $config["FORWARD_REJECTED_MAIL"] = true;
     if (!isset($config["RETURN_TO_SENDER"]))
         $config["RETURN_TO_SENDER"] = false;
@@ -2625,27 +2667,32 @@ function SpecialMessageParsing(&$content, &$attachments, $config) {
     }
     if ($message_start) {
         $content = StartFilter($content, $message_start);
+        //DebugEcho("post start: $content");
     }
     if ($message_end) {
         $content = EndFilter($content, $message_end);
+        //DebugEcho("post end: $content");
     }
     if ($drop_signature) {
         $content = remove_signature($content, $sig_pattern_list);
+        //DebugEcho("post signature: $content");
     }
     if ($prefer_text_type == "html" && count($attachments["cids"])) {
         ReplaceImageCIDs($content, $attachments);
+        //DebugEcho("post CIDs: $content");
     }
     if (!$custom_image_field) {
         ReplaceImagePlaceHolders($content, $attachments["html"], $config);
+        //DebugEcho("post placeholders: $content");
     } else {
         $customImages = array();
-        DebugEcho("Looking for custom images");
+        //DebugEcho("Looking for custom images");
         //DebugDump($attachments["html"]);
 
         foreach ($attachments["html"] as $key => $value) {
             //DebugEcho("checking " . htmlentities($value));
             if (preg_match("/src\s*=\s*['\"]([^'\"]*)['\"]/i", $value, $matches)) {
-                DebugEcho("found custom image: " . $matches[1]);
+                //DebugEcho("found custom image: " . $matches[1]);
                 array_push($customImages, $matches[1]);
             }
         }

@@ -55,7 +55,7 @@ class acf_Radio extends acf_Field
 			
 			// if there is no value and this is the first of the choices and there is no "0" choice, select this on by default
 			// the 0 choice would normally match a no value. This needs to remain possible for the create new field to work.
-			if(!$field['value'] && $i == 1 && !isset($field['choices']['0']))
+			if(!$field['value'] && $i == 1 && !isset($field['choices'][0]))
 			{
 				$field['value'] = $key;
 			}

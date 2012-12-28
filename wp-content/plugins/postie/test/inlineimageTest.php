@@ -130,8 +130,8 @@ class postiefunctions2Test extends PHPUnit_Framework_TestCase {
     }
 
     function testHandleMessageEncoding() {
-        $e=HandleMessageEncoding('quoted-printable','iso-8859-7','<span style=3D"font-family:arial,sans-serif;font-size:13px">ABC=C3=C4=CEABC=</span><br>');
-        $this->assertEquals('<span style="font-family:arial,sans-serif;font-size:13px">ABCΓΔΞABC=</span><br>',$e);
+        $e = HandleMessageEncoding('quoted-printable', 'iso-8859-7', '<span style=3D"font-family:arial,sans-serif;font-size:13px">ABC=C3=C4=CEABC=</span><br>');
+        $this->assertEquals('<span style="font-family:arial,sans-serif;font-size:13px">ABCΓΔΞABC=</span><br>', $e);
     }
 
     function testGreek() {
@@ -155,42 +155,49 @@ class postiefunctions2Test extends PHPUnit_Framework_TestCase {
     public function testReplaceImagePlaceHolders() {
         $c = "";
         $config = $this->standardConfig();
-        $attachements = array("image.jpg" => 'template with {CAPTION}');
+        $attachements = array("image.jpg" => '<img title="{CAPTION}" />');
 
         ReplaceImagePlaceHolders($c, array(), $config);
         $this->assertEquals("", $c);
 
         ReplaceImagePlaceHolders($c, $attachements, $config);
-        $this->assertEquals("template with ", $c);
+        $this->assertEquals('<img title="" />', $c);
 
         $c = "#img1#";
         ReplaceImagePlaceHolders($c, $attachements, $config);
-        $this->assertEquals("template with ", $c);
+        $this->assertEquals('<img title="" />', $c);
 
         $c = "test #img1# test";
         ReplaceImagePlaceHolders($c, $attachements, $config);
-        $this->assertEquals("test template with  test", $c);
+        $this->assertEquals('test <img title="" /> test', $c);
 
         $c = "test #img1 caption='1'# test";
         ReplaceImagePlaceHolders($c, $attachements, $config);
-        $this->assertEquals("test template with 1 test", $c);
+        $this->assertEquals('test <img title="1" /> test', $c);
+
+        $c = "test #img1 caption='! @ % ^ & * ( ) ~ \"Test\"'# test";
+        ReplaceImagePlaceHolders($c, $attachements, $config);
+        $this->assertEquals('test <img title="! @ % ^ &amp; * ( ) ~ &quot;Test&quot;" /> test', $c);
+
+        $c = "test <div>#img1 caption=&#39;! @ % ^ &amp; * ( ) ~ &quot;Test&quot;&#39;#</div> test";
+        ReplaceImagePlaceHolders($c, $attachements, $config);
+        $this->assertEquals("test <div><img title=\"! @ % ^ &amp; * ( ) ~ &quot;Test&quot;\" /></div> test", $c);
 
         $c = "test #img1 caption=\"I'd like some cheese.\"# test";
         ReplaceImagePlaceHolders($c, $attachements, $config);
-        $this->assertEquals("test template with I'd like some cheese. test", $c);
-        
+        $this->assertEquals('test <img title="I&#039;d like some cheese." /> test', $c);
+
         $c = "test #img1 caption=\"Eiskernbrecher mögens laut\"# test";
         ReplaceImagePlaceHolders($c, $attachements, $config);
-        $this->assertEquals("test template with Eiskernbrecher mögens laut test", $c);
-        
-        
-         $c = "test #img1 caption='[image-caption]'# test";
+        $this->assertEquals('test <img title="Eiskernbrecher mögens laut" /> test', $c);
+
+        $c = "test #img1 caption='[image-caption]'# test";
         ReplaceImagePlaceHolders($c, $attachements, $config);
-        $this->assertEquals("test template with [image-caption] test", $c);
+        $this->assertEquals('test <img title="[image-caption]" /> test', $c);
 
         $c = "test #img1 caption='1'# test #img2 caption='2'#";
         ReplaceImagePlaceHolders($c, $attachements, $config);
-        $this->assertEquals("test template with 1 test #img2 caption='2'#", $c);
+        $this->assertEquals('test <img title="1" /> test #img2 caption=\'2\'#', $c);
 
         $attachements = array("image1.jpg" => 'template with {CAPTION}', "image2.jpg" => 'template with {CAPTION}');
         $c = "test #img1 caption='1'# test #img2 caption='2'#";

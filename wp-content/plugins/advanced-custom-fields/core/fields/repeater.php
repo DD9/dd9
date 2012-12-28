@@ -99,14 +99,12 @@ class acf_Repeater extends acf_Field
 
 		
 		// setup values for row clone
-		$field['value'][999] = array();
+		$field['value']['acfcloneindex'] = array();
 		foreach( $field['sub_fields'] as $sub_field)
 		{
 			$sub_value = isset($sub_field['default_value']) ? $sub_field['default_value'] : false;
-			$field['value'][999][$sub_field['name']] = $sub_value;
+			$field['value']['acfcloneindex'][$sub_field['name']] = $sub_value;
 		}
-		
-
 
 ?>
 <div class="repeater" data-min_rows="<?php echo $field['row_min']; ?>" data-max_rows="<?php echo $field['row_limit']; ?>">
@@ -152,9 +150,9 @@ class acf_Repeater extends acf_Field
 		</thead>
 	<?php endif; ?>
 	<tbody>
-	<?php if( $field['value'] ): foreach($field['value'] as $i => $value): ?>
+	<?php if( $field['value'] ): foreach( $field['value'] as $i => $value ): ?>
 		
-		<tr class="<?php echo ($i == 999) ? "row-clone" : "row"; ?>">
+		<tr class="<?php echo ( (string) $i == 'acfcloneindex') ? "row-clone" : "row"; ?>">
 		
 		<?php 
 		
@@ -234,8 +232,8 @@ class acf_Repeater extends acf_Field
 		
 		if( $field['row_min'] < $field['row_limit'] ): ?>
 			<td class="remove">
-				<a class="add-row add-row-before" href="javascript:;"></a>
-				<a class="remove-row" href="javascript:;"></a>
+				<a class="acf-button-add add-row-before" href="javascript:;"></a>
+				<a class="acf-button-remove" href="javascript:;"></a>
 			</td>
 		<?php endif; ?>
 		
@@ -274,7 +272,7 @@ class acf_Repeater extends acf_Field
 		$fields_names = array();
 		$defaults = array(
 			'row_limit'		=>	'',
-			'row_min'		=>	'0',
+			'row_min'		=>	0,
 			'layout' 		=> 'table',
 			'sub_fields'	=>	array(),
 			'button_label'	=>	__("Add Row",'acf'),
@@ -294,7 +292,7 @@ class acf_Repeater extends acf_Field
 			'label' => __("New Field",'acf'),
 			'name' => __("new_field",'acf'),
 			'type' => 'text',
-			'order_no' =>	'1',
+			'order_no' =>	1,
 			'instructions' =>	'',
 		);
 
@@ -307,6 +305,7 @@ class acf_Repeater extends acf_Field
 				$fields_names[$f->name] = $f->title;
 			}
 		}
+		unset( $fields_names['tab'] );
 		
 		?>
 <tr class="field_option field_option_<?php echo $this->name; ?> field_option_<?php echo $this->name; ?>_fields">
@@ -450,7 +449,10 @@ class acf_Repeater extends acf_Field
 								</tr>
 								<?php 
 								
-								$this->parent->fields[$sub_field['type']]->create_options($key.'][sub_fields]['.$sub_field['key'], $sub_field);
+								if( isset($this->parent->fields[ $sub_field['type'] ]) )
+								{
+									$this->parent->fields[$sub_field['type']]->create_options($key.'][sub_fields]['.$sub_field['key'], $sub_field);
+								}
 								
 								?>
 								<tr class="field_save">
@@ -617,7 +619,7 @@ class acf_Repeater extends acf_Field
 		if($value)
 		{
 			// remove dummy field
-			unset($value[999]);
+			unset($value['acfcloneindex']);
 			
 			$i = -1;
 			

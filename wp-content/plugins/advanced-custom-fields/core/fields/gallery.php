@@ -223,8 +223,8 @@ class acf_Gallery extends acf_Field
 				</div>
 				<div class="hover">
 					<ul class="bl">
-						<li><a href="#" class="remove-image ir"><?php _e("Remove",'acf'); ?></a></li>
-						<li><a href="#" class="edit-image ir"><?php _e("Edit",'acf'); ?></a></li>
+						<li><a href="#" class="acf-button-delete ir"><?php _e("Remove",'acf'); ?></a></li>
+						<li><a href="#" class="acf-button-edit ir"><?php _e("Edit",'acf'); ?></a></li>
 					</ul>
 				</div>
 				
@@ -253,8 +253,8 @@ class acf_Gallery extends acf_Field
 		</div>
 		<div class="hover">
 			<ul class="bl">
-				<li><a href="#" class="remove-image ir"><?php _e("Remove",'acf'); ?></a></li>
-				<li><a href="#" class="edit-image ir"><?php _e("Edit",'acf'); ?></a></li>
+				<li><a href="#" class="acf-button-delete ir"><?php _e("Remove",'acf'); ?></a></li>
+				<li><a href="#" class="acf-button-edit ir"><?php _e("Edit",'acf'); ?></a></li>
 			</ul>
 		</div>
 		
@@ -428,19 +428,12 @@ class acf_Gallery extends acf_Field
 	*/
 	
 	function popup_head()
-	{
-		// $_GET is required
-		if( ! isset($_GET) )
-		{
-			return;
-		}
-		
-		
+	{	
 		// options
 		$defaults = array(
 			'acf_type' => '',
 			'acf_gallery_id' => '',
-			'preview_size' => 'thumbnail',
+			'acf_preview_size' => 'thumbnail',
 			'tab'	=>	'type',	
 		);
 		
@@ -456,7 +449,6 @@ class acf_Gallery extends acf_Field
 			
 ?><style type="text/css">
 	#media-upload-header #sidemenu li#tab-type_url,
-	#media-upload-header #sidemenu li#tab-gallery,
 	#media-items .media-item a.toggle,
 	#media-items .media-item tr.image-size,
 	#media-items .media-item tr.align,
@@ -507,6 +499,7 @@ class acf_Gallery extends acf_Field
 		position: relative;
 		overflow: hidden;
 		display: none; /* default is hidden */
+		clear: both;
 	}
 	
 	#media-upload .acf-submit a {
@@ -525,6 +518,15 @@ class acf_Gallery extends acf_Field
 	#wpcontent {
    		margin-left: 0 !important;
     }
+    
+<?php if( $options['tab'] == 'gallery' ): ?>
+	#sort-buttons,
+	#gallery-form > .widefat,
+	#media-items .menu_order,
+	#gallery-settings {
+		display: none !important;
+	}
+<?php endif; ?>
 
 </style>
 <script type="text/javascript">
@@ -703,7 +705,7 @@ class acf_Gallery extends acf_Field
 		
 		$('form#filter').each(function(){
 			
-			$(this).append('<input type="hidden" name="acf_preview_size" value="<?php echo $options['preview_size']; ?>" />');
+			$(this).append('<input type="hidden" name="acf_preview_size" value="<?php echo $options['acf_preview_size']; ?>" />');
 			$(this).append('<input type="hidden" name="acf_type" value="gallery" />');
 						
 		});
@@ -711,7 +713,7 @@ class acf_Gallery extends acf_Field
 		$('form#image-form, form#library-form').each(function(){
 			
 			var action = $(this).attr('action');
-			action += "&acf_type=gallery&acf_preview_size=<?php $options['preview_size']; ?>";
+			action += "&acf_type=gallery&acf_preview_size=<?php $options['acf_preview_size']; ?>";
 			$(this).attr('action', action);
 			
 		});
@@ -735,7 +737,7 @@ class acf_Gallery extends acf_Field
 			data : {
 				action: 'acf_get_preview_image',
 				id: attachment_id,
-				preview_size : "<?php echo $options['preview_size']; ?>"
+				preview_size : "<?php echo $options['acf_preview_size']; ?>"
 			},
 			cache: false,
 			dataType: "json",

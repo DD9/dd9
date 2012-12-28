@@ -40,7 +40,6 @@ class acf_field_group
 		
 		// filters
 		add_filter('name_save_pre', array($this, 'save_name'));
-		//add_filter('acf_save_field', array($this, 'acf_save_field'));
 		
 		
 		// ajax
@@ -154,8 +153,14 @@ class acf_field_group
 		if( ! $this->validate_page() ) return;
 		
 		
+		global $post;
+		
+		
 		// add js vars
-		echo '<script type="text/javascript">acf.nonce = "' . wp_create_nonce( 'acf_nonce' ) . '";</script>';
+		echo '<script type="text/javascript">
+			acf.nonce = "' . wp_create_nonce( 'acf_nonce' ) . '";
+			acf.post_id = ' . $post->ID . ';
+		</script>';
 		
 		
 		do_action('acf_head-fields');
@@ -244,33 +249,44 @@ class acf_field_group
 	
 	function ajax_acf_field_options()
 	{
-		// defaults
-		$defaults = array(
-			'field_key' => null,
-			'field_type' => null,
-			'post_id' => null,
+		// vars
+		$options = array(
+			'field_key' => '',
+			'field_type' => '',
+			'post_id' => 0,
+			'nonce' => ''
 		);
 		
 		// load post options
-		$options = array_merge($defaults, $_POST);
+		$options = array_merge($options, $_POST);
 		
-		// required
-		if(!$options['field_type'])
+		
+		// verify nonce
+		if( ! wp_verify_nonce($options['nonce'], 'acf_nonce') )
 		{
-			echo "";
-			die();
+			die(0);
 		}
 		
+		
+		
+		// required
+		if( ! $options['field_type'] )
+		{
+			die(0);
+		}
+		
+		
+		// find key (not actual field key, more the html attr name)
 		$options['field_key'] = str_replace("fields[", "", $options['field_key']);
 		$options['field_key'] = str_replace("][type]", "", $options['field_key']) ;
 		
 		
-		// load field
-		//$field = $this->get_acf_field("field_" . $options['field_key'], $options['post_id']);
+
 		$field = array();
 		
 		// render options
-		$this->parent->fields[$options['field_type']]->create_options($options['field_key'], $field);
+		$this->parent->fields[ $options['field_type'] ]->create_options($options['field_key'], $field);
+		
 		die();
 		
 	}
@@ -318,12 +334,9 @@ class acf_field_group
 		{
 			case "post_type":
 				
-				$choices = get_post_types(array(
-					//'public' => true
-				));
-				
-				unset( $choices['attachment'], $choices['revision'] , $choices['nav_menu_item'], $choices['acf']  );
-		
+				// all post types except attachment
+				$choices = $this->parent->get_post_types( array('attachment') );
+
 				break;
 			
 			
@@ -594,15 +607,15 @@ class acf_field_group
 	function save_post($post_id)
 	{	
 		
-		// do not save if this is an auto save routine
-		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return $post_id;
-		
-		
 		// only for save acf
-		if( ! isset($_POST['acf_save_post']) || $_POST['acf_save_post'] != 'field_group')
+		if( ! isset($_POST['acf_field_group']) || ! wp_verify_nonce($_POST['acf_field_group'], 'acf_field_group') )
 		{
 			return $post_id;
 		}
+		
+		
+		// do not save if this is an auto save routine
+		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return $post_id;
 		
 		
 		// only save once! WordPress save's a revision as well.
@@ -642,13 +655,12 @@ class acf_field_group
 				$field['key'] = $key;
 				
 				
-				// apply filters
-				$field = apply_filters('acf_save_field', $field );
-				$field = apply_filters('acf_save_field-' . $field['type'], $field );
+				// trim key
+				$field['key'] = preg_replace('/\s+/' , '' , $field['key']);
 				
 				
-				// save it!
-				update_post_meta($post_id, $field['key'], $field);
+				// save
+				$this->parent->update_field( $post_id, $field);
 				
 				
 				// add to dont delete array
@@ -726,12 +738,12 @@ class acf_field_group
 		// verify nonce
 		if( ! wp_verify_nonce($options['nonce'], 'acf_nonce') )
 		{
-			die('0');
+			die(0);
 		}
 		
 		
 		// get next id
-		$next_id = (int) get_option('acf_next_field_id', 1);
+		$next_id = intval( get_option('acf_next_field_id', 1) );
 		
 		
 		// update the acf_next_field_id
