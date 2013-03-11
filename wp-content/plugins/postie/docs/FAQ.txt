@@ -56,6 +56,18 @@ gmail preferences.
       this would be just foo)
     * password - your password 
 
+= Can I use postie with GoDaddy hosting? =
+
+Yes, but you must use an email set up using the GoDaddy email service and the following settings:
+
+* protocol - pop3
+* server - pop.secureserver.net
+* port - 110
+* userid - xxxxx@yourdomain
+* password - your password 
+
+GoDaddy hosting does not allow you to connect to non-GoDaddy mail servers like Gmail.
+
 = My posts show up as being posted by 'admin' instead of me. Why? =
 
 If your admin account is linked to bar@gmail.com, and you send mail from
@@ -99,6 +111,9 @@ post with :end
 Simply upload the icons you want to the postie/icons/custom directory. You
 must name the icons according to the following scheme:
 `{filetype}-{size}.png`
+
+NOTE THAT ANY CUSTOM FILES ADDED TO THE POSTIE DIRECTORY WILL BE DELETED IF YOU 
+USE THE NORMAL WORDPRESS UPGRADE PROCESS.
 
 For example, for word documents, you could use:
 

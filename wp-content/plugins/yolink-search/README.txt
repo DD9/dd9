@@ -3,7 +3,7 @@ Contributors: technosailor, tigerlogic
 Tags: search, social sharing
 Requires at least: 3.0.5
 Tested up to: 3.3.1
-Stable tag: 2.4
+Stable tag: 2.6
 
 Optimize your site search, increase time on site, and help help drive organic SEO with the most powerful search plugin for Wordpress.
 == Description ==
@@ -174,6 +174,12 @@ A:  The yolink Search for WordPress user interface and dashboard is currently av
 6. Example implementation of yolink Search for WordPress.
 
 == Upgrade Notice ==
+= 2.6 =
+* fixed potential xss vulnerability
+
+= 2.5 = 
+* minor bug fixes
+
 = 2.4 =
 * Introduce yolink_custom_url custom tag to allow posts to index outside content.
 
@@ -196,6 +202,12 @@ A:  The yolink Search for WordPress user interface and dashboard is currently av
 * Fixes bug for blogs with exceedingly large posts. Added extra customization options
 
 == Changelog ==
+= 2.6 =
+* fixed potential xss vulnerability
+
+= 2.5 = 
+* minor bug fixes
+
 = 2.4 =
 * Introduce yolink_custom_url custom tag to allow posts to index outside content.
 

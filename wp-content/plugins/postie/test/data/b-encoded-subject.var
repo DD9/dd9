@@ -1,0 +1,50 @@
+s:2488:"Delivered-To: postie-test@devzing.com
+Received: by 10.220.5.199 with SMTP id 7csp152947vcw; Tue, 8 Jan 2013 21:47:51
+ -0800 (PST)
+X-Received: by 10.42.27.145 with SMTP id j17mr41445850icc.13.1357710471091;
+ Tue, 08 Jan 2013 21:47:51 -0800 (PST)
+Return-Path: <haruo.nakayama@gmail.com>
+Received: from mail-ie0-f180.google.com (mail-ie0-f180.google.com
+ [209.85.223.180]) by mx.google.com with ESMTPS id
+ aq7si61462097icc.54.2013.01.08.21.47.50 (version=TLSv1/SSLv3 cipher=OTHER);
+ Tue, 08 Jan 2013 21:47:51 -0800 (PST)
+Received-SPF: pass (google.com: domain of haruo.nakayama@gmail.com designates
+ 209.85.223.180 as permitted sender) client-ip=209.85.223.180;
+Authentication-Results: mx.google.com; spf=pass (google.com: domain of
+ haruo.nakayama@gmail.com designates 209.85.223.180 as permitted sender)
+ smtp.mail=haruo.nakayama@gmail.com; dkim=pass header.i=@gmail.com
+Received: by mail-ie0-f180.google.com with SMTP id c10so1610099ieb.11 for
+ <postie-test@devzing.com>; Tue, 08 Jan 2013 21:47:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20120113;
+ h=mime-version:x-received:reply-to:sender:date:x-google-sender-auth
+ :message-id:subject:from:to:content-type:content-transfer-encoding;
+ bh=OC6ctgkTs1yDoPYl2T/MlwSHFZq9gXhrJYY8LNVQfyc=;
+ b=eYav4RJ3bWfWLjc2yIbEFo2UkhZLQA9GKJ5SnvWRFfkQp3cKED6DkppPJBeqNVITTb
+ zOCp31ypBVTehDNxS61unc3n7uI0P40YJ2IOMM5pIUM+TshW8FM+z7w/peD5Ix/9xSMG
+ brXwyNcfvIAaTqyTyp5QW+3izmDqznUb0/tP0aBJeOZ2Bs4+SaEpbgWZmI9vdxUqqVJt
+ mkUOlN/yCd2dSggS9HgFkwRL55hqAjgpG4J+IhqUnBYrR/yByEm4BwgVwDBe9YXpDOZy
+ X5R0+JeQmPJXWFZoyAdnlhTNobdZFz8a+L8Iqm0bu2/dRqNy65vAMe5nxLCgBC1/+8hT 9L8A==
+MIME-Version: 1.0
+X-Received: by 10.50.40.137 with SMTP id x9mr372788igk.1.1357710470718; Tue,
+ 08 Jan 2013 21:47:50 -0800 (PST)
+Reply-To: harupong@gmail.com
+Sender: haruo.nakayama@gmail.com
+Received: by 10.64.142.8 with HTTP; Tue, 8 Jan 2013 21:47:50 -0800 (PST)
+Date: Wed, 9 Jan 2013 14:47:50 +0900
+X-Google-Sender-Auth: o_kogwDfjgHRX3jzy1rn107g87M
+Message-ID: <CAHLzoivgB21Tue51SYjg8yAywwOdok1sRP95ciSVNzpx=+Mdpw@mail.gmail.com>
+Subject: =?ISO-2022-JP?B?GyRCJUYlOSVIJEckOSRoGyhC?=
+From: harupong <harupong@gmail.com>
+To: postie-test@devzing.com
+Content-Type: text/plain; charset=ISO-2022-JP
+Content-Transfer-Encoding: 7bit
+
+このメールはPostieのテストです
+
+The subject says "This is a test" in Japanese, and the first line of
+body says "This email is for testing Postie."
+
+Thanks.
+
+harupong
+";

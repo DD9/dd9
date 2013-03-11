@@ -85,6 +85,8 @@ class PostieIMAP {
 
         if ($this->_connection) {
             $this->_connected = true;
+        } else {
+            LogInfo("imap_open failed: " . imap_last_error());
         }
         return $this->_connected;
     }
@@ -98,7 +100,13 @@ class PostieIMAP {
             $status = imap_status($this->_connection, $this->_server_string, SA_ALL); //get all messages in debug mode so we can reprocess them
             //DebugEcho($this->_server_string);
             //DebugDump($status);
-            return $status->unseen;
+            if ($status)
+                return $status->unseen;
+            else {
+                LogInfo("Error imap_status did not return a value");
+                DebugDump($this);
+                return 0;
+            }
         } else {
             return imap_num_msg($this->_connection);
         }
@@ -150,6 +158,7 @@ class PostieIMAP {
      * @return string
      */
     function error() {
+        //echo(print_r(imap_errors(), true));
         return(imap_last_error());
     }
 

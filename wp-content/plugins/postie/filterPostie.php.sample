@@ -1,11 +1,22 @@
 <?php
 /*
+ * WARNING - WARNING - WARNING
+ * Do not put any custom filter code in the Postie directory. The standard WordPress
+ * upgrade process will delete your code. 
+ * 
+ * Instead copy filterPostie.php.sample to the wp-content directory and rename it
+ * to filterPostie.php and edit to your hearts content.
+ * 
+ * Another option is to create your own plugin or add this code to your theme.
+*/
+
+/*
 Plugin Name: Postie Filter
-Plugin URI: http://PostiePlugin.com/
+Plugin URI: Your URI
 Description: Adds my own custom filter to messages posted by postie
-Version: 1.4
-Author: Robert Felty
-Author URI: http://robfelty.com/
+Version: 1.0
+Author: Your Name
+Author URI: Your URI
 */
 
 /* 

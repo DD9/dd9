@@ -5,13 +5,12 @@ Author URI: http://allens-home.com/
 Plugin URI: http://PostiePlugin.com/
 Tags: e-mail, email
 Requires at least: 3.0
-Tested up to: 3.5
-Stable tag: 1.4.13
+Tested up to: 3.5.1
+Stable tag: 1.4.36
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The Postie plugin allows you to blog via e-mail, including many advanced
-features not found in WordPress's default post by e-mail feature.
+Postie allows you to blog via e-mail, including many advanced features not found in WordPress's default post by e-mail feature.
 
 == Description ==
 Postie offers many advanced features for posting to your blog via e-mail,
@@ -41,18 +40,31 @@ imap and pop3, with the option for ssl with both.  For usage notes, see the
 * (Postie ignores the settings under Settings->Writing->Writing-by-Email)
 
 = Automating checking e-mail =
+WordPress cron (which Postie relies on) doesn't run unless a page is accessed on 
+the site. So if you send an email, but nobody accesses the site for 3 days Postie 
+won't be given the chance to fetch the email and publish the post.
+
+To ensure that Postie runs smoothly on a low or no volume site you need to ensure 
+that a page gets hit (any page is fine). Use something like cron + curl on Linux 
+or install curl on Windows and use the Scheduled Tasks control panel. If you are 
+using a hosting company that doesn't allow you access to cron you can use a service 
+like SetCronJob.
 
 By default, postie checks for new e-mail every 30 minutes. You can select from
 a number of different checking intervals in the settings page, under the
-mailserver tab.
+Mailserver tab.
 
+= Forcing e-mail check =
 If you would prefer to have more fine-grained control of how postie checks
 for mail, you can also set up a crontab. This is for advanced users only.
-If your site runs on a UNIX/linux server, and you have shell access, you can
-enable mail checking using cron; if you don't know anything about cron, skip
-to the cronless postie section.
 
-Setup a cronjob to pull down the get\_mail.php
+Setup a cronjob to pull down the get\_mail.php - note that every time you access
+get\_mail.php Postie will run - it is like clicking Run Postie on the Admin screen.
+
+= Linux =
+If your site runs on a UNIX/linux server, and you have shell access, you can
+enable mail checking using cron. 
+
 Examples:
 
 */5 * * * * /usr/bin/lynx --source http://blog.robfelty.com/wp-content/plugins/postie/get\_mail.php >/dev/null 2>&1
@@ -62,14 +74,27 @@ This fetches the mail every five minutes with lynx
 */10 * * * * /usr/bin/wget -O /dev/null http://blog.robfelty.com/wp-content/plugins/postie/get\_mail.php >/dev/null 2>&1
 
 This fetches the mail every ten minutes with wget 
+
+= Windows =
+You will need to install [wget](http://gnuwin32.sourceforge.net/packages/wget.htm) or [curl](http://curl.haxx.se/dlwiz/)
+Then use the Task Scheduler control panel to call wget or cron.
+
 == Usage ==
-* If you put in :start - the message processing won't start until it sees that string
-* If you put in :end - the message processing will stop once it sees that string
+= Specifying Beginning and Ending of Post =
+* If you put in :start - the message processing won't start until it sees that string.
+* If you put in :end - the message processing will stop once it sees that string.
+
+= Post Date =
+* Posts can have a specific publication date. Relative dates like "tomorrow", "monday", "first day of next month" are supported.
+  *    date: date
+  *    date: date time
 * Posts can be delayed by adding a line with delayXdXhXm where X is a number.
   *    delay:1d - 1 day
   *    delay:1h - 1 hour
   *    delay:1m - 1 minute
   *    delay:1d2h4m - 1 day 2 hours 4m
+
+= Comment Control =
 * By putting comments:X in your message you can control if comments are allowed
    *   comments:0 - means closed
    *   comments:1 - means open
@@ -80,6 +105,8 @@ This fetches the mail every ten minutes with wget
     get posted as a comment to the "foo" post. This works by the subject
     line, so if you have two posts with titles "foo", then the comment
     will get placed in the more recent post.
+
+= Post Excerpt =
 * Custom excerpt
   * You can include a custom excerpt of an e-mail by putting it between
     :excerptstart and :excerptend
@@ -88,9 +115,9 @@ This fetches the mail every ten minutes with wget
 
 = Post type =
   You can specify the post type by including it as the first part of the subject
-  E.g. <post type>//<real subject>
+  E.g. post type//real subject
 
-= Category and tag handling =
+= Categories =
 * If you put a category name in the subject with a : it will be used
   as the category for the post
 * If you put a category id number in the subject with a : it will
@@ -98,9 +125,10 @@ This fetches the mail every ten minutes with wget
 * If you put the first part of a category name it will be posted in
   the first category that the system finds that matches - so if you put
 
-  Subject: Gen: New News
+  Gen: New News
 
-  The system will post that in General.
+  The system will post that in General. Note you must turn on the "Match short category"
+  setting for this to work.
 
 * All of the above also applies if you put the category in brackets []
 * Using [] or you can post to multiple categories at once
@@ -121,6 +149,8 @@ This fetches the mail every ten minutes with wget
 * You can also set a default tag to be applied if no tags are included.
 
 = Image Handling =
+Note you can only use this feature if your "Preferred Text Type" is set to "plain"
+
 * Allows you to attach images to your email and automatically post
   them to your blog
 * You can publish images in the text of your message by using #img1#
@@ -139,34 +169,50 @@ This fetches the mail every ten minutes with wget
 
 * Image templates
   Postie now uses the default wordpress image template, but you can specify a
-different one if you wish.
+  different one if you wish.
 
   You can also specify a custom image template. I use the following custom
-template:
+  template:
 
   `<div class='imageframe alignleft'><a href='{IMAGE}'><img src="{THUMBNAIL}"
   alt="{CAPTION}" title="{CAPTION}" 
   class="attachment" /></a><div
   class='imagecaption'>{CAPTION}</div></div>`
      
-    * {THUMBNAIL} gets replaced with the url to the thumbnail image
-    * {MEDIUM} gets replaced with the url to the medium-sized image
-    * {LARGE} gets replaced with the url to the large-sized image
-    * {FULL} gets replaced with the url to the full-sized image
-    * {FILENAME} gets replaced with the absolute path to the full-size image
-    * {RELFILENAME} gets replaced with the relative path to the full-size image
     * {CAPTION} gets replaced with the caption you specified (if any)
-    * {WIDTH} gets replaced with width of the photo
+    * {FILELINK} gets replaced with the url to the media
+    * {FILENAME} gets replaced with the name of the attachment from the email
+    * {FULL} same as {FILELINK}
     * {HEIGHT} gets replaced with the height of the photo
+    * {ID} gets replaced with the post id
+    * {IMAGE} same as {FILELINK}
+    * {LARGEHEIGHT} gets replaced with the height of a large image
+    * {LARGEWIDTH} gets replaced with the width of a large image
+    * {LARGE} gets replaced with the url to the large-sized image
+    * {MEDIUMHEIGHT} gets replaced with the height of a medium image
+    * {MEDIUMWIDTH} gets replaced with the width of a medium image
+    * {MEDIUM} gets replaced with the url to the medium-sized image
+    * {PAGELINK} gets replaced with the URL of the file in WordPress
+    * {POSTTITLE} gets replaced with the post title (subject)
+    * {RELFILENAME} gets replaced with the relative path to the full-size image
+    * {THUMBHEIGHT} gets replaced with the height of a thumbnail image
+    * {THUMB} gets replaced with the url to the thumbnail image
+    * {THUMBNAIL} same as {THUMB}
+    * {THUMBWIDTH} gets replaced with the width of a thumbnail image
+    * {TITLE} same as {POSTTITLE}
+    * {URL} same as {FILELINK}
+    * {WIDTH} gets replaced with width of the photo
+
 
 = Interoperability =
 * If your mail client doesn't support setting the subject (nokia) you
-  can do so by putting #your title here# at the beginning of your message
+  can do so by putting #your subject/title here# at the beginning of your message
 * POP3,POP3-SSL,IMAP,IMAP-SSL now supported - last three require
   php-imap support
 * The program understands enough about mime to not duplicate post
   if you send an HTML and plain text message
 * Automatically confirms that you are installed correctly
+
 == Frequently Asked Questions ==
 
 = Postie won't connect to my mailserver. Why Not? =
@@ -225,6 +271,18 @@ gmail preferences.
       this would be just foo)
     * password - your password 
 
+= Can I use postie with GoDaddy hosting? =
+
+Yes, but you must use an email set up using the GoDaddy email service and the following settings:
+
+* protocol - pop3
+* server - pop.secureserver.net
+* port - 110
+* userid - xxxxx@yourdomain
+* password - your password 
+
+GoDaddy hosting does not allow you to connect to non-GoDaddy mail servers like Gmail.
+
 = My posts show up as being posted by 'admin' instead of me. Why? =
 
 If your admin account is linked to bar@gmail.com, and you send mail from
@@ -268,6 +326,9 @@ post with :end
 Simply upload the icons you want to the postie/icons/custom directory. You
 must name the icons according to the following scheme:
 `{filetype}-{size}.png`
+
+NOTE THAT ANY CUSTOM FILES ADDED TO THE POSTIE DIRECTORY WILL BE DELETED IF YOU 
+USE THE NORMAL WORDPRESS UPGRADE PROCESS.
 
 For example, for word documents, you could use:
 
@@ -354,14 +415,123 @@ that doesn't allow you access to cron you can use a service like
 It is also possible to turn the WordPress cron off. Please make sure something like
 `define('DISABLE_WP_CRON', true);` is not in your wp-config.php file.
 == Upgrade Notice ==
-* Attachments are now processed in the order they were attached.
-* All script, style and body tags are stripped from html emails.
+
+= 1.4.18 =
+Many method names have been changed. Any custom filters may need to be updated.
+
+= 1.4.10 =
+All script, style and body tags are stripped from html emails.
+
+= 1.4.6 =
+Attachments are now processed in the order they were attached.
 
 == CHANGELOG ==
-1.4.13 (2012.12.26) =
-* Fixed bug that was trucating content at the first html encoded character. 
+= 1.4.36 (2013.03.07) =
+* Removed some debugging code from filters and hooks
+* Fixed bug where the date command was being ignored
+* Added 'quicktime' as a default type for the video1 template
 
-1.4.12 (2012.12.17) =
+= 1.4.35 (2013.02.22) =
+* Consolidated logic for load configuration settings. Fixes bug where new settings were not having their defaults set properly.
+* Fixed bug where attachment file name was not being correctly detected.
+
+= 1.4.34 (2013.02.07) =
+* Fixed bug in new category logic
+
+= 1.4.33 (2013.02.05) =
+* Fixed bug where non-category taxonomy was being selected as the post category.
+* Added option to force categories to match exactly.
+* Added logic to skip text attachments named "ATT00001.txt" where the numbers can be any sequence. This
+  improves the previous fix by detecting all attachments added, not just the first one.
+
+= 1.4.32 (2013.01.29) =
+* Fixed bug in detecting need for imap extension.
+* Added additional selections for "Maximum number of emails to process"
+* Added logic to skip text attachments named "ATT00001.txt" which are added by MS Exchange virus scanning.
+* Added option to check for email every 5 minutes.
+
+= 1.4.31 (2013.01.25) =
+* Enhanced category detection to be compatible with Polylang plugin.
+* Enhanced prerequisite detection.
+* Now using wp_mail() instead of mail()
+* WordPress 3.5.1 compatibility
+
+= 1.4.30 (2013.01.22) =
+* Fixed bug that caused activation to fail or show a blank page.
+* Fixed bug where WP media upload rejects a file.
+* Added a check for mbstring.
+* Fixed bug when attachment names were only supplied via d_parameters.
+
+= 1.4.29 (2013.01.19) =
+* Fixed bug where manually running Postie worked, but calling get_mail.php directly did not.
+
+= 1.4.28 (2013.01.18) =
+* Fixed bug in "reset settings to default" where the protocol wasn't being retained.
+* More cleanup and clarification on settings screen.
+* Fixed bug where excerpts weren't getting set if "Filter newlines" was set to "Yes"
+* Removed logic to increase memory size.
+
+= 1.4.27 (2013.01.17) =
+* Updated sample plugin for extending Postie.
+* Updated documentation for template variables.
+* Fixed a bug where text/plain attachments were not being treated as attachments.
+* Look for and include filterPostie.php in wp-content if it exists. (used for custom filters so they don't get deleted on upgrades)
+* Cleanup of settings screen layout.
+* Added additional error logging for mail connections.
+
+= 1.4.26 (2013.01.15) =
+* Fixed a bug where signatures were not removed in html emails.
+* Added support for text attachments such as text/calendar.
+
+= 1.4.25 (2013.01.15) =
+* Fixed a bug where newlines were being removed erroneously.
+
+= 1.4.24 (2013.01.13) =
+* Fixed a bug where the original attachment name wasn't being used.
+* Fixed a bug where the #eimg# tags in the excerpt were not getting expanded.
+
+= 1.4.23 (2013.01.10) =
+* Fixed a bug with embedded CID referenced images.
+
+= 1.4.22 (2013.01.10) =
+* Fixed a bug where the subject was not being properly decoded when Q-encoding was used.
+* Fixed a bug in #img# caption detection.
+* Fixed a bug where the tag command was picking up too much text.
+* Enhanced the date command to allow times as well.
+
+= 1.4.21 (2013.01.09) =
+* Removed all Call-time pass-by-references to support PHP 5.4
+
+= 1.4.20 (2013.01.08) =
+* Added Date feature. You can now specify a specific publication date.
+* Fixed a bug with embeded youtube/vimeo links when shortcodes are turned off
+
+= 1.4.19 (2013.01.07) =
+* Fixed a bug that prevented the settings from being saved
+
+= 1.4.18 (2013.01.06) =
+* Fixed a bug where linkifying was doing too much.
+* Updated lots of method names in preparation for some significant structural changes.
+
+= 1.4.17 (2013.01.03) =
+* Fixed a bug where non image/video attachments were not getting added to the post.
+
+= 1.4.16 (2013.01.03) =
+* Fixed a bug where an extra div tag was getting added.
+* Fixed a bug when linkifying URLs.
+* Fixed a bug where inline images were not being detected.
+
+= 1.4.15 (2013.01.02) =
+* Fixed a bug when a category is specified with [] and a colon (:) is in the subject, but not specifying a category
+
+= 1.4.14 (2012.12.29) =
+* Fixed a bug where attached images were not being detected properly causing a "File is empty. Please upload something more substantial." error
+* Tweaked some CSS.
+
+= 1.4.13 (2012.12.26) =
+* Fixed bug that was truncating content at the first html encoded character. 
+
+= 1.4.12 (2012.12.17) =
 * Added feature to limit the number of emails processed
 * Fixed bug where #img# was not processing the caption correctly
 

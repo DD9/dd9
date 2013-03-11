@@ -1,0 +1,100 @@
+s:5598:"Delivered-To: postie-test@devzing.com
+Received: by 10.220.3.83 with SMTP id 19csp107597vcm; Tue, 15 Jan 2013
+ 03:34:23 -0800 (PST)
+X-Received: by 10.14.174.132 with SMTP id x4mr237305628eel.39.1358249662791;
+ Tue, 15 Jan 2013 03:34:22 -0800 (PST)
+Return-Path: <info.stephanfrank.nl@gmail.com>
+Received: from mail-ea0-f173.google.com (mail-ea0-f173.google.com
+ [209.85.215.173]) by mx.google.com with ESMTPS id
+ s42si44619974eem.70.2013.01.15.03.34.22 (version=TLSv1
+ cipher=ECDHE-RSA-RC4-SHA bits=128/128); Tue, 15 Jan 2013 03:34:22 -0800 (PST)
+Received-SPF: pass (google.com: domain of info.stephanfrank.nl@gmail.com
+ designates 209.85.215.173 as permitted sender) client-ip=209.85.215.173;
+Authentication-Results: mx.google.com; spf=pass (google.com: domain of
+ info.stephanfrank.nl@gmail.com designates 209.85.215.173 as permitted sender)
+ smtp.mail=info.stephanfrank.nl@gmail.com; dkim=pass header.i=@gmail.com
+Received: by mail-ea0-f173.google.com with SMTP id i13so2078848eaa.4 for
+ <postie-test@devzing.com>; Tue, 15 Jan 2013 03:34:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20120113;
+ h=x-received:sender:subject:from:content-type:x-mailer:message-id
+ :date:to:content-transfer-encoding:mime-version;
+ bh=Hi0PYXNlusF3XJzS83/g9iZL0oW66DSpsnNb45g/eBc=;
+ b=ubRV63NuLxCprmwr3Nm3HZkDieQtV3ZvH1dwi3FewvLlvUFYpdOmd6NLDqnz2AmvV0
+ uCBbz+KQ8K8RlIj+kGuGm9AKXkQZyrn7jgb8oqnidRMH4MBpO2p3vyaVzFXXDpojC1oz
+ 4fFBj+ZAu0w35Y/hEbZ7vD3Npc7vhcSf4lkKvxh7TQ5uY6Z5yoWVPbTYMzSXRctYFNmA
+ n96hIuuzmLPx1+MpwFVJRJOtAx5xnLF2AuDUHKfBgMuiHkJla6VwU9isjtx4aapUz4nv
+ /ox0kxa+n2qio9QUIac977wyJe2p3p1Y3Y3lP6U+tIdjpuYrsAwpMTsNmE2dfzAzYu/2 /4ng==
+X-Received: by 10.14.219.72 with SMTP id l48mr241362170eep.37.1358249662206;
+ Tue, 15 Jan 2013 03:34:22 -0800 (PST)
+Return-Path: <info.stephanfrank.nl@gmail.com>
+Received: from [192.168.1.76] (s55975e63.adsl.online.nl. [85.151.94.99]) by
+ mx.google.com with ESMTPS id w44sm25213135eep.6.2013.01.15.03.34.20
+ (version=TLSv1 cipher=ECDHE-RSA-RC4-SHA bits=128/128); Tue, 15 Jan 2013
+ 03:34:21 -0800 (PST)
+Sender: Stephan Frank <info.stephanfrank.nl@gmail.com>
+Subject: Test mail Stephan
+From: Stephan Frank <info@stephanfrank.nl>
+Content-Type: multipart/alternative;
+ boundary=Apple-Mail-5188981C-92D4-4E12-B741-48865CC69241
+X-Mailer: iPad Mail (10A523)
+Message-Id: <B66784C4-DD84-4474-8C06-DCA9E5F292E0@stephanfrank.nl>
+Date: Tue, 15 Jan 2013 12:34:19 +0100
+To: "postie-test@devzing.com" <postie-test@devzing.com>
+Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0 (1.0)
+
+
+--Apple-Mail-5188981C-92D4-4E12-B741-48865CC69241
+Content-Type: text/plain;
+	charset=us-ascii
+Content-Transfer-Encoding: 7bit
+
+Test
+
+Een stuck TekstEen stuck TekstEen stuck TekstEen stuck Tekst
+
+Een stuck TekstEen stuck Tekst
+
+
+Een stuck TekstEen stuck Tekst
+--Apple-Mail-5188981C-92D4-4E12-B741-48865CC69241
+Content-Type: text/html;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head><meta http-equiv=3D"content-type" content=3D"text/html; charset=3D=
+utf-8"></head><body dir=3D"auto"><span style=3D"font-family: '.Helvetica Neu=
+eUI'; font-size: 18px; line-height: 24px; -webkit-tap-highlight-color: rgba(=
+26, 26, 26, 0.296875); -webkit-composition-fill-color: rgba(130, 98, 83, 0.0=
+976563); -webkit-composition-frame-color: rgba(191, 107, 82, 0.496094); ">Te=
+st</span><div style=3D"font-family: '.Helvetica NeueUI'; font-size: 18px; li=
+ne-height: 24px; -webkit-tap-highlight-color: rgba(26, 26, 26, 0.296875); -w=
+ebkit-composition-fill-color: rgba(130, 98, 83, 0.0976563); -webkit-composit=
+ion-frame-color: rgba(191, 107, 82, 0.496094); "><br></div><div style=3D"fon=
+t-family: '.Helvetica NeueUI'; font-size: 18px; line-height: 24px; -webkit-t=
+ap-highlight-color: rgba(26, 26, 26, 0.296875); -webkit-composition-fill-col=
+or: rgba(130, 98, 83, 0.0976563); -webkit-composition-frame-color: rgba(191,=
+ 107, 82, 0.496094); ">Een stuck TekstEen stuck TekstEen stuck TekstEen stuc=
+k Tekst</div><div style=3D"font-family: '.Helvetica NeueUI'; font-size: 18px=
+; line-height: 24px; -webkit-tap-highlight-color: rgba(26, 26, 26, 0.296875)=
+; -webkit-composition-fill-color: rgba(130, 98, 83, 0.0976563); -webkit-comp=
+osition-frame-color: rgba(191, 107, 82, 0.496094); "><br></div><div style=3D=
+"font-family: '.Helvetica NeueUI'; font-size: 18px; line-height: 24px; -webk=
+it-tap-highlight-color: rgba(26, 26, 26, 0.296875); -webkit-composition-fill=
+-color: rgba(130, 98, 83, 0.0976563); -webkit-composition-frame-color: rgba(=
+191, 107, 82, 0.496094); ">Een stuck TekstEen stuck Tekst</div><div style=3D=
+"font-family: '.Helvetica NeueUI'; font-size: 18px; line-height: 24px; -webk=
+it-tap-highlight-color: rgba(26, 26, 26, 0.296875); -webkit-composition-fill=
+-color: rgba(130, 98, 83, 0.0976563); -webkit-composition-frame-color: rgba(=
+191, 107, 82, 0.496094); "><br></div><div style=3D"font-family: '.Helvetica N=
+eueUI'; font-size: 18px; line-height: 24px; -webkit-tap-highlight-color: rgb=
+a(26, 26, 26, 0.296875); -webkit-composition-fill-color: rgba(130, 98, 83, 0=
+.0976563); -webkit-composition-frame-color: rgba(191, 107, 82, 0.496094); ">=
+<br></div><div style=3D"font-family: '.Helvetica NeueUI'; font-size: 18px; l=
+ine-height: 24px; -webkit-tap-highlight-color: rgba(26, 26, 26, 0.296875); -=
+webkit-composition-fill-color: rgba(130, 98, 83, 0.0976563); -webkit-composi=
+tion-frame-color: rgba(191, 107, 82, 0.496094); ">Een stuck TekstEen stuck T=
+ekst</div></body></html>=
+
+--Apple-Mail-5188981C-92D4-4E12-B741-48865CC69241--
+";

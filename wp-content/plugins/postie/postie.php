@@ -4,7 +4,7 @@
   Plugin Name: Postie
   Plugin URI: http://PostiePlugin.com/
   Description: Signifigantly upgrades the posting by mail features of Word Press (See <a href='options-general.php?page=postie/postie.php'>Settings and options</a>) to configure your e-mail settings. See the <a href='http://wordpress.org/extend/plugins/postie/other_notes'>Readme</a> for usage. Visit the <a href='http://wordpress.org/support/plugin/postie'>postie forum</a> for support.
-  Version: 1.4.13
+  Version: 1.4.36
   Author: Wayne Allen
   Author URI: http://allens-home.com/
   License: GPL2
@@ -27,33 +27,7 @@
  */
 
 /*
-  $Id: postie.php 644775 2012-12-26 19:43:03Z WayneAllen $
- * -= Requests Pending =-
- * Problem with some mail server
- * Multiple emails should tie to a single account
- * Each user should be able to have a default category
- * WP Switcher not compatible
- * Setup poll
-  - web server
-  - mail clients
-  - plain/html
-  - phone/computer
-  - os of server
-  - os of client
-  - number of users posting
- * Test for calling from the command line
- * Support userid/domain  as a valid username
- * WP-switcher not compatiable http://www.alexking.org/index.php?content=software/wordpress/content.php#wp_120
- * Test out a remote cron system
- * Add support for http://unknowngenius.com/wp-plugins/faq.html#one-click
- *    www.cdavies.org/code/3gp-thumb.php.txt
- *    www.cdavies.org/permalink/watchingbrowserembeddedgpvideosinlinux.php
- * Support private posts
- * Make it possible to post without a script at all
- * TODO - fix corruption of rtf attachments
- * TODO - add port checking in tests
- * TODO - non-image uploads get ignored in content when using autogallery - see replaceimageplaceholders
- * TODO - code to set featured image
+  $Id: postie.php 677715 2013-03-07 22:06:16Z WayneAllen $
  */
 
 define("POSTIE_ROOT", dirname(__FILE__));
@@ -80,7 +54,7 @@ if (isset($_GET["postie_read_me"])) {
     $title = __("Edit Plugins");
     $parent_file = 'plugins.php';
     include(ABSPATH . 'wp-admin/admin-header.php');
-    postie_read_me();
+    postie_ShowReadMe();
     include(ABSPATH . 'wp-admin/admin-footer.php');
 }
 //Add Menu Configuration
@@ -100,11 +74,15 @@ if (is_admin()) {
     postie_warnings();
 }
 
-function activate_postie() {
-    LogInfo("activiated");
+/*
+ * called by WP when activating the plugin
+ * Note that you can't do any output during this funtion or activation
+ * will fail on some systems. This means no DebugEcho, EchoInfo or DebugDump.
+ */
 
+function activate_postie() {
     static $init = false;
-    $options = get_option('postie-settings');
+    $options = config_Read();
 
     if ($init) {
         return;
@@ -113,10 +91,10 @@ function activate_postie() {
     if (!$options) {
         $options = array();
     }
-    $default_options = get_postie_config_defaults();
+    $default_options = config_GetDefaults();
     $old_config = array();
 
-    $result = GetConfig();
+    $result = config_GetOld();
     if (is_array($result)) {
         foreach ($result as $key => $val) {
             $old_config[strtolower($key)] = $val;
@@ -126,11 +104,9 @@ function activate_postie() {
     // overlay the options on top of each other:
     // the current value of $options takes priority over the $old_config, which takes priority over the $default_options
     $options = array_merge($default_options, $old_config, $options);
-    $options = postie_validate_settings($options);
+    $options = config_ValidateSettings($options);
     update_option('postie-settings', $options);
     $init = true;
-    DebugEcho("activate completed");
-    return $options;
 }
 
 register_activation_hook(__FILE__, 'activate_postie');
@@ -141,7 +117,7 @@ register_activation_hook(__FILE__, 'activate_postie');
  */
 function postie_warnings() {
 
-    $config = get_option('postie-settings');
+    $config = config_Read();
 
     if ((empty($config['mail_server']) ||
             empty($config['mail_server_port']) ||
@@ -158,18 +134,27 @@ function postie_warnings() {
         add_action('admin_notices', 'postie_enter_info');
     }
 
-    if (!function_exists('imap_mime_header_decode') && array_key_exists('activate', $_GET) && $_GET['activate'] == true) {
+    $p = strtolower($config['input_protocol']);
+    if (!function_exists('imap_mime_header_decode') && ($p == 'imap' || $p == 'imap-ssl' || $p == 'pop-ssl')) {
 
         function postie_imap_warning() {
             echo "<div id='postie-imap-warning' class='error'><p><strong>";
-            echo __('Warning: the IMAP php extension is not installed.', 'postie');
-            echo __('Postie may not function correctly without this extension (especially for non-English messages).', 'postie');
-            echo "</strong> ";
-            //echo __('Warning: the IMAP php extension is not installed. Postie may not function correctly without this extension (especially for non-English messages) .', 'postie')."</strong> ".
-            echo sprintf(__('Please see the <a href="%1$s">FAQ </a> for more information.'), "options-general.php?page=postie/postie.php", 'postie') . "</p></div> ";
+            echo __('Warning: the IMAP php extension is not installed. Postie can not use IMAP, IMAP-SSL or POP-SSL without this extension.', 'postie');
+            echo "</strong></p></div>";
         }
 
         add_action('admin_notices', 'postie_imap_warning');
+    }
+
+    if (!function_exists('mb_detect_encoding')) {
+
+        function postie_mbstring_warning() {
+            echo "<div id='postie-mbstring-warning' class='error'><p><strong>";
+            echo __('Warning: the Multibyte String php extension (mbstring) is not installed. Postie will not function without this extension.', 'postie');
+            echo "</strong></p></div>";
+        }
+
+        add_action('admin_notices', 'postie_mbstring_warning');
     }
 }
 
@@ -215,7 +200,7 @@ function check_postie() {
 
 function postie_cron($interval = false) {
     if (!$interval) {
-        $config = get_option('postie-settings');
+        $config = config_Read();
         $interval = $config['interval'];
     }
     if (!$interval || $interval == '')
@@ -223,9 +208,9 @@ function postie_cron($interval = false) {
     if ($interval == 'manual') {
         wp_clear_scheduled_hook('check_postie_hook');
     } else {
-        DebugEcho("Setting $interval cron schedule");
         if (false === wp_schedule_event(time(), $interval, 'check_postie_hook')) {
-            EchoInfo("Failed to set up cron task.");
+            //Do not echo output in filters, it seems to break some installs
+            error_log("Postie: Failed to set up cron task.");
         }
     }
 }
@@ -240,6 +225,7 @@ function postie_more_reccurences($schedules) {
     $schedules['weekly'] = array('interval' => (60 * 60 * 24 * 7), 'display' => __('Once Weekly'));
     $schedules['twiceperhour'] = array('interval' => 60 * 30, 'display' => __('Twice per hour '));
     $schedules['tenminutes'] = array('interval' => 60 * 10, 'display' => __('Every 10 minutes'));
+    $schedules['fiveminutes'] = array('interval' => 60 * 5, 'display' => __('Every 5 minutes'));
 
     return $schedules;
 }

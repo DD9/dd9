@@ -13,18 +13,18 @@ require_once (dirname(__FILE__) . DIRECTORY_SEPARATOR . 'postie-functions.php');
 if (!function_exists('file_get_html'))
     require_once (dirname(__FILE__) . DIRECTORY_SEPARATOR . 'simple_html_dom.php');
 
-if (!ini_get('safe_mode')) {
-    $original_mem_limit = ini_get('memory_limit');
-    ini_set('memory_limit', -1);
-    ini_set('max_execution_time', 300);
-}
-
 EchoInfo("Starting mail fetch");
 EchoInfo("Time: " . date('Y-m-d H:i:s', time()) . " GMT");
 include('Revision');
+$wp_content_path = dirname(dirname(dirname(__FILE__)));
+DebugEcho("wp_content_path: $wp_content_path");
+if (file_exists($wp_content_path . DIRECTORY_SEPARATOR . "filterPostie.php")) {
+    DebugEcho("found filterPostie.php in wp-content");
+    include_once ($wp_content_path . DIRECTORY_SEPARATOR . "filterPostie.php");
+}
 
 $test_email = null;
-$config = get_option('postie-settings');
+$config = config_Read();
 extract($config);
 if (!isset($maxemails))
     $maxemails = 0;
@@ -36,6 +36,9 @@ EchoInfo(sprintf(__("There are %d messages to process", "postie"), count($emails
 
 if (function_exists('memory_get_usage'))
     EchoInfo(__("memory at start of e-mail processing:") . memory_get_usage());
+
+DebugEcho("Error log: " . ini_get('error_log'));
+DebugDump($config);
 
 //loop through messages
 foreach ($emails as $email) {
@@ -68,7 +71,4 @@ foreach ($emails as $email) {
 if (function_exists('memory_get_usage'))
     EchoInfo("memory at end of e-mail processing:" . memory_get_usage());
 
-if (!ini_get('safe_mode')) {
-    ini_set('memory_limit', $original_mem_limit);
-}
 ?>

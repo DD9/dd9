@@ -6,6 +6,10 @@
 	};
 	var loadAce = function() {
 		// Set up ACE editor
+		ace.config.set( 'modePath', safecssAceSrcPath );
+		ace.config.set( 'workerPath', safecssAceSrcPath );
+		ace.config.set( 'themePath', safecssAceSrcPath );
+
 		editor = ace.edit( 'safecss-ace' );
 		// Globalize it so we can access it other places
 		global.safecss_editor = editor;
@@ -16,7 +20,7 @@
 		// Grab straight from the textarea
 		editor.getSession().setValue( $("#safecss").val() );
 		// We're editing CSS content
-		var CSSMode = require( 'ace/mode/css' ).Mode;
+		var CSSMode = ace.require( 'ace/mode/css' ).Mode;
 		editor.getSession().setMode( new CSSMode() );
 		// ace.js comes with the textmate coloring scheme already.
 		// kill the spinner

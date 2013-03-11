@@ -1,5 +1,7 @@
 <?php
 
+// NOTE this class has been modified from the original at http://pear.php.net/package/Mail_mimeDecode.
+
 /**
  * The Mail_mimeDecode class is used to decode mail/mime messages
  *
@@ -84,7 +86,7 @@ require_once 'PEAR.php';
  * @copyright  2003-2006 PEAR <pear-group@php.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php BSD License
  * @version    Release: @package_version@
- * @link       http://pear.php.net/package/Mail_mime
+ * @link       http://pear.php.net/package/Mail_mimeDecode
  */
 class Mail_mimeDecode extends PEAR {
 
@@ -688,10 +690,7 @@ class Mail_mimeDecode extends PEAR {
                     break;
 
                 case 'q':
-                    $text = str_replace('_', ' ', $text);
-                    preg_match_all('/=([a-f0-9]{2})/i', $text, $matches);
-                    foreach ($matches[1] as $value)
-                        $text = str_replace('=' . $value, chr(hexdec($value)), $text);
+                    $text = iconv($charset, "UTF-8//TRANSLIT", $this->_decode_Q($text));
                     break;
             }
 
@@ -699,6 +698,17 @@ class Mail_mimeDecode extends PEAR {
         }
 
         return $input;
+    }
+
+    # _decode_Q STRING
+    #     Private: used by _decodeHeader() to decode "Q" encoding, which is
+    #     almost, but not exactly, quoted-printable.  :-P
+    # source: http://www.phpkode.com/source/p/atmail/atmailopen/libs/Atmail/MIME_Words.php
+
+    function _decode_Q($str) {
+        $str = str_replace('_', "\x20", $str);                              # RFC-1522, Q rule 2
+        $str = preg_replace('/=([\da-fA-F]{2})/e', "pack('C', hexdec('$1'))", $str);   # RFC-1522, Q rule 1
+        return $str;
     }
 
     /**

@@ -1,0 +1,88 @@
+s:5025:"Delivered-To: postie-test@devzing.com
+Received: by 10.220.2.72 with SMTP id 8csp289393vci; Thu, 10 Jan 2013 21:49:47
+ -0800 (PST)
+X-Received: by 10.50.222.232 with SMTP id qp8mr4598150igc.25.1357883387082;
+ Thu, 10 Jan 2013 21:49:47 -0800 (PST)
+Return-Path: <wayne@allens-home.com>
+Received: from mail-ia0-f180.google.com (mail-ia0-f180.google.com
+ [209.85.210.180]) by mx.google.com with ESMTPS id
+ bd6si4653488icc.37.2013.01.10.21.49.46 (version=TLSv1
+ cipher=ECDHE-RSA-RC4-SHA bits=128/128); Thu, 10 Jan 2013 21:49:46 -0800 (PST)
+Received-SPF: neutral (google.com: 209.85.210.180 is neither permitted nor
+ denied by best guess record for domain of wayne@allens-home.com)
+ client-ip=209.85.210.180;
+Authentication-Results: mx.google.com; spf=neutral (google.com: 209.85.210.180
+ is neither permitted nor denied by best guess record for domain of
+ wayne@allens-home.com) smtp.mail=wayne@allens-home.com
+Received: by mail-ia0-f180.google.com with SMTP id t4so1227028iag.25 for
+ <postie-test@devzing.com>; Thu, 10 Jan 2013 21:49:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
+ s=20120113; h=mime-version:date:message-id:subject:from:to:content-type
+ :x-gm-message-state; bh=Kx8VC1csVJ90y69hWP/83rlz+zssqJRnw0m6G0sYFpk=;
+ b=K1g1+w2WHvyMjRmx9XZTzF5wQMkrhj1wUxnK2v5XPdEspL29MW4mTteC12r1RlUJ0T
+ B+D9hv7WLijsfvIh3qi70Glsuw9rqg0D9Q9Bzhe0/0tMpSSS93RxY3RmEMEjke4oop3T
+ K+8KCcZgqz2uGnLhXUn2oGFn8REzRsWUOoOBiJ7WKoqLIimplWGzQEuWFUwWtyxO4cfI
+ RRCdANehfMMDJceSUnzOL2GthdKPeuhhI1nV7HNJzUpHEzHcadjicob0juT+19WiHwNw
+ TerG7MGqB+fT8fAz3l6+K0tQO7Go+rvc5j+zrQW/VsMrqvNnIA492U7H2j0IHc4rDe/F I9jQ==
+MIME-Version: 1.0
+Received: by 10.50.222.166 with SMTP id qn6mr8107381igc.47.1357883386551; Thu,
+ 10 Jan 2013 21:49:46 -0800 (PST)
+Received: by 10.231.41.209 with HTTP; Thu, 10 Jan 2013 21:49:46 -0800 (PST)
+Date: Thu, 10 Jan 2013 21:49:46 -0800
+Message-ID: <CACOA_7ZwbqDcygOpc3Nig0MFGL=O5Vwsf1_3nRf7WSwdKvLXtQ@mail.gmail.com>
+Subject: ics test
+From: Wayne Allen <wayne@allens-home.com>
+To: postie-test@devzing.com
+Content-Type: multipart/mixed; boundary=14dae934111fe6ddee04d2fcdcca
+X-Gm-Message-State: ALoCoQk2GF4wk0t/o6B9nFOJMf8OqgmuEqg7PR52zFwBoq0F01oF8H79tIHaQ86owzEarPE09QnV
+
+--14dae934111fe6ddee04d2fcdcca
+Content-Type: multipart/alternative; boundary=14dae934111fe6ddeb04d2fcdcc8
+
+--14dae934111fe6ddeb04d2fcdcc8
+Content-Type: text/plain; charset=ISO-8859-1
+
+sample text
+
+--14dae934111fe6ddeb04d2fcdcc8
+Content-Type: text/html; charset=ISO-8859-1
+
+<div dir='ltr'>sample text<div><br></div></div>
+
+--14dae934111fe6ddeb04d2fcdcc8--
+--14dae934111fe6ddee04d2fcdcca
+Content-Type: application/octet-stream; name="sample.ics"
+Content-Disposition: attachment; filename="sample.ics"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_hbswpd1e0
+
+QkVHSU46VkNBTEVOREFSDQpQUk9ESUQ6LS8vR29vZ2xlIEluYy8vR29vZ2xlIENhbGVuZGFyIDcw
+LjkwNTQvL0VODQpWRVJTSU9OOjIuMA0KQ0FMU0NBTEU6R1JFR09SSUFODQpNRVRIT0Q6UFVCTElT
+SA0KWC1XUi1DQUxOQU1FOkRhdmlkDQpYLVdSLVRJTUVaT05FOkFtZXJpY2EvTmV3X1lvcmsNCkJF
+R0lOOlZUSU1FWk9ORQ0KVFpJRDpBbWVyaWNhL05ld19Zb3JrDQpYLUxJQy1MT0NBVElPTjpBbWVy
+aWNhL05ld19Zb3JrDQpCRUdJTjpEQVlMSUdIVA0KVFpPRkZTRVRGUk9NOi0wNTAwDQpUWk9GRlNF
+VFRPOi0wNDAwDQpUWk5BTUU6RURUDQpEVFNUQVJUOjE5NzAwMzA4VDAyMDAwMA0KUlJVTEU6RlJF
+UT1ZRUFSTFk7QllNT05USD0zO0JZREFZPTJTVQ0KRU5EOkRBWUxJR0hUDQpCRUdJTjpTVEFOREFS
+RA0KVFpPRkZTRVRGUk9NOi0wNDAwDQpUWk9GRlNFVFRPOi0wNTAwDQpUWk5BTUU6RVNUDQpEVFNU
+QVJUOjE5NzAxMTAxVDAyMDAwMA0KUlJVTEU6RlJFUT1ZRUFSTFk7QllNT05USD0xMTtCWURBWT0x
+U1UNCkVORDpTVEFOREFSRA0KRU5EOlZUSU1FWk9ORQ0KDQpCRUdJTjpWRVZFTlQNCkRUU1RBUlQ7
+VkFMVUU9REFURToyMDA3MDQxNw0KRFRFTkQ7VkFMVUU9REFURToyMDA3MDQxOA0KRFRTVEFNUDoy
+MDA3MTAwM1QxNzE1MTdaDQpPUkdBTklaRVI7Q049RGF2aWQ6TUFJTFRPOm1lQGhvbWUuY29tDQpV
+SUQ6NDFyOGNlZmdlMnBpM3RtdDd0dDc2NmJhZjRAZ29vZ2xlLmNvbQ0KQ09NTUVOVDtYLUNPTU1F
+TlRFUj1NQUlMVE86bWVAaG9tZS5jb206PHA+SGV5IEV2ZXJ5b25lOiBJIHRoaW5rIEkgaGF2ZSB0
+YWxrZWQgdG8gZXZlcnlvbmUgYWJvdXQgc2V0dGluZyB1cCBhIGJyYWluc3Rvcm0vaW5pdGlhbCBw
+bGFubmluZyBtZWV0aW5nIGZvciBhIGNvbXBsZXRlIG92ZXJoYXVsIG9mIHRoZSBjdXJyZW50IEZD
+QUcgc2l0ZS4gSSBoYXZlIHBlbmNpbGVkIGluIGEgbWVldGluZyBmb3IgVHVlc2RheSBBcHJpbCAx
+MCAgQCA3OjAwIFBNIDg6MzAgUE0uICBXb3VsZCB5b3UgYmUgYWJsZSB0byBhdHRlbmQ/DQpDTEFT
+UzpQVUJMSUMNCkNSRUFURUQ6MjAwNzA0MDJUMjM0ODIxWg0KREVTQ1JJUFRJT046V2Vic2l0ZSBC
+cmFpbnN0b3JtIFNlc3Npb24NCkxBU1QtTU9ESUZJRUQ6MjAwNzA0MTFUMTE1NjI1Wg0KTE9DQVRJ
+T046RkNBRw0KU0VRVUVOQ0U6Mg0KU1RBVFVTOkNPTkZJUk1FRA0KU1VNTUFSWTpGQ0FHIFdlYnNp
+dGUgTWVldGluZw0KVFJBTlNQOlRSQU5TUEFSRU5UDQpFTkQ6VkVWRU5UDQoNCkJFR0lOOlZFVkVO
+VA0KRFRTVEFSVDtWQUxVRT1EQVRFOjIwMDcxMjI1DQpEVEVORDtWQUxVRT1EQVRFOjIwMDcxMjI1
+DQpEVFNUQU1QOjIwMDcxMDAzVDE3MTUxN1oNCk9SR0FOSVpFUjtDTj1EYXZpZDpNQUlMVE86bWVA
+aG9tZS5jb20NClVJRDprYWlpNml0MWdtYnBuY21rYXZqa3BrcTF0a0Bnb29nbGUuY29tDQpDTEFT
+UzpQVUJMSUMNCkNSRUFURUQ6MjAwNzAyMDlUMTEzNjQ2Wg0KTEFTVC1NT0RJRklFRDoyMDA3MDIw
+OVQxMTM2NDZaDQpTRVFVRU5DRTowDQpTVEFUVVM6Q09ORklSTUVEDQpTVU1NQVJZOkNocmlzdG1h
+cw0KVFJBTlNQOk9QQVFVRQ0KRU5EOlZFVkVOVA0KRU5EOlZDQUxFTkRBUg==
+--14dae934111fe6ddee04d2fcdcca--
+";

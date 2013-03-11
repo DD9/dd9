@@ -1,11 +1,19 @@
 == Usage ==
-* If you put in :start - the message processing won't start until it sees that string
-* If you put in :end - the message processing will stop once it sees that string
+= Specifying Beginning and Ending of Post =
+* If you put in :start - the message processing won't start until it sees that string.
+* If you put in :end - the message processing will stop once it sees that string.
+
+= Post Date =
+* Posts can have a specific publication date. Relative dates like "tomorrow", "monday", "first day of next month" are supported.
+  *    date: date
+  *    date: date time
 * Posts can be delayed by adding a line with delayXdXhXm where X is a number.
   *    delay:1d - 1 day
   *    delay:1h - 1 hour
   *    delay:1m - 1 minute
   *    delay:1d2h4m - 1 day 2 hours 4m
+
+= Comment Control =
 * By putting comments:X in your message you can control if comments are allowed
    *   comments:0 - means closed
    *   comments:1 - means open
@@ -16,6 +24,8 @@
     get posted as a comment to the "foo" post. This works by the subject
     line, so if you have two posts with titles "foo", then the comment
     will get placed in the more recent post.
+
+= Post Excerpt =
 * Custom excerpt
   * You can include a custom excerpt of an e-mail by putting it between
     :excerptstart and :excerptend
@@ -24,9 +34,9 @@
 
 = Post type =
   You can specify the post type by including it as the first part of the subject
-  E.g. <post type>//<real subject>
+  E.g. post type//real subject
 
-= Category and tag handling =
+= Categories =
 * If you put a category name in the subject with a : it will be used
   as the category for the post
 * If you put a category id number in the subject with a : it will
@@ -34,9 +44,10 @@
 * If you put the first part of a category name it will be posted in
   the first category that the system finds that matches - so if you put
 
-  Subject: Gen: New News
+  Gen: New News
 
-  The system will post that in General.
+  The system will post that in General. Note you must turn on the "Match short category"
+  setting for this to work.
 
 * All of the above also applies if you put the category in brackets []
 * Using [] or you can post to multiple categories at once
@@ -57,6 +68,8 @@
 * You can also set a default tag to be applied if no tags are included.
 
 = Image Handling =
+Note you can only use this feature if your "Preferred Text Type" is set to "plain"
+
 * Allows you to attach images to your email and automatically post
   them to your blog
 * You can publish images in the text of your message by using #img1#
@@ -75,31 +88,47 @@
 
 * Image templates
   Postie now uses the default wordpress image template, but you can specify a
-different one if you wish.
+  different one if you wish.
 
   You can also specify a custom image template. I use the following custom
-template:
+  template:
 
   `<div class='imageframe alignleft'><a href='{IMAGE}'><img src="{THUMBNAIL}"
   alt="{CAPTION}" title="{CAPTION}" 
   class="attachment" /></a><div
   class='imagecaption'>{CAPTION}</div></div>`
      
-    * {THUMBNAIL} gets replaced with the url to the thumbnail image
-    * {MEDIUM} gets replaced with the url to the medium-sized image
-    * {LARGE} gets replaced with the url to the large-sized image
-    * {FULL} gets replaced with the url to the full-sized image
-    * {FILENAME} gets replaced with the absolute path to the full-size image
-    * {RELFILENAME} gets replaced with the relative path to the full-size image
     * {CAPTION} gets replaced with the caption you specified (if any)
-    * {WIDTH} gets replaced with width of the photo
+    * {FILELINK} gets replaced with the url to the media
+    * {FILENAME} gets replaced with the name of the attachment from the email
+    * {FULL} same as {FILELINK}
     * {HEIGHT} gets replaced with the height of the photo
+    * {ID} gets replaced with the post id
+    * {IMAGE} same as {FILELINK}
+    * {LARGEHEIGHT} gets replaced with the height of a large image
+    * {LARGEWIDTH} gets replaced with the width of a large image
+    * {LARGE} gets replaced with the url to the large-sized image
+    * {MEDIUMHEIGHT} gets replaced with the height of a medium image
+    * {MEDIUMWIDTH} gets replaced with the width of a medium image
+    * {MEDIUM} gets replaced with the url to the medium-sized image
+    * {PAGELINK} gets replaced with the URL of the file in WordPress
+    * {POSTTITLE} gets replaced with the post title (subject)
+    * {RELFILENAME} gets replaced with the relative path to the full-size image
+    * {THUMBHEIGHT} gets replaced with the height of a thumbnail image
+    * {THUMB} gets replaced with the url to the thumbnail image
+    * {THUMBNAIL} same as {THUMB}
+    * {THUMBWIDTH} gets replaced with the width of a thumbnail image
+    * {TITLE} same as {POSTTITLE}
+    * {URL} same as {FILELINK}
+    * {WIDTH} gets replaced with width of the photo
+
 
 = Interoperability =
 * If your mail client doesn't support setting the subject (nokia) you
-  can do so by putting #your title here# at the beginning of your message
+  can do so by putting #your subject/title here# at the beginning of your message
 * POP3,POP3-SSL,IMAP,IMAP-SSL now supported - last three require
   php-imap support
 * The program understands enough about mime to not duplicate post
   if you send an HTML and plain text message
 * Automatically confirms that you are installed correctly
+

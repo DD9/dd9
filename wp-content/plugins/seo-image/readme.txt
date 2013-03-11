@@ -3,7 +3,7 @@ Contributors: freediver
 Donate link: https://www.networkforgood.org/donation/MakeDonation.aspx?ORGID2=920155875
 Tags: seo, images, Post, admin, google
 Requires at least: 2.7
-Tested up to: 3.3.1
+Tested up to: 3.5.1
 Stable tag: trunk
 
 SEO Friendly Images automatically adds alt and title attributes to all your images improving traffic from search engines.
@@ -22,8 +22,12 @@ Plugin by [Vladimir Prelovac](http://www.prelovac.com/vladimir/ "Vladimir Prelov
 If you like what I do in WordPress, you will also like [ManageWP](http://managewp.com "Manage WordPress sites") service.
 
 == Changelog ==
+
+= 2.7.4 =
+* WordPress 3.5.1 Compatibility
+
 = 2.7.3 =
-* reverted change from 2.7.2 as it broke article view on some installations
+* Reverted change from 2.7.2 as it broke article view on some installations
 
 = 2.7.2 =
 * Fixed incompatiblity with mapping plugin [Leaflet Maps Marker](http://www.mapsmarker.com)

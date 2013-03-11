@@ -16,18 +16,31 @@
 * (Postie ignores the settings under Settings->Writing->Writing-by-Email)
 
 = Automating checking e-mail =
+WordPress cron (which Postie relies on) doesn't run unless a page is accessed on 
+the site. So if you send an email, but nobody accesses the site for 3 days Postie 
+won't be given the chance to fetch the email and publish the post.
+
+To ensure that Postie runs smoothly on a low or no volume site you need to ensure 
+that a page gets hit (any page is fine). Use something like cron + curl on Linux 
+or install curl on Windows and use the Scheduled Tasks control panel. If you are 
+using a hosting company that doesn't allow you access to cron you can use a service 
+like SetCronJob.
 
 By default, postie checks for new e-mail every 30 minutes. You can select from
 a number of different checking intervals in the settings page, under the
-mailserver tab.
+Mailserver tab.
 
+= Forcing e-mail check =
 If you would prefer to have more fine-grained control of how postie checks
 for mail, you can also set up a crontab. This is for advanced users only.
-If your site runs on a UNIX/linux server, and you have shell access, you can
-enable mail checking using cron; if you don't know anything about cron, skip
-to the cronless postie section.
 
-Setup a cronjob to pull down the get\_mail.php
+Setup a cronjob to pull down the get\_mail.php - note that every time you access
+get\_mail.php Postie will run - it is like clicking Run Postie on the Admin screen.
+
+= Linux =
+If your site runs on a UNIX/linux server, and you have shell access, you can
+enable mail checking using cron. 
+
 Examples:
 
 */5 * * * * /usr/bin/lynx --source http://blog.robfelty.com/wp-content/plugins/postie/get\_mail.php >/dev/null 2>&1
@@ -37,3 +50,8 @@ This fetches the mail every five minutes with lynx
 */10 * * * * /usr/bin/wget -O /dev/null http://blog.robfelty.com/wp-content/plugins/postie/get\_mail.php >/dev/null 2>&1
 
 This fetches the mail every ten minutes with wget 
+
+= Windows =
+You will need to install [wget](http://gnuwin32.sourceforge.net/packages/wget.htm) or [curl](http://curl.haxx.se/dlwiz/)
+Then use the Task Scheduler control panel to call wget or cron.
+

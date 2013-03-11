@@ -22,7 +22,7 @@
     if (isset($_POST["action"])) {
         switch ($_POST["action"]) {
             case "reset":
-                ResetPostieConfig();
+                config_ResetToDefault();
                 $message = 1;
                 break;
             case "cronless":
@@ -47,11 +47,11 @@
 
     $title = __('Postie Options', 'postie');
     $parent_file = 'options-general.php';
-    $config = get_option('postie-settings');
+    $config = config_Read();
     if (empty($config))
-        $config = ResetPostieConfig();
+        $config = config_ResetToDefault();
 
-    $arrays = get_arrayed_settings();
+    $arrays = config_ArrayedSettings();
     // some fields are stored as arrays, because that makes back-end processing much easier
     // and we need to convert those fields to strings here, for the options form
     foreach ($arrays as $sep => $fields) {
@@ -63,6 +63,9 @@
     if (!isset($maxemails)) {
         DebugEcho("New setting: maxemails");
         $maxemails = 0;
+    }
+    if (!isset($category_match)) {
+        $category_match = true;
     }
 
     if ($interval == 'manual') {
@@ -76,12 +79,6 @@
         <div class="updated"><p><?php _e($messages[$_GET['message']], 'postie'); ?></p></div>
     <?php endif; ?>
 
-
-
-    <form name="postie-options" method="post"> 
-        <input type="hidden" name="action" value="reset" />
-        <input name="Submit" value="<?php _e("Reset Settings To Defaults", 'postie') ?> &raquo;" type="submit" class='button'>
-    </form>
     <form name="postie-options" method='post'> 
         <input type="hidden" name="action" value="runpostie" />
         <input name="Submit" value="<?php _e("Run Postie", 'postie'); ?> &raquo;" type="submit" class='button'>
@@ -139,8 +136,8 @@
                                 <?php _e("POP3-SSL", 'postie'); ?> - 995 <br />
                             </span>
                         </th>
-                        <td>
-                            <input name='postie-settings[mail_server_port]' type="text" id='postie-settings-mail_server_port' value="<?php echo $mail_server_port; ?>" size="6" />
+                        <td valign="top">
+                            <br/><input name='postie-settings[mail_server_port]' type="text" id='postie-settings-mail_server_port' value="<?php echo esc_attr($mail_server_port); ?>" size="6" />
                         </td>
                     </tr>
                     <tr>
@@ -148,24 +145,24 @@
                             <br />
                             <span class='recommendation'><?php _e("Should be the same as your normal offset - but this lets you adjust it in cases where that doesn't work.", 'postie'); ?></span>
                         </th>
-                        <td><input name='postie-settings[time_offset]' type="text" id='postie-settings-time_offset' size="2" value="<?php echo $time_offset; ?>" /> 
+                        <td><input name='postie-settings[time_offset]' type="text" id='postie-settings-time_offset' size="2" value="<?php echo esc_attr($time_offset); ?>" /> 
                             <?php _e('hours', 'postie') ?> 
 
                         </td>
                     </tr>
                     <tr valign="top">
                         <th scope="row"><?php _e('Mail Server:', 'postie') ?></th>
-                        <td><input name='postie-settings[mail_server]' type="text" id='postie-settings-mail_server' value="<?php echo $mail_server; ?>" size="40" />
+                        <td><input name='postie-settings[mail_server]' type="text" id='postie-settings-mail_server' value="<?php echo esc_attr($mail_server); ?>" size="40" />
                         </td>
                     </tr>
                     <tr valign="top">
                         <th width="33%" scope="row"><?php _e('Mail Userid:', 'postie') ?></th>
-                        <td><input name='postie-settings[mail_userid]' type="text" id='postie-settings-mail_userid' value="<?php echo $mail_userid; ?>" size="40" /></td>
+                        <td><input name='postie-settings[mail_userid]' type="text" id='postie-settings-mail_userid' value="<?php echo esc_attr($mail_userid); ?>" size="40" /></td>
                     </tr>
                     <tr valign="top">
                         <th scope="row"><?php _e('Mail Password:', 'postie') ?></th>
                         <td>
-                            <input name='postie-settings[mail_password]' type="password" id='postie-settings-mail_password' value="<?php echo $mail_password; ?>" size="40" />
+                            <input name='postie-settings[mail_password]' type="password" id='postie-settings-mail_password' value="<?php echo esc_attr($mail_password); ?>" size="40" />
                         </td>
                     </tr>
                     <tr>
@@ -199,6 +196,11 @@
                                             echo "selected='selected'";
                                         }
                             ?>><?php _e('every ten minutes', 'postie') ?></option>
+                                <option value="fiveminutes" <?php
+                                        if ($interval == "fiveminutes") {
+                                            echo "selected='selected'";
+                                        }
+                            ?>><?php _e('every five minutes', 'postie') ?></option>
                                 <option value="manual" <?php
                                         if ($interval == "manual") {
                                             echo "selected='selected'";
@@ -209,11 +211,13 @@
                     </tr>
                     <tr>
                         <th>
-                            <?php _e('Maximum number of emails to process', 'postie'); ?>
+                            <?php _e('Maximum number of emails to process:', 'postie'); ?>
                         </th>
                         <td>
                             <select name='postie-settings[maxemails]' id='postie-settings-maxemails'>
                                 <option value="0" <?php if ($maxemails == '0') echo "selected='selected'" ?>>All</option>
+                                <option value="1" <?php if ($maxemails == '1') echo "selected='selected'" ?>>1</option>
+                                <option value="2" <?php if ($maxemails == '2') echo "selected='selected'" ?>>2</option>
                                 <option value="5" <?php if ($maxemails == '5') echo "selected='selected'" ?>>5</option>
                                 <option value="10" <?php if ($maxemails == '10') echo "selected='selected'" ?>>10</option>
                                 <option value="25" <?php if ($maxemails == '25') echo "selected='selected'" ?>>25</option>
@@ -228,24 +232,33 @@
             <div id="simpleTabs-content-2" class="simpleTabs-content">
                 <table class='form-table'>
 
-                    <?php echo BuildBooleanSelect(__("Allow Anyone To Post Via Email"), "postie-settings[turn_authorization_off]", $turn_authorization_off, "Changing this to yes is NOT RECOMMEDED - anything that gets sent in will automatically be posted. This could make it easier to compromise your server - YOU HAVE BEEN WARNED."); ?>
+                    <?php echo BuildBooleanSelect(__("Allow Anyone To Post Via Email"), "postie-settings[turn_authorization_off]", $turn_authorization_off, "Changing this to yes is NOT RECOMMENEDED - anything that gets sent in will automatically be posted. This could make it easier to compromise your server - YOU HAVE BEEN WARNED."); ?>
                     <tr>
-                        <th scope="row"><?php _e('Roles That Can Post:', 'postie') ?>
-                            <br />
-                            <span class='recommendation'><?php _e("This allows you to grant access to other users to post if they have the proper access level", 'postie'); ?></span></th>
+                        <th scope="row">
+                            <?php _e('Roles That Can Post:', 'postie') ?><br />
+                            <span class='recommendation'><?php _e("This allows you to grant access to other users to post if they have the proper access level. Administrators can always post.", 'postie'); ?></span>
+                        </th>
                         <td>
-                            <table>
-                                <tr><th>Administrator role can always post.</th>
-                                    <?php
-                                    foreach ($wp_roles->role_names as $roleId => $name) {
-                                        $name = translate_user_role($name);
-                                        $role = &$wp_roles->get_role($roleId);
-                                        if ($roleId != "administrator") {
-                                            ?>
+                            <br />
+                            <table class="checkbox-table">
+                                <?php
+                                foreach ($wp_roles->role_names as $roleId => $name) {
+                                    $name = translate_user_role($name);
+                                    $role = $wp_roles->get_role($roleId);
+                                    if ($roleId != "administrator") {
+                                        ?>
                                         <tr>
                                             <td>
                                                 <input type='checkbox' value='1' name='postie-settings[role_access][<?php echo $roleId; ?>]' <?php echo ($role->has_cap("post_via_postie")) ? 'checked="checked"' : "" ?>  >
                                                 <?php echo $name; ?>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                    } else {
+                                        ?>
+                                        <tr>
+                                            <td>
+                                                <input type='checkbox' value='1' disabled='disabled' checked='checked' > <?php echo $name; ?>
                                             </td>
                                         </tr>
                                         <?php
@@ -284,10 +297,12 @@
                     <?php echo BuildTextArea("Authorized Addresses", "postie-settings[authorized_addresses]", $authorized_addresses, "Put each email address on a single line. Posts from emails in this list will be treated as if they came from the admin. If you would prefer to have users post under their own name - create a WordPress user with the correct access level."); ?>
                     <tr> 
                         <th width="33%" valign="top" scope="row">
-                            <?php _e('Admin username:') ?> </th> 
+                            <?php _e('Admin username:') ?> <br />
+                            <span class='recommendation'><?php _e("This must be a valid WordPress user in the Administrator role. This will be the default poster in some cases.", 'postie'); ?></span>
+                        </th> 
                         <td>
-                            <input name='postie-settings[admin_username]' type="text" id='postie-settings-admin_username'
-                                   value="<?php echo $admin_username; ?>" size="50" />                </td> 
+                            <input name='postie-settings[admin_username]' type="text" id='postie-settings-admin_username' value="<?php echo esc_attr($admin_username); ?>" size="50" />
+                        </td> 
                     </tr> 
                 </table> 
             </div>
@@ -295,14 +310,16 @@
             <div id = "simpleTabs-content-3" class = "simpleTabs-content">
                 <table class = 'form-table'>
                     <tr valign = "top">
-                        <th scope = "row"><?php _e('Default post by mail category:', 'postie')
-                            ?></th>
+                        <th scope = "row"><?php _e('Default post by mail category:', 'postie') ?></th>
                         <td>
                             <?php
                             $defaultCat = $default_post_category;
-                            wp_dropdown_categories("name=postie-settings[default_post_category]&hierarchical=1&selected=$defaultCat&hide_empty=0");
+                            $args = array('name' => 'postie-settings[default_post_category]', 'hierarchical' => 1, 'selected' => $defaultCat, 'hide_empty' => 0);
+                            wp_dropdown_categories($args);
                             ?>
                     </tr>
+                    <?php echo BuildBooleanSelect("Match short category", "postie-settings[category_match]", $category_match, "Try to match categories using 'starts with logic' otherwise only do exact matches"); ?>
+
                     <tr valign="top">
                         <th scope="row">
                             <?php _e('Default post by mail tag(s)', 'postie') ?><br />
@@ -311,14 +328,13 @@
                             </span>
                         </th>
                         <td>
-                            <input type='text' name='postie-settings[default_post_tags]' id='postie-settings-default_post_tags' value='<?php echo $default_post_tags ?>' />
+                            <input type='text' name='postie-settings[default_post_tags]' id='postie-settings-default_post_tags' value='<?php echo esc_attr($default_post_tags) ?>' />
                         </td>
                     </tr>
                     <tr> 
                         <th width="33%" valign="top" scope="row"><?php _e('Default Title:', 'postie') ?> </th> 
                         <td>
-                            <input name='postie-settings[default_title]' type="text" id='postie-settings-default_title' value="<?php echo $default_title; ?>" size="50" /><br />
-                            <br />
+                            <input name='postie-settings[default_title]' type="text" id='postie-settings-default_title' value="<?php echo esc_attr($default_title); ?>" size="50" /><br />
                         </td> 
                     </tr> 
                     <tr> 
@@ -338,23 +354,23 @@
                         <th width="33%" valign="top" scope="row"><?php _e('Tag Of Message Start:', 'postie') ?> <br />
                             <span class='recommendation'><?php _e('Use to remove any text from a message that the email provider puts at the top of the message', 'postie') ?></span></th>
                         <td>
-                            <input name='postie-settings[message_start]' type="text" id='postie-settings-message_start' value="<?php echo $message_start; ?>" size="20" /><br />
+                            <input name='postie-settings[message_start]' type="text" id='postie-settings-message_start' value="<?php echo esc_attr($message_start); ?>" size="50" /><br />
                         </td> 
-                    </tr> 
-                    <tr> 
+                    </tr>
+                    <tr>
                         <th width="33%" valign="top" scope="row"><?php _e('Tag Of Message End:', 'postie') ?> <br />
                             <span class='recommendation'><?php _e('Use to remove any text from a message that the email provider puts at the end of the message', 'postie') ?></span></th>
                         <td>
-                            <input name='postie-settings[message_end]' type="text" id='postie-settings-message_end' value="<?php echo $message_end; ?>" size="20" /><br />
-                        </td> 
-                    </tr> 
+                            <input name='postie-settings[message_end]' type="text" id='postie-settings-message_end' value="<?php echo esc_attr($message_end); ?>" size="50" /><br />
+                        </td>
+                    </tr>
                 </table>
-                <a style='cursor:pointer;' onclick='showAdvanced("message-advanced", "message-advanced-arrow");'><span id="message-advanced-arrow">&#9654;</span> Advanced options</a>
-                <div id="message-advanced" style='display:none;'>
+                <a style='cursor:pointer;' onclick='showAdvanced("message-advanced", "message-advanced-arrow");'><span id="message-advanced-arrow">&#9660;</span> Advanced options</a>
+                <div id="message-advanced" >
                     <table class='form-table'>
                         <?php
                         echo BuildBooleanSelect("Wrap content in pre tags", "postie-settings[wrap_pre]", $wrap_pre);
-                        echo BuildBooleanSelect("Filter newlines", "postie-settings[filternewlines]", $filternewlines, "Set to no if using markdown or textitle syntax");
+                        echo BuildBooleanSelect("Filter newlines", "postie-settings[filternewlines]", $filternewlines, "Retain newlines from plain text. Set to no if using markdown or textitle syntax");
                         echo BuildBooleanSelect("Replace newline characters with html line breaks (&lt;br /&gt;)", "postie-settings[convertnewline]", $convertnewline);
                         echo BuildBooleanSelect("Return rejected mail to sender", "postie-settings[return_to_sender]", $return_to_sender);
                         ?>
@@ -379,12 +395,12 @@
                         <tr> 
                             <th width="33%" valign="top" scope="row"><?php _e('Encoding for pages and feeds:', 'postie') ?> </th> 
                             <td>
-                                <input name='postie-settings[message_encoding]' type="text" id='postie-settings-message_encoding' value="<?php echo $message_encoding; ?>" size="10" />
+                                <input name='postie-settings[message_encoding]' type="text" id='postie-settings-message_encoding' value="<?php echo esc_attr($message_encoding); ?>" size="10" />
                                 <span class='recommendation'>UTF-8 <?php _e("should handle ISO-8859-1 as well", 'postie'); ?></span>
                             </td> 
                         </tr> 
                         <?php echo BuildBooleanSelect("Decode Quoted Printable Data", "postie-settings[message_dequote]", $message_dequote); ?>
-                        <?php echo BuildTextArea("Supported File Types", "postie-settings[supported_file_types]", $supported_file_types, "Put each type on a single line."); ?>
+                        <?php echo BuildTextArea("Supported MIME Types", "postie-settings[supported_file_types]", $supported_file_types, "Add just the type (not the subtype). Text, Video, Audio, Image and Multipart are always supported. Put each type on a single line."); ?>
                         <?php echo BuildTextArea("Banned File Names", "postie-settings[banned_files_list]", $banned_files_list, "Put each file name on a single line.Files matching this list will never be posted to your blog. You can use wildcards such as *.xls, or *.* for all files"); ?>
                         <?php echo BuildBooleanSelect("Drop The Signature From Mail", "postie-settings[drop_signature]", $drop_signature); ?>
                         <?php echo BuildTextArea("Signature Patterns", "postie-settings[sig_pattern_list]", $sig_pattern_list, "Put each pattern on a separate line and make sure to escape any special characters."); ?>
@@ -403,12 +419,13 @@
                     <tr> 
                         <th width="33%" valign="top" scope="row"><?php _e('Image Place Holder Tag:', 'postie') ?> </th> 
                         <td>
-                            <input name='postie-settings[image_placeholder]' type="text" id='postie-settings-image_placeholder' value="<?php echo $image_placeholder; ?>" size="50" /><br />
+                            <input name='postie-settings[image_placeholder]' type="text" id='postie-settings-image_placeholder' value="<?php echo esc_attr($image_placeholder); ?>" size="50" /><br />
                         </td> 
                     </tr> 
                     <tr>
                         <th width="33%" valign="top" scope="row"><?php _e('Image Template', 'postie') ?><br />
                             <span class='recommendation'><?php _e('Choose a default template, then customize to your liking in the text box', 'postie'); ?></span><br /><br />
+                            <span class='recommendation'><?php _e('Note that this template are only used if the "Preferred Text Type" setting is set to "plain"', 'postie'); ?></span><br /><br />
                             <span class='recommendation'><?php _e('Sizes for thumbnail, medium, and large images can be chosen in the <a href="options-media.php">Media Settings</a>. The samples here use the default sizes, and will not reflect the sizes you have chosen.', 'postie'); ?></span>
                         </th>
                         <td>
@@ -456,8 +473,11 @@
             <div id="simpleTabs-content-5" class="simpleTabs-content">
                 <table class='form-table'>
 
-                    <tr><th scope='row'><?php _e('Video template 1', 'postie') ?><br />
-                            <span class='recommendation'><?php _e('Choose a default template, then customize to your liking in the text box', 'postie') ?></span></th>
+                    <tr>
+                        <th scope='row'><?php _e('Video template 1', 'postie') ?><br />
+                            <span class='recommendation'><?php _e('Choose a default template, then customize to your liking in the text box', 'postie') ?></span><br />
+                            <span class='recommendation'><?php _e('Note that this template are only used if the "Preferred Text Type" setting is set to "plain"', 'postie'); ?></span><br />
+                        </th>
                         <?php $templateDir = get_option('siteurl') . '/' . PLUGINDIR . '/postie/templates'; ?>
                         <td>
                             <input type='hidden' id='postie-settings-selected_video1template' name='postie-settings[selected_video1template]'
@@ -496,11 +516,16 @@
                             <?php _e('Video 1 file types:') ?><br /><span class='recommendation'>
                                 <?php _e('Use the video template 1 for these files types (separated by commas)', 'postie') ?></span> </th> 
                         <td>
-                            <input name='postie-settings[video1types]' type="text" id='postie-settings-video1types'
-                                   value="<?php if ($video1types != '') echo $video1types; ?>" size="40" />                </td> 
+                            <br/><input name='postie-settings[video1types]' type="text" id='postie-settings-video1types'
+                                        value="<?php if ($video1types != '') echo esc_attr($video1types); ?>" size="40" />                
+                        </td> 
                     </tr> 
-                    <tr><th scope='row'><?php _e('Video template 2', 'postie') ?><br />
-                            <span class='recommendation'><?php _e('Choose a default template, then customize to your liking in the text box', 'postie') ?></span></th>
+                    <tr><td colspan="2"><hr /></td></tr>
+                    <tr>
+                        <th scope='row'><?php _e('Video template 2', 'postie') ?><br />
+                            <span class='recommendation'><?php _e('Choose a default template, then customize to your liking in the text box', 'postie') ?></span><br/>
+                            <span class='recommendation'><?php _e('Note that this template are only used if the "Preferred Text Type" setting is set to "plain"', 'postie'); ?></span><br />
+                        </th>
                         <td>
                             <input type='hidden' id='postie-settings-selected_video2template' name='postie-settings[selected_video2template]'
                                    value="<?php echo esc_attr($selected_video2template) ?>" />
@@ -538,13 +563,19 @@
                     <tr> 
                         <th width="33%" valign="top" scope="row">
                             <?php _e('Video 2 file types:') ?><br /><span class='recommendation'>
-                                <?php _e('Use the video template 2 for these files types (separated by commas)', 'postie') ?></span> </th> 
+                                <?php _e('Use the video template 2 for these files types (separated by commas)', 'postie') ?></span> <br />
+                        </th> 
                         <td>
-                            <input name='postie-settings[video2types]' type="text" id='postie-settings-video2types'
-                                   value="<?php if ($video2types != '') echo $video2types; ?>" size="40" />                </td> 
+                            <br/><input name='postie-settings[video2types]' type="text" id='postie-settings-video2types'
+                                        value="<?php if ($video2types != '') echo esc_attr($video2types); ?>" size="40" />                
+                        </td> 
                     </tr> 
+                    <tr><td colspan="2"><hr /></td></tr>
                     <tr><th scope='row'><?php _e('Audio template', 'postie') ?><br />
-                            <span class='recommendation'><?php _e('Choose a default template, then customize to your liking in the text box', 'postie') ?></span></th>
+                            <span class='recommendation'><?php _e('Choose a default template, then customize to your liking in the text box', 'postie') ?></span>
+                            <br />
+                            <span class='recommendation'><?php _e('Note that this template are only used if the "Preferred Text Type" setting is set to "plain"', 'postie'); ?></span><br />
+                        </th>
                         <td>
                             <input type='hidden' id='postie-settings-selected_audiotemplate' name='postie-settings[selected_audiotemplate]'
                                    value="<?php echo esc_attr($selected_audiotemplate) ?>" />
@@ -581,12 +612,11 @@
                     <tr> 
                         <th width="33%" valign="top" scope="row">
                             <?php _e('Audio file types:') ?><br />
-                            <span class='recommendation'>
-                                <?php _e('Use the audio template for these files types (separated by commas)', 'postie') ?>
-                            </span> 
+                            <span class='recommendation'><?php _e('Use the audio template for these files types (separated by commas)', 'postie') ?></span> <br />
+
                         </th> 
                         <td>
-                            <input name='postie-settings[audiotypes]' type="text" id='postie-settings-audiotypes' value="<?php if ($audiotypes != '') echo $audiotypes; ?>" size="40" />
+                            <br/><input name='postie-settings[audiotypes]' type="text" id='postie-settings-audiotypes' value="<?php echo esc_attr($audiotypes); ?>" size="40" />
                         </td> 
                     </tr> 
                 </table> 
@@ -671,6 +701,10 @@
 
             </p>
     </form> 
+    <form name="postie-options" method="post"> 
+        <input type="hidden" name="action" value="reset" />
+        <input name="Submit" value="<?php _e("Reset Settings To Defaults", 'postie') ?>" type="submit" class='button'> (Your Mail server settings will be retained)
+    </form>
 </div>
 
 <?php $iconDir = get_option('siteurl') . '/' . PLUGINDIR . '/postie/icons'; ?>

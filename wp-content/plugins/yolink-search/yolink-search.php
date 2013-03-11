@@ -4,7 +4,7 @@ Testing
 Plugin Name: yolink Search for WordPress
 Plugin URI: http://yolink.com/wordpress
 Description: Drop-in replacement for WordPress search that actually provides relevant results.  To initialize the plugin, click Activate to the left, then click Settings and follow the instructions to generate and register your API key.
-Version: 2.4
+Version: 2.6
 Author: WP Engine
 Yolink Search
 Author URI: http://wpengine.com
@@ -401,8 +401,11 @@ class YolinkSearch
                 {
                     return $tigr(v).attr('url') || $tigr(v).attr('href');
                 },
-
-            keywords : '<?php echo html_entity_decode( get_search_query() ) ?>', // the keyword will be pulled from the s input box of the search term
+<?php
+            $term = html_entity_decode( get_search_query() );
+            $term = mysql_real_escape_string(strip_tags(trim($term)));
+?>
+            keywords : '<?php echo $term ?>', // the keyword will be pulled from the s input box of the search term
             showTools : 'result',
                 <?php 
                 echo ( $yolink_config['active_services']['share'] == 'true' ) ? 'share : true,' : 'share : false,';
@@ -1561,6 +1564,9 @@ class YolinkSearch
                 return false;
             }
         }
+        // sanitize the incoming data
+        $search_term = mysql_real_escape_string(strip_tags(trim($search_term)));
+        $search_term = htmlentities($search_term, ENT_QUOTES, "UTF-8");
         $search_results = $this->yolink_search( $search_term );
         set_transient( 'yolink_search_results_' . $search_term . '_' . $this->search_options, $search_results, 600 );
         
@@ -1631,7 +1637,7 @@ class YolinkSearch
                 $url        = get_permalink( $post_rec->ID );
 
                 $custom     = get_post_custom( $post_rec->ID );
-                $yolinkURL  = @$custom[ 'yolink_custom_url' ][0];
+                $yolinkURL  = @$custom[ 'ecpt_yolink_custom_url:' ][0];
 
                 if( $yolinkURL )
                 {
@@ -1832,7 +1838,7 @@ class YolinkSearch
         $url        = get_permalink( $post_id );
 
         $custom     = get_post_custom( $post_id );
-        $yolinkURL  = @$custom[ 'yolink_custom_url' ][0];
+        $yolinkURL  = @$custom[ 'ecpt_yolink_custom_url:' ][0];
 
         if( $yolinkURL )
         {
@@ -1909,7 +1915,7 @@ class YolinkSearch
             $url        = get_permalink( $post_id );
 
             $custom     = get_post_custom( $post_id );
-            $yolinkURL  = @$custom[ 'yolink_custom_url' ][0];
+            $yolinkURL  = @$custom[ 'ecpt_yolink_custom_url:' ][0];
 
             if( $yolinkURL )
             {
@@ -2258,9 +2264,13 @@ class YolinkSearch
     
     function get_search_form( $form )
     {
+        $search = get_search_query();
+        $search = mysql_real_escape_string(strip_tags(trim($search)));
+        $search = htmlentities($search, ENT_QUOTES, "UTF-8");
+
         $form = '<form role="yolink_search" method="get" id="yolink_searchform" action="' . home_url( '/' ) . '" >
         <div><label class="screen-reader-text" for="s">' . __('Search for:', 'yolink') . '</label>
-        <input type="text" value="' . get_search_query() . '" name="s" id="s" />
+        <input type="text" value="' . $search . '" name="s" id="s" /> 
         <input type="submit" id="searchsubmit" value="'. esc_attr__('Search', 'yolink') .'" />
         <cite style="float:right; margin-right:20px">' . __('Powered by ', 'yolink') . '<a href="http://yolink.com/yolink/plugins/whichplugin.jsp" target="_blank"><img src="http://www.yolink.com/yolink/images/yolink_logo.png" alt="' . __('Powered by yolink', 'yolink') . '" width="41" height="15" style="vertical-align:text-bottom;"/></a>
         </cite>
@@ -2362,7 +2372,7 @@ class YolinkSearch
                     $post->post_status       = 'open';
                     $post->comment_status    = 'open';
                     $post->ping_status       = 'open';
-                    $post->yolink_custom_url = '';
+                    $post->ecpt_yolink_custom_url = '';
                     $posts[]                 = $post;
 
                     $this->yolink_search_results[] = array( 'blog_id' => $blog_id, 'post' => $post, );

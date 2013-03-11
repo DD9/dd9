@@ -1,12 +1,121 @@
 == Upgrade Notice ==
-* Attachments are now processed in the order they were attached.
-* All script, style and body tags are stripped from html emails.
+
+= 1.4.18 =
+Many method names have been changed. Any custom filters may need to be updated.
+
+= 1.4.10 =
+All script, style and body tags are stripped from html emails.
+
+= 1.4.6 =
+Attachments are now processed in the order they were attached.
 
 == CHANGELOG ==
-1.4.13 (2012.12.26) =
+= 1.4.36 (2013.03.07) =
+* Removed some debugging code from filters and hooks
+* Fixed bug where the date command was being ignored
+* Added 'quicktime' as a default type for the video1 template
+
+= 1.4.35 (2013.02.22) =
+* Consolidated logic for load configuration settings. Fixes bug where new settings were not having their defaults set properly.
+* Fixed bug where attachment file name was not being correctly detected.
+
+= 1.4.34 (2013.02.07) =
+* Fixed bug in new category logic
+
+= 1.4.33 (2013.02.05) =
+* Fixed bug where non-category taxonomy was being selected as the post category.
+* Added option to force categories to match exactly.
+* Added logic to skip text attachments named "ATT00001.txt" where the numbers can be any sequence. This
+  improves the previous fix by detecting all attachments added, not just the first one.
+
+= 1.4.32 (2013.01.29) =
+* Fixed bug in detecting need for imap extension.
+* Added additional selections for "Maximum number of emails to process"
+* Added logic to skip text attachments named "ATT00001.txt" which are added by MS Exchange virus scanning.
+* Added option to check for email every 5 minutes.
+
+= 1.4.31 (2013.01.25) =
+* Enhanced category detection to be compatible with Polylang plugin.
+* Enhanced prerequisite detection.
+* Now using wp_mail() instead of mail()
+* WordPress 3.5.1 compatibility
+
+= 1.4.30 (2013.01.22) =
+* Fixed bug that caused activation to fail or show a blank page.
+* Fixed bug where WP media upload rejects a file.
+* Added a check for mbstring.
+* Fixed bug when attachment names were only supplied via d_parameters.
+
+= 1.4.29 (2013.01.19) =
+* Fixed bug where manually running Postie worked, but calling get_mail.php directly did not.
+
+= 1.4.28 (2013.01.18) =
+* Fixed bug in "reset settings to default" where the protocol wasn't being retained.
+* More cleanup and clarification on settings screen.
+* Fixed bug where excerpts weren't getting set if "Filter newlines" was set to "Yes"
+* Removed logic to increase memory size.
+
+= 1.4.27 (2013.01.17) =
+* Updated sample plugin for extending Postie.
+* Updated documentation for template variables.
+* Fixed a bug where text/plain attachments were not being treated as attachments.
+* Look for and include filterPostie.php in wp-content if it exists. (used for custom filters so they don't get deleted on upgrades)
+* Cleanup of settings screen layout.
+* Added additional error logging for mail connections.
+
+= 1.4.26 (2013.01.15) =
+* Fixed a bug where signatures were not removed in html emails.
+* Added support for text attachments such as text/calendar.
+
+= 1.4.25 (2013.01.15) =
+* Fixed a bug where newlines were being removed erroneously.
+
+= 1.4.24 (2013.01.13) =
+* Fixed a bug where the original attachment name wasn't being used.
+* Fixed a bug where the #eimg# tags in the excerpt were not getting expanded.
+
+= 1.4.23 (2013.01.10) =
+* Fixed a bug with embedded CID referenced images.
+
+= 1.4.22 (2013.01.10) =
+* Fixed a bug where the subject was not being properly decoded when Q-encoding was used.
+* Fixed a bug in #img# caption detection.
+* Fixed a bug where the tag command was picking up too much text.
+* Enhanced the date command to allow times as well.
+
+= 1.4.21 (2013.01.09) =
+* Removed all Call-time pass-by-references to support PHP 5.4
+
+= 1.4.20 (2013.01.08) =
+* Added Date feature. You can now specify a specific publication date.
+* Fixed a bug with embeded youtube/vimeo links when shortcodes are turned off
+
+= 1.4.19 (2013.01.07) =
+* Fixed a bug that prevented the settings from being saved
+
+= 1.4.18 (2013.01.06) =
+* Fixed a bug where linkifying was doing too much.
+* Updated lots of method names in preparation for some significant structural changes.
+
+= 1.4.17 (2013.01.03) =
+* Fixed a bug where non image/video attachments were not getting added to the post.
+
+= 1.4.16 (2013.01.03) =
+* Fixed a bug where an extra div tag was getting added.
+* Fixed a bug when linkifying URLs.
+* Fixed a bug where inline images were not being detected.
+
+= 1.4.15 (2013.01.02) =
+* Fixed a bug when a category is specified with [] and a colon (:) is in the subject, but not specifying a category
+
+= 1.4.14 (2012.12.29) =
+* Fixed a bug where attached images were not being detected properly causing a "File is empty. Please upload something more substantial." error
+* Tweaked some CSS.
+
+= 1.4.13 (2012.12.26) =
 * Fixed bug that was truncating content at the first html encoded character. 
 
-1.4.12 (2012.12.17) =
+= 1.4.12 (2012.12.17) =
 * Added feature to limit the number of emails processed
 * Fixed bug where #img# was not processing the caption correctly
 
