@@ -1,5 +1,22 @@
 	<div class="flexslider">
-      <ul class="slides">		
+      <ul class="slides">	
+      	  <li class="slide_mobile" style="display:none">  
+          	 <div class="slide_content"> 
+                <img src="<?php bloginfo('template_url'); ?>/images/home_slides/slide_mobilesites_01.jpg" alt="Mobile Website Design"/>
+                <div class="flex-caption">
+                    <h4 class="subheading_full_width slideshow">
+                        <a href="/services/mobile-website-design/">Mobile Web Design</a>
+                    </h4>
+                    
+                    <div class="block_content">
+                    	<h3 class="secondary"><a href="/services/mobile-website-design/">Mobile Optimized Websites</a></h3>
+                        <p class="top_line">We build responsive websites to showcase your content effectively, no matter the size of the screen. </p>
+                    </div>
+                
+                </div>
+              </div><!-- slide_content -->
+          </li>	
+          	
           <li class="slide_bookit" style="display:none">  
           	 <div class="slide_content"> 
                 <img src="<?php bloginfo('template_url'); ?>/images/home_slides/slide_bookit.jpg" alt="Bookit Web Appliction Development Screens"/>

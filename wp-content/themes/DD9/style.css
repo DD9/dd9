@@ -2097,6 +2097,10 @@ a.plain {
     background-repeat: repeat-x;
 }
 
+.flexslider .slides li.slide_lumilia {
+    background-image: url("images/home_slides/slide_lumilia_tile.jpg");
+}
+
 .flexslider .slides li.slide_bsi {
     background-image: url("images/home_slides/slide_bsi_tile.jpg");
 }
@@ -2105,7 +2109,7 @@ a.plain {
     background-image: url("images/home_slides/slide_bookit_tile.jpg");
 }
 
-.flexslider .slides li.slide_cyrium {
+.flexslider .slides li.slide_cyrium, .flexslider .slides li.slide_mobile {
     background-image: url("images/home_slides/slide_cyrium_tile.jpg");
 }
 
