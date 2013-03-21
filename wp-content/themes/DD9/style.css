@@ -2783,6 +2783,9 @@ ul.filters li a.instruction:hover {
 	#page, #branding.home, .flexslider .slide_content {
 		width: 95%;
 	}
+	.flexslider {
+		display:none;
+	}
 	
 	 .flexslider .controls_holder {
 	width: 990px;
