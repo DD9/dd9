@@ -2200,6 +2200,7 @@ a.plain {
 	position:absolute;
 	top:-40px;
 	left:0px;
+	margin: 16px 0;
 } 
 
 .flex-control-nav li {margin: 0 0 0 5px; float: left;}

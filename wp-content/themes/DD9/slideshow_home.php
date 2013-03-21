@@ -5,12 +5,12 @@
                 <img src="<?php bloginfo('template_url'); ?>/images/home_slides/slide_lumilia.jpg" alt="Lumi Lia Logo Mobile Website Design"/>
                 <div class="flex-caption">
                     <h4 class="subheading_full_width slideshow">
-                        <a href="/services/mobile-website-design/">Custom Design &amp; Development</a>
+                        <a href="/services/graphic-design/">Custom Design &amp; Development</a>
                     </h4>
                     
                     <div class="block_content">
-                    	<h3 class="secondary"><a href="/services/mobile-website-design/">Complete Branding, Collateral &amp; Website Packages</a></h3>
-                        <p class="top_line">We thrive on creating custom design solutions for website and branding projects with unique requirements.</p>
+                    	<h3 class="secondary"><a href="/clients/lumi-lia/">Complete Branding, Collateral &amp; Website Packages</a></h3>
+                        <p class="top_line">We create custom design solutions tailored to your company's goals.</p>
                     </div>
                 
                 </div>
