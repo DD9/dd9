@@ -1,6 +1,24 @@
 	<div class="flexslider">
       <ul class="slides">	
-      	  <li class="slide_mobile" style="display:none">  
+      	  <li class="slide_lumilia" style="display:none">  
+          	 <div class="slide_content"> 
+                <img src="<?php bloginfo('template_url'); ?>/images/home_slides/slide_lumilia.jpg" alt="Lumi Lia Logo Mobile Website Design"/>
+                <div class="flex-caption">
+                    <h4 class="subheading_full_width slideshow">
+                        <a href="/services/mobile-website-design/">Custom Design &amp; Development</a>
+                    </h4>
+                    
+                    <div class="block_content">
+                    	<h3 class="secondary"><a href="/services/mobile-website-design/">Complete Branding, Collateral &amp; Website Packages</a></h3>
+                        <p class="top_line">We thrive on creating custom design solutions for website and branding projects with unique requirements.</p>
+                    </div>
+                
+                </div>
+                <div class="extra_left"></div>
+              </div><!-- slide_content -->
+          </li>	
+          
+          <li class="slide_mobile" style="display:none">  
           	 <div class="slide_content"> 
                 <img src="<?php bloginfo('template_url'); ?>/images/home_slides/slide_mobilesites_01.jpg" alt="Mobile Website Design"/>
                 <div class="flex-caption">
@@ -54,7 +72,7 @@
           
           <li class="slide_illustration"  style="display:none">  
           	<div class="slide_content">  
-                <img src="<?php bloginfo('template_url'); ?>/images/home_slides/slide_illustration.jpg" alt="Bordello Graphic Design Competition Illustration" />
+                <img src="<?php bloginfo('template_url'); ?>/images/home_slides/slide_illustration.jpg" alt="Bordo Bello Graphic Design Competition Illustration" />
                 
                 <div class="flex-caption">
                     <h4 class="subheading_full_width slideshow">

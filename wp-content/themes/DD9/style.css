@@ -2101,6 +2101,15 @@ a.plain {
     background-image: url("images/home_slides/slide_lumilia_tile.jpg");
 }
 
+.flexslider .slides li.slide_lumilia .extra_left {
+	width:150px;
+	height:217px;
+	position:absolute;
+	bottom:0;
+	left:-150px;
+	background: url("images/home_slides/slide_ll_extra_left.png") no-repeat 0 0 transparent;
+}
+
 .flexslider .slides li.slide_bsi {
     background-image: url("images/home_slides/slide_bsi_tile.jpg");
 }
@@ -2639,18 +2648,28 @@ ul.filters li a.instruction:hover {
 	#page, #branding.home, .flexslider .slide_content, .flexslider .controls_holder {
 		width: 990px;
 	}
+	.flexslider .slides li.slide_lumilia {
+		background-image: url("images/home_slides/slide_lumilia_tile_small.jpg");
+	}
+	
+	.flexslider .slides li.slide_lumilia .extra_left {
+		background-image: url("images/home_slides/slide_ll_extra_left_small.png");
+		width:120px;
+		height:174px;
+		left:-120px;
+	}
 	
 	#primary {
 		width: 612px;
 	}
-.single-project #main .entry_content {
+	.single-project #main .entry_content {
             margin-bottom:0px;
-}
-.single-project #main .entry_content,
-.single-project .content_right .post_details  {
+	}
+	.single-project #main .entry_content,
+	.single-project .content_right .post_details  {
 		width: 100%;
         margin-right:0px;
-}
+	}
 	
 	.content_right.blog {
 		width:738px;	
