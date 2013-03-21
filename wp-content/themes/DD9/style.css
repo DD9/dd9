@@ -2783,7 +2783,7 @@ ul.filters li a.instruction:hover {
 	#page, #branding.home, .flexslider .slide_content {
 		width: 95%;
 	}
-	.flexslider {
+	body.home .flexslider {
 		display:none;
 	}
 	
