@@ -175,7 +175,7 @@ $wd_services = get_posts(array(
             
             <div class="launch_post_content">
                 <h5><a href="<?php the_permalink() ?>" ><?php the_title(); ?></a></h5>
-                <?= custom_excerpt(40); ?>
+                <?= custom_excerpt(30); ?>
                 <a class="more_link" href="<?php the_permalink() ?>">...read more</a>
                 <span class="launch_post_time"><?php the_time('F jS, Y'); ?></span>
             </div> 
