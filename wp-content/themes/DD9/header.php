@@ -62,36 +62,35 @@
 <script type="text/javascript" src="<?php bloginfo('template_url'); ?>/js/flexslider/jquery.flexslider-min.js"></script>
 
 <script type="text/javascript" charset="utf-8">
-  $(window).load(function() {
+  $(function() {
     $('.flexslider').flexslider({
-          animation: "fade",
+      animation: "fade",
 		  slideshowSpeed: 6000,           //Integer: Set the speed of the slideshow cycling, in milliseconds
 		  animationDuration: 400,         //Integer: Set the speed of animations, in milliseconds
 		  directionNav: true,             //Boolean: Create navigation for previous/next navigation? (true/false)
 		  controlNav: true,               //Boolean: Create navigation for paging control of each clide? Note: Leave true for manualControls usage
-		  keyboardNav: true,
-		 
+		  keyboardNav: true
     });
-	
-	$(".toggle_grid a").click(function () {
-	  $("#page").toggleClass("grid", 200);
-	});
-	
-	// cache container
-	var $container = $('ul#thumbnail_grid');
-	// initialize isotope
-	$container.isotope({
-	  // options
-	  itemSelector : 'ul#thumbnail_grid li',
-	});
-	
-	// filter items when filter link is clicked
-	$('.filters a').click(function(){
-	  var selector = $(this).attr('data-filter');
-	  $container.isotope({ filter: selector });
-	  return false;
-	});
-	
+
+  	$(".toggle_grid a").click(function () {
+  	  $("#page").toggleClass("grid", 200);
+  	});
+
+  	// cache container
+  	var $container = $('ul#thumbnail_grid');
+  	// initialize isotope
+  	$container.isotope({
+  	  // options
+  	  itemSelector : 'ul#thumbnail_grid li',
+  	});
+
+  	// filter items when filter link is clicked
+  	$('.filters a').click(function(){
+  	  var selector = $(this).attr('data-filter');
+  	  $container.isotope({ filter: selector });
+  	  return false;
+  	});
+
   });
 </script>
 
