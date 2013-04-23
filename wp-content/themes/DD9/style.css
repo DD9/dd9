@@ -1747,6 +1747,7 @@ ul#menu-footer01 li.client_login {
     width:738px;   
 }
 
+
 /* =Home Page
 ----------------------------------------------- */ 
 .entry-header.home.left {
@@ -1813,6 +1814,7 @@ p.top_line, ul#launch_posts p {
     /* [disabled]float:right; */
     margin-left: 252px;
  }
+
 
 #posts_container, #screenshots_container, .content_right.blog, .thin_border {
     border-top: 1px solid #000000;
@@ -1888,10 +1890,8 @@ ul.services {
     font-size: 100%;
 }
 
-
-
 .services li.parent_service a:hover,
- .block_link a:hover {
+.block_link a:hover {
 	color:#FFF;
 	background-color: #E6311F;
 }
@@ -2072,7 +2072,6 @@ ul#design_stream li a:hover img {
 a.plain {
 	color: #000;
 }
-
 
 #branding.home {
     background-color: #FFFFFF;
@@ -2313,6 +2312,70 @@ a.plain {
             opacity: 0;  
         }  */
 
+/* =Projects Landing
+----------------------------------------------- */ 
+#services_container.project_index {
+    float: left;
+    margin: 0;
+    width: 486px;
+}
+
+#services_container.project_index .web_design, #services_container.project_index .graphic_design {
+    float: left;
+    margin: 0;
+    width: 234px;
+}
+
+#services_container.project_index .graphic_design {
+    margin-left: 18px;
+}
+
+.project_index ul.services {
+	font-size:11px;
+}
+
+.project_index .services li.parent_service a {
+    background-color: #000000;
+    background-image: none;
+    color: #FFFFFF;
+    display: block;
+    height: 30px;
+    line-height: 30px;
+    margin: 0 0 5px;
+    padding: 0 0 0 10px;
+    width: auto;
+}
+
+.project_index .services li.parent_service a:hover {
+    background-color: #E6311F;
+}
+
+.project_index .services li.parent_service {
+    padding: 0 ;
+}
+
+.project_index .services li {
+    padding-left: 10px;
+    width: auto;
+}
+
+.content_right .post.plain {
+    border-top: none;
+    padding: 0;
+}
+
+.content_right .post.plain .entry_content {
+    border-top: 1px solid #000000;
+    margin-bottom: 18px;
+    margin-right: 18px;
+    padding-top: 17px;
+    width: 486px;
+}
+
+h4.alt_xl {
+    font-family: "DroidSerifRegular","Palatino Linotype","Book Antiqua",Palatino,serif;
+    font-size: 28px;
+}
 
 /* =About Page(s)
 ----------------------------------------------- */ 
