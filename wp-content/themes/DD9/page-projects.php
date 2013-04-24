@@ -45,7 +45,7 @@ $wd_services = get_posts(array(
           <article class="post plain">    
             <div class="entry_content">   
               <?php the_content(); ?>
-              <p>Below is a list of the graphic and web design services that we provide. Visit a page below to get in depth information about our design offerings.</p>
+              <p>To the right is a list of the graphic and web design services that we provide. Visit a service page to get in depth information about our <a href="/service">design offerings</a>.</p>
             </div>                  
             
             <div id="services_container" class="project_index">
