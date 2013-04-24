@@ -88,9 +88,11 @@ $wd_services = get_posts(array(
 			
       
       <?php 
-			// We'd like to group the projects by their "End Work" year, most recent first.
+			// We'd like to group projects by year (based on the End Date custom field), most recent first.
 			// For each year, load the year in the left column and the thumbmail grid of projects in the right content area.
 			?>
+      
+      <?php // For each year ?>
       <div class="block_container full_width clearfix"> 
         <div class="two_column">
         	
@@ -104,9 +106,8 @@ $wd_services = get_posts(array(
           
           <?php // Get the projects ?>
           <?php if($projects): ?>
-              
+            
             <ul id="thumbnail_grid" class="clearfix">
-              
 							<?php foreach($projects as $project):
 							
 							$project_services = get_posts(array(
@@ -151,7 +152,6 @@ $wd_services = get_posts(array(
                 
                 <a href="<?= get_permalink($project->ID) ?>" class="info_panel">
                   <span class="thumbnail_title"><?= $project->post_title ?></span>
-
                   <?php if($attributes): $i = 0; ?>                                  
                     <ul class="thumbnail_tags">                                        
                       <?php foreach($attributes as $attribute): if($i == 6) break; ?>
@@ -177,5 +177,6 @@ $wd_services = get_posts(array(
               
       	</div><!-- .content_right -->   
 			</div><!-- .block_container.full_width --> 
+      <?php // End for each Year ?>
           
 <?php get_footer(); ?>
