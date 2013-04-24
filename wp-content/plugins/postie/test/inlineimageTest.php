@@ -1,6 +1,6 @@
 <?php
 
-require '../mimedecode.php';
+require_once '../mimedecode.php';
 
 class postiefunctions2Test extends PHPUnit_Framework_TestCase {
 
@@ -11,7 +11,8 @@ class postiefunctions2Test extends PHPUnit_Framework_TestCase {
 
         $isreply = false;
         $mimeDecodedEmail = DecodeMIMEMail($email);
-        $post = CreatePost('wayne', $mimeDecodedEmail, 1, $isreply, $config);
+        $pm = new PostiePostModifiers();
+        $post = CreatePost('wayne', $mimeDecodedEmail, 1, $isreply, $config, $pm);
 
         return $post;
     }
@@ -47,7 +48,7 @@ class postiefunctions2Test extends PHPUnit_Framework_TestCase {
         $config['imagetemplate'] = '<a href="{FILELINK}">{FILENAME}</a>';
 
         $post = $this->process_file("data/inline.var", $config);
-        $this->assertEquals('test<div><br></div><div><img src="http://example.net/wp-content/uploads/filename" alt="Inline image 1"><br></div><div><br></div><div>test</div>  ', $post['post_content']);
+        $this->assertEquals('test<div><br></div><div><img src="http://example.net/wp-content/uploads/filename" alt="Inline image 1"><br></div><div><br></div><div>test</div>   ', $post['post_content']);
         $this->assertEquals('inline', $post['post_title']);
     }
 
@@ -57,7 +58,7 @@ class postiefunctions2Test extends PHPUnit_Framework_TestCase {
         $config['convertnewline'] = true;
 
         $post = $this->process_file("data/linebreaks.var", $config);
-        $this->assertEquals("Test<br />\nEen stuck TekstEen stuck TekstEen stuck TekstEen stuck Tekst<br />\nEen stuck TekstEen stuck Tekst<br />\n<br />\nEen stuck TekstEen stuck Tekst<br />\n", $post['post_content']);
+        $this->assertEquals("Test<br />\n<br />\nEen stuck TekstEen stuck TekstEen stuck TekstEen stuck Tekst<br />\n<br />\nEen stuck TekstEen stuck Tekst<br />\n<br />\n<br />\nEen stuck TekstEen stuck Tekst<br />\n", $post['post_content']);
     }
 
     function testjapaneseAttachment() {
@@ -75,11 +76,11 @@ class postiefunctions2Test extends PHPUnit_Framework_TestCase {
         $config['prefer_text_type'] = 'html';
 
         $post = $this->process_file("data/ics-attachment.var", $config);
-        $this->assertEquals("<div dir='ltr'>sample text<div><br></div></div>  <a href='http://example.net/wp-content/uploads/filename'><img src='localhost/postie/icons/silver/default-32.png' alt='default icon' />sample.ics</a> ", $post['post_content']);
+        $this->assertEquals("<div dir='ltr'>sample text<div><br></div></div>   <a href='http://example.net/wp-content/uploads/filename'><img src='localhost/postie/icons/silver/default-32.png' alt='default icon' />sample.ics</a> ", $post['post_content']);
     }
 
     function testTagsImg() {
-
+        echo "testTagsImg";
         $config = config_GetDefaults();
         $config['start_image_count_at_zero'] = true;
         $config['imagetemplate'] = '<a href="{FILELINK}">{FILENAME}</a>';
@@ -93,15 +94,16 @@ class postiefunctions2Test extends PHPUnit_Framework_TestCase {
     }
 
     function testSig() {
+        echo "testSig";
         $config = config_GetDefaults();
         $config['prefer_text_type'] = 'html';
 
         $post = $this->process_file("data/signature.var", $config);
-        $this->assertEquals('test content<div><br></div>  ', $post['post_content']);
+        $this->assertEquals('test content<div><br></div>   ', $post['post_content']);
 
         $config['prefer_text_type'] = 'html';
         $post = $this->process_file("data/signature.var", $config);
-        $this->assertEquals('test content<div><br></div>  ', $post['post_content']);
+        $this->assertEquals('test content<div><br></div>   ', $post['post_content']);
     }
 
     function testQuotedPrintable() {
@@ -214,12 +216,12 @@ class postiefunctions2Test extends PHPUnit_Framework_TestCase {
         $config['images_append'] = true;
         $c = "test";
         filter_ReplaceImagePlaceHolders($c, $attachements, $config);
-        $this->assertEquals("test[gallery]", $c);
+        $this->assertEquals("test\n[gallery]", $c);
 
         $config['images_append'] = true;
         $c = "test";
         filter_ReplaceImagePlaceHolders($c, $attachements, $config);
-        $this->assertEquals("test[gallery]", $c);
+        $this->assertEquals("test\n[gallery]", $c);
 
         $c = "test";
         filter_ReplaceImagePlaceHolders($c, array(), $config);

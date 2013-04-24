@@ -18,6 +18,12 @@ function pte_options_init(){
 		'pte', 
 		'pte_main' );
 
+	add_settings_field( 'pte_crop_save', 
+		__('Crop and Save', PTE_DOMAIN), 
+		'pte_crop_save_display', 
+		'pte', 
+		'pte_main' );
+
 	add_settings_field( 'pte_reset', 
 		__('Reset to defaults', PTE_DOMAIN), 
 		'pte_reset_display', 
@@ -41,6 +47,11 @@ function pte_options_init(){
 		add_settings_field( 'pte_jpeg_compression', 
 			__('JPEG Compression', PTE_DOMAIN), 
 			'pte_jpeg_compression_display', 
+			'pte', 
+			'pte_site' );
+		add_settings_field( 'pte_cache_buster', 
+			__('Cache Buster', PTE_DOMAIN), 
+			'pte_cache_buster_display', 
 			'pte', 
 			'pte_site' );
 	}
@@ -105,6 +116,9 @@ function pte_site_options_validate( $input ){
 		$output['pte_jpeg_compression'] = $tmp_jpeg_compression;
 	}
 
+	// Cache Buster
+	$output['cache_buster'] = isset( $input['pte_cache_buster'] );
+
 	return $output;
 }
 
@@ -115,6 +129,7 @@ function pte_options_validate( $input ){
 		return array();
 	}
 	$options['pte_debug'] = isset( $input['pte_debug'] );
+	$options['pte_crop_save'] = isset( $input['pte_crop_save'] );
 	return $options;
 }
 
@@ -132,6 +147,19 @@ function pte_debug_display(){
 		_e( "WP_DEBUG is currently set to true and will override this setting." ); 
 		print( "</em>" );
 	}?>
+	</span>
+	<?php
+}
+
+function pte_crop_save_display(){
+	$options = pte_get_user_options();
+	$option_label = pte_get_option_name();
+	?>
+	<span><input type="checkbox" name="<?php
+		print $option_label;
+	?>[pte_crop_save]" <?php 
+		if ( $options['pte_crop_save'] ): print "checked"; endif; 
+	?> id="pte_crop_save"/>&nbsp;<label for="pte_crop_save"><?php _e( 'I know what I\'m doing, bypass the image verification.', PTE_DOMAIN ); ?></label>
 	</span>
 	<?php
 }
@@ -190,7 +218,6 @@ function pte_sizes_display(){
 
 function pte_jpeg_compression_display(){
 	$options = pte_get_site_options();
-	$option_label = pte_get_option_name();
 ?>
 	<span><input class="small-text" type="text" 
 			 name="pte-site-options[pte_jpeg_compression]" 
@@ -198,6 +225,19 @@ function pte_jpeg_compression_display(){
 			 id="pte_jpeg_compression">&nbsp; 
 	<?php _e("Set the compression level for resizing jpeg images (0 to 100).", PTE_DOMAIN); ?>
 	<br/><em><?php _e("No entry defaults to using the 'jpeg_quality' filter or 90", PTE_DOMAIN); ?></em>
+	</span>
+	<?php
+}
+
+function pte_cache_buster_display(){
+	$options = pte_get_site_options();
+	?>
+	<span><input type="checkbox" name="pte-site-options[pte_cache_buster]" <?php 
+		if ( $options['cache_buster'] ): print "checked"; endif; 
+	?> id="pte_cache_buster"/>&nbsp;
+	<label for="pte_cache_buster"><?php
+		_e( 'Append timestamp to filename. Useful for solving caching problems.', PTE_DOMAIN ); 
+	?></label>
 	</span>
 	<?php
 }

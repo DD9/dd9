@@ -1,37 +1,30 @@
 provide a location for custom icons. update docs about location.
-reply logic not adding to comments
 hide/disable config options that don't apply
-code to set featured image. Global setting (first picture is featured). Featured tag to enable per email. Enhance #img#
 handle condition where only one of text/plain & text/html is supplied, but Preferred Text Type is set to the opposite.
-replace native imap with flourish
-replace MIME parser
-debug assistance
-setting for default post type
+replace native imap MIME parser with flourish - http://flourishlib.com/docs/fMailbox
 automatically create category if it doesn't exist. new option to allow this feature?
 WP MU support
-new command to set post status: published, draft, pending review, private
+Add setting for category detection. I.e. checkboxes for [], -- and : styles. Default to all on.
+setting for default post type/post format
+Make sure all failures are sent to admin (option?) failed attachments, etc.
+debug assistance
+Comment not being created when subject contains category command []. I.e. listserv subject lines
+reply logic not adding to comments
+rework attachment logic. video files can come through as application/octect-stream. Mail parsing should separate attachments 
+  into buckets? i.e. video, image, other. Each gets processed differently. I.e. when gallery in turned on images don't get embedded
+  but videos do.
+date: tag is being detected in body when not wanted
+Enhance #img# to specify the featured image
 
 standardize tags
 fix postie settings	http://alisothegeek.com/2011/01/wordpress-settings-api-tutorial-1/
 
 -- old todo --
- * USE built-in php message decoding to improve speed
- * Add custom fields
  * support for flexible upload plugin
- * iso 8859-2 support
- * add private post function http://forum.robfelty.com/topic/how-to-private-posts-from-postie?replies=2#post-1515
  * category per e-mail address
- * Problem with some mail server
  * Multiple emails should tie to a single account
  * Each user should be able to have a default category
  * Test for calling from the command line
  * Support userid/domain  as a valid username
- * WP-switcher not compatiable http://www.alexking.org/index.php?content=software/wordpress/content.php#wp_120
- * Test out a remote cron system
- * Add support for http://unknowngenius.com/wp-plugins/faq.html#one-click
- *    www.cdavies.org/code/3gp-thumb.php.txt
- *    www.cdavies.org/permalink/watchingbrowserembeddedgpvideosinlinux.php
  * Make it possible to post without a script at all
- * TODO - fix corruption of rtf attachments
- * TODO - add port checking in tests
  * TODO - non-image uploads get ignored in content when using autogallery - see replaceimageplaceholders

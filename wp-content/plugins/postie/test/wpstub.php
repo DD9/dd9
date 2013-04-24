@@ -37,7 +37,7 @@ function get_option($option, $default = false) {
 }
 
 function get_post_types() {
-    return array("post", "page", "custom", "image", "Video");
+    return array("post", "page", "custom", "custom1", "Custom2");
 }
 
 function current_time() {
@@ -62,7 +62,18 @@ function __($t) {
     return $t;
 }
 
-function wp_check_filetype() {
+function endsWith($haystack, $needle)
+{
+    return substr($haystack, -strlen($needle)) == $needle;
+}
+
+function wp_check_filetype($filename) {
+    if (empty($filename))
+        return null;
+    if (endsWith($filename, ".png"))
+            return array('ext' => 'png', 'type' => 'image/png');
+    if (endsWith($filename, ".ics"))
+            return array('ext' => 'ics', 'type' => 'text/calendar');
     return array('ext' => 'xxx', 'type' => 'xxx/xxx');
 }
 
@@ -117,8 +128,8 @@ function register_deactivation_hook() {
     
 }
 
-function apply_filters() {
-    
+function apply_filters($filter, $value) {
+    return $value;
 }
 
 function wp_insert_attachment() {
@@ -155,6 +166,10 @@ $g_get_term_by->term_id = 1;
 function get_term_by() {
     global $g_get_term_by;
     return $g_get_term_by;
+}
+
+function get_post_format_slugs() {
+    return array('standard' => 'standard', 'video' => 'video', 'image' => 'image', 'aside' => 'aside');
 }
 
 ?>

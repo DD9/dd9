@@ -3,6 +3,8 @@ global $post;
 function ep(){
    echo PTE_PLUGINURL;
 }
+
+$options = pte_get_options();
 ?>
 
 <!--
@@ -14,7 +16,7 @@ function ep(){
      , post_height = <?php echo $meta['height']; ?>
 </script>
  
-<link rel="stylesheet" href="<?php ep() ?>apps/font-awesome/fontawesome.css"/>
+<link rel="stylesheet" href="<?php ep() ?>apps/font-awesome/css/font-awesome.css"/>
 <link rel="stylesheet" href="<?php ep() ?>apps/jcrop/css/jquery.Jcrop.css"/>
 <style type="text/css" media="all">
    #pte-subtitle {
@@ -151,9 +153,9 @@ function ep(){
       padding: 10px 5px;
    }
    .pte-display-thumbnail-image.original {
-      transition: all 1.5s ease-in-out;
+      transition: background 1.5s ease-in-out, padding 1.5s ease-in-out;
       -webkit-transition: background 1.5s ease-in-out, padding 1.5s ease-in-out;
-      -moz-transition: all 1.5s ease-in-out;
+      -moz-transition: background 1.5s ease-in-out, padding 1.5s ease-in-out;
    }
 
    /*** Angular cloak ***/
@@ -197,28 +199,43 @@ function ep(){
                ?>"/>
       
                <div id="pte-crop-controls">
-               <a ng-click="toggleOptions()" class="button button-secondary" ng-href=""><?php
-                  _e( "Options", PTE_DOMAIN ); ?>
-   <i class="icon-caret-down" ng-hide="cropOptions"></i>
-   <i class="icon-caret-up" ng-show="cropOptions"></i>
-</a>
-<a ng-disabled="cropInProgress" class="button button-primary" ng-href="" ng-click="submitCrop()">
-<span ng-hide="cropInProgress"><?php _e( "Crop", PTE_DOMAIN ); ?></span>
-   <i ng-show="cropInProgress" class="icon-spin icon-spinner"></i>
-</a>
+						<a ng-click="toggleOptions()" class="button button-secondary" ng-href=""><?php
+							_e( "Options", PTE_DOMAIN ); ?>
+							<i class="icon-caret-down" ng-hide="cropOptions"></i>
+							<i class="icon-caret-up" ng-show="cropOptions"></i>
+						</a>
+						<a ng-disabled="cropInProgress" class="button button-primary" ng-href="" ng-click="submitCrop()">
+							<span ng-hide="cropInProgress">{{ cropText() }}</span>
+							<i ng-show="cropInProgress" class="icon-spin icon-spinner"></i>
+						</a>
                </div>
-<div style="position: relative">
-   <div id="pte-crop-settings" ng-show="cropOptions">
-      <i class="icon-remove" ng-click="toggleOptions()"></i>
-      <!--ui-event="{blur : 'aspectRatioBlur()'}"-->
-      <label for="pte-aspect-ratio"><?php _e( "Aspect Ratio", PTE_DOMAIN ); ?>: </label>
-      <input id="pte-aspect-ratio" type="number" placeholder="<?php _e( "width/height", PTE_DOMAIN ); ?>"
-            ng-model="aspectRatio" ng-change="changeAR()"/>
-            <!--ng-pattern="aspectRatioPattern"/>-->
-      <i class="icon-undo" ng-click="aspectRatio = null"></i>
-   </div>
-</div>
-            </div>
+					<div style="position: relative">
+						<div id="pte-crop-settings" ng-show="cropOptions">
+							<i class="icon-remove" ng-click="toggleOptions()"></i>
+							<ul>
+								<li>
+									<!--ui-event="{blur : 'aspectRatioBlur()'}"-->
+									<label for="pte-aspect-ratio"><?php _e( "Aspect Ratio", PTE_DOMAIN ); ?>: </label>
+									<input id="pte-aspect-ratio" 
+											type="number"
+											placeholder="<?php _e( "width/height", PTE_DOMAIN ); ?>"
+											ng-model="aspectRatio" ng-change="changeAR()"/>
+									<!--ng-pattern="aspectRatioPattern"/>-->
+									<i class="icon-undo" ng-click="aspectRatio = null"></i>
+								</li>
+								<li>
+									<label for="pte-crop-and-save"><?php _e("Crop and save", PTE_DOMAIN); ?></label>
+									<input ng-model="pteCropSave"
+											ng-init="pteCropSave = <?php print( ( $options['pte_crop_save'] ) ? 'true':'false' ); ?>"
+											ng-change=""
+											type="checkbox"
+											name="pte-crop-and-save"
+											id="pte-crop-and-save"/>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
             <div id="pte-thumbnail-column" ng-controller="TableCtrl">
                <table id="pte-thumbnail-table" class="wp-list-table widefat" >
                   <thead>
@@ -230,12 +247,12 @@ function ep(){
                         <th class="center">
                            <span class="pte-thumbnails-menu">
                               <i ng-show="anyProposed()" 
-                                 ng-click="save(thumbnails)"
+                                 ng-click="save()"
                                  id="pte-save-all"
                                  title="<?php _e( "Save all", PTE_DOMAIN ); ?>"
                                  class="icon-save"></i>
                               <i ng-show="anyProposed()" 
-                                 ng-click="trashAll()"
+                                 ng-click="trashAll(); $event.stopPropagation()"
                                  id="pte-reset-all"
                                  title="<?php _e( "Reset all", PTE_DOMAIN ); ?>"
                                  class="icon-trash"></i>
@@ -253,31 +270,35 @@ function ep(){
                            ng-class-odd="'alternate'" 
                            ng-repeat="thumbnail in thumbnails">
                         <td class="center">
-                           <input type="checkbox" ng-model="thumbnail.selected" ng-change="updateSelected()"/>
+                           <input type="checkbox"
+                              ng-click="$event.stopPropagation()"
+                              ng-model="thumbnail.selected"
+                              ng-change="updateSelected()"/>
+
                         </td>
                         <td>{{ thumbnail.name }}</td>
                         <td class="center pte-thumbnail-options">
                            <span class="pte-thumbnail-menu">
                               <i ng-show="thumbnail.proposed" 
-                                 ng-click="save([thumbnail])"
+                                 ng-click="save(thumbnail)"
                                  title="<?php _e( "Save", PTE_DOMAIN ); ?>" class="icon-save"></i>
                               <i ng-show="thumbnail.proposed" 
-                                 ng-click="trash(thumbnail)"
+                                 ng-click="trash(thumbnail); $event.stopPropagation()"
                                  title="<?php _e( "Reset", PTE_DOMAIN ); ?>" class="icon-trash"></i>
                               <i ng-show="thumbnail.proposed" 
-                                 ng-click="changePage('view'); view(thumbnail.name);" 
+                                 ng-click="changePage('view'); view(thumbnail.name); $event.stopPropagation();" 
                                  title="<?php _e( "Compare/View", PTE_DOMAIN ); ?>" class="icon-search"></i>
                            </span>
                         </td>
                      </tr>
                   </tbody>
                </table>
-               <div id="aspect-ratio-selector">
+               <div id="aspect-ratio-selector" ng-show="aspectRatios.length">
                   <?php _e( "These thumbnails have an aspect ratio set:", PTE_DOMAIN ); ?>
                   <ul>
                      <li ng-repeat="aspectRatio in aspectRatios | orderBy:size">
                         <a ng-click="selectAspectRatio(aspectRatio)" ng-href="">
-                           <i class="icon-ok"></i>
+                           <i class="icon-chevron-right"></i>
                            {{ aspectRatio.thumbnails.toString().replace(",",", ") }}</a></li>
                   </ul>
                </div>
@@ -290,12 +311,12 @@ function ep(){
                      <div class="pte-display-thumbnail-menu" ng-show="thumbnail.proposed">
                         <button ng-click="thumbnail.showProposed = !thumbnail.showProposed"><i class="icon-refresh"></i></button>
                         <br/>
-                        <button ng-click="save([thumbnail])" ng-show="thumbnail.showProposed"><i class="icon-save"></i></button>
+                        <button ng-click="save(thumbnail)" ng-show="thumbnail.showProposed"><i class="icon-save"></i></button>
                         <br/>
-                        <button ng-click="trash(thumbnail)" ng-show="thumbnail.showProposed"><i class="icon-trash"></i></button>
+                        <button ng-click="trash(thumbnail); $event.stopPropagation()" ng-show="thumbnail.showProposed"><i class="icon-trash"></i></button>
                      </div>
                      <div 
-                        ng-dblclick="changePage('crop');event.stopPropagation();"
+                        ng-dblclick="changePage('crop');$event.stopPropagation();"
                         ng-click="thumbnail.selected = !thumbnail.selected;updateSelected();" 
                         ng-hide="thumbnail.showProposed">
                         <span ng-show="thumbnail.proposed"><strong><?php _e( "Original", PTE_DOMAIN ); ?>: {{ thumbnail.name }}</strong><br/></span>
@@ -309,7 +330,7 @@ function ep(){
                         </span>
                      </div>
                      <div
-                        ng-dblclick="changePage('crop');event.stopPropagation();"
+                        ng-dblclick="changePage('crop');$event.stopPropagation();"
                         ng-click="thumbnail.selected = !thumbnail.selected;updateSelected();"
                         ng-show="thumbnail.showProposed">
                         <span><strong><?php _e( "Proposed", PTE_DOMAIN ); ?>: {{ thumbnail.name }}</strong><br/></span>
@@ -328,13 +349,13 @@ function ep(){
 </div>
                <script src="<?php ep(); ?>apps/requirejs/require.js" data-main="<?php 
                ep();
-    $options = pte_get_options();
+               $options = pte_get_options();
 
-    if ( $options['pte_debug'] ){
-       print "js";
-    }
-    else {
-       print "js-build";
-    }
+               if ( $options['pte_debug'] ){
+                  print "js";
+               }
+               else {
+                  print "js-build";
+               }
 
-?>/main"></script>
+               ?>/main"></script>

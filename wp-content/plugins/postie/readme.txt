@@ -6,7 +6,7 @@ Plugin URI: http://PostiePlugin.com/
 Tags: e-mail, email
 Requires at least: 3.0
 Tested up to: 3.5.1
-Stable tag: 1.4.36
+Stable tag: 1.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,6 +84,11 @@ Then use the Task Scheduler control panel to call wget or cron.
 * If you put in :start - the message processing won't start until it sees that string.
 * If you put in :end - the message processing will stop once it sees that string.
 
+= Post Status =
+* Posts can have their status set to draft, publish, pending or private. This will override the Default Post Status set in the settings screen.
+  *    status: private
+  *    status: draft
+
 = Post Date =
 * Posts can have a specific publication date. Relative dates like "tomorrow", "monday", "first day of next month" are supported.
   *    date: date
@@ -113,9 +118,9 @@ Then use the Task Scheduler control panel to call wget or cron.
     * You can include images in the excerpt by using the shortcode #eimg1#,
       #eimg2# etc.
 
-= Post type =
-  You can specify the post type by including it as the first part of the subject
-  E.g. post type//real subject
+= Post type/format =
+  You can specify the post type or format by including it as the first part of the subject.
+  E.g. aside//real subject
 
 = Categories =
 * If you put a category name in the subject with a : it will be used
@@ -128,7 +133,7 @@ Then use the Task Scheduler control panel to call wget or cron.
   Gen: New News
 
   The system will post that in General. Note you must turn on the "Match short category"
-  setting for this to work.
+  setting for this to work (on by default).
 
 * All of the above also applies if you put the category in brackets []
 * Using [] or you can post to multiple categories at once
@@ -416,6 +421,18 @@ It is also possible to turn the WordPress cron off. Please make sure something l
 `define('DISABLE_WP_CRON', true);` is not in your wp-config.php file.
 == Upgrade Notice ==
 
+= 1.5.3 =
+* Postie can now set the first image in an email to be the "Featured" image. There is a new setting "Use First Image as Featured Image" which is off by default.
+* Postie now supports Use Transport Layer Security (TLS)
+
+= 1.5.0 =
+* New filter postie_filter_email. Used to map "from" to any other email. Allows custom user mapping.
+
+= 1.4.41 =
+Post format is now supported. You can specify any of the WordPress supported post formats using the Post type syntax.
+Post status can now be specified using the status: tag.
+Post status setting was renamed to Default Post Status and moved to the Message tab.
+
 = 1.4.18 =
 Many method names have been changed. Any custom filters may need to be updated.
 
@@ -426,6 +443,49 @@ All script, style and body tags are stripped from html emails.
 Attachments are now processed in the order they were attached.
 
 == CHANGELOG ==
+= 1.5.3 (2013.04.13) =
+* Added support for Featured Images
+* Added support for Use Transport Layer Security (TLS)
+* Updated postie_filter_email filter to get unprocessed email address
+
+= 1.5.2 (2013.04.12) =
+* Fixed bug in post type/format detection when no valid post type/format was found
+* Workaround for WP bug when POP3 account has no waiting messages
+* Fixed bug where cron was running postie_check on every page load
+
+= 1.5.1 (2013.04.10) =
+* Turned on POP3 debug logging if POSTIE_DEBUG is TRUE.
+* Disable autocomplete on some setup fields
+* Fixed bug where confirmation emails were not being sent to authors
+* Fixed bug where post were not saved if the default admin user didn't exist and the from user was not a WordPress user
+
+= 1.5.0 (2013.04.05) =
+* Apply Postie Time Correction to date: command
+* Add support for Post Formats
+* Add support for Post Status
+* Add warning if Admin username is invalid
+* Fixed bug where date: was not always being detected in html emails
+* Improved handling of attachments and mapping to file extensions for template selection
+* Video templates now include scale="tofit"
+* Add support for older png mime type
+* New filter postie_filter_email. Used to map "from" to any other email. Allows custom user mapping.
+
+
+= 1.4.40 (2013.03.18) =
+* Fixed bug where categories specified by ID were not being correctly identified
+
+= 1.4.39 (2013.03.14) =
+* Fixed bug where Postie supplied schedules were not always being correctly added to the cron
+
+= 1.4.38 (2013.03.12) =
+* Improved POP3 configuration test
+* Fixed bug where :start and :end were removing commands like tags: and date: before they got a chance to be processed
+
+= 1.4.37 (2013.03.11) =
+* Fixed bug in tag handling
+* Fixed bug in category detection
+* Worked around a bug in WordPress that was mangling filenames that are not in ASCII, i.e. Arabic, Hebrew, Cyrillic, etc.
+
 = 1.4.36 (2013.03.07) =
 * Removed some debugging code from filters and hooks
 * Fixed bug where the date command was being ignored

@@ -12,7 +12,7 @@ $small = '<object ' .
         'autoplay="no" controller="true" ' .
         'type="video/quicktime" ' .
         'pluginspage="http://www.apple.com/quicktime/download/" ' .
-        'width="128" height="110">' .
+        'width="128" height="110" scale="tofit">' .
         '</embed> ' .
         '</object>';
 $medium = '<object ' .
@@ -27,7 +27,7 @@ $medium = '<object ' .
         'autoplay="no" controller="true" ' .
         'type="video/quicktime" ' .
         'pluginspage="http://www.apple.com/quicktime/download/" ' .
-        'width="320" height="260">' .
+        'width="320" height="260" scale="tofit">' .
         '</embed> ' .
         '</object>';
 $medium_widescreen = '<object ' .
@@ -42,7 +42,7 @@ $medium_widescreen = '<object ' .
         'autoplay="no" controller="true" ' .
         'type="video/quicktime" ' .
         'pluginspage="http://www.apple.com/quicktime/download/" ' .
-        'width="480" height="290">' .
+        'width="480" height="290" scale="tofit">' .
         '</embed> ' .
         '</object>';
 $large = '<object ' .
@@ -57,7 +57,7 @@ $large = '<object ' .
         'autoplay="no" controller="true" ' .
         'type="video/quicktime" ' .
         'pluginspage="http://www.apple.com/quicktime/download/" ' .
-        'width="480" height="380">' .
+        'width="480" height="380" scale="tofit">' .
         '</embed> ' .
         '</object>';
 $large_widescreen = '<object ' .
@@ -72,7 +72,7 @@ $large_widescreen = '<object ' .
         'autoplay="no" controller="true" ' .
         'type="video/quicktime" ' .
         'pluginspage="http://www.apple.com/quicktime/download/" ' .
-        'width="640" height="380">' .
+        'width="640" height="380" scale="tofit">' .
         '</embed> ' .
         '</object>';
 

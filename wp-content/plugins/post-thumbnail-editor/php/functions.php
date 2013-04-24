@@ -331,12 +331,27 @@ function pte_get_width_height( $size_information, $w, $h ){
  * ================
  * See image_resize function in wp-includes/media.php to follow the same conventions
  *  - Check if the file exists
+ *
+ * Using the cache buster is a good idea because:
+ *  * we shouldn't overwrite old images that have been placed into posts
+ *  * keeps problems from occuring when I try to debug and people think picture
+ *    didn't save, when it's just a caching issue
  */
 function pte_generate_filename( $file, $w, $h ){
-	$info   = pathinfo( $file );
-	$ext    = $info['extension'];
-	$name   = wp_basename( $file, ".$ext" );
-	$suffix = "{$w}x{$h}";
+	$options      = pte_get_options();
+	$info         = pathinfo( $file );
+	$ext          = $info['extension'];
+	$name         = wp_basename( $file, ".$ext" );
+	$suffix       = "{$w}x{$h}";
+
+	if ( $options['cache_buster'] ){
+		$cache_buster = time();
+		return sprintf( "%s-%s-%s.%s",
+			$name,
+			$suffix,
+			$cache_buster,
+			$ext );
+	}
 	//print_r( compact( "file", "info", "ext", "name", "suffix" ) );
 	return "{$name}-{$suffix}.{$ext}";
 }
@@ -362,6 +377,7 @@ function pte_resize_images(){
 	$h  = pte_check_int( $_GET['h'] );
 	$x  = pte_check_int( $_GET['x'] );
 	$y  = pte_check_int( $_GET['y'] );
+	$save = isset( $_GET['save'] ) && ( strtolower( $_GET['save'] ) === "true" );
 
 	if ( $id === false
 		|| $w === false
@@ -373,11 +389,11 @@ function pte_resize_images(){
 	}
 
 	// Get the sizes to process
-   $pte_sizes      = $_GET['pte-sizes'];
-   if ( !is_array( $pte_sizes ) ){
-      $logger->debug( "Converting pte_sizes to array" );
-      $pte_sizes = explode( ",", $pte_sizes );
-   }
+	$pte_sizes      = $_GET['pte-sizes'];
+	if ( !is_array( $pte_sizes ) ){
+		$logger->debug( "Converting pte_sizes to array" );
+		$pte_sizes = explode( ",", $pte_sizes );
+	}
 	$sizes          = pte_get_all_alternate_size_information( $id );
 
 	// The following information is common to all sizes
@@ -418,8 +434,8 @@ function pte_resize_images(){
 		// === CREATE IMAGE ===================
 		// This function is in wp-includes/media.php
 		$editor = wp_get_image_editor( $original_file );
-      if ( is_a( $editor, "WP_Image_Editor_Imagick" ) ) $logger->debug( "EDITOR: ImageMagick" );
-      if ( is_a( $editor, "WP_Image_Editor_GD" ) ) $logger->debug( "EDITOR: GD" );
+		if ( is_a( $editor, "WP_Image_Editor_Imagick" ) ) $logger->debug( "EDITOR: ImageMagick" );
+		if ( is_a( $editor, "WP_Image_Editor_GD" ) ) $logger->debug( "EDITOR: GD" );
 		$crop_results = $editor->crop($x, $y, $w, $h, $dst_w, $dst_h); 
 
 		if ( is_wp_error( $crop_results ) ){
@@ -451,9 +467,23 @@ function pte_resize_images(){
 		return pte_json_error("No images processed");
 	}
 
+	$ptenonce = wp_create_nonce( "pte-{$id}" );
+
+	// If save -- return pte_confirm_images
+	if ( $save ){
+		function create_pte_confirm($thumbnail){
+			return $thumbnail['file'];
+		}
+		$_REQUEST['pte-nonce'] = $ptenonce;
+		$_GET['pte-confirm'] = array_map('create_pte_confirm', $thumbnails);
+		$logger->debug( "CONFIRM:" );
+		$logger->debug( print_r( $_GET, true ) );
+		return pte_confirm_images(true);
+	}
+
 	return pte_json_encode( array( 
 		'thumbnails'        => $thumbnails,
-		'pte-nonce'         => wp_create_nonce( "pte-{$id}" ),
+		'pte-nonce'         => $ptenonce,
 		'pte-delete-nonce'  => wp_create_nonce( "pte-delete-{$id}" )
 	) );
 }
@@ -466,7 +496,7 @@ function pte_resize_images(){
  *
  * Clean up and return error/success information...
  */
-function pte_confirm_images(){
+function pte_confirm_images($immediate = false){
 	global $pte_sizes;
 	$logger = PteLogger::singleton();
 
@@ -550,7 +580,10 @@ function pte_confirm_images(){
 	}
 	// Delete tmpdir
 	//pte_rmdir( $PTE_TMP_DIR );
-	return pte_json_encode( array( 'success' => "Yay!" ) );
+	return pte_json_encode( array( 
+		'thumbnails' => pte_get_all_alternate_size_information( $id ),
+		'immediate' => $immediate
+	) );
 }
 
 function pte_rmdir( $dir ){

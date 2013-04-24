@@ -4,7 +4,7 @@
 Plugin Name: SEO Friendly Images
 Plugin URI: http://www.prelovac.com/vladimir/wordpress-plugins/seo-friendly-images
 Description: Automatically adds alt and title attributes to all your images. Improves traffic from search results and makes them W3C/xHTML valid as well.
-Version: 2.7.4
+Version: 2.7.5
 Author: Vladimir Prelovac
 Author URI: http://www.prelovac.com/vladimir
 
@@ -15,7 +15,7 @@ To-Do:
 Copyright 2008  Vladimir Prelovac  vprelovac@gmail.com
 
 */
-	$seo_friendly_images_localversion="2.6";
+	$seo_friendly_images_localversion="2.7.5";
 	$sfi_plugin_url = trailingslashit( get_bloginfo('wpurl') ).PLUGINDIR.'/'. dirname( plugin_basename(__FILE__) );
 	function seo_friendly_images_add_pages() {
 		add_options_page('SEO Friendly Images options', 'SEO Friendly Images', 'manage_options', __FILE__, 'seo_friendly_images_options_page');
@@ -38,9 +38,9 @@ Copyright 2008  Vladimir Prelovac  vprelovac@gmail.com
 			}
 	
 			// If form was submitted
-			if (isset($_POST['submitted'])) {
-				$alt_text=(!isset($_POST['alttext'])? '': $_POST['alttext']);
-				$title_text=(!isset($_POST['titletext'])? '': $_POST['titletext']);
+			if (isset($_POST['submitted']) && check_admin_referer('CSRFcheck','CSRF_check')) {
+				$alt_text=(!isset($_POST['alttext'])? '': htmlentities(stripslashes(strip_tags($_POST['alttext']))));
+				$title_text=(!isset($_POST['titletext'])? '': htmlentities(stripslashes(strip_tags($_POST['titletext']))));
 				$override=(!isset($_POST['override'])? 'off': 'on');
 				$override_title=(!isset($_POST['override_title'])? 'off': 'on');
 				update_option('seo_friendly_images_alt', $alt_text);
@@ -68,7 +68,7 @@ Copyright 2008  Vladimir Prelovac  vprelovac@gmail.com
 		
 			global $sfi_plugin_url;
 			$imgpath=$sfi_plugin_url.'/i';
-			$action_url=$_SERVER['REQUEST_URI'];
+			$action_url=htmlentities(stripslashes(strip_tags($_SERVER['REQUEST_URI'])));
 	
 			// Configuration Page
 			echo <<<END
@@ -121,6 +121,9 @@ Copyright 2008  Vladimir Prelovac  vprelovac@gmail.com
 								</p>
 								<div class="submit"><input type="submit" name="Submit" value="Update options" /></div>
 							</div>
+END;
+wp_nonce_field('CSRFcheck','CSRF_check', false);
+echo <<<END
 						</form>
 						<br/><br/><h3>&nbsp;</h3>
 					</div>

@@ -1,11 +1,24 @@
 <?php
 
 /*
-  $Id: postie-functions.php 677715 2013-03-07 22:06:16Z WayneAllen $
+  $Id: postie-functions.php 697183 2013-04-14 05:39:42Z WayneAllen $
  */
 
 //to turn on debug output add the following line to wp-config.php
 //define('POSTIE_DEBUG', true);
+
+class PostiePostModifiers {
+
+    var $PostFormat = 'standard';
+
+    function apply($postid, $postdetails) {
+
+        if ($this->PostFormat != 'standard') {
+            set_post_format($postid, $this->PostFormat);
+        }
+    }
+
+}
 
 if (!function_exists('mb_str_replace')) {
 
@@ -98,29 +111,41 @@ function DebugEcho($v) {
     }
 }
 
-function tag_Date(&$content, $message_date) {
-    DebugEcho("tag_Date\n---\n$content\n---");
-    if (1 === preg_match("/^date:\s?(.*)$/im", $content, $matches)) {
-        $newdate = strtotime($matches[1]);
-        if (false !== $newdate) {
-            $t = date("H:i:s", $newdate);
-            DebugEcho("time: $t");
+function tag_Date(&$content, $message_date, $time_offset) {
+    $html = LoadDOM($content);
+    if ($html !== false) {
+        $es = $html->find('text');
+        DebugEcho("tag_Date: html " . count($es));
+        foreach ($es as $e) {
+            DebugEcho(trim($e->plaintext));
+            if (1 === preg_match("/^date:\s?(.*)$/im", trim($e->plaintext), $matches)) {
+                DebugEcho("tag_Date: found date tag $matches[1]");
+                $newdate = strtotime($matches[1]);
+                if (false !== $newdate) {
+                    $t = date("H:i:s", $newdate);
+                    DebugEcho("tag_Date: original time: $t");
 
-            $format = "Y-m-d";
-            if ($t != '00:00:00') {
-                $format.= " H:i:s";
+                    $newdate = $newdate + $time_offset * 3600;
+                    $t = date("H:i:s", $newdate);
+                    DebugEcho("tag_Date: adjusted time: $t");
+
+                    $format = "Y-m-d";
+                    if ($t != '00:00:00') {
+                        $format.= " H:i:s";
+                    }
+                    $message_date = date($format, $newdate);
+                    $content = str_replace($matches[0], '', $content);
+                    break;
+                }
             }
-            $message_date = date($format, $newdate);
-            $content = trim(str_replace($matches[0], '', $content));
         }
     } else {
-        DebugEcho("No date found");
+        DebugEcho("tag_Date: not html");
     }
-
     return $message_date;
 }
 
-function CreatePost($poster, $mimeDecodedEmail, $post_id, &$is_reply, $config) {
+function CreatePost($poster, $mimeDecodedEmail, $post_id, &$is_reply, $config, $postmodifiers) {
 
     $fulldebug = false;
 
@@ -131,6 +156,7 @@ function CreatePost($poster, $mimeDecodedEmail, $post_id, &$is_reply, $config) {
         "cids" => array(), //holds the cids for HTML email
         "image_files" => array() //holds the files for each image
     );
+
     if (array_key_exists('message-id', $mimeDecodedEmail->headers)) {
         EchoInfo("Message Id is :" . htmlentities($mimeDecodedEmail->headers["message-id"]));
         if ($fulldebug)
@@ -146,14 +172,6 @@ function CreatePost($poster, $mimeDecodedEmail, $post_id, &$is_reply, $config) {
         DebugEcho("the content is $content");
 
     $subject = GetSubject($mimeDecodedEmail, $content, $config);
-
-    filter_Start($content, $config);
-    if ($fulldebug)
-        DebugEcho("post start: $content");
-
-    filter_End($content, $config);
-    if ($fulldebug)
-        DebugEcho("post end: $content");
 
     filter_RemoveSignature($content, $config);
     if ($fulldebug)
@@ -179,17 +197,17 @@ function CreatePost($poster, $mimeDecodedEmail, $post_id, &$is_reply, $config) {
         }
         $message_date = HandleMessageEncoding($cte, $cs, $mimeDecodedEmail->headers["date"], $message_encoding, $message_dequote);
     }
-    $message_date = tag_Date($content, $message_date);
+    $message_date = tag_Date($content, $message_date, $time_offset);
 
     list($post_date, $post_date_gmt, $delay) = filter_Delay($content, $message_date, $time_offset);
     if ($fulldebug)
         DebugEcho("post date: $content");
 
-    filter_ubb2HTML($content);
+    filter_Ubb2HTML($content);
     if ($fulldebug)
         DebugEcho("post ubb: $content");
 
-    $post_categories = tag_categories($subject, $default_post_category, $category_match);
+    $post_categories = tag_Categories($subject, $default_post_category, $category_match);
     if ($fulldebug)
         DebugEcho("post category: $content");
 
@@ -201,12 +219,16 @@ function CreatePost($poster, $mimeDecodedEmail, $post_id, &$is_reply, $config) {
     if ($fulldebug)
         DebugEcho("post comment: $content");
 
+    $post_status = tag_Status($content, $post_status);
+    if ($fulldebug)
+        DebugEcho("post status: $content");
+
     if ($converturls) {
         $content = filter_Videos($content, $shortcode); //videos first so linkify doesn't mess with them
         if ($fulldebug)
             DebugEcho("post video: $content");
 
-        $content = filter_linkify($content);
+        $content = filter_Linkify($content);
         if ($fulldebug)
             DebugEcho("post linkify: $content");
     }
@@ -233,7 +255,7 @@ function CreatePost($poster, $mimeDecodedEmail, $post_id, &$is_reply, $config) {
     if ($fulldebug)
         DebugEcho("post custom: $content");
 
-    $post_type = tag_PostType($subject);
+    $post_type = tag_PostType($subject, $postmodifiers);
     if ($fulldebug)
         DebugEcho("post type: $content");
 
@@ -275,13 +297,19 @@ function CreatePost($poster, $mimeDecodedEmail, $post_id, &$is_reply, $config) {
 
     if ($delay != 0 && $post_status == 'publish') {
         $post_status = 'future';
-    } else {
-        $post_status = $post_status;
     }
 
-    filter_newlines($content, $config);
+    filter_Newlines($content, $config);
     if ($fulldebug)
         DebugEcho("post newline: $content");
+
+    filter_Start($content, $config);
+    if ($fulldebug)
+        DebugEcho("post start: $content");
+
+    filter_End($content, $config);
+    if ($fulldebug)
+        DebugEcho("post end: $content");
 
     DebugEcho("excerpt: $post_excerpt");
 
@@ -323,12 +351,17 @@ function PostEmail($poster, $mimeDecodedEmail, $config) {
     EchoInfo("new post id is $post_id");
 
     $is_reply = false;
-    $details = CreatePost($poster, $mimeDecodedEmail, $post_id, $is_reply, $config);
+    $postmodifiers = new PostiePostModifiers();
+
+    $details = CreatePost($poster, $mimeDecodedEmail, $post_id, $is_reply, $config, $postmodifiers);
 
     $details = apply_filters('postie_post', $details);
 
     DebugEcho(("Post postie_post filter"));
     DebugDump($details);
+
+    DebugEcho("Post modifiers");
+    DebugDump($postmodifiers);
 
     if (empty($details)) {
         // It is possible that the filter has removed the post, in which case, it should not be posted.
@@ -336,18 +369,20 @@ function PostEmail($poster, $mimeDecodedEmail, $config) {
         // then it should be removed
         if (!$is_reply) {
             wp_delete_post($post_id);
+            EchoInfo("postie_post filter cleared the post, not saving.");
         }
     } else {
         DisplayEmailPost($details);
-        PostToDB($details, $is_reply, true, $custom_image_field);
+
+        PostToDB($details, $is_reply, $custom_image_field, $postmodifiers);
+
         if ($confirmation_email != '') {
             if ($confirmation_email == 'sender') {
-                $recipients = array($postAuthorDetails['email']);
+                $recipients = array($details['email_author']);
             } elseif ($confirmation_email == 'admin') {
                 $recipients = array(get_option("admin_email"));
             } elseif ($confirmation_email == 'both') {
-                $recipients = array($postAuthorDetails['email'],
-                    get_option("admin_email"));
+                $recipients = array($details['email_author'], get_option("admin_email"));
             }
             MailToRecipients($mimeDecodedEmail, false, $recipients, false, false);
         }
@@ -362,35 +397,40 @@ function PostEmail($poster, $mimeDecodedEmail, $config) {
  * Adds support for handling Custom Post Types by adding the
  * Custom Post Type name to the email subject separated by
  * $custom_post_type_delim, e.g. "Movies // My Favorite Movie"
+ * Also supports setting the Post Format.
  */
-function tag_PostType(&$subject) {
+function tag_PostType(&$subject, $postmodifiers) {
 
+    $post_type = 'post';
     $custom_post_type_delim = "//";
     if (strpos($subject, $custom_post_type_delim) !== FALSE) {
-
         // Captures the custom post type in the subject before $custom_post_type_delim
         $separated_subject = explode($custom_post_type_delim, $subject);
         $custom_post_type = $separated_subject[0];
-        $subject = trim($separated_subject[1]);
 
         $custom_post_type = trim(strtolower($custom_post_type));
+        DebugEcho("post type: found possible type '$custom_post_type'");
 
         // Check if custom post type exists, if not, set default post type of 'post'
         $known_post_types = get_post_types();
+        //DebugDump($known_post_types);
+        //DebugDump(get_post_format_slugs());
 
         if (in_array($custom_post_type, array_map('strtolower', $known_post_types))) {
+            DebugEcho("post type: found type '$post_type'");
             $post_type = $custom_post_type;
-        } else {
-            $post_type = 'post';
+            $subject = trim($separated_subject[1]);
+        } elseif (in_array($custom_post_type, array_keys(get_post_format_slugs()))) {
+            DebugEcho("post type: found format '$custom_post_type'");
+            $postmodifiers->PostFormat = $custom_post_type;
+            $subject = trim($separated_subject[1]);
         }
-    } else {
-        $post_type = 'post';
     }
 
     return $post_type;
 }
 
-function filter_linkify($text) {
+function filter_Linkify($text) {
     # It turns urls into links, and video urls into embedded players
     //DebugEcho("begin: filter_linkify");
 
@@ -469,24 +509,24 @@ function linkifyVideo($text, $shortcode = false) {
 
 function make_links($text) {
     return preg_replace(
-                    array(
-                '/(?(?=<a[^>]*>.+<\/a>)
+            array(
+        '/(?(?=<a[^>]*>.+<\/a>)
              (?:<a[^>]*>.+<\/a>)
              |
              ([^="\']?)((?:https?|ftp|bf2|):\/\/[^<> \n\r]+)
          )/iex',
-                '/<a([^>]*)target="?[^"\']+"?/i',
-                '/<a([^>]+)>/i',
-                '/(^|\s)(www.[^<> \n\r]+)/iex',
-                '/(([_A-Za-z0-9-]+)(\\.[_A-Za-z0-9-]+)*@([A-Za-z0-9-]+)
+        '/<a([^>]*)target="?[^"\']+"?/i',
+        '/<a([^>]+)>/i',
+        '/(^|\s)(www.[^<> \n\r]+)/iex',
+        '/(([_A-Za-z0-9-]+)(\\.[_A-Za-z0-9-]+)*@([A-Za-z0-9-]+)
        (\\.[A-Za-z0-9-]+)*)/iex'
-                    ), array(
-                "stripslashes((strlen('\\2')>0?'\\1<a href=\"\\2\">\\2</a>\\3':'\\0'))",
-                '<a\\1',
-                '<a\\1 >',
-                "stripslashes((strlen('\\2')>0?'\\1<a href=\"http://\\2\">\\2</a>\\3':'\\0'))",
-                "stripslashes((strlen('\\2')>0?'<a href=\"mailto:\\0\">\\0</a>':'\\0'))"
-                    ), $text
+            ), array(
+        "stripslashes((strlen('\\2')>0?'\\1<a href=\"\\2\">\\2</a>\\3':'\\0'))",
+        '<a\\1',
+        '<a\\1 >',
+        "stripslashes((strlen('\\2')>0?'\\1<a href=\"http://\\2\">\\2</a>\\3':'\\0'))",
+        "stripslashes((strlen('\\2')>0?'<a href=\"mailto:\\0\">\\0</a>':'\\0'))"
+            ), $text
     );
 }
 
@@ -496,17 +536,23 @@ function make_links($text) {
  */
 
 function getPostAuthorDetails(&$subject, &$content, &$mimeDecodedEmail) {
-    global $wpdb;
 
     $theDate = $mimeDecodedEmail->headers['date'];
-    $theEmail = RemoveExtraCharactersInEmailAddress(trim($mimeDecodedEmail->headers["from"]));
+
+    $theEmail = $mimeDecodedEmail->headers["from"];
+    DebugEcho("getPostAuthorDetails: pre email filter $theEmail");
+    $theEmail = apply_filters("postie_filter_email", $theEmail);
+    DebugEcho("getPostAuthorDetails: post email filter $theEmail");
+
+    $theEmail = RemoveExtraCharactersInEmailAddress($theEmail);
+
     $regAuthor = get_user_by('email', $theEmail);
     if ($regAuthor) {
         $theAuthor = $regAuthor->user_login;
         $theUrl = $regAuthor->user_url;
         $theID = $regAuthor->ID;
     } else {
-        $theAuthor = GetNameFromEmail($mimeDecodedEmail->headers['from']);
+        $theAuthor = GetNameFromEmail($theEmail);
         $theUrl = '';
         $theID = '';
     }
@@ -536,8 +582,7 @@ function getPostAuthorDetails(&$subject, &$content, &$mimeDecodedEmail) {
         $content = $newContents;
     }
     $theDetails = array(
-        'content' => "<div class='postmetadata alt'>On $theDate, $theAuthor" .
-        " posted:</div>",
+        'content' => "<div class='postmetadata alt'>On $theDate, $theAuthor" . " posted:</div>",
         'emaildate' => $theDate,
         'author' => $theAuthor,
         'comment_author_url' => $theUrl,
@@ -611,7 +656,7 @@ function ConfigurePostie() {
  * This function handles determining the protocol and fetching the mail
  * @return array
  */
-function FetchMail($server = NULL, $port = NULL, $email = NULL, $password = NULL, $protocol = NULL, $offset = NULL, $test = NULL, $deleteMessages = true, $maxemails = 0) {
+function FetchMail($server = NULL, $port = NULL, $email = NULL, $password = NULL, $protocol = NULL, $offset = NULL, $test = NULL, $deleteMessages = true, $maxemails = 0, $email_tls = false) {
     $emails = array();
     if (!$server || !$port || !$email) {
         EchoInfo("Missing Configuration For Mail Server");
@@ -636,7 +681,7 @@ function FetchMail($server = NULL, $port = NULL, $email = NULL, $password = NULL
             if (!HasIMAPSupport()) {
                 EchoInfo("Sorry - you do not have IMAP php module installed - it is required for this mail setting.");
             } else {
-                $emails = IMAPMessageFetch($server, $port, $email, $password, $protocol, $offset, $test, $deleteMessages, $maxemails);
+                $emails = IMAPMessageFetch($server, $port, $email, $password, $protocol, $offset, $test, $deleteMessages, $maxemails, $email_tls);
             }
             break;
         case 'pop3':
@@ -650,11 +695,14 @@ function FetchMail($server = NULL, $port = NULL, $email = NULL, $password = NULL
 /**
  * Handles fetching messages from an imap server
  */
-function IMAPMessageFetch($server = NULL, $port = NULL, $email = NULL, $password = NULL, $protocol = NULL, $offset = NULL, $test = NULL, $deleteMessages = true, $maxemails = 0) {
+function IMAPMessageFetch($server = NULL, $port = NULL, $email = NULL, $password = NULL, $protocol = NULL, $offset = NULL, $test = NULL, $deleteMessages = true, $maxemails = 0, $tls = false) {
     require_once("postieIMAP.php");
     $emails = array();
     $mail_server = &PostieIMAP::Factory($protocol);
-    EchoInfo("Connecting to $server:$port ($protocol)");
+    if ($tls) {
+        $mail_server->TLSOn();
+    }
+    EchoInfo("Connecting to $server:$port ($protocol)" . ($tls ? " with TLS" : ""));
     if ($mail_server->connect($server, $port, $email, $password)) {
         $msg_count = $mail_server->getNumberOfMessages();
     } else {
@@ -691,8 +739,11 @@ function POP3MessageFetch($server = NULL, $port = NULL, $email = NULL, $password
 
     $emails = array();
     $pop3 = new POP3();
+    if (defined('POSTIE_DEBUG')) {
+        $pop3->DEBUG = POSTIE_DEBUG;
+    }
 
-    EchoInfo("Connecting to $server:$port ($protocol))");
+    EchoInfo("Connecting to $server:$port ($protocol)");
 
     if ($pop3->connect($server, $port)) {
         $msg_count = $pop3->login($email, $password);
@@ -706,16 +757,30 @@ function POP3MessageFetch($server = NULL, $port = NULL, $email = NULL, $password
         EchoInfo("The Server said: $pop3->ERROR");
         $msg_count = 0;
     }
+    DebugEcho("message count: $msg_count");
 
     // loop through messages 
+    //$msgs = $pop3->pop_list();
+    //DebugEcho("POP3MessageFetch: messages");
+    //DebugDump($msgs);
+
     for ($i = 1; $i <= $msg_count; $i++) {
-        $emails[$i] = implode('', $pop3->get($i));
-        if ($deleteMessages) {
-            if (!$pop3->delete($i)) {
-                EchoInfo('pop3 cannot delete message ' . $pop3->ERROR);
-                $pop3->reset();
-                exit;
+        $m = $pop3->get($i);
+        if ($m !== false) {
+            if (is_array($m)) {
+                $emails[$i] = implode('', $m);
+                if ($deleteMessages) {
+                    if (!$pop3->delete($i)) {
+                        EchoInfo('POP3MessageFetch: cannot delete message $i ' . $pop3->ERROR);
+                        $pop3->reset();
+                        exit;
+                    }
+                }
+            } else {
+                DebugEcho("POP3MessageFetch: message $i not an array");
             }
+        } else {
+            EchoInfo("POP3MessageFetch: message $i $pop3->ERROR");
         }
         if ($maxemails != 0 && $i >= $maxemails) {
             DebugEcho("Max emails ($maxemails)");
@@ -732,34 +797,36 @@ function POP3MessageFetch($server = NULL, $port = NULL, $email = NULL, $password
  * @param array - categories to be posted to
  * @param array - details of the post
  */
-function PostToDB($details, $isReply, $postToDb = true, $customImageField = false) {
-    if ($postToDb) {
-        if (!$isReply) {
-            $post_ID = wp_insert_post($details, true);
-            if (is_wp_error($post_ID)) {
-                EchoInfo("Error: " . $post_ID->get_error_message());
-                wp_delete_post($details['ID']);
-            }
-        } else {
-            $comment = array(
-                'comment_author' => $details['comment_author'],
-                'comment_post_ID' => $details['ID'],
-                'comment_author_email' => $details['email_author'],
-                'comment_date' => $details['post_date'],
-                'comment_date_gmt' => $details['post_date_gmt'],
-                'comment_content' => $details['post_content'],
-                'comment_author_url' => $details['comment_author_url'],
-                'comment_author_IP' => '',
-                'comment_approved' => 1,
-                'comment_agent' => '',
-                'comment_type' => '',
-                'comment_parent' => 0,
-                'user_id' => $details['user_ID']
-            );
+function PostToDB($details, $isReply, $customImageField, $postmodifiers) {
 
-            $post_ID = wp_insert_comment($comment);
+    if (!$isReply) {
+        $post_ID = wp_insert_post($details, true);
+        if (is_wp_error($post_ID)) {
+            EchoInfo("Error: " . $post_ID->get_error_message());
+            wp_delete_post($details['ID']);
         }
-        if ($customImageField && $post_ID) {
+    } else {
+        $comment = array(
+            'comment_author' => $details['comment_author'],
+            'comment_post_ID' => $details['ID'],
+            'comment_author_email' => $details['email_author'],
+            'comment_date' => $details['post_date'],
+            'comment_date_gmt' => $details['post_date_gmt'],
+            'comment_content' => $details['post_content'],
+            'comment_author_url' => $details['comment_author_url'],
+            'comment_author_IP' => '',
+            'comment_approved' => 1,
+            'comment_agent' => '',
+            'comment_type' => '',
+            'comment_parent' => 0,
+            'user_id' => $details['user_ID']
+        );
+
+        $post_ID = wp_insert_comment($comment);
+    }
+
+    if ($post_ID) {
+        if ($customImageField) {
             DebugEcho("Saving custom image fields");
             //DebugDump($details['customImages']);
 
@@ -771,6 +838,8 @@ function PostToDB($details, $isReply, $postToDb = true, $customImageField = fals
                 }
             }
         }
+
+        $postmodifiers->apply($post_ID, $details);
     }
 }
 
@@ -796,7 +865,7 @@ function GetContent($part, &$attachments, $post_id, $poster, $config) {
     //global $charset, $encoding;
     DebugEcho('----');
     $meta_return = '';
-    DebugEcho("primary= " . $part->ctype_primary . ", secondary = " . $part->ctype_secondary);
+    DebugEcho("GetContent: primary= " . $part->ctype_primary . ", secondary = " . $part->ctype_secondary);
 
     DecodeBase64Part($part);
 
@@ -807,15 +876,9 @@ function GetContent($part, &$attachments, $post_id, $poster, $config) {
 
     if ($part->ctype_primary == "application" && $part->ctype_secondary == "octet-stream") {
         if (property_exists($part, 'disposition') && $part->disposition == "attachment") {
-            $image_endings = array("jpg", "png", "gif", "jpeg", "pjpeg");
-            foreach ($image_endings as $type) {
-                if (preg_match("/.$type\$/i", $part->d_parameters["filename"])) {
-                    $part->ctype_primary = "image";
-                    $part->ctype_secondary = $type;
-                    break;
-                }
-            }
+            //nothing 
         } else {
+            DebugEcho("GetContent: decoding application/octet-stream");
             $mimeDecodedEmail = DecodeMIMEMail($part->body);
             filter_PreferedText($mimeDecodedEmail, $prefer_text_type);
             foreach ($mimeDecodedEmail->parts as $section) {
@@ -841,9 +904,39 @@ function GetContent($part, &$attachments, $post_id, $poster, $config) {
         } elseif (property_exists($part, 'd_parameters') && is_array($part->d_parameters) && array_key_exists('filename', $part->d_parameters)) {
             $filename = $part->d_parameters['filename'];
         }
+        $fileext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
-        DebugEcho("Filename: $filename");
-        switch (strtolower($part->ctype_primary)) {
+        DebugEcho("GetContent: file name '$filename'");
+        DebugEcho("GetContent: extension '$fileext'");
+
+        $mimetype_primary = strtolower($part->ctype_primary);
+        $mimetype_secondary = strtolower($part->ctype_secondary);
+
+        $typeinfo = wp_check_filetype($filename);
+        //DebugDump($typeinfo);
+        if (!empty($typeinfo['type'])) {
+            DebugEcho("GetContent: secondary lookup found " . $typeinfo['type']);
+            $mimeparts = explode('/', strtolower($typeinfo['type']));
+            $mimetype_primary = $mimeparts[0];
+            $mimetype_secondary = $mimeparts[1];
+        } else {
+            DebugEcho("GetContent: secondary lookup failed, checking configured extensions");
+            if (in_array($fileext, $audiotypes)) {
+                DebugEcho("GetContent: found audio extension");
+                $mimetype_primary = 'audio';
+                $mimetype_secondary = $fileext;
+            } elseif (in_array($fileext, array_merge($video1types, $video2types))) {
+                DebugEcho("GetContent: found video extension");
+                $mimetype_primary = 'video';
+                $mimetype_secondary = $fileext;
+            } else {
+                DebugEcho("GetContent: found no extension");
+            }
+        }
+
+        DebugEcho("GetContent: mimetype $mimetype_primary/$mimetype_secondary");
+
+        switch ($mimetype_primary) {
             case 'multipart':
                 DebugEcho("multipart: " . count($part->parts));
                 //DebugDump($part);
@@ -885,26 +978,27 @@ function GetContent($part, &$attachments, $post_id, $poster, $config) {
                         $file_id = postie_media_handle_upload($part, $post_id, $poster);
                         if (!is_wp_error($file_id)) {
                             $file = wp_get_attachment_url($file_id);
-                            $icon = chooseAttachmentIcon($file, $part->ctype_primary, $part->ctype_secondary, $icon_set, $icon_size);
+                            $icon = chooseAttachmentIcon($file, $mimetype_primary, $mimetype_secondary, $icon_set, $icon_size);
                             $attachments["html"][$filename] = "<a href='$file'>" . $icon . $filename . '</a>' . "\n";
+                            DebugEcho("text attachment: adding '$filename'");
                         } else {
                             LogInfo($file_id->get_error_message());
                         }
                     } else {
-                        DebugEcho("text attachment: skipping");
+                        DebugEcho("text attachment: skipping '$filename'");
                     }
                 } else {
 
                     //go through each sub-section
-                    if ($part->ctype_secondary == 'enriched') {
+                    if ($mimetype_secondary == 'enriched') {
                         //convert enriched text to HTML
                         DebugEcho("enriched");
-                        $meta_return .= filter_etf2HTML($part->body) . "\n";
-                    } elseif ($part->ctype_secondary == 'html') {
+                        $meta_return .= filter_Etf2HTML($part->body) . "\n";
+                    } elseif ($mimetype_secondary == 'html') {
                         //strip excess HTML
                         DebugEcho("html");
                         $meta_return .= filter_CleanHtml($part->body) . "\n";
-                    } elseif ($part->ctype_secondary == 'plain') {
+                    } elseif ($mimetype_secondary == 'plain') {
                         DebugEcho("plain text");
                         //DebugDump($part);
 
@@ -924,7 +1018,7 @@ function GetContent($part, &$attachments, $post_id, $poster, $config) {
                         $file_id = postie_media_handle_upload($part, $post_id, $poster);
                         if (!is_wp_error($file_id)) {
                             $file = wp_get_attachment_url($file_id);
-                            $icon = chooseAttachmentIcon($file, $part->ctype_primary, $part->ctype_secondary, $icon_set, $icon_size);
+                            $icon = chooseAttachmentIcon($file, $mimetype_primary, $mimetype_secondary, $icon_set, $icon_size);
                             $attachments["html"][$filename] = "<a href='$file'>" . $icon . $filename . '</a>' . "\n";
                         } else {
                             LogInfo($file_id->get_error_message());
@@ -937,6 +1031,13 @@ function GetContent($part, &$attachments, $post_id, $poster, $config) {
                 DebugEcho("image Attachement: $filename");
                 $file_id = postie_media_handle_upload($part, $post_id, $poster);
                 if (!is_wp_error($file_id)) {
+                    //featured image logic
+                    //set the first image we come across as the featured image
+                    DebugEcho("has_post_thumbnail: " . has_post_thumbnail($post_id));
+                    if ($featured_image && !has_post_thumbnail($post_id)) {
+                        DebugEcho("featured image: $file_id");
+                        set_post_thumbnail($post_id, $file_id);
+                    }
                     $file = wp_get_attachment_url($file_id);
                     $cid = "";
                     if (array_key_exists('content-id', $part->headers)) {
@@ -945,7 +1046,7 @@ function GetContent($part, &$attachments, $post_id, $poster, $config) {
                     }
 
                     $the_post = get_post($file_id);
-                    $attachments["html"][$filename] = parseTemplate($file_id, $part->ctype_primary, $imagetemplate, $filename);
+                    $attachments["html"][$filename] = parseTemplate($file_id, $mimetype_primary, $imagetemplate, $filename);
                     if ($cid) {
                         $attachments["cids"][$cid] = array($file, count($attachments["html"]) - 1);
                         DebugEcho("CID Attachement: $cid");
@@ -966,15 +1067,15 @@ function GetContent($part, &$attachments, $post_id, $poster, $config) {
                         $cid = trim($part->headers["content-id"], "<>");
                         DebugEcho("audio Attachement cid: $cid");
                     }
-                    if (in_array($part->ctype_secondary, $audiotypes)) {
-                        DebugEcho("using audio template: $part->ctype_secondary");
+                    if (in_array($fileext, $audiotypes)) {
+                        DebugEcho("using audio template: $mimetype_secondary");
                         $audioTemplate = $audiotemplate;
                     } else {
-                        DebugEcho("using default audio template: $part->ctype_secondary");
-                        $icon = chooseAttachmentIcon($file, $part->ctype_primary, $part->ctype_secondary, $icon_set, $icon_size);
+                        DebugEcho("using default audio template: $mimetype_secondary");
+                        $icon = chooseAttachmentIcon($file, $mimetype_primary, $mimetype_secondary, $icon_set, $icon_size);
                         $audioTemplate = '<a href="{FILELINK}">' . $icon . '{FILENAME}</a>';
                     }
-                    $attachments["html"][$filename] = parseTemplate($file_id, $part->ctype_primary, $audioTemplate, $filename);
+                    $attachments["html"][$filename] = parseTemplate($file_id, $mimetype_primary, $audioTemplate, $filename);
                 } else {
                     LogInfo("audio error: " . $file_id->get_error_message());
                 }
@@ -991,18 +1092,18 @@ function GetContent($part, &$attachments, $post_id, $poster, $config) {
                         DebugEcho("video Attachement cid: $cid");
                     }
                     //DebugDump($part);
-                    if (in_array(strtolower($part->ctype_secondary), $video1types)) {
-                        DebugEcho("using video1 template: $part->ctype_secondary");
+                    if (in_array($fileext, $video1types)) {
+                        DebugEcho("using video1 template: $fileext");
                         $videoTemplate = $video1template;
-                    } elseif (in_array(strtolower($part->ctype_secondary), $video2types)) {
-                        DebugEcho("using video2 template: $part->ctype_secondary");
+                    } elseif (in_array($fileext, $video2types)) {
+                        DebugEcho("using video2 template: $fileext");
                         $videoTemplate = $video2template;
                     } else {
-                        DebugEcho("using default template: $part->ctype_secondary");
-                        $icon = chooseAttachmentIcon($file, $part->ctype_primary, $part->ctype_secondary, $icon_set, $icon_size);
+                        DebugEcho("using default template: $fileext");
+                        $icon = chooseAttachmentIcon($file, $mimetype_primary, $mimetype_secondary, $icon_set, $icon_size);
                         $videoTemplate = '<a href="{FILELINK}">' . $icon . '{FILENAME}</a>';
                     }
-                    $attachments["html"][$filename] = parseTemplate($file_id, $part->ctype_primary, $videoTemplate, $filename);
+                    $attachments["html"][$filename] = parseTemplate($file_id, $mimetype_primary, $videoTemplate, $filename);
                     //echo "videoTemplate = $videoTemplate\n";
                 } else {
                     LogInfo($file_id->get_error_message());
@@ -1010,10 +1111,10 @@ function GetContent($part, &$attachments, $post_id, $poster, $config) {
                 break;
 
             default:
-                DebugEcho("found file type: " . $part->ctype_primary);
-                if (in_array(strtolower($part->ctype_primary), $supported_file_types)) {
+                DebugEcho("found file type: " . $mimetype_primary);
+                if (in_array($mimetype_primary, $supported_file_types)) {
                     //pgp signature - then forget it
-                    if ($part->ctype_secondary == 'pgp-signature') {
+                    if ($mimetype_secondary == 'pgp-signature') {
                         DebugEcho("found pgp-signature - done");
                         break;
                     }
@@ -1021,7 +1122,7 @@ function GetContent($part, &$attachments, $post_id, $poster, $config) {
                     if (!is_wp_error($file_id)) {
                         $file = wp_get_attachment_url($file_id);
                         DebugEcho("uploaded $file_id ($file)");
-                        $icon = chooseAttachmentIcon($file, $part->ctype_primary, $part->ctype_secondary, $icon_set, $icon_size);
+                        $icon = chooseAttachmentIcon($file, $mimetype_primary, $mimetype_secondary, $icon_set, $icon_size);
                         DebugEcho("default: $icon $filename");
                         $attachments["html"][$filename] = "<a href='$file'>" . $icon . $filename . '</a>' . "\n";
                         if (array_key_exists('content-id', $part->headers)) {
@@ -1047,7 +1148,7 @@ function GetContent($part, &$attachments, $post_id, $poster, $config) {
     return $meta_return;
 }
 
-function filter_ubb2HTML(&$text) {
+function filter_Ubb2HTML(&$text) {
 // Array of tags with opening and closing
     $tagArray['img'] = array('open' => '<img src="', 'close' => '">');
     $tagArray['b'] = array('open' => '<b>', 'close' => '</b>');
@@ -1077,7 +1178,7 @@ function filter_ubb2HTML(&$text) {
 // This function turns Enriched Text into something similar to HTML
 // Very basic at the moment, only supports some functionality and dumps the rest
 // FIXME: fix colours: <color><param>FFFF,C2FE,0374</param>some text </color>
-function filter_etf2HTML($content) {
+function filter_Etf2HTML($content) {
 
     $search = array(
         '/<bold>/',
@@ -1152,11 +1253,12 @@ function ValidatePoster(&$mimeDecodedEmail, $config) {
     $from = "";
     if (array_key_exists('from', $mimeDecodedEmail->headers)) {
         $from = RemoveExtraCharactersInEmailAddress(trim($mimeDecodedEmail->headers["from"]));
+        $from = apply_filters("postie_filter_email", $from);
+        DebugEcho("ValidatePoster: post email filter $from");
     } else {
         DebugEcho("No 'from' header found");
         DebugDump($mimeDecodedEmail->headers);
     }
-
 
     $resentFrom = "";
     if (array_key_exists('resent-from', $mimeDecodedEmail->headers)) {
@@ -1178,12 +1280,23 @@ function ValidatePoster(&$mimeDecodedEmail, $config) {
             EchoInfo("posting as user $poster");
         } else {
             $poster = $wpdb->get_var("SELECT ID FROM $wpdb->users WHERE user_login  = '$admin_username'");
+            if (!$poster) {
+                EchoInfo("Your 'Admin username' setting '$admin_username' is not a valid WordPress user (1)");
+                $poster = 1;
+            }
         }
     } elseif ($turn_authorization_off || isEmailAddressAuthorized($from, $authorized_addresses) || isEmailAddressAuthorized($resentFrom, $authorized_addresses)) {
+        DebugEcho("ValidatePoster: looking up default user $admin_username");
         $poster = $wpdb->get_var("SELECT ID FROM $wpdb->users WHERE user_login  = '$admin_username'");
+        DebugEcho("ValidatePoster: found user '$poster'");
+        if (empty($poster)) {
+            EchoInfo("Your 'Admin username' setting '$admin_username' is not a valid WordPress user (2)");
+            $poster = 1;
+        }
     }
 
     $validSMTP = isValidSmtpServer($mimeDecodedEmail, $smtp);
+
     if (!$poster || !$validSMTP) {
         EchoInfo('Invalid sender: ' . htmlentities($from) . "! Not adding email!");
         if ($forward_rejected_mail) {
@@ -1242,28 +1355,31 @@ function filter_Start(&$content, $config) {
  */
 function filter_RemoveSignature(&$content, $config) {
     if ($config['drop_signature']) {
-        if (empty($config['sig_pattern_list']))
+        if (empty($config['sig_pattern_list'])) {
+            DebugEcho("filter_RemoveSignature: no sig_pattern_list");
             return;
+        }
         //DebugEcho("looking for signature in: $content");
 
         $pattern = '/^(' . implode('|', $config['sig_pattern_list']) . ')\s?$/m';
-        DebugEcho("sig pattern: $pattern");
+        DebugEcho("filter_RemoveSignature: pattern: $pattern");
 
         $html = LoadDOM($content);
         if ($html !== false) {
             filter_RemoveSignatureWorker($html->root, $pattern);
             $content = $html->save();
         } else {
-            DebugEcho("sig non-html");
+            DebugEcho("filter_RemoveSignature: non-html");
             $arrcontent = explode("\n", $content);
             $strcontent = '';
 
             for ($i = 0; $i < count($arrcontent); $i++) {
                 $line = trim($arrcontent[$i]);
                 if (preg_match($pattern, trim($line))) {
-                    DebugEcho("signature found: removing");
+                    DebugEcho("filter_RemoveSignature: signature found: removing");
                     break;
                 }
+
                 $strcontent .= $line;
             }
             $content = $strcontent;
@@ -1316,7 +1432,7 @@ function filter_End(&$content, $config) {
 }
 
 //filter content for new lines
-function filter_newlines(&$content, $config) {
+function filter_Newlines(&$content, $config) {
     if ($config['filternewlines']) {
 
         $search = array(
@@ -1413,7 +1529,7 @@ function DecodeBase64Part(&$part) {
             //DebugDump($part);
             if (isset($part->disposition) && $part->disposition == 'attachment') {
                 $part->body = base64_decode($part->body);
-            } else if (is_array($part->ctype_parameters) && array_key_exists('charset', $part->ctype_parameters)) {
+            } else if (property_exists($part, 'ctype_parameters') && is_array($part->ctype_parameters) && array_key_exists('charset', $part->ctype_parameters)) {
                 $part->body = iconv($part->ctype_parameters['charset'], 'UTF-8//TRANSLIT', base64_decode($part->body));
                 DebugEcho("convertef from: " . $part->ctype_parameters['charset']);
                 $part->ctype_parameters['charset'] = 'default'; //so we don't double decode
@@ -1443,6 +1559,17 @@ function tag_AllowCommentsOnPost(&$content) {
         }
     }
     return $comments_allowed;
+}
+
+function tag_Status(&$content, $currentstatus) {
+    $poststatus = $currentstatus;
+    if (preg_match("/status:\s*(draft|publish|pending|private)/i", $content, $matches)) {
+        DebugEcho("tag_Status: found status $matches[1]");
+        DebugDump($matches);
+        $content = preg_replace("/$matches[0]/i", "", $content);
+        $poststatus = $matches[1];
+    }
+    return $poststatus;
 }
 
 /**
@@ -1488,7 +1615,7 @@ function filter_Delay(&$content, $message_date = NULL, $offset = 0) {
 /**
  * This function takes the content of the message - looks for a subject at the begining surrounded by # and then removes that from the content
  */
-function tag_subject($content, $defaultTitle) {
+function tag_Subject($content, $defaultTitle) {
     DebugEcho("Looking for subject in email body");
     if (substr($content, 0, 1) != "#") {
         DebugEcho("No subject found, using default [1]");
@@ -1536,6 +1663,12 @@ function postie_media_handle_upload($part, $post_id, $poster, $post_data = array
         fclose($fp);
     } else {
         EchoInfo("could not write to temp file: '$tmpFile' ");
+    }
+
+    //special case to deal with older png implementations
+    if (strtolower($part->ctype_secondary == 'x-png')) {
+        DebugEcho("postie_media_handle_upload: x-png found, renamed to png");
+        $part->ctype_secondary = 'png';
     }
 
     $name = 'postie-media.' . $part->ctype_secondary;
@@ -1623,7 +1756,7 @@ function postie_media_handle_upload($part, $post_id, $poster, $post_data = array
     if (!is_wp_error($id)) {
         $amd = wp_generate_attachment_metadata($id, $file);
         DebugEcho("wp_generate_attachment_metadata");
-        DebugDump($amd);
+        //DebugDump($amd);
         wp_update_attachment_metadata($id, $amd);
         DebugEcho("wp_update_attachment_metadata complete");
     } else {
@@ -1646,9 +1779,6 @@ function postie_handle_upload(&$file, $overrides = false, $time = null) {
     // You may define your own function and pass the name in $overrides['upload_error_handler']
     $upload_error_handler = 'wp_handle_upload_error';
 
-    // You may define your own function and pass the name in $overrides['unique_filename_callback']
-    $unique_filename_callback = null;
-
     // $_POST['action'] must be set and its value must equal $overrides['action'] or this:
     $action = 'wp_handle_upload';
 
@@ -1662,56 +1792,44 @@ function postie_handle_upload(&$file, $overrides = false, $time = null) {
         __("Missing a temporary folder."),
         __("Failed to write file to disk."));
 
-    // All tests are on by default. Most can be turned off by $override[{test_name}] = false;
-    $test_form = true;
-    $test_size = true;
-
-    // If you override this, you must provide $ext and $type!!!!
-    $test_type = true;
-    $mimes = false;
-
     // Install user overrides. Did we mention that this voids your warranty?
     if (is_array($overrides))
         extract($overrides, EXTR_OVERWRITE);
-
-    // A correct form post will pass this test.
-    if ($test_form && (!isset($_POST['action']) || ($_POST['action'] != $action ) ))
-        return $upload_error_handler($file, __('Invalid form submission.'));
 
     // A successful upload will pass this test. It makes no sense to override this one.
     if ($file['error'] > 0)
         return $upload_error_handler($file, $upload_error_strings[$file['error']]);
 
     // A non-empty file will pass this test.
-    if ($test_size && !($file['size'] > 0 ))
+    if (!($file['size'] > 0 ))
         return $upload_error_handler($file, __('File is empty. Please upload something more substantial. This error could also be caused by uploads being disabled in your php.ini.'));
 
     // A properly uploaded file will pass this test. There should be no reason to override this one.
     if (!file_exists($file['tmp_name']))
         return $upload_error_handler($file, __('Specified file failed upload test.'));
     // A correct MIME type will pass this test. Override $mimes or use the upload_mimes filter.
-    if ($test_type) {
-        $wp_filetype = wp_check_filetype($file['name'], $mimes);
 
-        extract($wp_filetype);
+    $wp_filetype = wp_check_filetype($file['name']);
+    DebugEcho("postie_handle_upload: detected file type for " . $file['name'] . " is " . $wp_filetype['type']);
 
-        if ((!$type || !$ext ) && !current_user_can('unfiltered_upload'))
-            return $upload_error_handler($file, __('File type does not meet security guidelines. Try another.'));
+    extract($wp_filetype);
 
-        if (!$ext)
-            $ext = ltrim(strrchr($file['name'], '.'), '.');
+    if ((!$type || !$ext ) && !current_user_can('unfiltered_upload'))
+        return $upload_error_handler($file, __('File type does not meet security guidelines. Try another.'));
 
-        if (!$type)
-            $type = $file['type'];
-    }
+    if (!$ext)
+        $ext = ltrim(strrchr($file['name'], '.'), '.');
+
+    if (!$type)
+        $type = $file['type'];
 
     // A writable uploads dir will pass this test. Again, there's no point overriding this one.
     if (!( ( $uploads = wp_upload_dir($time) ) && false === $uploads['error'] ))
         return $upload_error_handler($file, $uploads['error']);
 
-    // fix filename (remove non-standard characters)
-    $file['name'] = preg_replace("/[^\x9\xA\xD\x20-\x7F]/", "", $file['name']);
-    $filename = wp_unique_filename($uploads['path'], $file['name'], $unique_filename_callback);
+    // fix filename (encode non-standard characters)
+    $file['name'] = filename_fix($file['name']);
+    $filename = wp_unique_filename($uploads['path'], $file['name']);
     DebugEcho("wp_unique_filename: $filename");
 
     // Move the file to the uploads dir
@@ -1735,6 +1853,10 @@ function postie_handle_upload(&$file, $overrides = false, $time = null) {
     $return = apply_filters('wp_handle_upload', array('file' => $new_file, 'url' => $url, 'type' => $type));
 
     return $return;
+}
+
+function filename_fix($filename) {
+    return str_replace('%', '', urlencode($filename));
 }
 
 /**
@@ -1787,7 +1909,7 @@ function filter_PreferedText($mimeDecodedEmail, $preferTextType) {
  * It accepts an object containing the entire message
  */
 function MailToRecipients(&$mail_content, $testEmail = false, $recipients = array(), $returnToSender, $reject = true) {
-    DebugEcho("send mail");
+    DebugEcho("MailToRecipients: send mail");
     if ($testEmail) {
         return false;
     }
@@ -1798,13 +1920,14 @@ function MailToRecipients(&$mail_content, $testEmail = false, $recipients = arra
     $blogurl = get_option("siteurl");
 
     if (count($recipients) == 0) {
-        DebugEcho("send mail: no recipients");
+        DebugEcho("MailToRecipients: no recipients");
         return false;
     }
 
     $from = trim($mail_content->headers["from"]);
     $subject = $mail_content->headers['subject'];
     if ($returnToSender) {
+        DebugEcho("MailToRecipients: return to sender $returnToSender");
         array_push($recipients, $from);
     }
 
@@ -1815,9 +1938,10 @@ function MailToRecipients(&$mail_content, $testEmail = false, $recipients = arra
             $headers .= "Cc: " . $recipient . "\r\n";
         }
     }
+    DebugEcho($headers);
     // Set email subject
     if ($reject) {
-        DebugEcho("send mail: sending reject mail");
+        DebugEcho("MailToRecipients: sending reject mail");
         $alert_subject = $blogname . ": Unauthorized Post Attempt from $from";
         if (is_array($mail_content->ctype_parameters) && array_key_exists('boundary', $mail_content->ctype_parameters) && $mail_content->ctype_parameters['boundary']) {
             $boundary = $mail_content->ctype_parameters["boundary"];
@@ -1857,8 +1981,8 @@ function MailToRecipients(&$mail_content, $testEmail = false, $recipients = arra
                 $mailtext .= $part->body;
         }
     } else {
-        DebugEcho("send mail: sending success mail");
         $alert_subject = "Successfully posted to $blogname";
+        DebugEcho("MailToRecipients: $alert_subject");
         $mailtext = "Your post '$subject' has been successfully published to $blogname <$blogurl>.\n";
     }
 
@@ -1920,8 +2044,10 @@ function RemoveExtraCharactersInEmailAddress($address) {
     $matches = array();
     if (preg_match('/^[^<>]+<([^<> ()]+)>$/', $address, $matches)) {
         $address = $matches[1];
+        DebugEcho("RemoveExtraCharactersInEmailAddress: $address (1)");
     } else if (preg_match('/<([^<> ()]+)>/', $address, $matches)) {
         $address = $matches[1];
+        DebugEcho("RemoveExtraCharactersInEmailAddress: $address (2)");
     }
 
     return $address;
@@ -2121,15 +2247,16 @@ function filter_ReplaceImagePlaceHolders(&$content, $attachments, $config) {
             $content = html_entity_decode($content, ENT_QUOTES);
         }
 
-        $startIndex = $config ['start_image_count_at_zero'] ? 0 : 1;
-        if (!empty($attachments) && $config ['auto_gallery']) {
+        $startIndex = $config['start_image_count_at_zero'] ? 0 : 1;
+        if (!empty($attachments) && $config['auto_gallery']) {
             $imageTemplate = '[gallery]';
-            if ($config ['images_append']) {
-                $content .= $imageTemplate;
+            if ($config['images_append']) {
+                $content .= "\n$imageTemplate";
+                DebugEcho("Auto gallery: append");
             } else {
                 $content = "$imageTemplate\n" . $content;
+                DebugEcho("Auto gallery: prepend");
             }
-            DebugEcho("Auto gallery");
             return;
         }
 
@@ -2178,6 +2305,8 @@ function filter_ReplaceImagePlaceHolders(&$content, $attachments, $config) {
                 /* if using the gallery shortcode, don't add pictures at all */
                 if (!preg_match("/\[gallery[^\[]*\]/", $content, $matches)) {
                     $pics .= $imageTemplate;
+                } else {
+                    DebugEcho("gallery detected, not inserting images");
                 }
             }
             $i++;
@@ -2201,7 +2330,7 @@ function GetSubject(&$mimeDecodedEmail, &$content, $config) {
     if (!array_key_exists('subject', $mimeDecodedEmail->headers) || empty($mimeDecodedEmail->headers['subject'])) {
         DebugEcho("No subject in email");
         if ($allow_subject_in_mail) {
-            list($subject, $content) = tag_subject($content, $default_title);
+            list($subject, $content) = tag_Subject($content, $default_title);
         } else {
             DebugEcho("Using default subject");
             $subject = $default_title;
@@ -2239,7 +2368,7 @@ function tag_Tags(&$content, $defaultTags) {
         if (!empty($matches[1])) {
             DebugEcho("Found tags: $matches[1]");
             $content = str_replace($matches[0], "", $content);
-            $post_tags = preg_split("/,\s*/", $matches[1]);
+            $post_tags = preg_split("/,\s*/", trim($matches[1]));
             //DebugDump($post_tags);
         }
     }
@@ -2261,7 +2390,7 @@ function tag_Excerpt(&$content, $filterNewLines, $convertNewLines) {
         DebugEcho("excerpt found: $post_excerpt");
         if ($filterNewLines) {
             DebugEcho("filtering newlines from excerpt");
-            filter_newlines($post_excerpt, $convertNewLines);
+            filter_Newlines($post_excerpt, $convertNewLines);
         }
     }
     return $post_excerpt;
@@ -2271,7 +2400,7 @@ function tag_Excerpt(&$content, $filterNewLines, $convertNewLines) {
  * This function determines the categories ids for the post
  * @return array
  */
-function tag_categories(&$subject, $defaultCategory, $category_match) {
+function tag_Categories(&$subject, $defaultCategory, $category_match) {
     $original_subject = $subject;
     $post_categories = array();
     $matchtypes = array();
@@ -2322,16 +2451,21 @@ function lookup_category($trial_category, $category_match) {
 
     $term = get_term_by('name', $trial_category, 'category');
     if ($term !== false) {
-        DebugDump($term);
+        DebugEcho("category: found by name $trial_category");
+        //DebugDump($term);
         //then category is a named and found 
         return $term->term_id;
     }
-    $term = get_term_by('id', $trial_category, 'category');
+
+    $term = get_term_by('id', intval($trial_category), 'category');
     if ($term !== false) {
+        DebugEcho("category: found by id $trial_category");
+        //DebugDump($term);
         //then cateogry was an ID and found 
         return $term->term_id;
     }
-    if (empty($found_category) && $category_match) {
+
+    if ($category_match) {
         DebugEcho("category wildcard lookup: $trial_category");
         $sql_sub_name = 'SELECT term_id FROM ' . $wpdb->terms . ' WHERE name LIKE \'' . addslashes($trial_category) . '%\' limit 1';
         $found_category = $wpdb->get_var($sql_sub_name);
@@ -2430,12 +2564,7 @@ function config_ResetToDefault() {
 function config_Update($data) {
     UpdatePostiePermissions($data["role_access"]);
     // We also update the cron settings
-    if ($data['interval'] != '') {
-        postie_decron();
-        if ($data['interval'] != 'manual') {
-            postie_cron($interval = $data['interval']);
-        }
-    }
+    postie_cron($data['interval']);
 }
 
 /**
@@ -2508,7 +2637,9 @@ function config_GetDefaults() {
         'video2types' => array('x-flv'),
         'video1templates' => $video1Templates,
         'video2templates' => $video2Templates,
-        'wrap_pre' => 'no'
+        'wrap_pre' => 'no',
+        'featured_image' => false,
+        'email_tls' => false
     );
 }
 
@@ -2798,16 +2929,23 @@ function isMarkdownInstalled() {
  * and ensures that arrayed items are stored as such
  */
 function config_ValidateSettings($in) {
-    //DebugDump($in);
+    //DebugEcho("config_ValidateSettings");
+
     $out = array();
 
-// use the default as a template: 
-// if a field is present in the defaults, we want to store it; otherwise we discard it
+    //DebugDump($in);
+    // use the default as a template: 
+    // if a field is present in the defaults, we want to store it; otherwise we discard it
     $allowed_keys = config_GetDefaults();
-    foreach ($allowed_keys as $key => $default)
-        $out[$key] = array_key_exists($key, $in) ? $in[$key] : $default;
+    foreach ($allowed_keys as $key => $default) {
+        if (is_array($in)) {
+            $out[$key] = array_key_exists($key, $in) ? $in[$key] : $default;
+        } else {
+            $out[$key] = $default;
+        }
+    }
 
-// some fields are always forced to lower case:
+    // some fields are always forced to lower case:
     $lowercase = array('authorized_addresses', 'smtp', 'supported_file_types', 'video1types', 'video2types', 'audiotypes');
     foreach ($lowercase as $field) {
         $out[$field] = ( is_array($out[$field]) ) ? array_map("strtolower", $out[$field]) : strtolower($out[$field]);
@@ -2896,8 +3034,6 @@ function DebugEmailOutput($email, $mimeDecodedEmail) {
             $file = fopen($fname . ".php ", "w");
             fwrite($file, serialize($email));
             fclose($file);
-        } else {
-            DebugEcho("The directory $dname does not exist, creating this optional directory will allow saving copies of emails for debugging purposes.");
         }
     }
 }

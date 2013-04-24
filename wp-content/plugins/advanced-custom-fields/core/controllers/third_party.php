@@ -1,20 +1,15 @@
 <?php 
 
 /*
-*  third_party
+*  acf_third_party
 *
-*  @description: 
-*  @since 3.5.1
-*  @created: 23/06/12
+*  @description: controller for add-ons sub menu page
+*  @since: 3.6
+*  @created: 25/01/13
 */
- 
-class acf_third_party 
-{
 
-	var $parent,
-		$data;
-	
-	
+class acf_third_party
+{
 	/*
 	*  __construct
 	*
@@ -23,24 +18,20 @@ class acf_third_party
 	*  @created: 23/06/12
 	*/
 	
-	function __construct($parent)
+	function __construct()
 	{
-		// vars
-		$this->parent = $parent;
-		$this->data['metaboxes'] = array();
-		
-		
 		// Tabify Edit Screen - http://wordpress.org/extend/plugins/tabify-edit-screen/
 		add_action('admin_head-settings_page_tabify-edit-screen', array($this,'admin_head_tabify'));
 		
 		
 		// Duplicate Post - http://wordpress.org/extend/plugins/duplicate-post/
-		add_action( 'dp_duplicate_page', array($this, 'dp_duplicate_page'), 11, 2);
+		add_action('dp_duplicate_page', array($this, 'dp_duplicate_page'), 11, 2);
 		
 		
 		// Post Type Switcher - http://wordpress.org/extend/plugins/post-type-switcher/
 		add_filter('pts_post_type_filter', array($this, 'pts_post_type_filter'));
 	}
+	
 	
 	
 	/*
@@ -121,7 +112,7 @@ class acf_third_party
 	function tabify_add_meta_boxes( $post_type )
 	{
 		// get acf's
-		$acfs = $this->parent->get_field_groups();
+		$acfs = apply_filters('acf/get_field_groups', array());
 		
 		if($acfs)
 		{
@@ -164,22 +155,25 @@ class acf_third_party
 		
 		// update keys
 		$metas = get_post_custom( $new_post_id );
-		
+
+
 		if( $metas )
 		{
 			foreach( $metas as $field_key => $field )
 			{
 				if( strpos($field_key, 'field_') !== false )
 				{
-					$field = maybe_unserialize($field[0]);
+					$field = $field[0];
+					$field = maybe_unserialize( $field );
+					$field = maybe_unserialize( $field ); // just to be sure!
 					
 					// delete old field
 					delete_post_meta($new_post_id, $field_key);
 
-					
+
 					// set new keys (recursive for sub fields)
-					$field = $this->create_new_field_keys( $field );
-					
+					$this->create_new_field_keys( $field );
+
 
 					// save it!
 					update_post_meta($new_post_id, $field['key'], $field);
@@ -202,33 +196,39 @@ class acf_third_party
 	*  @created: 9/10/12
 	*/
 	
-	function create_new_field_keys( $field )
+	function create_new_field_keys( &$field )
 	{
-		// get next id
-		$next_id = (int) get_option('acf_next_field_id', 1);
-		
-		
-		// update the acf_next_field_id
-		update_option('acf_next_field_id', ($next_id + 1) );
-		
-		
 		// update key
-		$field['key'] = 'field_' . $next_id;
+		$field['key'] = 'field_' . uniqid();
 		
 		
-		// update sub field's keys
-		if( isset( $field['sub_fields'] ) )
+		if( isset($field['sub_fields']) && is_array($field['sub_fields']) )
 		{
-			foreach( $field['sub_fields'] as $k => $v )
+			foreach( $field['sub_fields'] as $f )
 			{
-				$field['sub_fields'][ $k ] = $this->create_new_field_keys( $v );
+				$this->create_new_field_keys( $f );
 			}
 		}
-		
-		
-		return $field;
+		elseif( isset($field['layouts']) && is_array($field['layouts']) )
+		{
+			foreach( $field['layouts'] as $layout )
+			{
+				if( isset($layout['sub_fields']) && is_array($layout['sub_fields']) )
+				{
+					foreach( $layout['sub_fields'] as $f )
+					{
+						$this->create_new_field_keys( $f );
+					}
+				}
+				
+			}
+		}
 	}
-
+	
+	
+			
 }
+
+new acf_third_party();
 
 ?>

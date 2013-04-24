@@ -2,10 +2,6 @@
 
 class P2P_Connection_Type {
 
-	protected $directed_class = 'P2P_Directed_Connection_Type';
-
-	protected $arrow = '&rarr;';
-
 	public $side;
 
 	public $cardinality;
@@ -48,13 +44,6 @@ class P2P_Connection_Type {
 			return $value;
 
 		return $value[ $direction ];
-	}
-
-	function _directions_for_admin( $direction, $show_ui ) {
-		return array_intersect(
-			_p2p_expand_direction( $show_ui ),
-			_p2p_expand_direction( $direction )
-		);
 	}
 
 	private function set_self_connections( &$args ) {
@@ -128,12 +117,16 @@ class P2P_Connection_Type {
 			return;
 		}
 
-		// TODO: make find_direction() return the normalized item and pass that along
-		$directed = $this->find_direction( $args[0] );
-		if ( !$directed ) {
+		$r = $this->direction_from_item( $args[0] );
+		if ( !$r ) {
 			trigger_error( sprintf( "Can't determine direction for '%s' type.", $this->name ), E_USER_WARNING );
 			return false;
 		}
+
+		// replace the first argument with the normalized one, to avoid having to do it again
+		list( $direction, $args[0] ) = $r;
+
+		$directed = $this->set_direction( $direction );
 
 		return call_user_func_array( array( $directed, $method ), $args );
 	}
@@ -150,7 +143,7 @@ class P2P_Connection_Type {
 			return false;
 
 		if ( $instantiate ) {
-			$class = $this->directed_class;
+			$class = $this->strategy->get_directed_class();
 
 			return new $class( $this, $direction );
 		}
@@ -168,9 +161,6 @@ class P2P_Connection_Type {
 	 * @return bool|object|string False on failure, P2P_Directed_Connection_Type instance or direction on success.
 	 */
 	public function find_direction( $arg, $instantiate = true, $object_type = null ) {
-		if ( is_array( $arg ) )
-			$arg = reset( $arg );
-
 		if ( $object_type ) {
 			$direction = $this->direction_from_object_type( $object_type );
 			if ( !$direction )
@@ -180,26 +170,26 @@ class P2P_Connection_Type {
 				return $this->set_direction( $direction, $instantiate );
 		}
 
-		$direction = $this->direction_from_item( $arg );
+		$r = $this->direction_from_item( $arg );
+		if ( !$r )
+			return false;
 
-		if ( $direction )
-			return $this->set_direction( $direction, $instantiate );
+		list( $direction, $item ) = $r;
 
-		return false;
-	}
-
-	protected function choose_direction( $direction ) {
-		return $direction;
+		return $this->set_direction( $direction, $instantiate );
 	}
 
 	protected function direction_from_item( $arg ) {
+		if ( is_array( $arg ) )
+			$arg = reset( $arg );
+
 		foreach ( array( 'from', 'to' ) as $direction ) {
 			$item = $this->side[ $direction ]->item_recognize( $arg );
 
 			if ( !$item )
 				continue;
 
-			return $this->choose_direction( $direction );
+			return array( $this->strategy->choose_direction( $direction ), $item );
 		}
 
 		return false;
@@ -226,7 +216,7 @@ class P2P_Connection_Type {
 			if ( !$this->_type_check( $direction, $object_type, $post_types ) )
 				continue;
 
-			return $this->choose_direction( $direction );
+			return $this->strategy->choose_direction( $direction );
 		}
 
 		return false;
@@ -292,9 +282,13 @@ class P2P_Connection_Type {
 
 		// The direction needs to be based on the second parameter,
 		// so that it's consistent with $this->connect( $from, $to ) etc.
-		$directed = $this->find_direction( $to );
-		if ( !$directed )
+		$r = $this->direction_from_item( $to );
+		if ( !$r )
 			return false;
+
+		list( $direction, $to ) = $r;
+
+		$directed = $this->set_direction( $direction );
 
 		$key = $directed->get_orderby_key();
 		if ( !$key )
@@ -309,13 +303,63 @@ class P2P_Connection_Type {
 		$adjacent = $directed->get_connected( $to, array(
 			'connected_meta' => array(
 				array(
-					'key' => $directed->get_orderby_key(),
+					'key' => $key,
 					'value' => $order + $which
 				)
 			)
 		), 'abstract' );
 
-		return _p2p_first( $adjacent->items );
+		if ( empty( $adjacent->items ) )
+			return false;
+
+		$item = reset( $adjacent->items );
+
+		return $item->get_object();
+	}
+
+	/**
+	 * Get the previous, next and parent items, in an ordered connection type.
+	 *
+	 * @param mixed The current item
+	 *
+	 * @return bool|array False if the connections aren't sortable,
+	 *   associative array otherwise:
+	 * array(
+	 *   'parent' => bool|object
+	 *   'previous' => bool|object
+	 *   'next' => bool|object
+	 * )
+	 */
+	public function get_adjacent_items( $item ) {
+		$result = array(
+			'parent' => false,
+			'previous' => false,
+			'next' => false,
+		);
+
+		$r = $this->direction_from_item( $item );
+		if ( !$r )
+			return false;
+
+		list( $direction, $item ) = $r;
+
+		$connected_series = $this->set_direction( $direction )->get_connected( $item,
+			array(), 'abstract' )->items;
+
+		if ( empty( $connected_series ) )
+			return $r;
+
+		if ( count( $connected_series ) > 1 ) {
+			trigger_error( 'More than one connected parents found.', E_USER_WARNING );
+		}
+
+		$parent = $connected_series[0];
+
+		$result['parent'] = $parent->get_object();
+		$result['previous'] = $this->get_previous( $item->ID, $parent->ID );
+		$result['next'] = $this->get_next( $item, $parent );
+
+		return $result;
 	}
 
 	/**
@@ -385,7 +429,7 @@ class P2P_Connection_Type {
 			$desc[ $key ] = $this->side[ $key ]->get_desc();
 		}
 
-		$label = sprintf( '%s %s %s', $desc['from'], $this->arrow, $desc['to'] );
+		$label = sprintf( '%s %s %s', $desc['from'], $this->strategy->get_arrow(), $desc['to'] );
 
 		$title = $this->get_field( 'title', 'from' );
 

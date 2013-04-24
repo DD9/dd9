@@ -2,9 +2,8 @@
 Tags: contact, template
 Contributors: westi, ryanduff, firas
 Requires at least: 2.8
-Tested up to: 2.8
+Tested up to: 3.6
 Stable tag: 1.5.1.1
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=paypal%40ftwr%2eco%2euk&item_name=Peter%20Westwood%20WordPress%20Plugins&no_shipping=1&cn=Donation%20Notes&tax=0&currency_code=GBP&bn=PP%2dDonationsBF&charset=UTF%2d8
 
 == Description ==
 WP Contact Form is a drop in form for users to contact you. It can be
@@ -32,6 +31,10 @@ Not yet but an major update to the plugin is in development to add a shortcode a
 2. This shows the settings page for the plugin.
 
 == Changelog ==
+
+= 1.6 =
+* Rewrote a bunch of the code to be slightly more modern
+* Escaped all the things to fix self-xss issues
 
 = 1.5.1.1 =
 

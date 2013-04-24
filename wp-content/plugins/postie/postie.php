@@ -4,7 +4,7 @@
   Plugin Name: Postie
   Plugin URI: http://PostiePlugin.com/
   Description: Signifigantly upgrades the posting by mail features of Word Press (See <a href='options-general.php?page=postie/postie.php'>Settings and options</a>) to configure your e-mail settings. See the <a href='http://wordpress.org/extend/plugins/postie/other_notes'>Readme</a> for usage. Visit the <a href='http://wordpress.org/support/plugin/postie'>postie forum</a> for support.
-  Version: 1.4.36
+  Version: 1.5.3
   Author: Wayne Allen
   Author URI: http://allens-home.com/
   License: GPL2
@@ -27,11 +27,22 @@
  */
 
 /*
-  $Id: postie.php 677715 2013-03-07 22:06:16Z WayneAllen $
+  $Id: postie.php 697184 2013-04-14 05:43:22Z WayneAllen $
  */
 
 define("POSTIE_ROOT", dirname(__FILE__));
 define("POSTIE_URL", WP_PLUGIN_URL . '/' . basename(dirname(__FILE__)));
+
+//register the hooks early in the page in case some method needs the result of one of them (i.e. cron_schedules)
+add_action('init', 'disable_kses_content', 20);
+add_action('check_postie_hook', 'check_postie');
+
+add_filter('whitelist_options', 'postie_whitelist');
+add_filter('cron_schedules', 'postie_more_reccurences');
+
+register_activation_hook(__FILE__, 'activate_postie');
+register_activation_hook(__FILE__, 'postie_cron');
+register_deactivation_hook(__FILE__, 'postie_decron');
 
 function postie_loadjs_add_page() {
     $postiepage = add_options_page('Postie', 'Postie', 'manage_options', POSTIE_ROOT . '/postie.php', 'postie_loadjs_options_page');
@@ -109,8 +120,6 @@ function activate_postie() {
     $init = true;
 }
 
-register_activation_hook(__FILE__, 'activate_postie');
-
 /**
  * set up actions to show relevant warnings, 
  * if mail server is not set, or if IMAP extension is not available
@@ -145,6 +154,16 @@ function postie_warnings() {
 
         add_action('admin_notices', 'postie_imap_warning');
     }
+    if ($p == 'pop3' && $config['email_tls']) {
+
+        function postie_tls_warning() {
+            echo "<div id='postie-lst-warning' class='error'><p><strong>";
+            echo __('Warning: The POP3 connector does not support TLS.', 'postie');
+            echo "</strong></p></div>";
+        }
+
+        add_action('admin_notices', 'postie_tls_warning');
+    }
 
     if (!function_exists('mb_detect_encoding')) {
 
@@ -156,13 +175,26 @@ function postie_warnings() {
 
         add_action('admin_notices', 'postie_mbstring_warning');
     }
+
+    if (!function_exists('get_user_by')) {
+        include ABSPATH . 'wp-includes/pluggable.php';
+    }
+    $adminuser = get_user_by('login', $config['admin_username']);
+    if ($adminuser === false) {
+
+        function postie_adminuser_warning() {
+            echo "<div id='postie-mbstring-warning' class='error'><p><strong>";
+            echo __('Warning: the Admin username is not a valid WordPress login. Postie may reject emails if this is not corrected.', 'postie');
+            echo "</strong></p></div>";
+        }
+
+        add_action('admin_notices', 'postie_adminuser_warning');
+    }
 }
 
 function disable_kses_content() {
     remove_filter('content_save_pre', 'wp_filter_post_kses');
 }
-
-add_action('init', 'disable_kses_content', 20);
 
 function postie_whitelist($options) {
     $added = array('postie-settings' => array('postie-settings'));
@@ -170,9 +202,9 @@ function postie_whitelist($options) {
     return $options;
 }
 
-add_filter('whitelist_options', 'postie_whitelist');
-
+//don't use DebugEcho or EchoInfo here as it is not defined when called as an action
 function check_postie() {
+    error_log("check_postie");
     $host = get_option('siteurl');
     preg_match("/https?:\/\/(.[^\/]*)(.*)/i", $host, $matches);
     $host = $matches[1];
@@ -194,44 +226,60 @@ function check_postie() {
         }
         fclose($fp);
     } else {
-        EchoInfo("Cannot connect to server on port $port. Please check to make sure that this port is open on your webhost. Additional information: $errno: $errstr");
+        error_log("Cannot connect to server on port $port. Please check to make sure that this port is open on your webhost. Additional information: $errno: $errstr");
     }
 }
 
 function postie_cron($interval = false) {
+    //Do not echo output in filters, it seems to break some installs
+    //error_log("postie_cron: setting up cron task: $interval");
+    //$schedules = wp_get_schedules();
+    //error_log("postie_cron\n" . print_r($schedules, true));
+
     if (!$interval) {
         $config = config_Read();
         $interval = $config['interval'];
+        //error_log("postie_cron: setting up cron task from config: $interval");
     }
-    if (!$interval || $interval == '')
+    if (!$interval || $interval == '') {
         $interval = 'hourly';
+        //error_log("Postie: setting up cron task: defaulting to hourly");
+    }
     if ($interval == 'manual') {
-        wp_clear_scheduled_hook('check_postie_hook');
+        postie_decron();
+        //error_log("postie_cron: clearing cron (manual)");
     } else {
-        if (false === wp_schedule_event(time(), $interval, 'check_postie_hook')) {
-            //Do not echo output in filters, it seems to break some installs
-            error_log("Postie: Failed to set up cron task.");
+        if ($interval != wp_get_schedule('check_postie_hook')) {
+            postie_decron(); //remove existing
+            //try to create the new schedule with the first run in 5 minutes
+            if (false === wp_schedule_event(time() + 5 * 60, $interval, 'check_postie_hook')) {
+                //error_log("postie_cron: Failed to set up cron task: $interval");
+            } else {
+                //error_log("postie_cron: Set up cron task: $interval");
+            }
+        } else {
+            //error_log("postie_cron: OK: $interval");
+            //don't need to do anything, cron already scheduled
         }
     }
 }
 
 function postie_decron() {
+    //error_log("postie_decron: clearing cron");
     wp_clear_scheduled_hook('check_postie_hook');
 }
 
 /* here we add some more cron options for how often to check for e-mail */
 
 function postie_more_reccurences($schedules) {
+    //Do not echo output in filters, it seems to break some installs
+    //error_log("postie_more_reccurences: setting cron schedules");
     $schedules['weekly'] = array('interval' => (60 * 60 * 24 * 7), 'display' => __('Once Weekly'));
-    $schedules['twiceperhour'] = array('interval' => 60 * 30, 'display' => __('Twice per hour '));
+    $schedules['twiceperhour'] = array('interval' => 60 * 30, 'display' => __('Twice per hour'));
     $schedules['tenminutes'] = array('interval' => 60 * 10, 'display' => __('Every 10 minutes'));
     $schedules['fiveminutes'] = array('interval' => 60 * 5, 'display' => __('Every 5 minutes'));
 
     return $schedules;
 }
 
-add_filter('cron_schedules', 'postie_more_reccurences');
-register_activation_hook(__FILE__, 'postie_cron');
-register_deactivation_hook(__FILE__, 'postie_decron');
-add_action('check_postie_hook', 'check_postie');
 ?>

@@ -29,13 +29,13 @@ extract($config);
 if (!isset($maxemails))
     $maxemails = 0;
 
-$emails = FetchMail($mail_server, $mail_server_port, $mail_userid, $mail_password, $input_protocol, $time_offset, $test_email, $delete_mail_after_processing, $maxemails);
+$emails = FetchMail($mail_server, $mail_server_port, $mail_userid, $mail_password, $input_protocol, $time_offset, $test_email, $delete_mail_after_processing, $maxemails, $email_tls);
 $message = 'Done.';
 
 EchoInfo(sprintf(__("There are %d messages to process", "postie"), count($emails)));
 
 if (function_exists('memory_get_usage'))
-    EchoInfo(__("memory at start of e-mail processing:") . memory_get_usage());
+    DebugEcho(__("memory at start of e-mail processing:") . memory_get_usage());
 
 DebugEcho("Error log: " . ini_get('error_log'));
 DebugDump($config);
@@ -69,6 +69,6 @@ foreach ($emails as $email) {
 }
 
 if (function_exists('memory_get_usage'))
-    EchoInfo("memory at end of e-mail processing:" . memory_get_usage());
+    DebugEcho("memory at end of e-mail processing:" . memory_get_usage());
 
 ?>

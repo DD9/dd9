@@ -16,23 +16,25 @@ if (!current_user_can('manage_options')) {
     exit();
 }
 DebugEcho("Error log: " . ini_get('error_log'));
-$images = array("Test.png", "Test.jpg", "Test.gif");
 ?>
 <div class="wrap"> 
     <h1>Postie Configuration Test</h1>
     <?php
     if (isMarkdownInstalled()) {
-        ?>
-        <h1>Warning!</h1>
-        <p>You currently have the Markdown plugin installed. It will cause problems if you send in HTML
-            email. Please turn it off if you intend to send email using HTML</p>");
-        <?php
+        EchoInfo("You currently have the Markdown plugin installed. It will cause problems if you send in HTML email. Please turn it off if you intend to send email using HTML.");
     }
 
     if (!isPostieInCorrectDirectory()) {
         EchoInfo("Warning! Postie expects to be in its own directory named postie.");
     } else {
         EchoInfo("Postie is in " . dirname(__FILE__));
+    }
+    if (defined('ALTERNATE_WP_CRON') && ALTERNATE_WP_CRON) {
+        EchoInfo("Alternate cron is enabled");
+    }
+
+    if (defined('DISABLE_WP_CRON') && DISABLE_WP_CRON) {
+        EchoInfo("WordPress cron is disabled. Postie will not run unless you have an external cron set up.");
     }
     ?>
 
@@ -44,11 +46,11 @@ $images = array("Test.png", "Test.jpg", "Test.gif");
     } else {
         EchoInfo("Warning! Postie requires that iconv be enabled.");
     }
-    
+
     if (function_exists('imap_mime_header_decode')) {
         EchoInfo("imap: installed");
     } else {
-        EchoInfo("Warning! Postie requires that imap be enabled.");
+        EchoInfo("Warning! Postie requires that imap be enabled if you are using IMAP, IMAP-SSL or POP3-SSL.");
     }
 
     if (HasMbStringInstalled()) {
@@ -75,7 +77,7 @@ $images = array("Test.png", "Test.jpg", "Test.gif");
     } else {
         DebugEcho("checking");
     }
-    
+
     switch (strtolower($config["input_protocol"])) {
         case 'imap':
         case 'imap-ssl':
@@ -85,6 +87,9 @@ $images = array("Test.png", "Test.jpg", "Test.gif");
             } else {
                 require_once("postieIMAP.php");
                 $mail_server = &PostieIMAP::Factory($config["input_protocol"]);
+                if ($email_tls){
+                    $mail_server->TLSOn();
+                }
                 if (!$mail_server->connect($config["mail_server"], $config["mail_server_port"], $config["mail_userid"], $config["mail_password"])) {
                     EchoInfo("Unable to connect. The server said:");
                     EchoInfo($mail_server->error());
@@ -97,12 +102,28 @@ $images = array("Test.png", "Test.jpg", "Test.gif");
         case 'pop3':
         default:
             require_once(ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'class-pop3.php');
-            $pop3 = &new POP3();
+            $pop3 = new POP3();
+            if (defined('POSTIE_DEBUG')) {
+                $pop3->DEBUG = POSTIE_DEBUG;
+            }
             if (!$pop3->connect($config["mail_server"], $config["mail_server_port"])) {
-                EchoInfo("Unable to connect. The server said:");
-                EchoInfo($pop3->ERROR);
+                EchoInfo("Unable to connect. The server said:" . $pop3->ERROR);
             } else {
                 EchoInfo("Sucessful " . strtoupper($config['input_protocol']) . " connection on port {$config["mail_server_port"]}");
+                $msgs = $pop3->login($config["mail_userid"], $config["mail_password"]);
+                if ($msgs === false) {
+                    //workaround for bug reported here Apr 12, 2013
+                    //https://sourceforge.net/tracker/?func=detail&atid=100311&aid=3610701&group_id=311
+                    //originally repoted here:
+                    //https://core.trac.wordpress.org/ticket/10587
+                    if (empty($pop3->ERROR))
+                        EchoInfo("No waiting messages");
+                    else
+                        EchoInfo("Unable to login. The server said:" . $pop3->ERROR);
+                } else {
+                    EchoInfo("# of waiting messages: $msgs");
+                }
+                $pop3->quit();
             }
             break;
     }

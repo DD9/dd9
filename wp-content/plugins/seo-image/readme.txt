@@ -23,6 +23,9 @@ If you like what I do in WordPress, you will also like [ManageWP](http://managew
 
 == Changelog ==
 
+= 2.7.5 =
+* XSS and CSRF fixes
+
 = 2.7.4 =
 * WordPress 3.5.1 Compatibility
 

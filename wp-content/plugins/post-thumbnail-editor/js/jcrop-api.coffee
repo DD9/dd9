@@ -6,6 +6,9 @@ define [
 ], ($, settings) ->
    jcrop = null
    crop_options =
+      # TODO
+      # Make the bgColor an option (dropdown, black or transparent)
+      bgColor: 'transparent'
       onRelease: ->
          {x, y, w, h, x2, y2} = this.tellSelect()
          if x isnt 0 or
@@ -19,15 +22,10 @@ define [
 
          return
       trueSize: [
-         settings.getWindowVar('post_width')
-         settings.getWindowVar('post_height')
+         settings.width
+         settings.height
       ]
 
-   $("#pte-preview").Jcrop crop_options, ->
-      jcrop = this
-      jcrop?.release()
-      return
-   # Block until jcrop has been loaded
-   while jcrop is null
-      noop = null
+   jcrop = $.Jcrop "#pte-preview", crop_options
+   jcrop.release()
    return jcrop

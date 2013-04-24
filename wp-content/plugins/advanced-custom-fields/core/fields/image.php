@@ -1,142 +1,53 @@
 <?php
 
-class acf_Image extends acf_Field
+class acf_field_image extends acf_field
 {
 	
-	/*--------------------------------------------------------------------------------------
+	/*
+	*  __construct
 	*
-	*	Constructor
+	*  Set name / label needed for actions / filters
 	*
-	*	@author Elliot Condon
-	*	@since 1.0.0
-	*	@updated 2.2.0
-	* 
-	*-------------------------------------------------------------------------------------*/
+	*  @since	3.6
+	*  @date	23/01/13
+	*/
 	
-	function __construct($parent)
+	function __construct()
 	{
-    	parent::__construct($parent);
+		// vars
+		$this->name = 'image';
+		$this->label = __("Image",'acf');
+		$this->category = __("Content",'acf');
+		
+		
+		// do not delete!
+    	parent::__construct();
     	
-    	$this->name = 'image';
-		$this->title = __('Image','acf');
-		
+    	
+    	// extra
+		add_filter('get_media_item_args', array($this, 'get_media_item_args'));
+		add_action('acf_head-update_attachment-' . $this->name, array($this, 'acf_head_update_attachment'));
 		add_action('admin_head-media-upload-popup', array($this, 'popup_head'));
-		add_filter('get_media_item_args', array($this, 'allow_img_insertion'));
-		add_action('wp_ajax_acf_get_preview_image', array($this, 'acf_get_preview_image'));
-		add_action('acf_head-update_attachment-image', array($this, 'acf_head_update_attachment'));
-   	}
-   	
-   	
-   	/*
-   	*  acf_head_update_attachment
-   	*
-   	*  @description: 
-   	*  @since: 3.2.7
-   	*  @created: 4/07/12
-   	*/
-   	
-   	function acf_head_update_attachment()
-	{
-		?>
-<script type="text/javascript">
-(function($){
-	
-	// vars
-	var div = self.parent.acf_edit_attachment;
-	
-	
-	// add message
-	self.parent.acf.add_message("<?php _e("Image Updated.",'acf'); ?>", div);
-	
-
-})(jQuery);
-</script>
-		<?php
-	}
-	
-   	/*--------------------------------------------------------------------------------------
-	*
-	*	acf_get_preview_image
-	*
-	*	@description 		Returns a json array of preview sized urls
-	*	@author 			Elliot Condon
-	*	@since 				3.1.7
-	* 
-	*-------------------------------------------------------------------------------------*/
-	
-   	function acf_get_preview_image()
-   	{
-   		$options = array(
-   			'id' => false,
-   			'preview_size' => 'thumbnail'
-   		);
-   		$options = array_merge($options, $_GET);
-   		
-   		
-   		
-   		// vars
-		$return = array();
 		
-		
-		// validate
-		if( ! $options['id'] )
-		{
-			die( 0 );
-		}
-		
-		
-		// convert id_string into an array
-		$ids = explode(',' , $options['id']);
-		if( ! is_array($ids) )
-		{
-			$ids = array( $options['id'] );
-		}
-		
-		
-		// find image preview url for each image
-		foreach( $ids as $k => $v )
-		{
-			$url = wp_get_attachment_image_src( $v, $options['preview_size'] );
-			$return[] = array(
-				'id' => $v,
-				'url' => $url[0],
-			);
-		}
-   		
-
-		// return json
-		echo json_encode( $return );
-		die();
-   	}
-   	
-   	
-   	/*--------------------------------------------------------------------------------------
-	*
-	*	admin_print_scripts / admin_print_styles
-	*
-	*	@author Elliot Condon
-	*	@since 3.0.1
-	* 
-	*-------------------------------------------------------------------------------------*/
-	
-	function allow_img_insertion($vars)
-	{
-	    $vars['send'] = true;
-	    return($vars);
+		add_action('wp_ajax_acf/fields/image/get_images', array($this, 'ajax_get_images'), 10, 1);
+		add_action('wp_ajax_nopriv_acf/fields/image/get_images', array($this, 'ajax_get_images'), 10, 1);
+		add_action('wp_prepare_attachment_for_js', array($this, 'wp_prepare_attachment_for_js'), 10, 3);
 	}
 	
 	
-	/*--------------------------------------------------------------------------------------
+	/*
+	*  create_field()
 	*
-	*	create_field
+	*  Create the HTML interface for your field
 	*
-	*	@author Elliot Condon
-	*	@since 2.0.5
-	*	@updated 2.2.0
-	* 
-	*-------------------------------------------------------------------------------------*/
+	*  @param	$field - an array holding all the field's data
+	*
+	*  @type	action
+	*  @since	3.6
+	*  @date	23/01/13
+	*/
 	
-	function create_field($field)
+	function create_field( $field )
 	{
 		// vars
 		$class = "";
@@ -157,7 +68,7 @@ class acf_Image extends acf_Field
 		
 		?>
 <div class="acf-image-uploader clearfix <?php echo $class; ?>" data-preview_size="<?php echo $preview_size; ?>">
-	<input class="value" type="hidden" name="<?php echo $field['name']; ?>" value="<?php echo $field['value']; ?>" />
+	<input class="acf-image-value" type="hidden" name="<?php echo $field['name']; ?>" value="<?php echo $field['value']; ?>" />
 	<div class="has-image">
 		<div class="hover">
 			<ul class="bl">
@@ -175,25 +86,29 @@ class acf_Image extends acf_Field
 	}
 	
 	
-	/*--------------------------------------------------------------------------------------
+	/*
+	*  create_options()
 	*
-	*	create_options
+	*  Create extra options for your field. This is rendered when editing a field.
+	*  The value of $field['name'] can be used (like bellow) to save extra data to the $field
 	*
-	*	@author Elliot Condon
-	*	@since 2.0.6
-	*	@updated 2.2.0
-	* 
-	*-------------------------------------------------------------------------------------*/
+	*  @type	action
+	*  @since	3.6
+	*  @date	23/01/13
+	*
+	*  @param	$field	- an array holding all the field's data
+	*/
 	
-	function create_options($key, $field)
-	{	
+	function create_options( $field )
+	{
 		// vars
 		$defaults = array(
-			'save_format'	=>	'object',
+			'save_format'	=>	'id',
 			'preview_size'	=>	'thumbnail',
 		);
 		
 		$field = array_merge($defaults, $field);
+		$key = $field['name'];
 		
 		?>
 		<tr class="field_option field_option_<?php echo $this->name; ?>">
@@ -201,13 +116,13 @@ class acf_Image extends acf_Field
 				<label><?php _e("Return Value",'acf'); ?></label>
 			</td>
 			<td>
-				<?php 
-				$this->parent->create_field(array(
-					'type'	=>	'radio',
-					'name'	=>	'fields['.$key.'][save_format]',
-					'value'	=>	$field['save_format'],
+				<?php
+				do_action('acf/create_field', array(
+					'type'		=>	'radio',
+					'name'		=>	'fields['.$key.'][save_format]',
+					'value'		=>	$field['save_format'],
 					'layout'	=>	'horizontal',
-					'choices' => array(
+					'choices'	=> array(
 						'object'	=>	__("Image Object",'acf'),
 						'url'		=>	__("Image URL",'acf'),
 						'id'		=>	__("Image ID",'acf')
@@ -223,24 +138,210 @@ class acf_Image extends acf_Field
 			<td>
 				<?php
 				
-				$image_sizes = $this->parent->get_all_image_sizes();
-				
-				$this->parent->create_field(array(
-					'type'	=>	'radio',
-					'name'	=>	'fields['.$key.'][preview_size]',
-					'value'	=>	$field['preview_size'],
+				do_action('acf/create_field', array(
+					'type'		=>	'radio',
+					'name'		=>	'fields['.$key.'][preview_size]',
+					'value'		=>	$field['preview_size'],
 					'layout'	=>	'horizontal',
-					'choices' => $image_sizes
+					'choices' 	=>	apply_filters('acf/get_image_sizes', array())
 				));
-				
+
 				?>
 			</td>
 		</tr>
 		<?php
+		
 	}
-
+	
 	
 	/*
+	*  format_value_for_api()
+	*
+	*  This filter is appied to the $value after it is loaded from the db and before it is passed back to the api functions such as the_field
+	*
+	*  @type	filter
+	*  @since	3.6
+	*  @date	23/01/13
+	*
+	*  @param	$value	- the value which was loaded from the database
+	*  @param	$post_id - the $post_id from which the value was loaded
+	*  @param	$field	- the field array holding all the field options
+	*
+	*  @return	$value	- the modified value
+	*/
+	
+	function format_value_for_api( $value, $post_id, $field )
+	{
+		// vars
+		$defaults = array(
+			'save_format'	=>	'url',
+		);
+		
+		$field = array_merge($defaults, $field);
+		
+		
+		// validate
+		if( !$value )
+		{
+			return false;
+		}
+		
+		
+		// format
+		if( $field['save_format'] == 'url' )
+		{
+			$value = wp_get_attachment_url( $value );
+		}
+		elseif( $field['save_format'] == 'object' )
+		{
+			$attachment = get_post( $value );
+			
+			
+			// validate
+			if( !$attachment )
+			{
+				return false;	
+			}
+			
+			
+			// create array to hold value data
+			$src = wp_get_attachment_image_src( $attachment->ID, 'full' );
+			
+			$value = array(
+				'id' => $attachment->ID,
+				'alt' => get_post_meta($attachment->ID, '_wp_attachment_image_alt', true),
+				'title' => $attachment->post_title,
+				'caption' => $attachment->post_excerpt,
+				'description' => $attachment->post_content,
+				'url' => $src[0],
+				'width' => $src[1],
+				'height' => $src[2],
+				'sizes' => array(),
+			);
+			
+			
+			// find all image sizes
+			$image_sizes = get_intermediate_image_sizes();
+			
+			if( $image_sizes )
+			{
+				foreach( $image_sizes as $image_size )
+				{
+					// find src
+					$src = wp_get_attachment_image_src( $attachment->ID, $image_size );
+					
+					// add src
+					$value[ 'sizes' ][ $image_size ] = $src[0];
+					$value[ 'sizes' ][ $image_size . '-width' ] = $src[1];
+					$value[ 'sizes' ][ $image_size . '-height' ] = $src[2];
+				}
+				// foreach( $image_sizes as $image_size )
+			}
+			// if( $image_sizes )
+			
+		}
+		
+		return $value;
+		
+	}
+	
+	
+	/*
+	*  get_media_item_args
+	*
+	*  @description: 
+	*  @since: 3.6
+	*  @created: 27/01/13
+	*/
+	
+	function get_media_item_args( $vars )
+	{
+	    $vars['send'] = true;
+	    return($vars);
+	}
+	
+	
+	/*
+   	*  acf_head_update_attachment
+   	*
+   	*  @description: 
+   	*  @since: 3.2.7
+   	*  @created: 4/07/12
+   	*/
+   	
+   	function acf_head_update_attachment()
+	{
+		?>
+<script type="text/javascript">
+(function($){
+	
+	// vars
+	var div = self.parent.acf.media.div;
+	
+	
+	// add message
+	self.parent.acf.helpers.add_message("<?php _e("Image Updated.",'acf'); ?>", div);
+	
+
+})(jQuery);
+</script>
+		<?php
+	}
+	
+	
+	/*
+   	*  ajax_get_images
+   	*
+   	*  @description: 
+   	*  @since: 3.5.7
+   	*  @created: 13/01/13
+   	*/
+	
+   	function ajax_get_images()
+   	{
+   		// vars
+		$options = array(
+			'nonce' => '',
+			'images' => array(),
+			'preview_size' => 'thumbnail'
+		);
+		$return = array();
+		
+		
+		// load post options
+		$options = array_merge($options, $_POST);
+		
+		
+		// verify nonce
+		if( ! wp_verify_nonce($options['nonce'], 'acf_nonce') )
+		{
+			die(0);
+		}
+		
+		
+		if( $options['images'] )
+		{
+			foreach( $options['images'] as $id )
+			{
+				$src = wp_get_attachment_image_src( $id, $options['preview_size'] );
+				
+				
+				$return[] = array(
+					'id' => $id,
+					'src' => $src[0],
+				);
+			}
+		}
+		
+		
+		// return json
+		echo json_encode( $return );
+		die;
+		
+   	}
+   	
+   	
+   	/*
 	*  popup_head
 	*
 	*  @description: css + js for thickbox
@@ -346,7 +447,7 @@ class acf_Image extends acf_Field
 </style>
 <script type="text/javascript">
 (function($){	
-		
+	
 	/*
 	*  Select Image
 	*
@@ -368,9 +469,10 @@ class acf_Image extends acf_Field
 		}
 		
 		
-		var data = {
-			action: 'acf_get_preview_image',
-			id: id,
+		var ajax_data = {
+			action : 'acf/fields/image/get_images',
+			nonce : self.parent.acf.nonce,
+			images : [ id ],
 			preview_size : "<?php echo $options['acf_preview_size']; ?>"
 		};
 	
@@ -378,45 +480,32 @@ class acf_Image extends acf_Field
 		// ajax
 		$.ajax({
 			url: ajaxurl,
-			data : data,
+			type: 'post',
+			data : ajax_data,
 			cache: false,
 			dataType: "json",
-			success: function( json ) {
-		    	
+			success: function( json ) {	    	
 
 				// validate
-				if(!json)
+				if( !json )
 				{
 					return false;
 				}
 				
 				
-				// get item
-				var item = json[0],
-					div = self.parent.acf_div;
+				// add file
+				self.parent.acf.fields.image.add( json[0] );
 				
-				
-				// update acf_div
-				div.find('input.value').val( item.id ).trigger('change');
-	 			div.find('img').attr( 'src', item.url );
-	 			div.addClass('active');
-	 	
-	 	
-	 			// validation
-	 			div.closest('.field').removeClass('error');
-	 			
-	 			
-	 			// reset acf_div and return false
-	 			self.parent.acf_div = null;
 	 			self.parent.tb_remove();
 	 	
 	 	
 			}
 		});
 		
+ 						
 		return false;
-		
 	});
+	
 	
 	
 	/*
@@ -437,68 +526,92 @@ class acf_Image extends acf_Field
 			return false; 
 		} 
 		
-		
-		// generate id's
-		var attachment_ids = [];
-		$('#media-items .media-item .acf-checkbox:checked').each(function(){
-			attachment_ids.push( $(this).val() );
-		});
-		
-		
-		// creae json data
-		var data = {
-			action: 'acf_get_preview_image',
-			id: attachment_ids.join(','),
+		 
+		var ajax_data = {
+			action : 'acf/fields/image/get_images',
+			nonce : self.parent.acf.nonce,
+			images : [],
 			preview_size : "<?php echo $options['acf_preview_size']; ?>"
 		};
 		
 		
-		// since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
-		$.getJSON(ajaxurl, data, function( json ) {
+		// add to id array
+		$('#media-items .media-item .acf-checkbox:checked').each(function(){
 			
-			// validate
-			if(!json)
-			{
-				return false;
-			}
+			ajax_data.images.push( $(this).val() );
 			
-			$.each(json, function(i ,item){
-			
-				// update acf_div
-				self.parent.acf_div.find('input.value').val( item.id ).trigger('change'); 
-	 			self.parent.acf_div.find('img').attr('src', item.url ); 
-	 			self.parent.acf_div.addClass('active'); 
-	 	 
-	 	 
-	 			// validation 
-	 			self.parent.acf_div.closest('.field').removeClass('error'); 
-	
-	 			 
-	 			if((i+1) < total) 
-	 			{ 
-	 				// add row 
-	 				self.parent.acf_div.closest('.repeater').find('.add-row-end').trigger('click'); 
-	 			 
-	 				// set acf_div to new row image 
-	 				self.parent.acf_div = self.parent.acf_div.closest('.repeater').find('> table > tbody > tr.row:last .acf-image-uploader'); 
-	 			} 
-	 			else 
-	 			{ 
-	 				// reset acf_div and return false 
-					self.parent.acf_div = null; 
-					self.parent.tb_remove(); 
-	 			} 
-				
-    		});
-
-			
-		
 		});
 		
-		return false;
+		
+		// ajax
+		$.ajax({
+			url: ajaxurl,
+			type: 'post',
+			data : ajax_data,
+			cache: false,
+			dataType: "json",
+			success: function( json ) {
+			
+				// validate
+				if( !json )
+				{
+					return false;
+				}
+				
+				
+				
+				var selection = json,
+		    		i = 0;
+		    		
+		    	
+		    	$.each( json, function( k, image ){
+
+			    	// counter
+			    	i++;
+			    	
+			    	
+			    	// vars
+			    	var div = self.parent.acf.media.div;
+			    	
+			    	
+			    	// add image to field
+			        self.parent.acf.fields.image.add( image );
+			        
+			        
+			        // select / add another file field?
+			        if( i < selection.length )
+					{
+						var tr = div.closest('tr'),
+							repeater = tr.closest('.repeater');
+						
+						
+						if( tr.next('.row').exists() )
+						{
+							self.parent.acf.media.div = tr.next('.row').find('.acf-image-uploader');
+						}
+						else
+						{
+							// add row 
+			 				repeater.find('.add-row-end').trigger('click'); 
+			 			 
+			 				// set div to new row file 
+			 				self.parent.acf.media.div = repeater.find('> table > tbody > tr.row:last .acf-image-uploader');
+						}
+					}
+					
+			    });
+				
+				
+	 			self.parent.tb_remove();
+	 	
+			}
+		});
+ 		
+ 		
+		return false; 
 		 
 	}); 
-	
+		
 	
 	/*
 	*  Edit Attachment Toggle
@@ -545,7 +658,7 @@ class acf_Image extends acf_Field
 	function add_buttons()
 	{
 		// vars
-		var is_sub_field = (self.parent.acf_div && self.parent.acf_div.closest('.repeater').length > 0) ? true : false;
+		var is_sub_field = (self.parent.acf.media.div.closest('.repeater').length > 0) ? true : false;
 		
 		
 		// add submit after media items (on for sub fields)
@@ -642,82 +755,85 @@ class acf_Image extends acf_Field
 
 	}
 	
-
-	/*--------------------------------------------------------------------------------------
-	*
-	*	get_value_for_api
-	*
-	*	@author Elliot Condon
-	*	@since 3.0.0
-	* 
-	*-------------------------------------------------------------------------------------*/
 	
-	function get_value_for_api($post_id, $field)
+	/*
+	*  image_size_names_choose
+	*
+	*  @description: 
+	*  @since: 3.5.7
+	*  @created: 13/01/13
+	*/
+	
+	function image_size_names_choose( $sizes )
 	{
-		// vars
-		$format = isset($field['save_format']) ? $field['save_format'] : 'url';
-		$value = parent::get_value($post_id, $field);
-		
-		
-		// validate
-		if( !$value )
-		{
-			return false;
-		}
-		
-		
-		// format
-		if($format == 'url')
-		{
-			$value = wp_get_attachment_url($value);
-		}
-		elseif($format == 'object')
-		{
-			$attachment = get_post( $value );
+		global $_wp_additional_image_sizes;
 			
-			
-			// validate
-			if( !$attachment )
+		if( $_wp_additional_image_sizes )
+		{
+			foreach( $_wp_additional_image_sizes as $k => $v )
 			{
-				return false;	
+				$title = $k;
+				$title = str_replace('-', ' ', $title);
+				$title = str_replace('_', ' ', $title);
+				$title = ucwords( $title );
+				
+				$sizes[ $k ] = $title;
 			}
-			
-			
-			// create array to hold value data
-			$value = array(
-				'id' => $attachment->ID,
-				'alt' => get_post_meta($attachment->ID, '_wp_attachment_image_alt', true),
-				'title' => $attachment->post_title,
-				'caption' => $attachment->post_excerpt,
-				'description' => $attachment->post_content,
-				'url' => wp_get_attachment_url( $attachment->ID ),
-				'sizes' => array(),
-			);
-			
-			// find all image sizes
-			$image_sizes = get_intermediate_image_sizes();
-			
-			if( $image_sizes )
-			{
-				foreach( $image_sizes as $image_size )
-				{
-					// find src
-					$src = wp_get_attachment_image_src( $attachment->ID, $image_size );
-					
-					// add src
-					$value['sizes'][$image_size] = $src[0];
-				}
-				// foreach( $image_sizes as $image_size )
-			}
-			// if( $image_sizes )
-			
+			// foreach( $image_sizes as $image_size )
 		}
 		
-		return $value;
+        return $sizes;
 	}
 	
 	
+	/*
+	*  wp_prepare_attachment_for_js
+	*
+	*  @description: This sneaky hook adds the missing sizes to each attachment in the 3.5 uploader. It would be a lot easier to add all the sizes to the 'image_size_names_choose' filter but then it will show up on the normal the_content editor
+	*  @since: 3.5.7
+	*  @created: 13/01/13
+	*/
+	
+	function wp_prepare_attachment_for_js( $response, $attachment, $meta )
+	{
+		// only for image
+		if( $response['type'] != 'image' )
+		{
+			return $response;
+		}
 		
+		
+		// make sure sizes exist. Perhaps they dont?
+		if( !isset($meta['sizes']) )
+		{
+			return $response;
+		}
+		
+		
+		$attachment_url = $response['url'];
+		$base_url = str_replace( wp_basename( $attachment_url ), '', $attachment_url );
+		
+		if( isset($meta['sizes']) && is_array($meta['sizes']) )
+		{
+			foreach( $meta['sizes'] as $k => $v )
+			{
+				if( !isset($response['sizes'][ $k ]) )
+				{
+					$response['sizes'][ $k ] = array(
+						'height'      =>  $v['height'],
+						'width'       =>  $v['width'],
+						'url'         => $base_url .  $v['file'],
+						'orientation' => $v['height'] > $v['width'] ? 'portrait' : 'landscape',
+					);
+				}
+			}
+		}
+
+		return $response;
+	}
+	
 }
+
+new acf_field_image();
 
 ?>

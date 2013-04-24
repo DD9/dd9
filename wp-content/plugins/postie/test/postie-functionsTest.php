@@ -1,9 +1,9 @@
 <?php
 
-require 'wpstub.php';
-require'../postie-functions.php';
-require'../simple_html_dom.php';
-require '../postie.php';
+require_once 'wpstub.php';
+require_once '../postie-functions.php';
+require_once '../simple_html_dom.php';
+require_once '../postie.php';
 
 define('WP_DEBUG', true);
 define('WP_DEBUG_LOG', true);
@@ -142,7 +142,27 @@ class postiefunctionsTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("test", $content);
     }
 
-    public function testEndFilter() {
+    public function testfilter_Start() {
+        $config = config_GetDefaults();
+
+        $c = "test";
+        filter_Start($c, $config);
+        $this->assertEquals("test", $c);
+
+        $c = ":start\ntest";
+        filter_Start($c, $config);
+        $this->assertEquals("\ntest", $c);
+
+        $c = "test/n:start\nsomething";
+        filter_Start($c, $config);
+        $this->assertEquals("\nsomething", $c);
+
+        $c = "<p>test</p><p>:start</p><p>something</p>";
+        filter_Start($c, $config);
+        $this->assertEquals("</p><p>something</p>", $c);
+    }
+
+    public function testfilter_End() {
         $config = config_GetDefaults();
         $c = "test";
         filter_End($c, $config);
@@ -163,67 +183,71 @@ class postiefunctionsTest extends PHPUnit_Framework_TestCase {
         $c = "This is a test :end";
         filter_End($c, $config);
         $this->assertEquals("This is a test ", $c);
+
+        $c = "<p>This is a test</p><p>:end</p><div>some footer</div>";
+        filter_End($c, $config);
+        $this->assertEquals("<p>This is a test</p><p>", $c);
     }
 
-    public function testFilterNewLines() {
+    public function testfilter_Newlines() {
         $config = config_GetDefaults();
 
         $c = "test";
-        filter_newlines($c, $config);
+        filter_Newlines($c, $config);
         $this->assertEquals("test", $c);
 
         $c = "test";
-        filter_newlines($c, $config);
+        filter_Newlines($c, $config);
         $this->assertEquals("test", $c);
 
         $c = "test\n";
-        filter_newlines($c, $config);
+        filter_Newlines($c, $config);
         $this->assertEquals("test ", $c);
 
         $c = "test\r\n";
-        filter_newlines($c, $config);
+        filter_Newlines($c, $config);
         $this->assertEquals("test ", $c);
 
         $c = "test\r";
-        filter_newlines($c, $config);
+        filter_Newlines($c, $config);
         $this->assertEquals("test ", $c);
 
         $c = "test\n\n";
-        filter_newlines($c, $config);
+        filter_Newlines($c, $config);
         $this->assertEquals("test ", $c);
 
         $c = "test\r\n\r\n";
-        filter_newlines($c, $config);
+        filter_Newlines($c, $config);
         $this->assertEquals("test  ", $c);
 
         $c = "test\r\n\r\ntest\n\ntest\rtest\r\ntest\ntest";
-        filter_newlines($c, $config);
+        filter_Newlines($c, $config);
         $this->assertEquals("test  test test test test test", $c);
 
         $config['convertnewline'] = true;
 
         $c = "test\n";
-        filter_newlines($c, $config);
+        filter_Newlines($c, $config);
         $this->assertEquals("test<br />\n", $c);
 
         $c = "test\n\n";
-        filter_newlines($c, $config);
+        filter_Newlines($c, $config);
         $this->assertEquals("test<br />\n", $c);
 
         $c = "test\r";
-        filter_newlines($c, $config);
+        filter_Newlines($c, $config);
         $this->assertEquals("test<br />\n", $c);
 
         $c = "test\r\n";
-        filter_newlines($c, $config);
+        filter_Newlines($c, $config);
         $this->assertEquals("test<br />\n", $c);
 
         $c = "test\r\n\r\n";
-        filter_newlines($c, $config);
+        filter_Newlines($c, $config);
         $this->assertEquals("test<br />\n<br />\n", $c);
 
         $c = "test\r\n\r\ntest\n\ntest\rtest\r\ntest\ntest";
-        filter_newlines($c, $config);
+        filter_Newlines($c, $config);
         $this->assertEquals("test<br />\n<br />\ntest<br />\ntest<br />\ntest<br />\ntest<br />\ntest", $c);
     }
 
@@ -234,33 +258,40 @@ class postiefunctionsTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testGetPostType() {
+        $pm = new PostiePostModifiers();
         $subject = "test";
-        $this->assertEquals("post", tag_PostType($subject));
+        $this->assertEquals("post", tag_PostType($subject, $pm));
         $this->assertEquals("test", $subject);
 
         $subject = "custom//test";
-        $this->assertEquals("custom", tag_PostType($subject));
+        $this->assertEquals("custom", tag_PostType($subject, $pm));
         $this->assertEquals("test", $subject);
 
         $subject = "//test";
-        $this->assertEquals("post", tag_PostType($subject));
-        $this->assertEquals("test", $subject);
+        $this->assertEquals("post", tag_PostType($subject, $pm));
+        $this->assertEquals("//test", $subject);
 
         $subject = "//";
-        $this->assertEquals("post", tag_PostType($subject));
-        $this->assertEquals("", $subject);
+        $this->assertEquals("post", tag_PostType($subject, $pm));
+        $this->assertEquals("//", $subject);
 
-        $subject = "Image//test";
-        $this->assertEquals("image", tag_PostType($subject));
+        $subject = "custom2//test";
+        $this->assertEquals("custom2", tag_PostType($subject, $pm));
         $this->assertEquals("test", $subject);
 
-        $subject = "Image // test";
-        $this->assertEquals("image", tag_PostType($subject));
+        $subject = "Custom1 // test";
+        $this->assertEquals("custom1", tag_PostType($subject, $pm));
         $this->assertEquals("test", $subject);
 
         $subject = "video//test";
-        $this->assertEquals("video", tag_PostType($subject));
+        $this->assertEquals("post", tag_PostType($subject, $pm));
         $this->assertEquals("test", $subject);
+        $this->assertEquals('video', $pm->PostFormat);
+        
+        $subject = "//WL2K /Test Message";
+        $this->assertEquals("post", tag_PostType($subject, $pm));
+        $this->assertEquals("//WL2K /Test Message", $subject);
+        $this->assertEquals('video', $pm->PostFormat);
     }
 
     public function testGetPostExcerpt() {
@@ -397,6 +428,10 @@ class postiefunctionsTest extends PHPUnit_Framework_TestCase {
         $c = "line 1\nline 2\n--";
         filter_RemoveSignature($c, $config);
         $this->assertEquals("line 1\nline 2\n", $c);
+
+        $c = "test content<div><br></div><div>--</div><div>signature</div>";
+        filter_RemoveSignature($c, $config);
+        $this->assertEquals("test content<div><br></div>", $c);
     }
 
     public function testmore_reccurences() {
@@ -482,7 +517,7 @@ class postiefunctionsTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals("test \nmore stuff\n:end", $c);
     }
 
-    public function testclickableLink() {
+    public function testfilter_linkify() {
         $this->assertEquals("", filter_linkify(""));
         $this->assertEquals("test", filter_linkify("test"));
         $this->assertEquals('<a href="http://www.example.com" >http://www.example.com</a>', filter_linkify("http://www.example.com"));
@@ -503,60 +538,64 @@ class postiefunctionsTest extends PHPUnit_Framework_TestCase {
 
     public function testtag_Date() {
         $c = "";
-        $this->assertEquals(null, tag_Date($c, null));
+        $this->assertEquals(null, tag_Date($c, null, 0));
         $this->assertEquals("", $c);
 
         $c = "date:";
-        $this->assertEquals(null, tag_Date($c, null));
+        $this->assertEquals(null, tag_Date($c, null, 0));
         $this->assertEquals("date:", $c);
 
         $c = "date: nothing";
-        $this->assertEquals(null, tag_Date($c, null));
+        $this->assertEquals(null, tag_Date($c, null, 0));
         $this->assertEquals("date: nothing", $c);
 
         $c = "date: 1";
-        $this->assertEquals(null, tag_Date($c, null));
+        $this->assertEquals(null, tag_Date($c, null, 0));
         $this->assertEquals("date: 1", $c);
 
         $c = "date: 12/31/2013";
-        $this->assertEquals("2013-12-31", tag_Date($c, null));
+        $this->assertEquals("2013-12-31", tag_Date($c, null, 0));
         $this->assertEquals("", $c);
 
         $c = "date:12/31/2013";
-        $this->assertEquals("2013-12-31", tag_Date($c, null));
+        $this->assertEquals("2013-12-31", tag_Date($c, null, 0));
         $this->assertEquals("", $c);
 
         $c = "Date: 12/31/2013";
-        $this->assertEquals("2013-12-31", tag_Date($c, null));
+        $this->assertEquals("2013-12-31", tag_Date($c, null, 0));
         $this->assertEquals("", $c);
 
         $c = "DATE: 12/31/2013";
-        $this->assertEquals("2013-12-31", tag_Date($c, null));
+        $this->assertEquals("2013-12-31", tag_Date($c, null, 0));
         $this->assertEquals("", $c);
 
         $c = "date: 31-12-2013";
-        $this->assertEquals("2013-12-31", tag_Date($c, null));
+        $this->assertEquals("2013-12-31", tag_Date($c, null, 0));
         $this->assertEquals("", $c);
 
         $c = "date: 31.12.2013";
-        $this->assertEquals("2013-12-31", tag_Date($c, null));
+        $this->assertEquals("2013-12-31", tag_Date($c, null, 0));
         $this->assertEquals("", $c);
 
         $c = "date: Dec 31, 2013";
-        $this->assertEquals("2013-12-31", tag_Date($c, null));
+        $this->assertEquals("2013-12-31", tag_Date($c, null, 0));
         $this->assertEquals("", $c);
 
         $c = "date: 12/31/2013\nstuff";
-        $this->assertEquals("2013-12-31", tag_Date($c, null));
-        $this->assertEquals("stuff", $c);
+        $this->assertEquals("2013-12-31", tag_Date($c, null, 0));
+        $this->assertEquals("\nstuff", $c);
 
         $c = "date: Dec 31, 2013 14:22";
-        $this->assertEquals("2013-12-31 14:22:00", tag_Date($c, null));
+        $this->assertEquals("2013-12-31 14:22:00", tag_Date($c, null, 0));
         $this->assertEquals("", $c);
 
         $c = "stuff\n\ndate: Dec 31, 2013 14:22\n\nmorestuff";
-        $this->assertEquals("2013-12-31 14:22:00", tag_Date($c, null));
+        $this->assertEquals("2013-12-31 14:22:00", tag_Date($c, null, 0));
         $this->assertEquals("stuff\n\n\n\nmorestuff", $c);
+
+        $c = "<p>stuff</p><p>date: Dec 31, 2013 14:22</p><p>morestuff</p>";
+        $this->assertEquals("2013-12-31 14:22:00", tag_Date($c, null, 0));
+        $this->assertEquals("<p>stuff</p><p></p><p>morestuff</p>", $c);
     }
 
     function testtag_Excerpt() {
@@ -579,6 +618,64 @@ class postiefunctionsTest extends PHPUnit_Framework_TestCase {
         $e = tag_Excerpt($c, false, false);
         $this->assertEquals("", $c);
         $this->assertEquals("stuff ", $e);
+    }
+
+    function test_filename_fix() {
+        $f = "simple.png";
+        $this->assertEquals($f, filename_fix($f));
+
+        $f = "moiré-pättern.png";
+        $this->assertEquals("moireCC81-paCC88ttern.png", filename_fix($f));
+
+        $f = "וְאָהַבְתָּ.png";
+        $this->assertEquals("D795D6B0D790D6B8D794D6B7D791D6B0D7AAD6BCD6B8.png", filename_fix($f));
+
+        $this->assertEquals("D09AD0BED0B3D0B0D182D0BE.png", filename_fix("Когато.png"));
+    }
+
+    function testtag_Status() {
+
+        $c = "";
+        $s = tag_Status($c, 'publish');
+        $this->assertEquals("", $c);
+        $this->assertEquals("publish", $s);
+
+        $c = "status:private";
+        $s = tag_Status($c, 'publish');
+        $this->assertEquals("", $c);
+        $this->assertEquals("private", $s);
+
+        $c = "status: private";
+        $s = tag_Status($c, 'publish');
+        $this->assertEquals("", $c);
+        $this->assertEquals("private", $s);
+
+        $c = "status:blah";
+        $s = tag_Status($c, 'publish');
+        $this->assertEquals("status:blah", $c);
+        $this->assertEquals("publish", $s);
+
+        $c = "multi\nstatus: private\nline";
+        $s = tag_Status($c, 'publish');
+        $this->assertEquals("multi\n\nline", $c);
+        $this->assertEquals("private", $s);
+    }
+
+    function testgetPostAuthorDetails() {
+        $s = "subject";
+        $c = "content";
+        $e = new stdClass();
+        $e->headers = array();
+        $e->headers['date'] = "Jan 1, 2013";
+        $e->headers['from'] = "wayne@postieplugin.com";
+
+        $r = getPostAuthorDetails($s, $c, $e);
+
+        $this->assertEquals($s, "subject");
+        $this->assertEquals($c, "content");
+        $this->assertEquals($r['author'], "wayne");
+        $this->assertEquals($r['email'], "wayne@postieplugin.com");
+        $this->assertEquals($r['emaildate'], "Jan 1, 2013");
     }
 
 }
