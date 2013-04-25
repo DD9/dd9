@@ -67,7 +67,7 @@
 			?>
 
 			<div id="site-generator">
-				<p>Copyright &copy; 2001 - 2012 DD9, Inc. All rights reserved. <a href="/wp-admin/" style="color:#CCC; font-size:8px; float:right" rel="nofollow">Admin Login</a></p>
+				<p>Copyright &copy; 2001 - <?php echo date('Y'); ?>  DD9, Inc. All rights reserved. <a href="/wp-admin/" style="color:#CCC; font-size:8px; float:right" rel="nofollow">Admin Login</a></p>
 
 <div itemscope itemtype="http://data-vocabulary.org/Organization" id="microformat_block"> 
     <span itemprop="name">DD9</span>, Inc.  &#8226; 
