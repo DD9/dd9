@@ -26,6 +26,32 @@ foreach($all_projects as $project)
   $projects_by_year[$year][] = $project;
 }
 
+
+// CUT HERE TO REMOVE NULL PROJECT HUNT CODE
+
+$all_projects = get_posts(array(
+  'post_type' => 'project',
+  'suppress_filters' => false,
+  'numberposts' => -1
+));
+
+$null_projects = array();
+
+foreach($all_projects as $project) {
+  $start_date = get_post_meta($project->ID, 'start_work', true);
+  if($start_date == null)
+  {
+    $null_projects[] = $project;
+  }
+}
+
+echo "<!-- ";
+print_r($null_projects);
+echo "-- >";
+
+// CUT HERE TO REMOVE NULL PROJECT HUNT CODE
+
+
 $graphic_design = get_post($gd_id);
 
 $gd_services = get_posts(array(
