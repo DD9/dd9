@@ -26,9 +26,9 @@ foreach($all_projects as $project)
   $projects_by_year[$year][] = $project;
 }
 
-
+// KEEP JUST IN CASE
 // CUT HERE TO REMOVE NULL PROJECT HUNT CODE
-
+/*
 $all_projects = get_posts(array(
   'post_type' => 'project',
   'suppress_filters' => false,
@@ -47,8 +47,8 @@ foreach($all_projects as $project) {
 
 echo "<!-- ";
 print_r($null_projects);
-echo "-- >";
-
+echo "-->";
+*/
 // CUT HERE TO REMOVE NULL PROJECT HUNT CODE
 
 
