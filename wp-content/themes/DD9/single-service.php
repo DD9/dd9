@@ -76,18 +76,18 @@ $wd_services = get_posts(array(
 
 		<div class="block_container breadcrumbs clearfix">    
              
-          <div class="two_column">
+          <div class="secondary">
           <h4 class="subheading_full_width"><a href="/services/" title="DD9 Serivce Directory">Services</a></h4>     
              <!--h4 class="subheading breadcrumbs"><a href="/services/" title="DD9 Serivce Directory">/services/</a></h4-->
              <div class="block_content">
                
-               <h1 class="secondary"><?php the_h1_override(); ?></h1>
+               <h1><?php the_h1_override(); ?></h1>
                <p class="top_line"><em></em></p>
                 <?php include('social.php'); ?>
 
                
              </div><!-- .block_content -->
-          </div><!-- .two_column -->
+          </div><!-- .secondary -->
              
           <div class="content_right thin_border"> 
             <article class="post">

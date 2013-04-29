@@ -17,7 +17,7 @@ get_header(); ?>
 		
 			 <div class="block_container full_width clearfix">
         		
-                <div class="two_column">
+                <div class="secondary">
                   <?php //returns the root parent page 
 					function get_top_ancestor($id){
 						$current = get_post($id);
@@ -51,7 +51,7 @@ get_header(); ?>
                         
                        <h4 class="subheading_full_width"><a href="<?php echo esc_url( get_permalink( get_page_by_title( $top_ancestor ) ) ); ?>"><?php echo $top_ancestor; ?></a></h4>
                          <div class="block_content">
-                           <h1 class="secondary"><?php the_h1_override(); ?></h1>
+                           <h1><?php the_h1_override(); ?></h1>
                            <ul class="arrows sidebar_nav"><?php echo $children; ?></ul>
                          </div><!-- .block_content -->
                    
@@ -60,7 +60,7 @@ get_header(); ?>
 				   <?php else: ?>
                    <?php endif; ?>
                  
-                 </div><!-- .two_column -->
+                 </div><!-- .secondary -->
                  
                  
                  

@@ -35,12 +35,12 @@ $project = $projects ? $projects[0] : null;
 
 ?>
 
-
-          <div class="two_column">     
+        <div class="secondary">
+             
              <h4 class="subheading_full_width"><a href="/blog/" title="DD9 Blog Home">Blog</a></h4>
              <div class="block_content">
                
-               <h1 class="secondary"><?php the_title(); ?></h1>
+               <h1><?php the_title(); ?></h1>
                 <?php
 					/* translators: used between list items, there is a space after the comma */
 					$tags_list = get_the_tag_list( '', __( ', ', 'twentyeleven' ) );
@@ -56,39 +56,34 @@ $project = $projects ? $projects[0] : null;
                 <?php include('social.php'); ?>
                
                <ul class="post_details">
-                      
-                    
-                    
-                    <li id="author-info">
-                        <div id="author-avatar">
-                            <?php echo get_avatar( get_the_author_meta( 'user_email' ), apply_filters( 'twentyeleven_author_bio_avatar_size', 68 ) ); ?>
-                        </div><!-- #author-avatar -->
-                       
-                    </li><!-- #entry-author-info -->
-                    
-                    <li class="post_author"><h6 class="title">Author:</h6> <a href="<?php echo get_author_posts_url(get_the_author_meta( 'ID' )); ?>"><?php the_author_meta('display_name'); ?></a></li>
+                  <li id="author-info">
+                      <div id="author-avatar">
+                          <?php echo get_avatar( get_the_author_meta( 'user_email' ), apply_filters( 'twentyeleven_author_bio_avatar_size', 68 ) ); ?>
+                      </div><!-- #author-avatar -->
+                     
+                  </li><!-- #entry-author-info -->
+                  
+                  <li class="post_author"><h6 class="title">Author:</h6> <a href="<?php echo get_author_posts_url(get_the_author_meta( 'ID' )); ?>"><?php the_author_meta('display_name'); ?></a></li>
 
-                    
-                    <li class="post_time"><h6 class="title">Posted On:</h6><?php the_time('F jS, Y'); ?></li> 
-                   
-                    <?php
-                    /* translators: used between list items, there is a space after the comma */
-                    $categories_list = get_the_category_list( __( ', ', 'twentyeleven' ) );
-                    if ( $categories_list ):
-                    ?>
-                    <li class="cat-links">
-                    <h6 class="title">Categories:</h6>
-                        <?php printf( __( ' %2$s', 'twentyeleven' ), 'entry-utility-prep entry-utility-prep-cat-links', $categories_list );
-                        $show_sep = true; ?>
-                    </li>
-                    <?php endif; // End if categories ?>
-                    
-                   
+                  
+                  <li class="post_time"><h6 class="title">Posted On:</h6><?php the_time('F jS, Y'); ?></li> 
+                 
+                  <?php
+                  /* translators: used between list items, there is a space after the comma */
+                  $categories_list = get_the_category_list( __( ', ', 'twentyeleven' ) );
+                  if ( $categories_list ):
+                  ?>
+                  <li class="cat-links">
+                  <h6 class="title">Categories:</h6>
+                      <?php printf( __( ' %2$s', 'twentyeleven' ), 'entry-utility-prep entry-utility-prep-cat-links', $categories_list );
+                      $show_sep = true; ?>
+                  </li>
+                  <?php endif; // End if categories ?>
+                  
                  </ul><!-- .post_details -->
                
-               
              </div><!-- .block_content -->
-          </div><!-- .two_column -->
+          </div><!-- .secondary -->
 
 
 	  <div class="content_right single">

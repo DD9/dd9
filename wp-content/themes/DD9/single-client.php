@@ -87,15 +87,15 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
     <div class="block_container breadcrumbs clearfix">    
           
            
-          <div class="two_column">     
+          <div class="secondary">     
              <h4 class="subheading_full_width"><a href="/clients/" title="DD9 Clients">Clients</a></h4>
              <div class="block_content">
                
-               <h1 class="secondary"> <?php the_title(); ?></h1>
+               <h1> <?php the_title(); ?></h1>
                <p class="top_line"><em></em></p>
                
              </div><!-- .block_content -->
-          </div><!-- .two_column -->
+          </div><!-- .secondary -->
             
               
           <div class="content_right thin_border"> 

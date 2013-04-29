@@ -35,7 +35,7 @@ $wd_services = get_posts(array(
 ?>
 
 	      <div class="block_container full_width clearfix">
-            <div id="secondary">
+            <div class="secondary">
               <div class="two_column">
                 <h4 class="subheading_full_width"><span><?php the_title(); ?></span></h4>
                   <div class="block_content">

@@ -12,7 +12,7 @@ $thecategory = get_category($cat);
 ?>
 
 <?php if ( have_posts() ) : ?>
-      <div id="secondary" class="two_column blog">
+      <div class="secondary" class="two_column blog">
       
 		
         <?php if ($thecategory->category_parent == '3' || $thecategory->cat_ID == '3'): ?> 
@@ -20,7 +20,7 @@ $thecategory = get_category($cat);
          
             <h4 class="subheading_full_width"><a href="/category/design-screenshots/" title="DD9 Design Stream Home">Design Stream</a></h4>
               <div class="block_content">
-                <h1 class="secondary"><?php
+                <h1><?php
 						printf( __( '%s', 'twentyeleven' ), '<span>' . single_cat_title( '', false ) . '</span>' );
 					?> </h1>
                 <p class="top_line"></p>
@@ -44,7 +44,7 @@ $thecategory = get_category($cat);
         
             <h4 class="subheading_full_width"><a href="/blog/" title="DD9 Blog Home">Blog</a></h4>
               <div class="block_content">
-                <h1 class="secondary"><?php
+                <h1><?php
 						printf( __( '%s', 'twentyeleven' ), '<span>' . single_cat_title( '', false ) . '</span>' );
 					?> </h1>
                 <p class="top_line"></p>

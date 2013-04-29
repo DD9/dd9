@@ -29,15 +29,15 @@ $wd_services = get_posts(array(
 
       <div class="block_container full_width clearfix">
 
-      <div class="two_column">
+      <div class="secondary">
         <h4 class="subheading_full_width"><span><?php the_title(); ?></span></h4>
           <div class="block_content">
-            <h1 class="secondary"><?php the_h1_override(); ?></h1>
+            <h1><?php the_h1_override(); ?></h1>
             <p class="top_line"><em>Click on a service to learn more and view sample projects.</em></p>
             
             <?php the_content(); ?>
           </div>
-      </div><!-- .two_column -->
+      </div><!-- .secondary -->
 
       <?php include('primary_cta.php'); ?>
       

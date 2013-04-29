@@ -15,7 +15,7 @@
 get_header(); ?>
       
       <div class="block_container full_width clearfix">
-		<div id="secondary">
+		<div class="secondary">
           <div class="two_column">
             <h4 class="subheading_full_width"><span>Contact</span></h4>
               <div class="block_content">
@@ -36,7 +36,7 @@ get_header(); ?>
               </div>
           </div><!-- .two_column -->         
       
-        </div><!-- #secondary -->
+        </div><!-- .secondary -->
 
 	    <div class="content_right"> 
 

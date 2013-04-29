@@ -37,14 +37,14 @@ get_header(); the_post();
 <?php // Category One: The Team (Todd, Taavo, Hilary)?> 
         <div class="block_container full_width clearfix">
         
-          <div class="two_column">
+          <div class="secondary">
             <h4 class="subheading_full_width"><a href="/about/">About</a></h4>
               <div class="block_content">
-                <h1 class="secondary">The DD9 Team</h1>
+                <h1>The DD9 Team</h1>
                 <p class="top_line"></p>
                 <ul class="arrows sidebar_nav"><?php wp_list_pages( $about_children ); ?></ul>
               </div>
-          </div><!-- .two_column -->         
+          </div><!-- .secondary -->         
           
           <div class="content_right"> 
 			<?php foreach($users['team'] as $user): ?>

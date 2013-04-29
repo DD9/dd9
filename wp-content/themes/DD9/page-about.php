@@ -16,14 +16,14 @@ $about_children = array(
 		
      <div class="block_container full_width clearfix">
         
-        <div class="two_column">
+        <div class="secondary">
           <h4 class="subheading_full_width"><span>About</span></h4>
             <div class="block_content">
               <?php the_content(); ?>
               
               <ul class="arrows sidebar_nav"><?php wp_list_pages( $about_children ); ?></ul> 
             </div>
-        </div><!-- .two_column -->
+        </div><!-- .secondary -->
                   
                  
         

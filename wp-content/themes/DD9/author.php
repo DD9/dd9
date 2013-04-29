@@ -52,13 +52,13 @@ $design_shots = get_posts(array(
             
              <div class="block_container full_width clearfix">
         
-              <div class="two_column">
+              <div class="secondary">
                 <h4 class="subheading_full_width"><span>Author Archives</span></h4>
                   <div class="block_content">
-                    <h1 class="secondary"><?= $full_name ?> </h1>
+                    <h1><?= $full_name ?> </h1>
                     
                   </div>
-              </div><!-- .two_column -->         
+              </div><!-- .secondary -->         
               
               <div class="content_right"> 
                 
