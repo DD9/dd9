@@ -9,7 +9,7 @@
                     </h4>
                     
                     <div class="block_content">
-                    	<h3 class="secondary"><a href="/clients/lumi-lia/">Complete Branding, Collateral &amp; Website Packages</a></h3>
+                    	<h3><a href="/clients/lumi-lia/">Complete Branding, Collateral &amp; Website Packages</a></h3>
                         <p class="top_line">We create custom design solutions tailored to your company's goals.</p>
                     </div>
                 
@@ -27,7 +27,7 @@
                     </h4>
                     
                     <div class="block_content">
-                    	<h3 class="secondary"><a href="/services/mobile-website-design/">Mobile Optimized Websites</a></h3>
+                    	<h3><a href="/services/mobile-website-design/">Mobile Optimized Websites</a></h3>
                         <p class="top_line">We build responsive websites to showcase your content effectively, no matter the size of the screen. </p>
                     </div>
                 
@@ -44,7 +44,7 @@
                     </h4>
                     
                     <div class="block_content">
-                    	<h3 class="secondary"><a href="/services/application-development/">Web-based Software + Applications</a></h3>
+                    	<h3><a href="/services/application-development/">Web-based Software + Applications</a></h3>
                         <p class="top_line">We specialize in custom design and build for Ruby On Rails&#8482; and PHP/MySQL software applications.</p>
                     </div>
                 
@@ -62,7 +62,7 @@
                     </h4>
                     
                     <div class="block_content">
-                    	<h3 class="secondary"><a href="/clients/cyrium-technologies/">Complete Branding, Collateral &amp; Website Packages</a></h3>
+                    	<h3><a href="/clients/cyrium-technologies/">Complete Branding, Collateral &amp; Website Packages</a></h3>
                         <p class="top_line">We provide comprehensive website and graphic design packages tailored to your company's needs.</p>
                     </div>
                 
@@ -80,7 +80,7 @@
                     </h4>
                     
                     <div class="block_content">
-                    	<h3 class="secondary"><a href="/services/graphic-design/">Bespoke Graphics</a></h3>
+                    	<h3><a href="/services/graphic-design/">Bespoke Graphics</a></h3>
                         <p class="top_line">We excel at projects that require custom illustration and unique graphics.</p>
                     </div>
                 
@@ -99,7 +99,7 @@
                     </h4>
                     
                     <div class="block_content">
-                    	<h3 class="secondary"><a href="/services/website-design/">One Web, Many Devices</a></h3>
+                    	<h3 ><a href="/services/website-design/">One Web, Many Devices</a></h3>
                         <p class="top_line">Whether you need a new website, a website redesign, or a site optimized for mobile devices, we'll create a custom solution that speaks directly to your requirements. </p>
                     </div>
                 
