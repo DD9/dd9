@@ -57,7 +57,7 @@ hosting provider about this.</p>
 
 <h4 id='answer-6'>Can I use postie to check a gmail account?</h4>
 
-<p>Yes. You can use either pop3-ssl or imap-ssl with a gmail account. Before
+<p>Yes. You can use either pop3-ssl or imap-ssl with a gmail account (including Google Apps). Before
 attempting to use with postie, make sure that you enable pop or imap in your
 gmail preferences.</p>
 
@@ -66,20 +66,20 @@ gmail preferences.</p>
 
 <ul>
 <li>protocol - pop3-ssl</li>
+<li>Use Transport Layer Security - no</li>
 <li>server - pop.gmail.com</li>
 <li>port - 995</li>
-<li>userid - your username (e.g. if your e-mail address is <a href="mailto:foo@gmail.com">foo@gmail.com</a>,
-this would be just foo)</li>
+<li>userid - your full email address</li>
 <li>password - your password </li>
 </ul></li>
 <li>IMAP settings:
 
 <ul>
 <li>protocol - imap-ssl</li>
+<li>Use Transport Layer Security - no</li>
 <li>server - imap.gmail.com</li>
 <li>port - 993</li>
-<li>userid - your username (e.g. if your e-mail address is <a href="mailto:foo@gmail.com">foo@gmail.com</a>,
-this would be just foo)</li>
+<li>userid - your full email address</li>
 <li>password - your password </li>
 </ul></li>
 </ul>
@@ -90,6 +90,7 @@ this would be just foo)</li>
 
 <ul>
 <li>protocol - pop3</li>
+<li>Use Transport Layer Security - no</li>
 <li>server - pop.secureserver.net</li>
 <li>port - 110</li>
 <li>userid - xxxxx@yourdomain</li>

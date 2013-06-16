@@ -11,9 +11,19 @@ $options = pte_get_options();
 <base href="/wp-admin/"/>
 -->
 <script type="text/javascript" charset="utf-8">
-   var post_id     = <?php echo $post->ID; ?>
-     , post_width  = <?php echo $meta['width']; ?>
-     , post_height = <?php echo $meta['height']; ?>
+   var post_id     = <?php echo $post->ID; ?> 
+     , post_width  = <?php echo $meta['width']; ?> 
+     , post_height = <?php echo $meta['height']; ?> 
+     , pteI18n     = <?php echo json_encode( 
+			  array( 'no_t_selected' => __( 'No thumbnails selected', PTE_DOMAIN )
+			  , 'no_c_selected' => __( 'No crop selected', PTE_DOMAIN )
+			  , 'crop_problems' => __( 'Cropping will likely result in skewed imagery', PTE_DOMAIN )
+			  , 'save_crop_problem' => __( 'There was a problem saving the crop...', PTE_DOMAIN )
+			  , 'cropSave' => __( 'Crop and Save', PTE_DOMAIN )
+			  , 'crop' => __( 'Crop', PTE_DOMAIN )
+		  ));
+?>;
+
 </script>
  
 <link rel="stylesheet" href="<?php ep() ?>apps/font-awesome/css/font-awesome.css"/>
@@ -30,6 +40,7 @@ $options = pte_get_options();
    #pte-image { float: left; margin-right: 10px;}
    #pte-thumbnail-column {
       float: left;
+      position: relative;
       width: 400px;
    }
    #pte-thumbnail-column button {
@@ -71,6 +82,9 @@ $options = pte_get_options();
    #pte-thumbnail-table th input,
    #pte-thumbnail-table td input {
       margin: 1px 0 0;
+   }
+   .align-right {
+      text-align: right !important;
    }
 
    #aspect-ratio-selector {
@@ -162,8 +176,34 @@ $options = pte_get_options();
    [ng\:cloak], [ng-cloak], .ng-cloak {
       display: none;
    }
+
+   /** For thumbnail review **/
+   #pte-remember, #pte-remember-list {
+       margin: 0;
+       padding: 0;
+       z-index: 1000;
+   }
+   #pte-remember.horizontal {
+       width: 100%;
+   }
+   #pte-remember.vertical {
+       position: absolute;
+       top: -15px;
+       right: -130px;
+       /*top: -0px;*/
+   }
+   #pte-remember.horizontal #pte-remember-list {
+       overflow-x: auto;
+       width: 100%;
+       white-space: nowrap;
+       margin-right: -10px;
+   }
+   #pte-remember.horizontal li { display: inline-block; margin-left: 10px; }
+   #pte-remember.horizontal #pte-remember-list li:first-child { margin-left: 0; }
+   #pte-remember.horizontal li img { height: 100px; }
+   #pte-remember.vertical li img { width: 100px; }
 </style>
-<div class="wrap ng-cloak" ng-controller="PteCtrl">
+<div class="wrap ng-cloak" ng-init="currentThumbnailBarPosition='<?php echo $options['pte_thumbnail_bar'];?>'" ng-controller="PteCtrl">
    <?php screen_icon(); ?>
    <h2><?php _e("Post Thumbnail Editor", PTE_DOMAIN);?> &ndash; 
       <span id="pte-subtitle"><?php _e("crop and resize", PTE_DOMAIN); ?></span>
@@ -190,7 +230,7 @@ $options = pte_get_options();
             <div id="pte-image" ng-controller="CropCtrl">
                <img id="pte-preview" src="<?php 
                echo admin_url('admin-ajax.php'); 
-               ?>?action=imgedit-preview&amp;_ajax_nonce=<?php
+               ?>?action=pte_imgedit_preview&amp;_ajax_nonce=<?php
                echo $nonce; 
                ?>&amp;postid=<?php
                echo $post->ID;
@@ -232,6 +272,9 @@ $options = pte_get_options();
 											name="pte-crop-and-save"
 											id="pte-crop-and-save"/>
 								</li>
+								<li>
+                                    <?php _e( "Change the current thumbnails position:" ); ?>&nbsp;<button ng-click="toggleCurrentThumbnailBarPosition()">{{ currentThumbnailBarPosition }}</button>
+								</li>
 							</ul>
 						</div>
 					</div>
@@ -244,6 +287,9 @@ $options = pte_get_options();
                            <input type="checkbox" ng-model="tableSelector" ng-change="toggleAll()"/>
                         </th>
                         <th><?php _e( "Thumbnails" ); ?></th>
+                        <th class="align-right"><?php _e( "W" ); ?></th>
+                        <th class="align-right"><?php _e( "H" ); ?></th>
+                        <th><?php _e( "C" ); ?></th>
                         <th class="center">
                            <span class="pte-thumbnails-menu">
                               <i ng-show="anyProposed()" 
@@ -277,6 +323,9 @@ $options = pte_get_options();
 
                         </td>
                         <td>{{ thumbnail.name }}</td>
+                        <td class="align-right">{{ thumbnail.width }}</td>
+                        <td class="align-right">{{ thumbnail.height }}</td>
+                        <td>{{ thumbnail.crop }}</td>
                         <td class="center pte-thumbnail-options">
                            <span class="pte-thumbnail-menu">
                               <i ng-show="thumbnail.proposed" 
@@ -301,6 +350,20 @@ $options = pte_get_options();
                            <i class="icon-chevron-right"></i>
                            {{ aspectRatio.thumbnails.toString().replace(",",", ") }}</a></li>
                   </ul>
+               </div>
+               <div ng-class="currentThumbnailBarPosition" id="pte-remember" ng-show="anySelected()">
+                   <h4><?php _e( "Current Thumbnails", PTE_DOMAIN ); ?></h4>
+                   <ul id="pte-remember-list">
+                       <li ng-repeat="thumbnail in thumbnails | filter:{selected:true}">
+                           <img ng-src="{{ thumbnail.current.url | randomizeUrl }}" 
+                                   ng-show="thumbnail.current"
+                                   alt="{{ thumbnail.name }}" 
+                                   title="{{ thumbnail.name }}"/>
+                           <span title="{{ thumbnail.name }}" class="no-current-image" ng-hide="thumbnail.current">
+                               <i class="icon-exclamation-sign"></i>
+                           </span>
+                       </li>
+                   </ul>
                </div>
             </div>
             </div>
@@ -347,15 +410,28 @@ $options = pte_get_options();
       </div>
    </div>
 </div>
-               <script src="<?php ep(); ?>apps/requirejs/require.js" data-main="<?php 
-               ep();
-               $options = pte_get_options();
+<?php
 
-               if ( $options['pte_debug'] ){
-                  print "js";
-               }
-               else {
-                  print "js-build";
-               }
+			   function evaluate_attributes( $array ) {
+				   foreach ( $array as $key => $value ) {
+					   $attributes[] = "$key=\"$value\"";
+				   }
+				   return $attributes;
+			   }
 
-               ?>/main"></script>
+			   $script_tag = "<script %s></script>";
+			   $options = pte_get_options();
+			   if ( $options['pte_debug'] ) {
+				   $script_attributes = evaluate_attributes( array(
+					   'src' => PTE_PLUGINURL . "apps/requirejs/require.js",
+					   'data-main' => PTE_PLUGINURL . 'js/main'
+				   ) );
+			   }
+			   else {
+				   $script_attributes = evaluate_attributes( array(
+					   'src' => PTE_PLUGINURL . "js-build/main.js"
+				   ) );
+			   }
+
+
+			   echo sprintf( $script_tag, join( $script_attributes, " " ) );

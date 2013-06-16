@@ -15,49 +15,11 @@ if (!current_user_can('manage_options')) {
     echo "<h2> Sorry only admin can run this file</h2>";
     exit();
 }
-DebugEcho("Error log: " . ini_get('error_log'));
 ?>
 <div class="wrap"> 
     <h1>Postie Configuration Test</h1>
     <?php
-    if (isMarkdownInstalled()) {
-        EchoInfo("You currently have the Markdown plugin installed. It will cause problems if you send in HTML email. Please turn it off if you intend to send email using HTML.");
-    }
-
-    if (!isPostieInCorrectDirectory()) {
-        EchoInfo("Warning! Postie expects to be in its own directory named postie.");
-    } else {
-        EchoInfo("Postie is in " . dirname(__FILE__));
-    }
-    if (defined('ALTERNATE_WP_CRON') && ALTERNATE_WP_CRON) {
-        EchoInfo("Alternate cron is enabled");
-    }
-
-    if (defined('DISABLE_WP_CRON') && DISABLE_WP_CRON) {
-        EchoInfo("WordPress cron is disabled. Postie will not run unless you have an external cron set up.");
-    }
-    ?>
-
-    <br/>
-    <h2>International support</h2>
-    <?php
-    if (HasIconvInstalled()) {
-        EchoInfo("iconv: installed");
-    } else {
-        EchoInfo("Warning! Postie requires that iconv be enabled.");
-    }
-
-    if (function_exists('imap_mime_header_decode')) {
-        EchoInfo("imap: installed");
-    } else {
-        EchoInfo("Warning! Postie requires that imap be enabled if you are using IMAP, IMAP-SSL or POP3-SSL.");
-    }
-
-    if (HasMbStringInstalled()) {
-        EchoInfo("mbstring: installed");
-    } else {
-        EchoInfo("Warning! Postie requires that mbstring be enabled.");
-    }
+    postie_environment();
     ?>
 
     <h2>Clock Tests</h2>
@@ -73,7 +35,7 @@ DebugEcho("Error log: " . ini_get('error_log'));
 
     <?php
     if (!$mail_server || !$mail_server_port || !$mail_userid) {
-        EchoInfo("NO - check server settings");
+        EchoInfo("FAIL - server settings not complete");
     } else {
         DebugEcho("checking");
     }
@@ -87,7 +49,7 @@ DebugEcho("Error log: " . ini_get('error_log'));
             } else {
                 require_once("postieIMAP.php");
                 $mail_server = &PostieIMAP::Factory($config["input_protocol"]);
-                if ($email_tls){
+                if ($email_tls) {
                     $mail_server->TLSOn();
                 }
                 if (!$mail_server->connect($config["mail_server"], $config["mail_server_port"], $config["mail_userid"], $config["mail_password"])) {
@@ -96,6 +58,7 @@ DebugEcho("Error log: " . ini_get('error_log'));
                 } else {
                     EchoInfo("Successful " . strtoupper($config['input_protocol']) . " connection on port {$config["mail_server_port"]}");
                     EchoInfo("# of waiting messages: " . $mail_server->getNumberOfMessages());
+                    $mail_server->disconnect();
                 }
             }
             break;

@@ -37,23 +37,23 @@ hosting provider about this.
 
 = Can I use postie to check a gmail account? =
 
-Yes. You can use either pop3-ssl or imap-ssl with a gmail account. Before
+Yes. You can use either pop3-ssl or imap-ssl with a gmail account (including Google Apps). Before
 attempting to use with postie, make sure that you enable pop or imap in your
 gmail preferences.
 
 * Pop3 settings:
     * protocol - pop3-ssl
+    * Use Transport Layer Security - no
     * server - pop.gmail.com
     * port - 995
-    * userid - your username (e.g. if your e-mail address is foo@gmail.com,
-      this would be just foo)
+    * userid - your full email address
     * password - your password 
 * IMAP settings:
     * protocol - imap-ssl
+    * Use Transport Layer Security - no
     * server - imap.gmail.com
     * port - 993
-    * userid - your username (e.g. if your e-mail address is foo@gmail.com,
-      this would be just foo)
+    * userid - your full email address
     * password - your password 
 
 = Can I use postie with GoDaddy hosting? =
@@ -61,6 +61,7 @@ gmail preferences.
 Yes, but you must use an email set up using the GoDaddy email service and the following settings:
 
 * protocol - pop3
+* Use Transport Layer Security - no
 * server - pop.secureserver.net
 * port - 110
 * userid - xxxxx@yourdomain

@@ -9,7 +9,7 @@
   *    status: draft
 
 = Post Date =
-* Posts can have a specific publication date. Relative dates like "tomorrow", "monday", "first day of next month" are supported.
+* Posts can have a specific publication date such as Apr 14, 2013. Relative dates like "tomorrow", "monday", "first day of next month" are also supported.
   *    date: date
   *    date: date time
 * Posts can be delayed by adding a line with delayXdXhXm where X is a number.
@@ -126,6 +126,7 @@ Note you can only use this feature if your "Preferred Text Type" is set to "plai
     * {TITLE} same as {POSTTITLE}
     * {URL} same as {FILELINK}
     * {WIDTH} gets replaced with width of the photo
+    * {ICON} insert the icon for the attachment (for non-audio/image/video attachments only)
 
 
 = Interoperability =

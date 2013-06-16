@@ -3,9 +3,13 @@
 //support moving wp-config.php as described here http://codex.wordpress.org/Hardening_WordPress#Securing_wp-config.php
 $wp_config_path = dirname(dirname(dirname(dirname(__FILE__))));
 if (file_exists($wp_config_path . DIRECTORY_SEPARATOR . "wp-config.php")) {
-    include_once ($wp_config_path . DIRECTORY_SEPARATOR . "wp-config.php");
-} else {
+    include_once($wp_config_path . DIRECTORY_SEPARATOR . "wp-config.php");
+} elseif (file_exists(dirname($wp_config_path) . DIRECTORY_SEPARATOR . "wp-config.php")) {
     include_once (dirname($wp_config_path)) . DIRECTORY_SEPARATOR . "wp-config.php";
+} elseif (file_exists('/usr/share/wordpress/wp-config.php')) {
+    include_once('/usr/share/wordpress/wp-config.php');
+} else {
+    die("wp-config.php could not be found.");
 }
 
 require_once (dirname(__FILE__) . DIRECTORY_SEPARATOR . 'mimedecode.php');
@@ -14,12 +18,11 @@ if (!function_exists('file_get_html'))
     require_once (dirname(__FILE__) . DIRECTORY_SEPARATOR . 'simple_html_dom.php');
 
 EchoInfo("Starting mail fetch");
-EchoInfo("Time: " . date('Y-m-d H:i:s', time()) . " GMT");
-include('Revision');
+postie_environment();
 $wp_content_path = dirname(dirname(dirname(__FILE__)));
 DebugEcho("wp_content_path: $wp_content_path");
 if (file_exists($wp_content_path . DIRECTORY_SEPARATOR . "filterPostie.php")) {
-    DebugEcho("found filterPostie.php in wp-content");
+    DebugEcho("found filterPostie.php in $wp_content_path");
     include_once ($wp_content_path . DIRECTORY_SEPARATOR . "filterPostie.php");
 }
 
@@ -37,20 +40,21 @@ EchoInfo(sprintf(__("There are %d messages to process", "postie"), count($emails
 if (function_exists('memory_get_usage'))
     DebugEcho(__("memory at start of e-mail processing:") . memory_get_usage());
 
-DebugEcho("Error log: " . ini_get('error_log'));
 DebugDump($config);
 
 //loop through messages
+$message_number = 0;
 foreach ($emails as $email) {
-    DebugEcho("------------------------------------");
+    $message_number++;
+    DebugEcho("$message_number: ------------------------------------");
     //sanity check to see if there is any info in the message
     if ($email == NULL) {
         $message = __('Dang, message is empty!', 'postie');
-        EchoInfo($message);
+        EchoInfo("$message_number: $message");
         continue;
     } else if ($email == 'already read') {
-        $message = __("There does not seem to be any new mail.", 'postie');
-        EchoInfo($message);
+        $message = __("Message is already marked 'read'.", 'postie');
+        EchoInfo("$message_number: $message");
         continue;
     }
 
@@ -70,5 +74,4 @@ foreach ($emails as $email) {
 
 if (function_exists('memory_get_usage'))
     DebugEcho("memory at end of e-mail processing:" . memory_get_usage());
-
 ?>

@@ -1,0 +1,640 @@
+# Postie Translation File
+# Copyright (C) 2005 Dirk Elmendorf <headgeek@economysizegeek.com>
+# This file is distributed under the same license as Postie.
+# Dirk Elmendorf <headgeek@economysizegeek.com>, 2005
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Postie\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/src\n"
+"POT-Creation-Date: 2012-11-14 22:30:13+00:00\n"
+"PO-Revision-Date: 2013-05-30 11:27+0100\n"
+"Last-Translator: \n"
+"Language-Team: Max Guglielmino <info@maxguglielmino.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Italian\n"
+"X-Poedit-Country: ITALY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: config_form.php:4
+#: config_form.php:35
+msgid "Postie Options"
+msgstr "Opzioni Postie"
+
+#: config_form.php:55
+msgid "Configuration successfully updated!"
+msgstr "Configurazione aggiornata con successo!"
+
+#: config_form.php:56
+msgid "Error - unable to save configuration"
+msgstr "Errore - non è stato possibile di salvare la configurazione"
+
+#: config_form.php:63
+msgid "Reset Settings To Defaults"
+msgstr "Reimposta configurazione ai valori predefiniti"
+
+#: config_form.php:67
+msgid "Run Postie"
+msgstr "Avvia Postie"
+
+#: config_form.php:68
+msgid "(To run the check mail script manually)"
+msgstr "(Per avviare lo script di controllo mail manualmente)"
+
+#: config_form.php:72
+msgid "Test Config"
+msgstr "Test Configurazione"
+
+#: config_form.php:73
+msgid "this will run a special script to test your configuration options"
+msgstr "questo avvia uno script speciale per testare le tue opzioni di configurazione"
+
+#: config_form.php:81
+msgid "Mailserver"
+msgstr "Server Mail:"
+
+#: config_form.php:82
+msgid "User"
+msgstr "Utente"
+
+#: config_form.php:83
+msgid "Message"
+msgstr "Messaggio"
+
+#: config_form.php:84
+msgid "Image"
+msgstr "Immagine"
+
+#: config_form.php:85
+msgid "Video and Audio"
+msgstr "Video e Audio"
+
+#: config_form.php:86
+msgid "Attachments"
+msgstr "Allegati"
+
+#: config_form.php:87
+msgid "Help"
+msgstr "Aiuto"
+
+#: config_form.php:88
+msgid "FAQ"
+msgstr "FAQ"
+
+#: config_form.php:95
+msgid "Mail Protocol:"
+msgstr "Protocollo Mail:"
+
+#: config_form.php:111
+msgid "Port:"
+msgstr "Porta:"
+
+#: config_form.php:112
+msgid "Standard Ports:"
+msgstr "Porte Standard:"
+
+#: config_form.php:113
+msgid "POP3"
+msgstr "POP3"
+
+#: config_form.php:114
+msgid "IMAP"
+msgstr "IMAP"
+
+#: config_form.php:115
+msgid "IMAP-SSL"
+msgstr "IMAP-SSL"
+
+#: config_form.php:116
+msgid "POP3-SSL"
+msgstr "POP3-SSL"
+
+#: config_form.php:124
+msgid "Postie Time Correction:"
+msgstr "Correzione Orario per Postie:"
+
+#: config_form.php:126
+msgid "Should be the same as your normal offset - but this lets you adjust it in cases where that doesn't work."
+msgstr "Dovrebbe essere lo stesso del tuo normale fuso orario, ma questo ti permette di aggiustarlo nel caso non funzioni."
+
+#: config_form.php:129
+msgid "hours"
+msgstr "ore"
+
+#: config_form.php:134
+msgid "Mail Server:"
+msgstr "Server Mail:"
+
+#: config_form.php:139
+msgid "Mail Userid:"
+msgstr "Nome Utente Mail:"
+
+#: config_form.php:143
+msgid "Mail Password:"
+msgstr "Password Mail:"
+
+#: config_form.php:149
+msgid "Check for mail every"
+msgstr "Controlla mail ogni"
+
+#: config_form.php:157
+msgid "Once weekly"
+msgstr "Una volta alla settimana"
+
+#: config_form.php:162
+msgid "daily"
+msgstr "giornalmente"
+
+#: config_form.php:167
+msgid "hourly"
+msgstr "ogni ora"
+
+#: config_form.php:172
+msgid "twice per hour"
+msgstr "due volte l'ora"
+
+#: config_form.php:177
+msgid "every ten minutes"
+msgstr "ogni dieci minuti"
+
+#: config_form.php:183
+msgid "check manually"
+msgstr "controlla manualmente"
+
+#: config_form.php:195
+msgid "Roles That Can Post:"
+msgstr "Ruoli che possono pubblicare:"
+
+#: config_form.php:197
+msgid "This allows you to grant access to other users to post if they have the proper access level"
+msgstr "Questo consente di concedere accesso ad altri utenti per pubblicare se hanno il livello d'accesso giusto"
+
+#: config_form.php:221
+msgid "Post status:"
+msgstr "Stato della pubblicazione:"
+
+#: config_form.php:253
+msgid "Admin username:"
+msgstr "Nome Utente Admin:"
+
+#: config_form.php:263
+msgid "Default post by mail category:"
+msgstr "Categoria Articolo-da-mail predefinita:"
+
+#: config_form.php:272
+msgid "Default post by mail tag(s)"
+msgstr "Tag(s) predefiniti pubblicazione da mail"
+
+#: config_form.php:274
+msgid "separated by commas"
+msgstr "separato da virgole"
+
+#: config_form.php:282
+msgid "Default Title:"
+msgstr "Titolo Predefinito:"
+
+#: config_form.php:289
+msgid "Preferred Text Type:"
+msgstr "Tipo di testo preferito:"
+
+#: config_form.php:302
+msgid "Tag Of Message Start:"
+msgstr "Tag Inizio Messaggio:"
+
+#: config_form.php:303
+msgid "Use to remove any text from a message that the email provider puts at the top of the message"
+msgstr "Utilizzato per rimuovere testo che il provider mette in cima al messaggio"
+
+#: config_form.php:309
+msgid "Tag Of Message End:"
+msgstr "Tag Fine Messaggio:"
+
+#: config_form.php:310
+msgid "Use to remove any text from a message that the email provider puts at the end of the message"
+msgstr "Utilizzato per rimuovere testo che il provider mette alla fine del messaggio"
+
+#: config_form.php:327
+msgid "Send post confirmation e-mail to"
+msgstr "Invia email conferma pubblicazione a:"
+
+#: config_form.php:332
+msgid "sender"
+msgstr "mittente"
+
+#: config_form.php:333
+msgid "administrator"
+msgstr "amministratore"
+
+#: config_form.php:334
+msgid "sender and administrator"
+msgstr "mittente e amministratore"
+
+#: config_form.php:335
+msgid "none"
+msgstr "nessuno"
+
+#: config_form.php:345
+msgid "Encoding for pages and feeds:"
+msgstr "Encoding per pagine e feeds:"
+
+#: config_form.php:348
+msgid "should handle ISO-8859-1 as well"
+msgstr "dovrebbe gestire anche ISO-8859-1"
+
+#: config_form.php:369
+msgid "Image Place Holder Tag:"
+msgstr "Tag segnaposto immagine:"
+
+#: config_form.php:375
+msgid "Image Template"
+msgstr "Template Immagine"
+
+#: config_form.php:376
+#: config_form.php:425
+#: config_form.php:468
+#: config_form.php:512
+msgid "Choose a default template, then customize to your liking in the text box"
+msgstr "Scegli una template predefinita, quindi personalizza a tuo piacimento nel box di testo"
+
+#: config_form.php:377
+msgid "Sizes for thumbnail, medium, and large images can be chosen in the <a href=\"options-media.php\">Media Settings</a>. The samples here use the default sizes, and will not reflect the sizes you have chosen."
+msgstr "Dimensioni per immagini miniatura, media, e larga possono essere scelte nelle <a href=\"options-media.php\">Impostazioni Media</a>. L'esempio qui mostra le misure predefinite, e non riflette le dimensioni da te scelte."
+
+#: config_form.php:405
+#: config_form.php:452
+#: config_form.php:494
+#: config_form.php:539
+#: config_form.php:614
+msgid "Preview"
+msgstr "Anteprima"
+
+#: config_form.php:424
+msgid "Video template 1"
+msgstr "Template video 1"
+
+#: config_form.php:461
+msgid "Video 1 file types:"
+msgstr "Tipi di file video 1:"
+
+#: config_form.php:462
+msgid "Use the video template 1 for these files types (separated by commas)"
+msgstr "Usa la template video 1 per questi tipi di file (separati da virgole)"
+
+#: config_form.php:467
+msgid "Video template 2"
+msgstr "Template video 2"
+
+#: config_form.php:505
+msgid "Video 2 file types:"
+msgstr "Tipi di file video 2:"
+
+#: config_form.php:506
+msgid "Use the video template 2 for these files types (separated by commas)"
+msgstr "Usa la template video 2 per questi tipi di file (separati da virgole)"
+
+#: config_form.php:511
+msgid "Audio template"
+msgstr "Template audio:"
+
+#: config_form.php:548
+msgid "Audio file types:"
+msgstr "Tipi fi file audio:"
+
+#: config_form.php:550
+msgid "Use the audio template for these files types (separated by commas)"
+msgstr "Usa la template audio per questi tipi di file (separati da virgole)"
+
+#: config_form.php:563
+msgid "Attachment icon set"
+msgstr "Set icone allegati"
+
+#: config_form.php:590
+msgid "Attachment icon size (in pixels)"
+msgstr "Set icone allegati (in pixels)"
+
+#: config_form.php:635
+msgid "Save Changes"
+msgstr "Salva Modifiche"
+
+#: get_mail.php:21
+msgid "Dang, message is empty!"
+msgstr "Messaggio vuoto!"
+
+#: get_mail.php:24
+#: postie-functions.php:449
+msgid "There does not seem to be any new mail."
+msgstr "Sembra che non ci siano nuove mail."
+
+#: postie-functions.php:1387
+msgid "The uploaded file exceeds the <code>upload_max_filesize</code> directive in <code>php.ini</code>."
+msgstr "Il file caricato supera il <code>upload_max_filesize</code> definito nel <code>php.ini</code>."
+
+#: postie-functions.php:1388
+msgid "The uploaded file exceeds the <em>MAX_FILE_SIZE</em> directive that was specified in the HTML form."
+msgstr "Il file caricato supera il <code>MAX_FILE_SIZE</code> definito nel modulo HTML."
+
+#: postie-functions.php:1389
+msgid "The uploaded file was only partially uploaded."
+msgstr "Il file è stato solo parzialmente caricato."
+
+#: postie-functions.php:1390
+msgid "No file was uploaded."
+msgstr "Nessun file caricato."
+
+#: postie-functions.php:1392
+msgid "Missing a temporary folder."
+msgstr "Manca una cartella temporaria."
+
+#: postie-functions.php:1393
+msgid "Failed to write file to disk."
+msgstr "Impossibile scrivere il file su disco."
+
+#: postie-functions.php:1409
+msgid "Invalid form submission."
+msgstr "Invio del modulo non valido."
+
+#: postie-functions.php:1417
+msgid "File is empty. Please upload something more substantial. This error could also be caused by uploads being disabled in your php.ini."
+msgstr "Il file è vuoto. Si prega di caricare qualcosa di più sostanzioso. Questo errore potrebbe essere causato anche da caricamento disattivato nel tuo php.ini."
+
+#: postie-functions.php:1421
+msgid "Specified file failed upload test."
+msgstr "Il file specificato non ha superato il test di caricamento."
+
+#: postie-functions.php:1429
+msgid "File type does not meet security guidelines. Try another."
+msgstr "Il tipo di file non rispetta le linee guida di sicurezza. Provare con un altro."
+
+#: postie-functions.php:1449
+msgid "The uploaded file could not be moved to %s."
+msgstr "Il file caricato non può essere spostato in %s."
+
+#: postie-functions.php:2059
+msgid "Yes"
+msgstr "Si"
+
+#: postie-functions.php:2061
+msgid "No"
+msgstr "No"
+
+#: postie.php:82
+msgid "Edit Plugins"
+msgstr "Modifica Plugins"
+
+#: postie.php:161
+msgid "Postie is almost ready."
+msgstr "Postie è quasi pronto."
+
+#: postie.php:162
+msgid "You must <a href=\"%1$s\">enter your email settings</a> for it to work."
+msgstr "Devi <a href=\"%1$s\">inserire le tue impostazioni email</a> per funzionare."
+
+#: postie.php:172
+msgid "Warning: the IMAP php extension is not installed."
+msgstr "Attenzione: l'estensione php IMAP non è installata."
+
+#: postie.php:173
+msgid "Postie may not function correctly without this extension (especially for non-English messages)."
+msgstr "Postie potrebbe non funzionare correttamente senza questa estensione (in particolare per messaggi non in Inglese)"
+
+#: postie.php:176
+msgid "Please see the <a href=\"%1$s\">FAQ </a> for more information."
+msgstr "Per favore leggere le <a href=\"%1$s\">FAQ </a> per maggiori informazioni."
+
+#: postie_test.php:10
+msgid "Postie Diagnosis"
+msgstr "Diagnosi Postie"
+
+#: postie_test.php:41
+msgid "Only required for international character set support"
+msgstr "Richiesto solo per supporto di set caratteri internazionali"
+
+#: postie_test.php:45
+#: postie_test.php:49
+msgid "yes"
+msgstr "si"
+
+#: util/wp-i18n/pomo/sample/app.php:56
+msgid "Welcome %s!"
+msgstr "Benvenuto %s!"
+
+#: util/wp-i18n/pomo/sample/app.php:60
+msgid "A string with low priority!"
+msgstr "Una stringa con bassa priorità!"
+
+#: util/wp-i18n/pomo/sample/app.php:62
+msgid "Bye\n"
+msgstr "Addio\n"
+
+#~ msgid ""
+#~ "If you would like to start over - you can click the button on the right "
+#~ "to reset all configurations to the default."
+#~ msgstr ""
+#~ "Se vuoi ricominciare - puoi cliccare il pulsante sulla destra per "
+#~ "reimpostare tutte le configurazioni ai valori predefiniti."
+
+#~ msgid "Authorization Settings"
+#~ msgstr "Impostazioni Autorizzazione"
+
+#~ msgid "Allow Anyone To Post Via Email"
+#~ msgstr "Permetti a chiunque di pubblicare tramite email"
+
+#~ msgid ""
+#~ "Changing this to yes is NOT RECOMMEDED - anything that gets sent in will "
+#~ "automatically be posted. This could make it easier to compromise your "
+#~ "server - YOU HAVE BEEN WARNED."
+#~ msgstr ""
+#~ "Modificare questo parametro NON È RACCOMANDATO - qualsiasi cosa venga "
+#~ "spedita verrà automaticamente pubblicata. Questo può facilitare la "
+#~ "compromissione del tuo server - SEI STATO AVVISATO."
+
+#~ msgid "Minimum Access Level Required To Post:"
+#~ msgstr "Livello di accesso minimo richiesto per pubblicare:"
+
+#~ msgid "Authorized Addresses"
+#~ msgstr "Indirizzi Autorizzati"
+
+#~ msgid ""
+#~ "Put each email address on a single line. Posts from emails in this list "
+#~ "will be treated as if they came from the admin. If you would prefer to "
+#~ "have users post under their own name - create a WordPress user with the "
+#~ "correct access level."
+#~ msgstr ""
+#~ "Metti ogni indirizzo email su una riga. Articoli da indirizzi in questa "
+#~ "lista verranno trattati come se venissero direttamente "
+#~ "dall'amministrazione. Se preferisci che gli utenti pubblichino a loro "
+#~ "nome, crea l'utente WordPress col corretto livello d'accesso."
+
+#~ msgid "Directory Settings"
+#~ msgstr "Impostazione Cartella"
+
+#~ msgid "Directory For Photos:"
+#~ msgstr "Cartella per foto:"
+
+#~ msgid "Recommended"
+#~ msgstr "Raccomandato"
+
+#~ msgid "Directory For Files:"
+#~ msgstr "Cartella per files:"
+
+#~ msgid "Live from the field"
+#~ msgstr "Live dal campo"
+
+#~ msgid "plain"
+#~ msgstr "semplice"
+
+#~ msgid "html"
+#~ msgstr "html"
+
+#~ msgid "Forward Rejected Mail"
+#~ msgstr "Inoltra mail rifiutate"
+
+#~ msgid "Allow Subject In Mail"
+#~ msgstr "Permetti oggetto in mail"
+
+#~ msgid "Allow HTML In Mail Subject"
+#~ msgstr "Permetti HTML in oggetto mail"
+
+#~ msgid "Allow HTML In Mail Body"
+#~ msgstr "Permetti HTML nel corpo mail"
+
+#~ msgid "UTF-8"
+#~ msgstr "UTF-8"
+
+#~ msgid "Decode Quoted Printable Data"
+#~ msgstr "Decodifica dati stampabili quotati"
+
+#~ msgid "Should be yes in most cases."
+#~ msgstr "Dovrebbe essere 'si' in generale."
+
+#~ msgid "Supported File Types"
+#~ msgstr "Tipi di file accettati"
+
+#~ msgid "Put each type on a single line."
+#~ msgstr "Metti ogni tipo in una riga."
+
+#~ msgid "Banned File Names"
+#~ msgstr "Nomi file bannati"
+
+#~ msgid ""
+#~ "Put each file name on a single line.Files matching this list will never "
+#~ "be posted to your blog."
+#~ msgstr ""
+#~ "Metti ogni nome in una riga. I file che coincidono con questa lista non "
+#~ "verranno pubblicati."
+
+#~ msgid "Drop The Signature From Mail"
+#~ msgstr "Cancella la firma dalla mail"
+
+#~ msgid "Signature Patterns"
+#~ msgstr "Modelli firma"
+
+#~ msgid ""
+#~ "Put each pattern on a seperate line and make sure to escape any special "
+#~ "characters."
+#~ msgstr ""
+#~ "Metti ogni modello in una riga e assicurati di trasformare (escape) ogni "
+#~ "carattere speciale."
+
+#~ msgid "Image Settings"
+#~ msgstr "Impostazioni Immagine"
+
+#~ msgid "No GD Support"
+#~ msgstr "Nessun supporto GD"
+
+#~ msgid ""
+#~ "Currently your installation of PHP does not have GD installed so no image "
+#~ "resizing can occur."
+#~ msgstr ""
+#~ "La tua installazione di PHP non ha GD installato, quindi nessun "
+#~ "ridimensionamento immagine può essere effettuato."
+
+#~ msgid "Post Images At End"
+#~ msgstr "Pubblica immagini alla fine"
+
+#~ msgid "No means they will be put before the text of the message."
+#~ msgstr "'No' significa che verranno messe prima del testo del messaggio."
+
+#~ msgid "Resize Large Images"
+#~ msgstr "Ridimensiona immagini larghe"
+
+#~ msgid "Maximum Image Width:"
+#~ msgstr "Larghezza immagine massima:"
+
+#~ msgid "pixels"
+#~ msgstr "pixels"
+
+#~ msgid "JPEG Compression:"
+#~ msgstr "Compressione JPEG:"
+
+#~ msgid "%"
+#~ msgstr "%"
+
+#~ msgid "Use ImageMagick"
+#~ msgstr "Usa ImageMagick"
+
+#~ msgid "convert binary location:"
+#~ msgstr "località convert in binary:"
+
+#~ msgid "only needed if you are using ImageMagick"
+#~ msgstr "necessario solo se usi ImageMagick"
+
+#~ msgid "should be /usr/bin/convert"
+#~ msgstr "dovrebbe essere /usr/bin/convert"
+
+#~ msgid "identify binary location:"
+#~ msgstr "località identify binary:"
+
+#~ msgid "should be /usr/bin/identify"
+#~ msgstr "dovrebbe essere /usr/bin/identify"
+
+#~ msgid "Start Image Count At 0"
+#~ msgstr "Inizia conteggio immagine a 0"
+
+#~ msgid "Image CSS Class:"
+#~ msgstr "Classe CSS immagine:"
+
+#~ msgid "Image CSS Style:"
+#~ msgstr "Stile CSS immagine:"
+
+#~ msgid "3GP"
+#~ msgstr "3GP"
+
+#~ msgid "Embed 3GP videos as QuickTime"
+#~ msgstr "Incorpora video 3GP come QuickTime"
+
+#~ msgid ""
+#~ "This controls if the video is just a link or embeded in the page using "
+#~ "QuickTime"
+#~ msgstr ""
+#~ "Questo controlla se un video è un semplice link o viene incorporato nella "
+#~ "pagina utilizzando QuickTime"
+
+#~ msgid "Location of ffmpeg:"
+#~ msgstr "Località di ffmpeg:"
+
+#~ msgid ""
+#~ "only needed if you are on a Linux server and use 3gp video,and don't "
+#~ "embed the video. This allows postie to make thumbnail of the very first "
+#~ "frame"
+#~ msgstr ""
+#~ "necessario solo se sei su un server Linux, utilizzi video 3GP e non li "
+#~ "incorpori. Questo permette a Postie di creare una miniatura del primo "
+#~ "fotogramma."
+
+#~ msgid "should be /usr/bin/ffmpeg"
+#~ msgstr "dovrebbe essere /usr/bin/ffmpeg"
+
+#~ msgid "3GP CSS Class:"
+#~ msgstr "Classe CSS 3GP:"
+
+#~ msgid "Mailserver Settings"
+#~ msgstr "Impostazioni Server di Posta"
+
+#~ msgid "IMAP/IMAP-SSL/POP3-SSL unavailable"
+#~ msgstr "IMAP/IMAP-SSL/POP3-SSL non disponibili"
+
+#~ msgid "Update Options"
+#~ msgstr "Aggiorna Opzioni"

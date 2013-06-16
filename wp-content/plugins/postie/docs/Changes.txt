@@ -22,6 +22,60 @@ All script, style and body tags are stripped from html emails.
 Attachments are now processed in the order they were attached.
 
 == CHANGELOG ==
+= 1.5.12 (2013.06.08) =
+* Added full paths to includes in config_form due to some hosts having include_path set in a way that breaks Postie.
+* Added some checks for emails that aren't correctly formatted (AirMail/WinLink)
+* Consolidated environmental checks
+* Added logic for Debian location of wp-config.php
+
+= 1.5.11 (2013.06.02) =
+* Moved test files out of main repository to decrease plugin size
+* Fixed issue with readme file (Wordpress readme validator moved)
+
+= 1.5.10 (2013.05.31) =
+* Added template field descriptions to image tab.
+* Fixed a bug where caption placeholder in templates wasn't being properly set.
+* Additional test to see if wp-config.php can be found.
+
+= 1.5.9 (2013.05.18) =
+* Fixed a bug where valid users can post via email even though they don't have role permissions.
+* Fixed a bug where nice_name was being used in the settings screen even though user_login was needed.
+* Fixed the error message when the default poster is not valid.
+* Fixed bug where gallery short tag was getting set when non-image attachments were found.
+
+= 1.5.8 (2013.05.14) =
+* Added additional default signature patterns.
+* Fixed a bug where attachments were not showing up if :start or :end were used.
+
+= 1.5.7 (2013.05.09) =
+* Fixed bug where the admin user was not getting set as author in some cases.
+* Fixed bug where file names were not being sanitized.
+* Added setting to disable thumbnail generation.
+* Updated the default signature patterns and help text.
+
+= 1.5.6 (2013-05-07) =
+* Fixed bug where default post format was empty when the theme didn't support any formats.
+* Removed all hard coded references to wp-content.
+* Fixed bug where caption wasn't being filled out in templates.
+* Updated direct DB access to use standard methods.
+* Added attachment template for non-audio/image/video attachments.
+* Added additional checks to the test screen.
+* Added new template variable {ICON}
+
+= 1.5.5 (2013.05.02) =
+* Added ability to run a manual check with debugging output.
+* Added support for default post type.
+* Added version number to settings page.
+* Changed Admin User to Default Poster, clarified help text and changed input to combo box of valid values.
+* Fixed bug where commas (,) were not allowed in signature detection.
+* Fixed some CSS issues on admin page.
+
+= 1.5.4 (2013.05.01) =
+* Added support for default post format
+* Fixed bug where replies were getting attached to the wrong post
+* Fixed bug where tags were not being detected correctly in html emails
+* Fixed bug in reply detection
+
 = 1.5.3 (2013.04.13) =
 * Added support for Featured Images
 * Added support for Use Transport Layer Security (TLS)
@@ -427,7 +481,6 @@ Attachments are now processed in the order they were attached.
       * No longer directly including pluggable.php (should
         prevent conflicts with other plugins such as registerplus
 
-
 =  1.1.5 (2009.03.10) =
   * Added option to have postie posts be pending review, published, or draft
   * Settings panel only shows up for administrators
@@ -454,8 +507,7 @@ Attachments are now processed in the order they were attached.
   * replying to an e*mail adds a comment to a post
   * fixed category handling to work with taxonomy
   * fixed one syntax error
-  * added option to wrap posts and comments in <pre%gt; tags
-
+  * added option to wrap posts and comments in <pre> tags
 
 =  1.1.1 =
 
@@ -491,21 +543,20 @@ plugin.  And the rest is history :)
 
 =  0.9.9.3.2 =
 * BUGFIX: Typo
+
 =  0.9.9.3.1 =
 * BUGFIX: Removed debugging code
 
 =  0.9.9.3 =
 * BUGFIX: If your email address matches an existing user - then it will post as that user - even if you allow anyone to post.
 * BUGFIX: Replaced get_settings('home') with get_settings('siteurl')
-* BUGFIX: Better handling for Japanese charactersets - Thanks to http://www.souzouzone.jp/blog/archives/009531.html
+* BUGFIX: Better handling for Japanese character sets - Thanks to http://www.souzouzone.jp/blog/archives/009531.html
 * BUGFIX: Better thumbnail window opening code - thanks to Gabi & Duntello!
 * FEATURE: Added an option to set the MAX Height of an image - idea from Duntello
 * BUGFIX: Modified the FilterNewLines for better flowed text handling - You now HAVE TO PUT TWO NEW LINES to end a paragraph.
 * FEATURE: Added new CSS tags to support positioning images/attachments/3gp videos
 * BUGFIX: Tries to use the date in the message (Thanks Ravan) I tried this once before and it never worked - hopefully this time it will.
 * BUGFIX: Added a workaround to fix the problem with Subscribe2 - it will now notify on posts that are not set to show up in the future.
-
-
 
 =  0.9.9.2 =
 * BUGFIX: Looks for the NOOP error and disgards it
@@ -537,6 +588,7 @@ plugin.  And the rest is history :)
 * FEATURE: Added option to turn of quoted printable decoding
 * FEATURE: :start tag - now postie looks for this tag before looking for you message - handy if your service provider prepends a message 
 * FEATURE: Template for translation now included
+
 =  0.9.8.4 =
 * BUGFIX: Fixed problem with config_form.php - select had "NULL" instead of ""
 * BUGFIX: 3g2 now supported
@@ -559,7 +611,7 @@ plugin.  And the rest is history :)
 * BUGFIX: Email that has both Plain and HTML content will show the HTML content and not the plain if html is preferred
 
 =  0.9.8.2 =
-* BUGFIX: Fixed an extra new line after attachin non-image files.
+* BUGFIX: Fixed an extra new line after attaching non-image files.
 * BUGFIX: The Test system now displays any missing gd functions
 * BUGFIX: The test system was only using ImageMagick
 
@@ -596,7 +648,7 @@ plugin.  And the rest is history :)
 * FEATURE: Option to embed 3GP in QuickTime Controller.
 
 =  0.9.5.2 =
-* BUGFIX: gmt varialble not being set correctly
+* BUGFIX: gmt variable not being set correctly
 * BUGFIX: Changed the name of the Check Mail button to fix an issue with mod_security
 * BUGFIX: Fixed issue with Cronless-Postie
 * BUGFIX: There was an argument passed by reference incorrectly
@@ -621,7 +673,6 @@ plugin.  And the rest is history :)
 * BUGFIX: fixed issue of compatability with cjd-notepad
 * BUGFIX: Windows Works Now
 
-
 =  0.9.4 =
 * BUGFIX: Cronless Postie - fixed the include statement
 * BUGFIX: Authorized Addresses now supports a single address
@@ -635,16 +686,20 @@ plugin.  And the rest is history :)
 
 =  0.9.3 =
 * Bug fixes for IIS
+
 =  0.9.2 =
 * Moved to more of a DIRECTORY_SEPARATOR structure 
+
 =  0.9.1 =
 * Added a define to fix a problem with over including
+
 =  0.9 =
 * Converted to an honest to god plugin
 * BUGFIX: If you put a single category:subject it now works
 * BUGFIX: ? Special characters may be supported?  The test post now shows a lot of umlats and accents?
 * BUGFIX: The last ] in a subject with categories is now filtered out
 * FEATURE: -1- subject - will put the post in category 1
+
 =  0.312.13 =
 * Code clean up - The main loop is finally readable by even non programmers
 * FEATURE - You can now post to multiple categories at one time by using the [#],[Category Name], [Cat] in the subject
@@ -656,40 +711,48 @@ plugin.  And the rest is history :)
 * BUG FIX: Able to handle mis-mime typed images as long as they are named with .jpg/.gif/.png
 
 =  0.312.12 =
-* Code clean up - slowing shrinking the main to make it easiery to fix things
+* Code clean up - slowing shrinking the main to make it easier to fix things
 * FEATURE: Be able to turn on/off allowing comments in an email
 * BUG FIX: AppleDouble now mostly supported 
 * BUG FIX: MIME handling improved.
 * BUG FIX: Fix issue with timing delay
+
 =  0.312.11 =
 * FEATURE: Patterns to define where a sig starts are user configurable
 * FEATURE: Add filter options for banned file names
 * BUG FIX: Made it possible to turn off posting to the db for testing purposes
+
 =  0.312.10 =
 * FEATURE: Added in code to diplay the mime type of the file being linked to
 * BUG FIX: It now tests for the existance of the directories and makes sure
 * that the web server can write to them
+
 =  0.312.9 =
 * FEATURE:Should handle jpg as well as jpeg as the file type
 * BUG FIX: Now correctly handles the subject in the message
 * BUG FIX: Should handle Text preferences correctly 
+
 =  0.312.8 =
 * Some general code tidying. 
-* FEATURE: Can now have email from invalid email addresses automatically forwared
+* FEATURE: Can now have email from invalid email addresses automatically forwarded
 * to the admin's email account. This forward includes all attachments. 
 * Props to David Luden for getting this started.
 * Minor change: The system will continue if it runs into a message that doesn't have 
 * any content - it will also continue to process if it gets an email from 
 * someone not in the system. In the past this could result in deleted mail
 * if your cron job didn't run often enough.
+
 =  0.312.7 =
 * Confirm the handling of 3gp video for cell phones o
 * Added in new directive SUPPORTED_FILE_TYPES -if the mime type is listed here then the system will try to make a link to it without making a thumb nail.
+
 =  0.312.6 =
 * Bug Fix: Ok the last bug I fixed - actually caused another bug - man I should set up some unit tests. Now it handles mail from the nokia mail client correctly.
+
 =  0.312.5 =
-* Bug Fix : The system was accepting all test/* types. Now you can set a preference (defaults to text/plain)
+* Bug Fix : The system was accepting all text/* types. Now you can set a preference (defaults to text/plain)
 * to use as the main text for the post.
+
 =  0.312.4  =
 * Added in sanitize_title call suggested by Jemima
 * Added in ability to provide a subject in an mms - by using #Subject#
@@ -711,6 +774,7 @@ plugin.  And the rest is history :)
 
 =  0.312.2 =
 * BUGFIX: It now removes the delay tag from the message
+
 =  0.312.1 =
 * Added modification for placeholder support for images (David Luden)
 * Added in support to automatically scale down big images (Dirk Elmendorf)
@@ -719,18 +783,17 @@ plugin.  And the rest is history :)
 * Switch config options to defines to reduce the number of global variables (Dirk Elmendorf)
 * Added tests to make sure there is a trailing slash on the DIR definitions (Dirk Elmendorf)
 * Add tests to see if they have gd installed (Dirk Elmendorf)
-* Seperate the scaling out to a function for easier usage (Dirk Elmendorf)
+* Separate the scaling out to a function for easier usage (Dirk Elmendorf)
 * Add delay feature for future posting. (Dirk Elmendorf)
 * Added in ability to use strtotime if it is available (Dirk ELmendorf)
 
-* Todo
-* Have option to have the email that is rejected forwarded on to another address.
-* Fix bug that id still diplays the delay tag in the body 
 =  0.312 - 2005-03 =
 *  CHANGE FOR DEFAULT E-mail Categories, instead of [General] Subject you can now use General: Subject in the subject line.  Less typing, and there must be a space after the colon. 
 *  Fixed bugs with no default posting for categories and user 
+
 =  0.311 - 2005-01 =
 *  eep, major bug for pop3 server. Next time I test my code more before I released, fixed so that pop3 now works.`
+
 =  0.31 - 2004-12 & 2005-01 =
 * (Has it been this long, best get back into the swing of things... did most of this coding on my holiday as I didn't have a machine to play WoW on :)
 *  moved the deletion of pop3 emails into a check so that e-mails aren't deleted without proper checking.

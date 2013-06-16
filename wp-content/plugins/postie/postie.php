@@ -4,7 +4,7 @@
   Plugin Name: Postie
   Plugin URI: http://PostiePlugin.com/
   Description: Signifigantly upgrades the posting by mail features of Word Press (See <a href='options-general.php?page=postie/postie.php'>Settings and options</a>) to configure your e-mail settings. See the <a href='http://wordpress.org/extend/plugins/postie/other_notes'>Readme</a> for usage. Visit the <a href='http://wordpress.org/support/plugin/postie'>postie forum</a> for support.
-  Version: 1.5.3
+  Version: 1.5.12
   Author: Wayne Allen
   Author URI: http://allens-home.com/
   License: GPL2
@@ -27,9 +27,10 @@
  */
 
 /*
-  $Id: postie.php 697184 2013-04-14 05:43:22Z WayneAllen $
+  $Id: postie.php 724558 2013-06-09 01:26:50Z WayneAllen $
  */
 
+define('POSTIE_VERSION', '1.5.12');
 define("POSTIE_ROOT", dirname(__FILE__));
 define("POSTIE_URL", WP_PLUGIN_URL . '/' . basename(dirname(__FILE__)));
 
@@ -54,10 +55,9 @@ function postie_loadjs_options_page() {
 }
 
 function postie_loadjs_admin_head() {
-    $plugindir = get_option('siteurl') . '/wp-content/plugins/' . dirname(plugin_basename(__FILE__));
-    wp_enqueue_script('loadjs', $plugindir . '/js/simpleTabs.jquery.js');
-    echo '<link type="text/css" rel="stylesheet" href="' . get_bloginfo('wpurl') . '/wp-content/plugins/postie/css/style.css" />' . "\n";
-    echo '<link type="text/css" rel="stylesheet" href="' . get_bloginfo('wpurl') . '/wp-content/plugins/postie/css/simpleTabs.css" />' . "\n";
+    wp_enqueue_script('loadjs', plugins_url('js/simpleTabs.jquery.js', __FILE__));
+    echo '<link type="text/css" rel="stylesheet" href="' . plugins_url('css/style.css', __FILE__) . "\"/>\n";
+    echo '<link type="text/css" rel="stylesheet" href="' . plugins_url('css/simpleTabs.css', __FILE__) . "\"/>\n";
 }
 
 if (isset($_GET["postie_read_me"])) {
@@ -205,15 +205,18 @@ function postie_whitelist($options) {
 //don't use DebugEcho or EchoInfo here as it is not defined when called as an action
 function check_postie() {
     error_log("check_postie");
-    $host = get_option('siteurl');
-    preg_match("/https?:\/\/(.[^\/]*)(.*)/i", $host, $matches);
+
+    $fullurl = plugins_url("get_mail.php", __FILE__);
+    preg_match("/https?:\/\/(.[^\/]*)(.*)/i", $fullurl, $matches);
     $host = $matches[1];
+
     $url = "";
     if (isset($matches[2])) {
-        $url .= $matches[2];
+        $url = $matches[2];
     }
-    $url .= "/wp-content/plugins/postie/get_mail.php";
-    $port = 80;
+
+    $port = is_ssl() ? 443 : 80;
+
     $fp = fsockopen($host, $port, $errno, $errstr);
     if ($fp) {
         fputs($fp, "GET $url HTTP/1.0\r\n");

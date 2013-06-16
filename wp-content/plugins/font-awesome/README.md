@@ -1,31 +1,57 @@
-#Font Awesome WordPress Plugin
+#Font Awesome Icons
+
+Contributors: rachelbaker
+
+Tags: icons, font-awesome, font icon, UI, icon font, bootstrap
+
+Requires at least: 3.0
+
+Tested up to: 3.6 beta2
+
+Stable tag: 3.1
+
+License: GPLv3 or later
+
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
+
+![image](http://f.cl.ly/items/3Y0C0i270N281b0v2Q3y/banner-772x250.png)
+
 
 Enables easy use of the Font Awesome icon font set from within WordPress.  Icons can be inserted using either HTML or a shortcode.
 
-Font Awesome is a pictographic font set of 220 icons.  The icons are infitinely scalable and screen reader compatible.
+Font Awesome is a pictographic font set of 302 icons.  The icons are infinitely scalable and screen reader compatible.
 
-A full list of the 220 Font Awesome icons is available: [http://fortawesome.github.com/Font-Awesome/#all-icons](http://fortawesome.github.com/Font-Awesome/#all-icons)
+A full list of the 302 Font Awesome icons is available: [http://fontawesome.io/icons/](http://fontawesome.io/icons/)
 
 ##Usage Instructions
 
 To use any of the Font Awesome icons on your WordPress site you have two options:
 
-###1. HTML Option
+__HTML Option__
 
-All code examples on the Font Awesome site apply: [http://fortawesome.github.com/Font-Awesome/#code](http://fortawesome.github.com/Font-Awesome/#code)
+All code examples on the Font Awesome site apply: [http://fontawesome.io/examples/](http://fontawesome.io/examples/)
 
 **Examples**
-Pencil icon `<i class="icon-pencil"></i>`
-Phone icon `<i class="icon-phone"></i>`
-Chevron left icon `<i class="icon-chevron-left"></i>`
 
-###2. Shortcode Option
+Pencil icon
+
+`<i class="icon-pencil"></i>`
+
+Phone icon
+
+`<i class="icon-phone"></i>`
+
+Chevron left icon
+
+`<i class="icon-chevron-left"></i>`
+
+__Shortcode Option__
 
 Don't want to worry about HTML tags?  You can use a shortcode in your posts, pages and even widgets to display a Font Awesome icon.
 
 The shortcode to use is `[icon name=name-of-icon]`, where name=X is the class of the icon you would like to use.
 
-**Examples**
+
 Pencil icon
 
 `[icon name=icon-pencil]`
@@ -38,11 +64,34 @@ Chevron left icon
 
 `[icon name=icon-chevron-left]`
 
-##Icons
 
-![image](http://f.cl.ly/items/3Q3Z0Z30153Q3a2e3i1M/FontAwesome-Vectors.jpg)
+
+##Installation
+
+1. Upload Font Awesome Icons to the `/wp-content/plugins/` directory.
+
+2. Activate the plugin through the 'Plugins' menu in WordPress.
+
+3. Add shortcode to your posts, pages and even widgets to display a Font Awesome icon.
+
+The shortcode to use is `[icon name=name-of-icon]`, where name=X is the class of the icon you would like to use.
 
 ##Release Notes
+
+__Version 3.1__
+
+*   Updated font and CSS files to Font Awesome 3.1 release. (Thanks to @Taylor4484)
+*   Updated reference urls to new Font Awesome URL. (Thanks to @Taylor4484)
+*   Added build/icons.yml file for reference. (Thanks to @BFTrick)
+*   Updated reference PDF file with Font Awesome 3.1 icons.
+
+__Version 3.0__
+
+Updated font and CSS files to Font Awesome 3.0 release.
+
+__Version 1.2__
+
+Added IE7 conditional stylesheet
 
 __Version 1.1__
 

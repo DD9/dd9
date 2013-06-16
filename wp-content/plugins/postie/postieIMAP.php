@@ -37,6 +37,7 @@ class PostieIMAP {
      */
     function TLSOn() {
         $this->_tls_on = true;
+        DebugEcho("IMAP: TLS enabled");
     }
 
     /**
@@ -78,10 +79,12 @@ class PostieIMAP {
         } else {
             $this->_server_string = "{" . $server . ":" . $port . $option . "}";
         }
+        DebugEcho("IMAP: connection string - {$this->_server_string}");
         $this->_connection = imap_open($this->_server_string, $login, $password);
 
         if ($this->_connection) {
             $this->_connected = true;
+            DebugEcho("IMAP: connected");
         } else {
             LogInfo("imap_open failed: " . imap_last_error());
         }
@@ -94,13 +97,12 @@ class PostieIMAP {
      */
     function getNumberOfMessages() {
         $status = imap_status($this->_connection, $this->_server_string, SA_ALL); //get all messages in debug mode so we can reprocess them
-        //DebugEcho($this->_server_string);
-        //DebugDump($status);
+        DebugDump($status);
         if ($status)
             return $status->messages;
         else {
             LogInfo("Error imap_status did not return a value");
-            DebugDump($this);
+            //DebugDump($this);
             return 0;
         }
     }
@@ -110,10 +112,9 @@ class PostieIMAP {
      * @return string
      */
     function fetchEmail($index) {
-//        if ($index < 1 || $index > ($this->getNumberOfMessages() + 1)) {
-//            die("Invalid IMAP/POP3 message index!");
-//        }
+
         $header_info = imap_headerinfo($this->_connection, $index);
+        DebugDump($header_info);
 
         if (IsDebugMode() || $header_info->Recent == 'N' || $header_info->Unseen == 'U') {
             $email = imap_fetchheader($this->_connection, $index);
@@ -129,6 +130,7 @@ class PostieIMAP {
      * Marks a message for deletion
      */
     function deleteMessage($index) {
+        DebugEcho("IMAP: deleting message $index");
         imap_delete($this->_connection, $index);
     }
 
@@ -136,6 +138,7 @@ class PostieIMAP {
      * Handles purging any files that are marked for deletion
      */
     function expungeMessages() {
+        DebugEcho("IMAP: expunge");
         imap_expunge($this->_connection);
     }
 
@@ -143,6 +146,7 @@ class PostieIMAP {
      * Handles disconnecting from the server
      */
     function disconnect() {
+        DebugEcho("IMAP: closing connection");
         imap_close($this->_connection);
         $this->_connection = false;
     }
@@ -151,7 +155,7 @@ class PostieIMAP {
      * @return string
      */
     function error() {
-        //echo(print_r(imap_errors(), true));
+        DebugDump(imap_errors());
         return(imap_last_error());
     }
 

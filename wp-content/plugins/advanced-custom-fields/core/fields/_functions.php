@@ -59,26 +59,19 @@ class acf_field_functions
 		}
 		
 		
+		// set default value
+		$value = false;
+		
+		
 		// if $post_id is a string, then it is used in the everything fields and can be found in the options table
 		if( is_numeric($post_id) )
 		{
-			$value = get_post_meta( $post_id, $field['name'], false );
+			$v = get_post_meta( $post_id, $field['name'], false );
 			
-			// value is an array, check and assign the real value / default value
-			if( !isset($value[0]) )
+			// value is an array
+			if( isset($v[0]) )
 			{
-				if( isset($field['default_value']) )
-				{
-					$value = $field['default_value'];
-				}
-				else
-				{
-					$value = false;
-				}
-		 	}
-		 	else
-		 	{
-			 	$value = $value[0];
+			 	$value = $v[0];
 		 	}
 
 		}
@@ -86,41 +79,33 @@ class acf_field_functions
 		{
 			$post_id = str_replace('user_', '', $post_id);
 			
-			$value = get_user_meta( $post_id, $field['name'], false );
+			$v = get_user_meta( $post_id, $field['name'], false );
 			
-			// value is an array, check and assign the real value / default value
-			if( !isset($value[0]) )
+			// value is an array
+			if( isset($v[0]) )
 			{
-				if( isset($field['default_value']) )
-				{
-					$value = $field['default_value'];
-				}
-				else
-				{
-					$value = false;
-				}
+			 	$value = $v[0];
 		 	}
-		 	else
-		 	{
-			 	$value = $value[0];
-		 	}
+		 	
 		}
 		else
 		{
-			$value = get_option( $post_id . '_' . $field['name'], null );
+			$v = get_option( $post_id . '_' . $field['name'], null );
 			
-			if( is_null($value) )
+			if( !is_null($value) )
 			{
-				if( isset($field['default_value']) )
-				{
-					$value = $field['default_value'];
-				}
-				else
-				{
-					$value = false;
-				}
+				$value = $v;
 		 	}
-
+		}
+		
+		
+		// no value?
+		if( $value === false )
+		{
+			if( isset($field['default_value']) && $field['default_value'] !== "" )
+			{
+				$value = $field['default_value'];
+			}
 		}
 		
 		
@@ -370,7 +355,7 @@ class acf_field_functions
 	function load_field_defaults( $field )
 	{
 		// validate $field
-		if( ! $field )
+		if( !is_array($field) )
 		{
 			$field = array();
 		}
@@ -399,6 +384,10 @@ class acf_field_functions
 		// Parse Values
 		$field = apply_filters( 'acf/parse_types', $field );
 		
+		
+		// field specific defaults
+		$field = apply_filters('acf/load_field_defaults/type=' . $field['type'] , $field);
+				
 		
 		// class
 		if( !$field['class'] )
@@ -568,6 +557,10 @@ foreach( $field['conditional_logic']['rules'] as $rule ):
 	
 	function create_field_options($field)
 	{
+		// load standard + field specific defaults
+		$field = apply_filters('acf/load_field_defaults', $field);
+		
+		// render HTML
 		do_action('acf/create_field_options/type=' . $field['type'], $field);
 	}
 

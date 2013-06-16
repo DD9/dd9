@@ -20,7 +20,7 @@ table.form-table th {
     width:40%;
     font-weight:bold;
 }
-span.recommendation {
+.recommendation {
     font-size: 10px;
     font-weight:normal;
     color:#222;
@@ -40,4 +40,7 @@ div.simpleTabs-content li li li {
 }
 table.checkbox-table td {
     padding:0px;
+}
+.updated {
+    overflow: hidden;
 }

@@ -3,7 +3,7 @@
 Plugin Name: Font Awesome Icons
 Plugin URI: http://www.rachelbaker.me
 Description: Use the Font Awesome icon set within WordPress. Icons can be inserted using either HTML or a shortcode.
-Version: 1.1
+Version: 3.1
 Author: Rachel Baker
 Author URI: http://rachelbaker.me/font-awesome-icons-wordpress-plugins/
 Author Email: rachel@rachelbaker.me
@@ -13,7 +13,7 @@ Credits:
 
 License:
 
-  Copyright (C) 2012  Rachel Baker, Plugged In Consulting, Inc.
+  Copyright (C) 2013  Rachel Baker
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,33 +30,31 @@ License:
 
 */
 
-class FontAwesome
-{
-    public function __construct()
-    {
+class FontAwesome {
+    public function __construct() {
         add_action( 'init', array( &$this, 'init' ) );
     }
 
-    public function init()
-    {
-        add_action( 'wp_enqueue_scripts', array( &$this, 'register_plugin_styles' ) );
-        add_shortcode('icon', array( &$this, 'setup_shortcode' ) );
-        add_filter('widget_text', 'do_shortcode');
+    public function init() {
+        add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_styles' ) );
+        add_shortcode( 'icon', array( $this, 'setup_shortcode' ) );
+        add_filter( 'widget_text', 'do_shortcode' );
     }
 
-    public function register_plugin_styles()
-    {
-        wp_enqueue_style( 'font-awesome-styles', plugins_url( 'assets/css/font-awesome.css', __FILE__  ) );
+    public function register_plugin_styles() {
+        global $wp_styles;
+        wp_enqueue_style( 'font-awesome-styles', plugins_url( 'assets/css/font-awesome.min.css', __FILE__  ) );
+        wp_enqueue_style( 'font-awesome-ie7', plugins_url( 'assets/css/font-awesome-ie7.min.css', __FILE__ ), array(), '1.0', 'all'  );
+        $wp_styles->add_data( 'font-awesome-ie7', 'conditional', 'lte IE 7' );
     }
 
-    public function setup_shortcode($params)
-    {
-     extract( shortcode_atts( array(
-             'name'  => 'icon-wrench'
-             ), $params));
-     $icon = '<i class="'.$params['name'].'">&nbsp;</i>';
+    public function setup_shortcode( $params ) {
+        extract( shortcode_atts( array(
+                    'name'  => 'icon-wrench'
+                ), $params ) );
+        $icon = '<i class="'.$params['name'].'">&nbsp;</i>';
 
-     return $icon;
+        return $icon;
     }
 
 }

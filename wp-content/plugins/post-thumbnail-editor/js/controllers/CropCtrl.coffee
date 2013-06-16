@@ -9,13 +9,9 @@ define [
          if x is y
             return
 
-         update_options =
-            'pte-action': 'change-options'
+         $scope.updateOptions
             'pte_crop_save': if $scope.pteCropSave then 'true' else 'false'
-         $log.log update_options
 
-         updated = $scope.thumbnailResource.get update_options, ->
-            $log.log "Updated options"
          return
 
       $scope.$watch 'aspectRatio', ->
@@ -23,6 +19,13 @@ define [
          jcrop.setOptions
             aspectRatio: ar
          return
+
+      $scope.$watch 'cropConstraints', ->
+         cropConstraints = $scope.cropConstraints || [null, null, false]
+         jcrop.setOptions
+            cropConstraints: cropConstraints
+         return
+
 
       $scope.changeAR = ->
          $scope.userChanged = true
@@ -52,9 +55,7 @@ define [
       # 3. In order to set the AR, each selected thumbnail needs to have the
       #    same AR.
       #
-      # 4. For the default AR:
-      #    if all the thumbnails have the same crop use it.
-      #    else width/height
+      # 4. For the default AR: Use the original images width/height
       #
       ###
       $scope.updateSelected = ->
@@ -64,9 +65,9 @@ define [
             return
 
          ar = null
+         cropConstraints = [null, null, false]
          try
             selected = false
-            allCrop = null
             for thumbnail in $scope.thumbnails
                # Get the crop/width/height and convert to numerals
                {crop, width, height} = thumbnail
@@ -76,14 +77,14 @@ define [
                tmp_ar = width/height
 
                if thumbnail.selected
+                  [cropW, cropH, isAR] = cropConstraints
+                  if !cropW or (0 < width and cropW < width)
+                     cropW = width
+                  if !cropH or (0 < height and cropH < height)
+                     cropH = height
+                  isAR = isAR or crop
+                  cropConstraints = [cropW, cropH, isAR]
                   selected = true
-
-               # Check if all the thumbnails have the same crop
-               if crop > 0
-                  if allCrop is null
-                     allCrop = tmp_ar
-                  else if allCrop > 0 and allCrop != tmp_ar
-                     allCrop = -1
 
                # Check Wordpress Crop setting (#2)
                if thumbnail.selected and crop > 0
@@ -94,16 +95,13 @@ define [
 
             # (#4) Set the default
             if ar is null and selected is false
-               if allCrop isnt null and allCrop > 0
-                  ar = allCrop
-               else
-                  ar = settings.width/settings.height
+               ar = settings.width/settings.height
          catch error
             $scope.setInfoMessage $scope.i18n.crop_problems
-            $scope.aspectRatio = null
-            return
+            ar = null
 
          $scope.aspectRatio = ar
+         $scope.cropConstraints = cropConstraints
          return # end updateSelected
 
       ###

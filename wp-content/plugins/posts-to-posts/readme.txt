@@ -1,11 +1,12 @@
 === Posts 2 Posts ===
-Contributors: scribu, ciobi
-Tags: connections, custom post types, relationships, many-to-many, users
-Requires at least: 3.5
-Tested up to: 3.5
-Stable tag: 1.5.2
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
+Contributors: scribu, ciobi  
+Tags: connections, custom post types, relationships, many-to-many, users  
+Requires at least: 3.5  
+Tested up to: 3.5  
+Stable tag: 1.6.1
+License: GPLv2 or later  
+License URI: http://www.gnu.org/licenses/gpl-2.0.html  
 
 Efficient many-to-many connections between posts, pages, custom post types, users.
 
@@ -24,6 +25,12 @@ Additionally, you can create many-to-many relationships between posts and users.
 * multiple authors per post
 * etc.
 
+= Support & Maintenance =
+
+I, scribu, will not be offering support (either free or paid) for this plugin anymore.
+
+If you want to help maintain the plugin, fork it [on github](https://github.com/scribu/wp-posts-to-posts) and open pull requests.
+
 Links: [**Documentation**](http://github.com/scribu/wp-posts-to-posts/wiki) | [Plugin News](http://scribu.net/wordpress/posts-to-posts) | [Author's Site](http://scribu.net)
 
 == Installation ==
@@ -36,12 +43,9 @@ Additional info can be found on the [wiki](http://github.com/scribu/wp-posts-to-
 
 == Frequently Asked Questions ==
 
-= Error on activation: "Parse error: syntax error, unexpected..." =
+= The waiting icon keeps spinning forever. =
 
-Make sure your host is running PHP 5. The only foolproof way to do this is to add this line to wp-config.php:
-
-`var_dump(PHP_VERSION);`
-<br>
+[Check for JavaScript errors](http://codex.wordpress.org/Using_Your_Browser_to_Diagnose_JavaScript_Errors). If it's an AJAX request, check its output.
 
 == Screenshots ==
 
@@ -52,6 +56,18 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 5. Connection Types screen
 
 == Changelog ==
+
+= 1.6.1 =
+* fixed user column handling. props versusbassz
+* fixed PHP strict standards warnings. props meloniq
+* added Estonian translation. props RistoNiinemets
+* added Finnish translation. props danielck
+
+= 1.6 =
+* introduced `p2p_candidate_title` filter
+* introduced JavaScript API
+* added Japanese translation
+* various refactorings
 
 = 1.5.2 =
 * fixed get_prev() and get_next()
