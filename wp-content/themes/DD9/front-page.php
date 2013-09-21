@@ -190,7 +190,7 @@ $wd_services = get_posts(array(
           
 
 
-<?php if($design_shots): ?>
+<?php if(false): //if($design_shots): ?>
 <div class="block_container full_width clearfix">
  <div class="two_column">
    <h4 class="subheading_full_width"><a href="/category/design-screenshots/" title="Browse the DD9 Project Stream">Design Stream</a></h4>
@@ -231,8 +231,6 @@ $wd_services = get_posts(array(
 	</div><!-- screenshots_container -->
 
 </div><!-- .block_container full_width -->
-<?php else: ?>
-	No design screenshots found.
 <?php endif; ?>	
 
 
