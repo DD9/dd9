@@ -75,12 +75,19 @@ class PostieIMAP {
         }
         if (preg_match("/google|gmail/i", $server)) {
             //Fix from Jim Hodgson http://www.jimhodgson.com/2006/07/19/postie/
+            DebugEcho("IMAP: using Google INBOX");
             $this->_server_string = "{" . $server . ":" . $port . $option . "}INBOX";
         } else {
             $this->_server_string = "{" . $server . ":" . $port . $option . "}";
         }
         DebugEcho("IMAP: connection string - {$this->_server_string}");
-        $this->_connection = imap_open($this->_server_string, $login, $password);
+        //Exchange connection, but requires PHP 5.3.2
+        if (version_compare(phpversion(), '5.3.2', '<')) {
+            $this->_connection = imap_open($this->_server_string, $login, $password);
+        } else {
+            DebugEcho("IMAP: disabling GSSAPI");
+            $this->_connection = imap_open($this->_server_string, $login, $password, NULL, 1, array('DISABLE_AUTHENTICATOR' => 'GSSAPI'));
+        }
 
         if ($this->_connection) {
             $this->_connected = true;
@@ -114,7 +121,7 @@ class PostieIMAP {
     function fetchEmail($index) {
 
         $header_info = imap_headerinfo($this->_connection, $index);
-        DebugDump($header_info);
+        //DebugDump($header_info);
 
         if (IsDebugMode() || $header_info->Recent == 'N' || $header_info->Unseen == 'U') {
             $email = imap_fetchheader($this->_connection, $index);
@@ -164,16 +171,16 @@ class PostieIMAP {
      * @return PostieIMAP|PostieIMAPSSL|PostimePOP3SSL
      * @static
      */
-    function &Factory($protocol) {
+    static function &Factory($protocol) {
         switch (strtolower($protocol)) {
             case "imap":
-                $object = &new PostieIMAP();
+                $object = new PostieIMAP();
                 break;
             case "imap-ssl":
-                $object = &new PostieIMAPSSL();
+                $object = new PostieIMAPSSL();
                 break;
             case "pop3-ssl":
-                $object = &new PostiePOP3SSL();
+                $object = new PostiePOP3SSL();
                 break;
             default:
                 die("$protocol not supported");

@@ -1,10 +1,10 @@
 === Easy FancyBox ===
 Contributors: RavanH
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=Easy%20FancyBox&item_number=1%2e3%2e4%2e9&no_shipping=0&tax=0&charset=UTF%2d8&currency_code=EUR
-Tags: fancybox, lightbox, gallery, image, photo, video, flash, nextgen, overlay, youtube, vimeo, dailymotion, pdf, iframe, swf, jquery
+Tags: fancybox, lightbox, gallery, image, photo, video, flash, nextgen, overlay, youtube, vimeo, dailymotion, pdf, svg, iframe, swf, jquery
 Requires at least: 3.3
 Tested up to: 3.6
-Stable tag: 1.5.0
+Stable tag: 1.5.5
 
 Easily enable the FancyBox jQuery extension on just about all media links. Multi-Site compatible. Supports iFrame and Flash movies.
 
@@ -42,18 +42,22 @@ Visit [FancyBox](http://fancybox.net/) for more information, examples and the Fa
 
 = Translators =
 
-- **Dutch** * Author: [R.A. van Hagen](http://status301.net) (version 1.5.0)
-- **French** * Author: Emmanuel Maillard (version 1.3.4.9)
-- **Hindi** * Author: [Outshine Solutions](http://outshinesolutions.com) (version 1.3.4.9)
-- **Indonesian** * Author: [Nasrulhaq Muiz](http://al-badar.net) (version 1.3.4.9)
-- **Lithuanian** * Author: [Vincent G](http://www.host1free.com) (version 1.3.4.9)
-- **Polish** * Author: Kamil Szymański (version 1.3.4.9)
-- **Romanian** * Author: [Web Geek Sciense](http://webhostinggeeks.com/) (version 1.3.4.9)
-- **Slovak** Author: [Branco Radenovich (WebHostingGeeks.com)](http://webhostinggeeks.com/blog/) (version: 1.3.4.9)
-- **Spanish** * Author: [David Pérez](http://www.closemarketing.es) (version 1.3.4.9)
-- **Turkish** * Author: [Hakan Er](http://hakanertr.wordpress.com/) (version: 1.5.0)
-- **Ukrainian** * Author: [Cmd Software](http://www.cmd-soft.com) (version: 1.3.4.9)
+- **Czech** *  Eldenroot (version 1.5.5)
+- **Dutch** *  R.A. van Hagen http://status301.net (version 1.5.0)
+- **French** * Emmanuel Maillard (version 1.5.5)
+- **Gujarati** * Apoto Team http://www.apoto.com (version 1.5.0)
+- **Hindi** * Outshine Solutions http://outshinesolutions.com (version 1.3.4.9)
+- **Indonesian** * Nasrulhaq Muiz http://al-badar.net (version 1.3.4.9)
+- **Lithuanian** * Vincent G http://www.host1free.com (version 1.3.4.9)
+- **Polish** * Kamil Szymański (version 1.3.4.9)
+- **Romanian** * Web Geek Sciense http://webhostinggeeks.com/ (version 1.3.4.9)
+- **Serbo-Croatian** Andrijana Nikolic http://webhostinggeeks.com/wordpresshosting.html (version 1.5.2) + translation of this page on http://science.webhostinggeeks.com/easy-fancybox
+- **Slovak** Branco Radenovich http://webhostinggeeks.com/blog/ (version: 1.3.4.9)
+- **Spanish** * David Pérez http://www.closemarketing.es (version 1.3.4.9)
+- **Turkish** * Hakan Er http://hakanertr.wordpress.com/ (version: 1.5.2)
+- **Ukrainian** * Cmd Software http://www.cmd-soft.com (version: 1.3.4.9)
 
+ 
 == Installation ==
 
 = Wordpress =
@@ -118,6 +122,20 @@ Please follow the trouble shooting steps on [Other Notes](http://wordpress.org/e
 
 Yes, but _only_ if you used the option **Link thumbnails to: Image File** when inserting the gallery! The gallery quicktag/shortcode should look something like `[gallery link="file"]`.
 
+= The lightbox does not look good on mobile devices. What can I do about that? =
+
+The FancyBox 1.3.4 script that is used in this plugin was not developed with mobile devices in mind. The only way around this issue is currently to disable FancyBox for small screen sizes. You can do this by adding a text widget in your sidebar with the following code snippet.
+
+`
+<script type="text/javascript">
+var pixelRatio = window.devicePixelRatio || 1;
+if(window.innerWidth/pixelRatio < 641 ) {
+  easy_fancybox_handler = null;
+};
+</script>
+`
+
+Tweak the value 641 to target other screen sizes.
 
 = Can I make a slideshow from my gallery? =
 
@@ -274,21 +292,25 @@ just add `<param name="wmode" value="opaque" />` among the other parameters. Or 
 just change that `wmode="window"` to `wmode="opaque"` or add the attribute if it is missing.
 
 
-= Can I display INLINE content in a FancyBox overlay ? =
+= How can I display INLINE content in a FancyBox overlay ? =
 
-Yes. Wrap the inline content in
+First go to your **Settings > Media** admin page and activate the **Inline** option under the FancyBox settings. After saving, the amin page will show a new section called Inline where you can tweak its parameters.
+
+Next, open your page/post for editing in the HTML tab and wrap the inline content in
 `
 <div style="display:none" class="fancybox-hidden"><div id="fancyboxID-1" class="hentry" style="width:460px;height:380px;">
 ...inline content here...
 </div></div>
 `
 
-Then place a FancyBox link anywhere else in the post/page content to the inline content. Something like
+Then place a FancyBox link tag with class attribute "fancybox-inline" anywhere else in the post/page content that will point to the inline content like
 `
-<a href="#fancyboxID-1" class="fancybox">Read my inline content</a>
+<a href="#fancyboxID-1" class="fancybox-inline">Read my inline content</a>
 `
 
 NOTE: The wrapping divs ID *must* be unique and it must correspond with the links HREF with a # in front of it. When using the above example for more FancyBox inline content (hidden div + opening link) combinations on one page, give the second one the ID  fancyboxID-2 and so on...
+
+NOTE 2: If you find that the inline contect shown in FancyBox is styled very different than the rests of the page content, then you might want to change the div tag attribute `class="hentry"` to something else that matches your theme. Find out what class name is used for the main content on your site and re-use that.
 
 
 = Can I display a contact form in FancyBox? =
@@ -431,10 +453,22 @@ If you still do not get to see your images in FancyBox, ask on the [Easy FancyBo
 
 == Upgrade Notice ==
 
-= 1.5.0 =
-Many new options. Speed improvements: stylesheet browser caching, metadata.js compression. Security fix. Dutch, Indonesian and Polish translations. 
+= 1.5.5 =
+Mousewheel fix. New approach for IE alphaimageloader path fix with less compatibility issues.
 
 == Changelog ==
+
+= 1.5.5 =
+* Prevent mousewheel scrolling page in the background
+* New stylesheet IE alphaimageloader path fix approach
+
+= 1.5.2 =
+* BUGFIX: easy_fancybox_handler() in combo with trigger('click') causes Uncaught Exception script error
+
+= 1.5.1 =
+* FIX: jQuery 1.9+ compatibility
+* Dropping support for gForms again -- "Cannot convert 'c' to object" error in combinaition with some older gForms version :(
+* NEW: support for Infinite Scroll by Jetpack
 
 = 1.5.0 =
 * FIX: CSS3 box-sizing issue (Twenty Thirteen) misplacing close button

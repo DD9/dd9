@@ -72,6 +72,8 @@ Then use the Task Scheduler control panel to call wget or cron.</p>	<hr />
 		
 		<h3>Upgrade Notice</h3>
 	<dl>
+		<dt>1.5.14</dt>
+		<dd>The postie_post filter has be deprecated in favor of postie_post_before.</dd>
 		<dt>1.5.3</dt>
 		<dd>Postie can now set the first image in an email to be the &quot;Featured&quot; image. There is a new setting &quot;Use First Image as Featured Image&quot; which is off by default.
 Postie now supports Use Transport Layer Security (TLS)</dd>
@@ -81,8 +83,6 @@ Postie now supports Use Transport Layer Security (TLS)</dd>
 		<dd>Post format is now supported. You can specify any of the WordPress supported post formats using the Post type syntax.
 Post status can now be specified using the status: tag.
 Post status setting was renamed to Default Post Status and moved to the Message tab.</dd>
-		<dt>1.4.18</dt>
-		<dd>Many method names have been changed. Any custom filters may need to be updated.</dd>
 		<dt>1.4.10</dt>
 		<dd>All script, style and body tags are stripped from html emails.</dd>
 		<dt>1.4.6</dt>
@@ -203,11 +203,9 @@ tags: foo, bar</li>
 
 <h4>Image Handling</h4>
 
-<p>Note you can only use this feature if your "Preferred Text Type" is set to "plain"</p>
-
 <ul>
 <li>Allows you to attach images to your email and automatically post
-them to your blog</li>
+them to your blog.</li>
 <li>You can publish images in the text of your message by using #img1#
 #img2# - each one will be replaced with the HTML for the image
 you attached</li>
@@ -222,7 +220,9 @@ you attached</li>
 in many photo editing programs (for example Picasa), will add an IPTC caption)</p>
 
 <p>Note that the images are processed in the order they are attached as of version
-1.4.6.</p></li>
+1.4.6.</p>
+
+<p>Note you can only use the #img# feature if your "Preferred Text Type" is set to "plain"</p></li>
 <li><p>Image templates
 Postie now uses the default wordpress image template, but you can specify a
 different one if you wish.</p>

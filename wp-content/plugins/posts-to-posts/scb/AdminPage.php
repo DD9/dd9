@@ -114,8 +114,7 @@ abstract class scbAdminPage {
 
 		if ( isset( $this->option_name ) ) {
 			add_action( 'admin_init', array( $this, 'option_init' ) );
-			if ( function_exists( 'settings_errors' ) )
-				add_action( 'admin_notices', 'settings_errors' );
+			add_action( 'admin_notices', 'settings_errors' );
 		}
 
 		add_action( 'admin_menu', array( $this, 'page_init' ), $this->args['admin_action_priority'] );
@@ -140,7 +139,9 @@ abstract class scbAdminPage {
 	 *
 	 * Useful for calling $screen->add_help_tab() etc.
 	 */
-	function page_loaded() {}
+	function page_loaded() {
+		$this->form_handler();
+	}
 
 	/**
 	 * This is where the css and js go
@@ -211,7 +212,7 @@ abstract class scbAdminPage {
 
 		$this->options->set( $new_data );
 
-		$this->admin_msg();
+		add_action( 'admin_notices', array( $this, 'admin_msg' ) );
 
 		return true;
 	}
@@ -496,8 +497,6 @@ abstract class scbAdminPage {
 	}
 
 	function _page_content_hook() {
-		$this->form_handler();
-
 		$this->page_header();
 		$this->page_content();
 		$this->page_footer();

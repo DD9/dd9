@@ -4,7 +4,7 @@
   Plugin Name: Postie
   Plugin URI: http://PostiePlugin.com/
   Description: Signifigantly upgrades the posting by mail features of Word Press (See <a href='options-general.php?page=postie/postie.php'>Settings and options</a>) to configure your e-mail settings. See the <a href='http://wordpress.org/extend/plugins/postie/other_notes'>Readme</a> for usage. Visit the <a href='http://wordpress.org/support/plugin/postie'>postie forum</a> for support.
-  Version: 1.5.12
+  Version: 1.5.16
   Author: Wayne Allen
   Author URI: http://allens-home.com/
   License: GPL2
@@ -27,10 +27,10 @@
  */
 
 /*
-  $Id: postie.php 724558 2013-06-09 01:26:50Z WayneAllen $
+  $Id: postie.php 772964 2013-09-15 22:53:47Z WayneAllen $
  */
 
-define('POSTIE_VERSION', '1.5.12');
+define('POSTIE_VERSION', '1.5.16');
 define("POSTIE_ROOT", dirname(__FILE__));
 define("POSTIE_URL", WP_PLUGIN_URL . '/' . basename(dirname(__FILE__)));
 
@@ -204,7 +204,7 @@ function postie_whitelist($options) {
 
 //don't use DebugEcho or EchoInfo here as it is not defined when called as an action
 function check_postie() {
-    error_log("check_postie");
+    //error_log("check_postie");
 
     $fullurl = plugins_url("get_mail.php", __FILE__);
     preg_match("/https?:\/\/(.[^\/]*)(.*)/i", $fullurl, $matches);

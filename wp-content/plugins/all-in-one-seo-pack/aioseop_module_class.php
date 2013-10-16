@@ -34,8 +34,8 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 		 * Handles calls to display_settings_page_{$location}, does error checking.
 		 */
 		function __call( $name, $arguments ) {
-			if ( strpos( $name, "display_settings_page_" ) === 0 )
-				return $this->display_settings_page( substr( $name, 22 ) );
+			if ( $this->strpos( $name, "display_settings_page_" ) === 0 )
+				return $this->display_settings_page( $this->substr( $name, 22 ) );
 			$error = __( sprintf( "Method %s doesn't exist", $name ), 'all_in_one_seo_pack' );
 			if ( class_exists( 'BadMethodCallException' ) )
 				throw new BadMethodCallException( $error );
@@ -182,6 +182,43 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 		function ucwords( $str ) {
 			return $this->convert_case( $str, 'title' );
 		}
+		
+		/**
+		 * Wrapper for strlen() - uses mb_strlen() if possible.
+		 */		
+		function strlen( $string ) {
+			if ( function_exists( 'mb_strlen' ) )
+				return mb_strlen( $string );
+			return strlen( $string );
+		}
+
+		/**
+		 * Wrapper for substr() - uses mb_substr() if possible.
+		 */
+		function substr( $string, $start = 0, $length = 2147483647 ) {
+			$args = func_get_args();
+			if ( function_exists( 'mb_substr' ) )
+				return call_user_func_array( 'mb_substr', $args );
+			return call_user_func_array( 'substr', $args );
+		}
+		
+		/**
+		 * Wrapper for strpos() - uses mb_strpos() if possible.
+		 */
+		function strpos( $haystack, $needle, $offset = 0 ) {
+			if ( function_exists( 'mb_strpos' ) )
+				return mb_strpos( $haystack, $needle, $offset );
+			return strpos( $haystack, $needle, $offset );
+		}
+		
+		/**
+		 * Wrapper for strrpos() - uses mb_strrpos() if possible.
+		 */
+		function strrpos( $haystack, $needle, $offset = 0 ) {
+			if ( function_exists( 'mb_strrpos' ) )
+				return mb_strrpos( $haystack, $needle, $offset );
+			return strrpos( $haystack, $needle, $offset );
+		}
 
 		/**
 		  * convert xml string to php array - useful to get a serializable value
@@ -192,6 +229,12 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 		  * @author Adrien aka Gaarf & contributors
 		  * @see http://gaarf.info/2009/08/13/xml-string-to-php-array/
 		*/
+		function html_string_to_array( $xmlstr ) {
+		  $doc = new DOMDocument();
+		  $doc->loadHTML( $xmlstr );
+		  return $this->domnode_to_array( $doc->documentElement );
+		}
+
 		function xml_string_to_array( $xmlstr ) {
 		  $doc = new DOMDocument();
 		  $doc->loadXML( $xmlstr );
@@ -213,7 +256,8 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 		          $t = $child->tagName;
 		          if(!isset($output[$t]))
 		            $output[$t] = array();
-		          $output[$t][] = $v;
+				  if ( is_array($output) )
+		          	$output[$t][] = $v;
 		        }
 		        elseif($v || $v === '0')
 		          $output = (string) $v;
@@ -232,6 +276,7 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 		            $output[$t] = $v[0];
 		      }
 		  }
+		  if ( empty( $output ) ) return '';
 		  return $output;
 		}
 		
@@ -314,6 +359,43 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 		}
 		
 		/**
+		 * Helper function for exporting settings on post data.
+		 */
+		function post_data_export( $prefix = '_aioseop', $query = Array( 'posts_per_page' => -1 ) ) {
+			$buf = '';
+			$posts_query = new WP_Query( $query );
+			while ($posts_query->have_posts() ) {
+				$posts_query->the_post();
+				global $post;
+				$guid = $post->guid; $type = $post->post_type; $title = $post->post_title; $date = $post->post_date;
+				$data = '';
+				$post_custom_fields = get_post_custom( $post->ID );
+				$has_data = null;
+
+				if( is_array( $post_custom_fields ) ) {
+					foreach( $post_custom_fields as $field_name => $field ){
+						if( ( $this->strpos( $field_name, $prefix ) === 0 ) && ( $field[0] ) ) {
+							$has_data = true;
+							$data .= $field_name . " = '" . $field[0] . "'\n";
+						} 
+					}
+				}
+				if ( !empty( $data ) ) $has_data = true;
+
+				if( $has_data != null ){
+					$post_info = "\n[post_data]\n\n";
+					$post_info .= "post_title = '" . $title . "'\n";
+					$post_info .= "post_guid = '" . $guid . "'\n";
+					$post_info .= "post_date = '" . $date . "'\n";
+					$post_info .= "post_type = '" . $type . "'\n";
+					if ( $data ) $buf .= $post_info . $data . "\n";
+				}
+			}
+			wp_reset_postdata();
+			return $buf;
+		}
+		
+		/**
 		 * Handles exporting settings data for a module.
 		 */
 		function settings_export( $buf ) {
@@ -333,51 +415,10 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 					}
 				}
 			}
-			if( $post_types != null ) {
-				$posts_query = new WP_Query( Array( 'posts_per_page' => -1, 'post_type' => $post_types ) );
-				if ( ( $this === $aiosp ) ) { //  || ( $this->locations !== null )
-					while ($posts_query->have_posts() ) : $posts_query->the_post();
-					
-						global $post;
-						$guid = $post->guid; $type = $post->post_type; $title = $post->post_title; $date = $post->post_date;
-						$data = '';
-						/* Add Module Meta Data */
-						if ( $this === $aiosp ) {
-							/* Add Post Field Data */
-							$post_custom_fields = get_post_custom( $post->ID );
-							$has_data = null;
-							if( is_array( $post_custom_fields ) ){ 
-								foreach( $post_custom_fields as $field_name => $field ){
-									if( ( substr( $field_name, 1, 7) == 'aioseop' ) && ( $field[0] ) ){ 
-										$has_data = true;
-										$data .= $field_name . " = '" . $field[0] . "'\n";
-									} 
-								}
-							}
-						} elseif ( $this->locations !== null ) {
-							foreach( $this->locations as $k => $v ) {
-								if ( isset($v['type'] ) && isset($v['options'] ) && ( $v['type'] === 'metabox' ) ) {
-									$value = $this->get_prefix($k) . $k;
-									$post_meta = get_post_meta( $post->ID, '_' . $value, true );
-									if ( $post_meta ) $data .= "$value = '" . str_replace( Array( "'", "\n", "\r" ), Array( "\'", '\n', '\r' ), trim( serialize( $post_meta ) ) ) . "'";
-								}
-							}
-						}
-						if ( !empty( $data ) ) $has_data = true;
-						/* Print post data to file */
-						if( $has_data != null ){
-							$post_info = "\n[post_data]\n\n";
-							$post_info .= "post_title = '" . $title . "'\n";
-							$post_info .= "post_guid = '" . $guid . "'\n";
-							$post_info .= "post_date = '" . $date . "'\n";
-							$post_info .= "post_type = '" . $type . "'\n";
-							if ( $data ) $buf .= $post_info . $data . "\n";
-						}
-					endwhile;
-					wp_reset_postdata();
-				}
-			} 
-			
+
+			if ( ( $post_types != null ) && ( $this === $aiosp ) )
+				$buf .= $this->post_data_export( '_aioseop', Array( 'posts_per_page' => -1, 'post_type' => $post_types ) );
+
 			/* Add all active settings to settings file */
 			$name = $this->get_option_name();
 			$options = $this->get_class_option();
@@ -406,10 +447,10 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 		 * Print a basic error message.
 		 */
 		function output_error( $error ) {
-			echo "<div class='aioseop_module error' style='text-align:center;'>$error</div>";
+			echo "<div class='aioseop_module error'>$error</div>";
 			return FALSE;
 		}
-				
+		
 		/***
 		 * Backwards compatibility - see http://php.net/manual/en/function.str-getcsv.php
 		 */
@@ -439,8 +480,11 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 		}
 
 		/** Allow modules to use WP Filesystem if available and desired, fall back to PHP filesystem access otherwise. */
-		function use_wp_filesystem( $method = '', $form_fields = Array(), $url = '', $error = false ) {
-			$this->credentials = request_filesystem_credentials($url, $method, $error, false, $form_fields);
+		function use_wp_filesystem( $method = '', $form_fields = false, $url = '', $error = false ) {
+			if ( empty( $method ) )
+				$this->credentials = request_filesystem_credentials( $url );
+			else
+				$this->credentials = request_filesystem_credentials( $url, $method, $error, false, $form_fields );
 			return $this->credentials;
 		}
 		
@@ -450,6 +494,7 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 		function get_filesystem_object( ) {
 			$cred = get_transient( 'aioseop_fs_credentials' );
 			if ( !empty( $cred ) ) $this->credentials = $cred;
+			
 			if ( function_exists( 'WP_Filesystem' ) && ( WP_Filesystem( $this->credentials ) ) ) {
 				global $wp_filesystem;
 				return $wp_filesystem;
@@ -459,8 +504,10 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 				require_once( ABSPATH . 'wp-admin/includes/file.php' );
 
 				if ( !WP_Filesystem( $this->credentials ) )
-					$this->use_wp_filesystem( '', Array(), '', true );
-				set_transient( 'aioseop_fs_credentials', $this->credentials, 10800 );
+					$this->use_wp_filesystem();
+
+				if ( !empty( $this->credentials ) )
+					set_transient( 'aioseop_fs_credentials', $this->credentials, 10800 );
 				global $wp_filesystem;
 				if ( is_object( $wp_filesystem ) )
 					return $wp_filesystem;
@@ -514,9 +561,9 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 					$file = $wpfs->get_contents( $filename );
 					if ( !is_string( $file ) || empty( $file ) ) return $file;
 					if ( $maxlen < 0 )
-						return substr( $file, $offset );
+						return $this->substr( $file, $offset );
 					else
-						return substr( $file, $offset, $maxlen );
+						return $this->substr( $file, $offset, $maxlen );
 				} else {
 					return $wpfs->get_contents( $filename );
 				}
@@ -701,45 +748,56 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 		 */
 		function add_page_hooks() {
 			$hookname = current_filter();
-			if ( strpos( $hookname, 'load-' ) === 0 )
-				$this->pagehook = substr( $hookname, 5 );
-			$this->filter_pointers();
+			if ( $this->strpos( $hookname, 'load-' ) === 0 )
+				$this->pagehook = $this->substr( $hookname, 5 );
 			add_action( "admin_print_scripts", Array( $this, 'enqueue_scripts' ) );
 			add_action( "admin_print_styles", Array( $this, 'enqueue_styles' ) );
 			add_action( $this->prefix . 'settings_header', Array( $this, 'display_tabs' ) );
 		}
 		
-		function add_admin_bar_submenu() {
-			global $aioseop_admin_menu, $wp_admin_bar;
-			if ( $aioseop_admin_menu ) {
-				if ( !empty( $this->menu_name ) )
-					$name = $this->menu_name;
-				else
-					$name = $this->name;
-				
-				$hookname = plugin_basename( $this->file );
-				if ( function_exists( 'menu_page_url' ) )
-					$url = menu_page_url( $hookname, 0 );
-				else
-					$url = esc_url( admin_url( 'admin.php?page=' . $hookname ) );
-				
-				if ( $this->locations === null )
-					$wp_admin_bar->add_menu( array( 'parent' => AIOSEOP_PLUGIN_DIRNAME, 'title' => $name, 'id' => $hookname, 'href' => $url ) );
-				else {
-					foreach( $this->locations as $k => $v ) {
-						if ( $v['type'] === 'settings' ) {
-							if ( $k === 'default' ) {
-								$wp_admin_bar->add_menu( array( 'parent' => AIOSEOP_PLUGIN_DIRNAME, 'title' => $name, 'id' => $hookname, 'href' => $url ) );
-							} else {
-								if ( !empty( $v['menu_name'] ) )
-									$name = $v['menu_name'];
-								else
-									$name = $v['name'];
-								$wp_admin_bar->add_menu( array( 'parent' => AIOSEOP_PLUGIN_DIRNAME, 'title' => $name, 'id' => $this->get_prefix( $k ) . $k, 'href' => esc_url( admin_url( 'admin.php?page=' . $this->get_prefix( $k ) . $k ) ) ) );								
-							}
+		function get_admin_links() {
+			if ( !empty( $this->menu_name ) )
+				$name = $this->menu_name;
+			else
+				$name = $this->name;
+			
+			$hookname = plugin_basename( $this->file );
+			
+			$links = Array();
+			$url = '';
+            if ( function_exists( 'menu_page_url' ) )
+                    $url = menu_page_url( $hookname, 0 );
+            if ( empty( $url ) )
+                    $url = esc_url( admin_url( 'admin.php?page=' . $hookname ) );
+			
+			if ( $this->locations === null )
+				array_unshift( $links, array( 'parent' => AIOSEOP_PLUGIN_DIRNAME, 'title' => $name, 'id' => $hookname, 'href' => $url, 'order' => $this->menu_order() ) );
+			else {
+				foreach( $this->locations as $k => $v ) {
+					if ( $v['type'] === 'settings' ) {
+						if ( $k === 'default' ) {
+							array_unshift( $links, array( 'parent' => AIOSEOP_PLUGIN_DIRNAME, 'title' => $name, 'id' => $hookname, 'href' => $url, 'order' => $this->menu_order() ) );
+						} else {
+							if ( !empty( $v['menu_name'] ) )
+								$name = $v['menu_name'];
+							else
+								$name = $v['name'];
+							array_unshift( $links, array( 'parent' => AIOSEOP_PLUGIN_DIRNAME, 'title' => $name, 'id' => $this->get_prefix( $k ) . $k, 'href' => esc_url( admin_url( 'admin.php?page=' . $this->get_prefix( $k ) . $k ) ), 'order' => $this->menu_order() ) );
 						}
 					}
 				}
+			}
+			return $links;
+		}
+		
+		function add_admin_bar_submenu() {
+			global $aioseop_admin_menu, $wp_admin_bar;
+			
+			if ( $aioseop_admin_menu ) {
+				$links = $this->get_admin_links();
+				if ( !empty( $links ) )
+					foreach( $links as $l )
+						$wp_admin_bar->add_menu( $l );
 			}
 		}
 		
@@ -800,6 +858,8 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 							} else {
 								$title = $v['name'];
 								if ( $title != $this->plugin_name ) $title = $this->plugin_name . ' - ' . $title;
+								if ( !empty( $v['help_link'] ) )
+									$title .= "<a class='aioseop_help_text_link aioseop_meta_box_help' target='_blank' href='" . $lopts['help_link'] . "'>" . __( 'Help', 'all_in_one_seo_pack' ) . "</a>";
 								add_meta_box( $v['prefix'] . $k, $title, Array( $this, 'display_metabox' ), $posttype, $v['context'], $v['priority'], $v );
 							}
 						}
@@ -812,6 +872,8 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 		 * Update postmeta for metabox.
 		 */
 		function save_post_data( $post_id ) {
+			static $update = false;
+			if ( $update ) return;
 			if ( $this->locations !== null ) {
 				foreach( $this->locations as $k => $v ) {
 					if ( isset($v['type']) && ( $v['type'] === 'metabox' ) ) {
@@ -825,7 +887,11 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 								$update = true;
 							}
 						}
-						if ( $update ) update_post_meta( $post_id, '_' . $this->get_prefix($k) . $k, $options );
+						if ( $update ) {
+							$prefix = $this->get_prefix( $k );
+							$options = apply_filters( $prefix . 'filter_metabox_options', $options, $k, $post_id );
+							update_post_meta( $post_id, '_' . $prefix . $k, $options );
+						}
 					}
 				}
 			}
@@ -864,9 +930,13 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 					foreach ( $option as $v => $subopt ) {
 						$sel = '';
 						$is_arr = is_array( $value );
-						if ( is_string( $v ) || is_string( $value ) )
-							$cmp = !strcmp( (string)$v, (string)$value );
-						else
+						if ( is_string( $v ) || is_string( $value ) ) {
+							if ( is_string( $value ) )
+								$cmp = !strcmp( $v, $value );
+							else
+								$cmp = !strcmp( $v, "" );
+						//	$cmp = !strcmp( (string)$v, (string)$value );							
+						} else
 							$cmp = ( $value == $v );
 						if ( ( !$is_arr && $cmp ) || ( $is_arr && in_array( $v, $value ) ) )
 							$sel = $setsel;
@@ -892,7 +962,7 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 			extract( $args );
 			if ( $options['type'] == 'custom' )
 				return apply_filters( "{$prefix}output_option", '', $args );				
-			if ( in_array( $options['type'], Array( 'multiselect', 'select', 'multicheckbox', 'radio', 'checkbox', 'textarea', 'text', 'submit', 'hidden' ) ) )
+			if ( in_array( $options['type'], Array( 'multiselect', 'select', 'multicheckbox', 'radio', 'checkbox', 'textarea', 'text', 'submit', 'hidden' ) ) && ( is_string( $value ) ) )
 				$value = esc_attr( $value );
 			$buf = '';
 			if ( !empty( $options['count'] ) ) {
@@ -912,7 +982,7 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 									  $buf .= "<input name='$name' type='{$options['type']}' $attr>\n"; break;
 				case 'textarea':	  $buf .= "<textarea name='$name' $attr>$value</textarea>"; break;
 				case 'image':		  $buf .= "<input class='aioseop_upload_image_button button-primary' type='button' value='Upload Image' style='float:left;' />" .
-											  "<input class='aioseop_upload_image_label' name='$name' type='text' readonly $attr value='$value' size=57 style='float:left;clear:left;'>\n";
+											  "<input class='aioseop_upload_image_label' name='$name' type='text' $attr value='$value' size=57 style='float:left;clear:left;'>\n";
 									  break;
 				case 'html':		  $buf .= $value; break;
 				default:			  $buf .= "<input name='$name' type='{$options['type']}' $attr value='$value'>\n";
@@ -921,8 +991,8 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 				$size = 60;
 				if ( isset( $options['size'] ) ) $size = $options['size'];
 				elseif ( isset( $options['rows'] ) && isset( $options['cols'] ) ) $size = $options['rows'] * $options['cols'];				
-				$buf .= "<br /><input readonly type='text' name='{$prefix}length$n' size='3' maxlength='3' style='width:53px;height:23px;margin:0px;padding:0px 0px 0px 10px;' value='" . strlen($value) . "' />"
-					 . sprintf( __(' characters. Most search engines use a maximum of %s chars for the %s.', 'all_in_one_seo_pack'), $size, strtolower( $options['name'] ) );
+				$buf .= "<br /><input readonly type='text' name='{$prefix}length$n' size='3' maxlength='3' style='width:53px;height:23px;margin:0px;padding:0px 0px 0px 10px;' value='" . $this->strlen($value) . "' />"
+					 . sprintf( __(' characters. Most search engines use a maximum of %s chars for the %s.', 'all_in_one_seo_pack'), $size, $this->strtolower( $options['name'] ) );
 			}
 			return $buf;
 		}
@@ -962,11 +1032,22 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 				static $location_settings = Array();
 				$defaults = null;
 				$prefix = $this->get_prefix( $location );
-				if ( is_array( $meta_args['args'] ) && !empty( $meta_args['args']['default_options'] ) )
+				$help_link = '';
+				if ( is_array( $meta_args['args'] ) && !empty( $meta_args['args']['default_options'] ) ) {
 					$defaults = $meta_args['args']['default_options'];
+				}
+				if ( !empty( $meta_args['callback_args'] ) ) {
+					if ( !empty( $meta_args['callback_args']['help_link'] ) ) {
+						$help_link = $meta_args['callback_args']['help_link'];
+					}
+				}
+				if ( !empty( $help_link ) )
+					echo "<a class='aioseop_help_text_link aioseop_meta_box_help' target='_blank' href='" . $help_link . "'>" . __( 'Help', 'all_in_one_seo_pack' ) . "</a>";
+				
 				if ( !isset( $location_settings[$prefix] ) ) {
 					$current_options = apply_filters( "{$this->prefix}display_options",  $this->get_current_options( Array(), $location, $defaults ), $location );
 					$settings		 = apply_filters( "{$this->prefix}display_settings", $this->setting_options( $location, $defaults ), $location, $current_options );
+					$current_options = apply_filters( "{$this->prefix}override_options", $current_options, $location, $settings );
 					$location_settings[$prefix]['current_options'] = $current_options;
 					$location_settings[$prefix]['settings']		   = $settings;
 				} else {
@@ -1119,10 +1200,12 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 					do_action( $this->prefix . 'settings_header', $location );
 ?>	<form id="aiosp_settings_form" name="dofollow" enctype="multipart/form-data" action="" method="post">
 		<div id="aioseop_top_button">
+			<div id="aiosp_ajax_settings_message"></div>
 <?php
+
 			$submit_options = Array('action'		=> Array( 'type' => 'hidden', 'value' => 'aiosp_update_module' ),
 									'module'		=> Array( 'type' => 'hidden', 'value' => get_class( $this ) ), 
-									'location'		=> Array( 'type' => 'hidden', 'value' => $location ),
+									'location'		=> Array( 'type' => 'hidden', 'value' => $location ), 
 									'nonce-aioseop'	=> Array( 'type' => 'hidden', 'value' => wp_create_nonce('aioseop-nonce') ),
 									'page_options'	=> Array( 'type' => 'hidden', 'value' => 'aiosp_home_description' ),
 									'Submit'		=> Array( 'type' => 'submit', 'class' => 'button-primary', 'value' => __('Update Options', 'all_in_one_seo_pack') . ' &raquo;' ),
@@ -1142,9 +1225,13 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 						  if ($opts !== FALSE) $this->options = $opts;						
 						if ( is_array( $this->layout ) ) {
 							foreach( $this->layout as $l => $lopts ) {
-								if ( !isset( $lopts['tab'] ) || ( $this->current_tab == $lopts['tab'] ) )
-									add_meta_box( $this->get_prefix( $location ) . $l . "_metabox", $lopts['name'], array($this, 'display_options' ),
-												  "{$this->prefix}settings", 'advanced', 'default', $lopts );
+								if ( !isset( $lopts['tab'] ) || ( $this->current_tab == $lopts['tab'] ) ) {
+									$title = $lopts['name'];
+									if ( !empty( $lopts['help_link'] ) )
+										$title .= "<a class='aioseop_help_text_link aioseop_meta_box_help' target='_blank' href='" . $lopts['help_link'] . "'>" . __( 'Help', 'all_in_one_seo_pack' ) . "</a>";
+									add_meta_box( $this->get_prefix( $location ) . $l . "_metabox", $title, array($this, 'display_options' ),
+												"{$this->prefix}settings", 'advanced', 'default', $lopts );									
+								}
 							}
 						} else add_meta_box( $this->get_prefix( $location ) . "metabox", $name, array($this, 'display_options'), "{$this->prefix}settings", 'advanced');
 						do_meta_boxes( "{$this->prefix}settings", 'advanced', $location );
@@ -1194,7 +1281,7 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 			if ( !$prefix ) $prefix = $this->prefix;
 			if ( !empty( $options ) )
 				foreach ($options as $k => $v) {
-					if ( !isset( $v['name'] ) )		$v['name'] = ucwords( strtr( $k, '_', ' ' ) );
+					if ( !isset( $v['name'] ) )		$v['name'] = $this->ucwords( strtr( $k, '_', ' ' ) );
 					if ( !isset( $v['type'] ) )		$v['type'] = 'checkbox';
 					if ( !isset( $v['default'] ) )	$v['default'] = null;
 					if ( !isset( $v['initial_options'] ) ) $v['initial_options'] = $v['default'];

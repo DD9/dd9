@@ -1,17 +1,6 @@
 <?php
 
-//support moving wp-config.php as described here http://codex.wordpress.org/Hardening_WordPress#Securing_wp-config.php
-$wp_config_path = dirname(dirname(dirname(dirname(__FILE__))));
-if (file_exists($wp_config_path . DIRECTORY_SEPARATOR . "wp-config.php")) {
-    include_once($wp_config_path . DIRECTORY_SEPARATOR . "wp-config.php");
-} elseif (file_exists(dirname($wp_config_path) . DIRECTORY_SEPARATOR . "wp-config.php")) {
-    include_once (dirname($wp_config_path)) . DIRECTORY_SEPARATOR . "wp-config.php";
-} elseif (file_exists('/usr/share/wordpress/wp-config.php')) {
-    include_once('/usr/share/wordpress/wp-config.php');
-} else {
-    die("wp-config.php could not be found.");
-}
-
+require_once (dirname(__FILE__) . DIRECTORY_SEPARATOR . 'postie-wp-config.php');
 require_once (dirname(__FILE__) . DIRECTORY_SEPARATOR . 'mimedecode.php');
 require_once (dirname(__FILE__) . DIRECTORY_SEPARATOR . 'postie-functions.php');
 if (!function_exists('file_get_html'))
@@ -24,6 +13,10 @@ DebugEcho("wp_content_path: $wp_content_path");
 if (file_exists($wp_content_path . DIRECTORY_SEPARATOR . "filterPostie.php")) {
     DebugEcho("found filterPostie.php in $wp_content_path");
     include_once ($wp_content_path . DIRECTORY_SEPARATOR . "filterPostie.php");
+}
+
+if (has_filter('postie_post')){
+    echo "Postie: filter 'postie_post' is depricated in favor of 'postie_post_before'";
 }
 
 $test_email = null;
@@ -58,7 +51,7 @@ foreach ($emails as $email) {
         continue;
     }
 
-    $mimeDecodedEmail = DecodeMIMEMail($email, true);
+    $mimeDecodedEmail = DecodeMIMEMail($email);
 
     DebugEmailOutput($email, $mimeDecodedEmail);
 
@@ -71,6 +64,7 @@ foreach ($emails as $email) {
     }
     flush();
 }
+EchoInfo("Mail fetch complete, $message_number emails");
 
 if (function_exists('memory_get_usage'))
     DebugEcho("memory at end of e-mail processing:" . memory_get_usage());

@@ -15,12 +15,15 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Feature_Manager' ) ) {
 			$this->prefix = 'aiosp_feature_manager_';						// option prefix
 			$this->file = __FILE__;									// the current file
 			parent::__construct();
-			$this->module_info = Array( 'performance' => Array( 'name'			=> __( 'Performance', 'all_in_one_seo_pack' ),
-									'description'	=> __( 'Optimize performance related to SEO and check your system status.', 'all_in_one_seo_pack' ),
-									'default'	=> 'on'),
-			'coming_soon' => Array( 'name'			=> __( 'Coming Soon...', 'all_in_one_seo_pack' ),
-									'description'	=> __( 'XML Sitemaps', 'all_in_one_seo_pack' ),
-									'save'		=> false ) );
+			$this->module_info = Array( 
+				'sitemap'	  => Array( 'name'			=> __( 'XML Sitemaps', 'all_in_one_seo_pack' ),
+										'description'	=> __( 'Create and manage your XML Sitemaps using this feature and submit your XML Sitemap to Google, Bing/Yahoo and Ask.com.', 'all_in_one_seo_pack' ) ),
+				'performance' => Array( 'name'			=> __( 'Performance', 'all_in_one_seo_pack' ),
+										'description'	=> __( 'Optimize performance related to SEO and check your system status.', 'all_in_one_seo_pack' ),
+										'default'	=> 'on' ),
+				'coming_soon' => Array( 'name'			=> __( 'Coming Soon...', 'all_in_one_seo_pack' ),
+										'description'	=> __( 'Social Meta', 'all_in_one_seo_pack' ),
+										'save'		=> false ) );
 
 			// Set up default settings fields
 			// name			- Human-readable name of the setting
@@ -51,7 +54,13 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Feature_Manager' ) ) {
 						if ( isset( $this->module_info[$m][$option] ) )
 							$this->default_options["enable_$m"][$option] = $this->module_info[$m][$option];
 			}
-			
+			$this->layout = Array(
+				'default' => Array(
+						'name' => $this->name,
+						'help_link' => 'http://semperplugins.com/documentation/feature-manager/',
+						'options' => array_keys( $this->default_options )
+					)
+			);
 			// load initial options / set defaults
 			$this->update_options( );
 			add_filter( $this->prefix . 'output_option', Array( $this, 'display_option_div' ), 10, 2 );

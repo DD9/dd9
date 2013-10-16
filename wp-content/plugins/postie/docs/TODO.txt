@@ -6,13 +6,21 @@ date: tag is being detected in body when not wanted
 Update tag_* and filter_* to handle HTML (per tag_Tags)
 dynamically determine video size (height/width) - https://code.google.com/p/phpvideotoolkit/
 gallery logic does not handle both images and non-images
+plugin conflict - Image Rotation Fixer
+send email notice when attachments are rejected.
 
-standardize tags
+=========
+AddOn Ideas
+(done) Google Alerts - turn each alert into a post
+HTML cleaning - use http://htmlpurifier.org/ to convert Word Html and other bad html into standard html
 
 =========
 Postie 2.0
 
+http://www.yaconiello.com/blog/how-to-write-wordpress-plugin/
+
 setting to turn off individual tags
+process single email at a time and don't delete unless successful
 plugin mechanism to add new tags (and define "built-in ones")
 fix postie settings	http://alisothegeek.com/2011/01/wordpress-settings-api-tutorial-1/
 Make sure all failures are sent to admin (option?) failed attachments, etc.
@@ -23,6 +31,7 @@ replace native imap MIME parser with flourish - http://flourishlib.com/docs/fMai
 provide a location for custom icons. update docs about location.
 handle condition where only one of text/plain & text/html is supplied, but Preferred Text Type is set to the opposite.
 change all Postie command to use a more consistent and easy to parse syntax
+
   commands with multiple data
     #custom name="field name" data="field value"  custom#
 
@@ -42,3 +51,9 @@ change all Postie command to use a more consistent and easy to parse syntax
     @more (new)
     @comments-open, @comments-closed, @comments-registeredonly
     @status-draft, @status-publish, @status-pending, @status-private
+
+  alternate syntax
+    {{@cmd data }}
+    {{@status draft}}
+    {{@category one, two, three}}
+    {{@custom name="field name" data="field value" }}

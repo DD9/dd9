@@ -1,8 +1,8 @@
 === Advanced Custom Fields ===
 Contributors: Elliot Condon
 Tags: custom, field, custom field, advanced, simple fields, magic fields, more fields, repeater, matrix, post, type, text, textarea, file, image, edit, admin
-Requires at least: 3.0.0
-Tested up to: 3.5.1
+Requires at least: 3.5.0
+Tested up to: 3.6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,7 +50,11 @@ Advanced Custom Fields is the perfect solution for any wordpress website which n
 * Mac Firefox 	:)
 * Mac Safari 	:)
 * Mac Chrome	:)
+* PC Safari 	:)
+* PC Chrome		:)
 * PC Firefox	:)
+* iPhone Safari :)
+* iPad Safari 	:)
 * PC ie7		:S
 
 = Website =
@@ -100,6 +104,65 @@ http://support.advancedcustomfields.com/
 
 
 == Changelog ==
+
+= 4.2.2 =
+* Field group: Added 'High (after title)' position for a metabox - http://support.advancedcustomfields.com/forums/topic/position-after-title-solution-inside/
+* Relationship field: Fixed bug with 'exclude_from_search' post types
+* Image / File field: Improved edit popup efficiency and fixed bug when 'upload' is last active mode - http://support.advancedcustomfields.com/forums/topic/edit-image-only-shows-add-new-screen/
+* JS: Added un compressed input.js file
+* JS: Fixed but with options page / taxonomy field - http://support.advancedcustomfields.com/forums/topic/checkbox-issues/
+* Language: Updated Persian Translation - thanks to Ghaem Omidi
+
+= 4.2.1 =
+* Taxonomy field: Fixed issue causing selected terms to appear as numbers - http://support.advancedcustomfields.com/forums/topic/latest-update-4-2-0-taxonomy-field-not-working-correctly/
+* Revisions: Fixed WP 3.6 revisions - http://support.advancedcustomfields.com/forums/topic/wordpress-3-6-revisions-custom-fields-no-longer-tracked/
+* Relationship Field: Add new option for return_format
+* Location Rule - Add new rule for post status - http://support.advancedcustomfields.com/forums/topic/location-rules-post-status/
+* Location Rule: Add 'super admin' to users rule - thanks to Ryan Nielson - https://github.com/RyanNielson/acf/commit/191abf35754c242f2ff75ac33ff8a4dca963a6cc
+* Core: Fixed pre_save_post $post_id issue - http://support.advancedcustomfields.com/forums/topic/frontend-form-issues-pre_save_post-save_post/
+* Core: Fix minor CSS but in media modal - http://support.advancedcustomfields.com/forums/topic/minor-css-issue-in-media-upload-lightbox/#post-2138
+* File field: Fix minor 'strict standards' warning - http://support.advancedcustomfields.com/forums/topic/strict-standards-error-on-file-upload/
+* Image field: Fix minor CSS issue - http://support.advancedcustomfields.com/forums/topic/firefox-repeaterimage-css/
+
+= 4.2.0 =
+* IMPORTANT: ACF now requires a minimum WordPress version of 3.5.0
+* Full integration between attachments and custom fields!
+* Text field: Added new options for prepend, append, placeholder and character limit
+* Textarea field: Added new options for prepend, append, placeholder and character limit
+* Number field: Added new options for prepend, append and placeholder
+* Email field: Added new options for prepend, append and placeholder
+* Password field: Added new options for prepend, append and placeholder
+* Image field: fixed safari bug causing all images to appear small
+* Core: Improved save_lock functionality to prevent inifinite loops when creating a post on the fly
+* Core: Major JS improvements including .live changed to .on
+* Compatibility: Fixed WYSIWYG JS bug with Visual Composer plugin
+* Language: Added Persian Translation - thanks to Ghaem Omidi
+* Language: Updated German translation - thanks to Thomas Meyer
+* Language: Added Swedish translation - thanks to Mikael Jorhult
+
+= 4.1.8.1 =
+* Select field: Revert choices logic - http://support.advancedcustomfields.com/forums/topic/select-field-label-cut-off-at/#post-529
+* CSS: Revert metabox CSS - http://support.advancedcustomfields.com/forums/topic/standard-metabox-margins-reversed/#post-456
+* Core: Fixed save_post conflict with Shopp plugin - http://support.advancedcustomfields.com/forums/topic/no-data-is-saving-with-shopp-acf-4-1-8/
+
+= 4.1.8 =
+* Core: Fix issue with cache $found variable preventing values from being loaded
+* Select field: Improve choices textarea detection - http://old.support.advancedcustomfields.com/discussion/6598/select-on-repeater-field
+* Language: Added Swedish translation - https://github.com/elliotcondon/acf/pull/93
+* Language: Updated Russian translation - https://github.com/elliotcondon/acf/pull/94
+
+= 4.1.7 =
+* Language: Added Russian translation - Thanks to Alex Torscho
+* Core: Improved the save_post function to compare post_id and only run once.
+* Core: Improved cache handling
+* Number field: Fixed step size decimal bug
+* Radio button field: Add option for 'other' and to also update field choices
+* Image / File field: Updated JS to add multiple items to the correct sub field - http://support.advancedcustomfields.com/discussion/6391/repeater-with-images-bug
+* JS: Remove redundant return ajax value - http://support.advancedcustomfields.com/discussion/6375/js-syntax-error-in-ie
+* Add-ons page: fix JS issue - http://support.advancedcustomfields.com/discussion/6405/add-ons-page-div-height-problem
+* Options Page: Fixed issue with load_value preventing the options page using default values - http://support.advancedcustomfields.com/discussion/4612/true-false-field-allow-default-value
+* AJAX: Fix chrome bug - untick category - http://support.advancedcustomfields.com/discussion/6419/disabling-a-category-still-shows-fields
+* JS: Fixed multiple Internet Explorer issues
 
 = 4.1.6 =
 * General: Improved load_value function to better handle false and default values

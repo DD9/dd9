@@ -1,7 +1,7 @@
 <?php
 // try to connect to server with different protocols/ and userids
+require_once (dirname(__FILE__) . DIRECTORY_SEPARATOR . 'postie-wp-config.php');
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "postie-functions.php");
-include_once (dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . "wp-config.php");
 require_once("postie-functions.php");
 
 $config = config_Read();

@@ -84,8 +84,10 @@ function acf_filter_post_id( $post_id )
 function get_field_reference( $field_name, $post_id )
 {
 	// cache
-	$cache = wp_cache_get( 'field_reference-' . $post_id . '-' . $field_name, 'acf' );
-	if( $cache )
+	$found = false;
+	$cache = wp_cache_get( 'field_reference/post_id=' .  $post_id . '/name=' .  $field_name, 'acf', false, $found );
+
+	if( $found )
 	{
 		return $cache;
 	}
@@ -112,7 +114,7 @@ function get_field_reference( $field_name, $post_id )
 	
 	
 	// set cache
-	wp_cache_set( 'field_reference-' . $post_id . '-' . $field_name, $return, 'acf' );
+	wp_cache_set( 'field_reference/post_id=' .  $post_id . '/name=' .  $field_name, $return, 'acf' );
 		
 	
 	// return	
@@ -338,8 +340,9 @@ function get_field_object( $field_key, $post_id = false, $options = array() )
 		$field = array(
 			'type' => 'text',
 			'name' => $orig_field_key,
-			'key' => 'temp_key_for_' . $orig_field_key,
+			'key' => 'field_' . $orig_field_key,
 		);
+		$field = apply_filters('acf/load_field', $field, $field['key'] );
 	}
 
 
@@ -1008,15 +1011,15 @@ function acf_form_head()
 		// $post_id to save against
 		$post_id = $_POST['post_id'];
 		
-
+		
 		// allow for custom save
 		$post_id = apply_filters('acf/pre_save_post', $post_id);
 		
 		
 		// save the data
 		do_action('acf/save_post', $post_id);	
-				
-				
+
+
 		// redirect
 		if(isset($_POST['return']))
 		{
@@ -1252,16 +1255,7 @@ function update_field( $field_key, $value, $post_id = false )
 	);
 	
 	$field = get_field_object( $field_key, $post_id, $options);
-	
-	
-	if( !is_array($field) )
-	{
-		$field = array(
-			'type' => 'none',
-			'name' => $field_key
-		);
-	}
-	
+
 	
 	// sub fields? They need formatted data
 	if( $field['type'] == 'repeater' )

@@ -1,14 +1,10 @@
 var acf = {
 	post_id : 0,
 	nonce : '',
-	text : {
-		'move_to_trash' : "Move to trash. Are you sure?",
-		'checked' : 'checked',
-		'conditional_no_fields' : 'No "toggle" fields available',
-		'title' : 'Field group title is required',
-		'copy' : 'copy',
-		'or' : "or"
-	},
+	admin_url : '',
+	ajaxurl : '',
+	text : {},
+	l10n : {},
 	helpers : {
 		uniqid : function(){},
 		sortable : function(){},
@@ -116,25 +112,29 @@ var acf = {
 		
 		  return retId;
 
-    }
+    };
         
     
     /*
-	*  Form Submit
+	*  Submit Post
 	*
-	*  @description: 
-	*  @since: 3.6
-	*  @created: 2/02/13
+	*  Run validation and return true|false accordingly
+	*
+	*  @type	function
+	*  @date	1/03/2011
+	*
+	*  @param	N/A
+	*  @return	N/A
 	*/
 	
-	$('#post').live('submit', function(){
+	$(document).on('submit', '#post', function(){
 		
 		// validate post title
 		var title = $('#titlewrap #title');
 		
 		if( !title.val() )
 		{
-			alert( acf.text.title );
+			alert( acf.l10n.title );
 			
 			title.focus();
 		
@@ -152,9 +152,9 @@ var acf = {
 	*  @description		
 	*/
 	
-	$('#submit-delete').live('click', function(){
+	$(document).on('click', '#submit-delete', function(){
 			
-		var response = confirm( acf.text.move_to_trash );
+		var response = confirm( acf.l10n.move_to_trash );
 		if( !response )
 		{
 			return false;
@@ -170,7 +170,7 @@ var acf = {
 	*  @description		Load in the opions html
 	*/
 	
-	$('#acf_fields tr.field_type select').live('change', function(){
+	$(document).on('change', '#acf_fields tr.field_type select', function(){
 		
 		// vars
 		var select = $(this),
@@ -291,7 +291,7 @@ var acf = {
 			$(this).attr('name', $(this).attr('name').replace(old_id, new_id) );
 		});
 		
-	}
+	};
 	
 	
 	/*
@@ -321,7 +321,7 @@ var acf = {
 	*  @created: 13/10/12
 	*/
 	
-	$('#acf_fields a.acf_edit_field').live('click', function(){
+	$(document).on('click', '#acf_fields a.acf_edit_field', function(){
 		
 		var field = $(this).closest('.field');
 		
@@ -336,7 +336,7 @@ var acf = {
 			$(document).trigger('acf/field_form-open', field);
 		}
 		
-		field.children('.field_form_mask').animate({'height':'toggle'}, 500);
+		field.children('.field_form_mask').animate({'height':'toggle'}, 250);
 		
 	});
 	
@@ -349,7 +349,7 @@ var acf = {
 	*  @created: 13/10/12
 	*/
 	
-	$('#acf_fields a.acf_delete_field').live('click', function(){
+	$(document).on('click', '#acf_fields a.acf_delete_field', function(){
 		
 		// vars
 		var a = $(this),
@@ -375,7 +375,7 @@ var acf = {
 			{
 				temp.animate({'height' : 0 }, 250, function(){
 					temp.remove();
-				})
+				});
 			}
 			
 			update_order_numbers();
@@ -394,7 +394,7 @@ var acf = {
 	*  @created: 13/10/12
 	*/
 	
-	$('#acf_fields a.acf_duplicate_field').live('click', function(){
+	$(document).on('click', '#acf_fields a.acf_duplicate_field', function(){
 			
 		// vars
 		var a = $(this),
@@ -446,7 +446,7 @@ var acf = {
 		
 		
 		name.val('');
-		label.val( label.val() + ' (' + acf.text.copy + ')' );
+		label.val( label.val() + ' (' + acf.l10n.copy + ')' );
 		label.trigger('blur').trigger('keyup');
 		
 		
@@ -464,7 +464,7 @@ var acf = {
 	*  @created: 13/10/12
 	*/
 	
-	$('#acf_fields #add_field').live('click',function(){
+	$(document).on('click', '#acf_fields #add_field', function(){
 		
 		var fields = $(this).closest('.table_footer').siblings('.fields');
 		
@@ -524,9 +524,9 @@ var acf = {
 	*  @since 3.5.1
 	*  @created: 15/10/12
 	*/
-
-	$('#acf_fields tr.field_label input.label').live('blur', function()
-	{
+	
+	$(document).on('blur', '#acf_fields tr.field_label input.label', function(){
+	
 		// vars
 		var $label = $(this),
 			$field = $label.closest('.field'),
@@ -588,18 +588,22 @@ var acf = {
 	*  @created: 15/10/12
 	*/
 	
-	$('#acf_fields .field_form tr.field_label input.label').live('keyup', function()
-	{
+	$(document).on('keyup', '#acf_fields .field_form tr.field_label input.label', function(){
+	
 		var val = $(this).val();
 		var name = $(this).closest('.field').find('td.field_label strong a').first().html(val);
+		
 	});
-	$('#acf_fields .field_form tr.field_name input.name').live('keyup', function()
-	{
+	
+	$(document).on('keyup', '#acf_fields .field_form tr.field_name input.name', function(){
+	
 		var val = $(this).val();
 		var name = $(this).closest('.field').find('td.field_name').first().html(val);
+		
 	});
-	$('#acf_fields .field_form tr.field_type select').live('change', function()
-	{
+	
+	$(document).on('change', '#acf_fields .field_form tr.field_type select', function(){
+	
 		var val = $(this).val();
 		var label = $(this).find('option[value="' + val + '"]').html();
 		
@@ -609,11 +613,17 @@ var acf = {
 	
 	
 	// sortable
-	$('#acf_fields td.field_order').live('mouseover', function(){
+	$(document).on('mouseover', '#acf_fields td.field_order', function(){
 		
+		// vars
 		var fields = $(this).closest('.fields');
 		
-		if(fields.hasClass('sortable')) return false;
+		
+		if( fields.hasClass('sortable') )
+		{
+			return false;
+		}
+		
 		
 		fields.addClass('sortable').sortable({
 			update: function(event, ui){
@@ -661,7 +671,7 @@ var acf = {
 			
 			
 			// add rule
-			_this.$el.find('.location-add-rule').live('click', function(){
+			_this.$el.on('click', '.location-add-rule', function(){
 				
 				_this.add_rule( $(this).closest('tr') );
 				
@@ -671,8 +681,8 @@ var acf = {
 			
 			
 			// remove rule
-			_this.$el.find('.location-remove-rule').live('click', function(){
-				
+			_this.$el.on('click', '.location-remove-rule', function(){
+							
 				_this.remove_rule( $(this).closest('tr') );
 				
 				return false;
@@ -681,8 +691,8 @@ var acf = {
 			
 			
 			// add rule
-			_this.$el.find('.location-add-group').live('click', function(){
-				
+			_this.$el.on('click', '.location-add-group', function(){
+							
 				_this.add_group();
 				
 				return false;
@@ -691,8 +701,8 @@ var acf = {
 			
 			
 			// change rule
-			_this.$el.find('.param select').live('change', function(){
-				
+			_this.$el.on('change', '.param select', function(){
+							
 				// vars
 				var $tr = $(this).closest('tr'),
 					rule_id = $tr.attr('data-id'),
@@ -715,7 +725,7 @@ var acf = {
 				
 				// load location html
 				$.ajax({
-					url: ajaxurl,
+					url: acf.ajaxurl,
 					data: ajax_data,
 					type: 'post',
 					dataType: 'html',
@@ -799,7 +809,7 @@ var acf = {
 			
 			
 			// update h4
-			$group2.find('h4').text( acf.text.or );
+			$group2.find('h4').text( acf.l10n.or );
 			
 			
 			// remove all tr's except the first one
@@ -817,7 +827,7 @@ var acf = {
 			$group.remove();
 			
 		}
-	}
+	};
 	
 	
 
@@ -844,7 +854,7 @@ var acf = {
 	*  @created: 4/09/12
 	*/
 	
-	$('#adv-settings input[name="show-field_key"]').live('change', function(){
+	$(document).on('change', '#adv-settings input[name="show-field_key"]', function(){
 		
 		if( $(this).val() == "1" )
 		{
@@ -871,7 +881,7 @@ var acf = {
 		// dafaults
 		var defaults = {
 			'type' : 'text',
-			'class' : '',
+			'classname' : '',
 			'name' : '',
 			'value' : ''
 		};
@@ -883,14 +893,14 @@ var acf = {
 		
 		if( options.type == "text" )
 		{
-			html += '<input class="text ' + options.class + '" type="text" id="' + options.name + '" name="' + options.name + '" value="' + options.value + '" />';
+			html += '<input class="text ' + options.classname + '" type="text" id="' + options.name + '" name="' + options.name + '" value="' + options.value + '" />';
 		}
 		else if( options.type == "select" )
 		{
-			html += '<select class="select ' + options.class + '" id="' + options.name + '" name="' + options.name + '">';
+			html += '<select class="select ' + options.classname + '" id="' + options.name + '" name="' + options.name + '">';
 			if( options.choices )
 			{
-				for( i = 0; i < options.choices.length; i++ )
+				for( var i = 0; i < options.choices.length; i++ )
 				{
 					var attr = '';
 					if( options.choices[i].value == options.value )
@@ -909,7 +919,7 @@ var acf = {
 			
 	};
 	
-	$(document).live('acf/field_form-open', function(e, field){
+	$(document).on('acf/field_form-open', function(e, field){
 		
 		// populate fields
 		acf.conditional_logic.setup();
@@ -925,7 +935,7 @@ var acf = {
 			// populate choices
 			if( acf.conditional_logic.fields )
 			{
-				for( i = 0; i < acf.conditional_logic.fields.length; i++ )
+				for( var i = 0; i < acf.conditional_logic.fields.length; i++ )
 				{
 					choices.push({
 						value : acf.conditional_logic.fields[i].id,
@@ -940,15 +950,15 @@ var acf = {
 			{
 				choices.push({
 					'value' : 'null',
-					'label' : acf.text.conditional_no_fields
-				})
+					'label' : acf.l10n.conditional_no_fields
+				});
 			}
 	
 			
 			// create select
-			select = acf.helpers.create_field({
+			var select = acf.helpers.create_field({
 				'type' : 'select',
-				'class' : 'conditional-logic-field',
+				'classname' : 'conditional-logic-field',
 				'name' : name,
 				'value' : val,
 				'choices' : choices
@@ -973,7 +983,7 @@ var acf = {
 	*  @created: 14/10/12
 	*/
 	
-	$('tr.conditional-logic input[type="radio"]').live('change', function(){
+	$(document).on('change', 'tr.conditional-logic input[type="radio"]', function(){
 		
 		if( $(this).val() == "1" )
 		{
@@ -995,33 +1005,31 @@ var acf = {
 	*  @created: 14/10/12
 	*/
 	
-	$('select.conditional-logic-field').live('change', function(){
+	$(document).on('change', 'select.conditional-logic-field', function(){
 		
 		// vars
 		var id = $(this).val(),
 			field = $('#acf_fields .field_key-' + id),
 			type = field.attr('data-type'),
-			conditional_function = $(this).closest('tr').find('.conditional-logic-value');
+			conditional_function = $(this).closest('tr').find('.conditional-logic-value'),
+			choices = [];
 			
 		
-		// true / false
-		choices = [];
-		
+		// populate choices
 		if( type == "true_false" )
 		{
 			choices = [
-				{ value : 1, label : acf.text.checked }
+				{ value : 1, label : acf.l10n.checked }
 			];
 						
 		}
 		else if( type == "select" || type == "checkbox" || type == "radio" )
 		{
-			field_choices = field.find('.field_option-choices').val();
-			field_choices = field_choices.split("\n");
+			var field_choices = field.find('.field_option-choices').val().split("\n");
 						
 			if( field_choices )
 			{
-				for( i = 0; i < field_choices.length; i++ )
+				for( var i = 0; i < field_choices.length; i++ )
 				{
 					var choice = field_choices[i].split(':');
 					
@@ -1034,7 +1042,7 @@ var acf = {
 					choices.push({
 						'value' : $.trim( choice[0] ),
 						'label' : $.trim( label )
-					})
+					});
 					
 				}
 			}
@@ -1043,9 +1051,9 @@ var acf = {
 		
 		
 		// create select
-		select = acf.helpers.create_field({
+		var select = acf.helpers.create_field({
 			'type' : 'select',
-			'class' : 'conditional-logic-value',
+			'classname' : 'conditional-logic-value',
 			'name' : conditional_function.attr('name'),
 			'value' : conditional_function.val(),
 			'choices' : choices
@@ -1077,7 +1085,7 @@ var acf = {
 			
 			var field = $(this),
 				id = field.attr('data-id'),
-				key = field.children('.input-field_key').val(),
+				//key = field.children('.input-field_key').val(),
 				type = field.attr('data-type'),
 				label = field.find('tr.field_label input').val();
 			
@@ -1094,7 +1102,7 @@ var acf = {
 			
 		});
 		
-	}
+	};
 	
 	
 	/*
@@ -1105,7 +1113,7 @@ var acf = {
 	*  @created: 15/10/12
 	*/
 	
-	$('tr.conditional-logic .acf-button-add').live('click',function(){
+	$(document).on('click', 'tr.conditional-logic .acf-button-add', function(){
 		
 		// vars
 		var old_tr = $(this).closest('tr'),
@@ -1148,7 +1156,7 @@ var acf = {
 	*  @created: 15/10/12
 	*/
 	
-	$('tr.conditional-logic .acf-button-remove').live('click',function(){
+	$(document).on('click', 'tr.conditional-logic .acf-button-remove', function(){
 		
 		var table = $(this).closest('table');
 		
@@ -1175,7 +1183,33 @@ var acf = {
 	});
 	
 	
+	/*
+	*  Field: Radio
+	*
+	*  Simple toggle for the radio 'other_choice' option
+	*
+	*  @type	function
+	*  @date	1/07/13
+	*/
 	
+	$(document).on('change', '.radio-option-other_choice input', function(){
+		
+		// vars
+		var $el = $(this),
+			$td = $el.closest('td');
+		
+		
+		if( $el.is(':checked') )
+		{
+			$td.find('.radio-option-save_other_choice').show();
+		}
+		else
+		{
+			$td.find('.radio-option-save_other_choice').hide();
+			$td.find('.radio-option-save_other_choice input').removeAttr('checked');
+		}
+		
+	});
 
 	
 
