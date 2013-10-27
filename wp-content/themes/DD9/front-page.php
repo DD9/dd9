@@ -28,7 +28,7 @@ $gd_services = get_posts(array(
 	'post_type'=>'service',
 	'suppress_filters' => false,
 	'numberposts'=>-1,
-	'orderby' => 'title',
+	'orderby' => 'menu_order',
 	'order' => 'ASC',
 	'post_parent' => GRAPHIC_DESIGN
 ));
@@ -39,7 +39,7 @@ $wd_services = get_posts(array(
 	'post_type'=>'service',
 	'suppress_filters' => false,
 	'numberposts'=>-1,
-	'orderby' => 'title',
+	'orderby' => 'menu_order',
 	'order' => 'ASC',
 	'post_parent' => WEBSITE_DESIGN
 ));

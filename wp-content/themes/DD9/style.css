@@ -47,7 +47,8 @@ input														{ margin: 0; }
 }
 
 @font-face {
-    font-family: 'DroidSerifRegular';
+    /*font-family: 'DroidSerifRegular';*/
+	font-family: 'Droid Serif';
     src: url('webfonts/DroidSerif-Regular-webfont.eot');
     src: url('webfonts/DroidSerif-Regular-webfont.eot?#iefix') format('embedded-opentype'),
          url('webfonts/DroidSerif-Regular-webfont.woff') format('woff'),
@@ -57,7 +58,7 @@ input														{ margin: 0; }
     font-style: normal;
 
 }
-
+/*
 @font-face {
     font-family: 'DroidSerifItalic';
     src: url('webfonts/DroidSerif-Italic-webfont.eot');
@@ -69,7 +70,7 @@ input														{ margin: 0; }
     font-style: normal;
 
 }
-
+*/
 
 /* =Structure
 ----------------------------------------------- */
@@ -119,7 +120,13 @@ nav, figure, section, footer					{ display: block; }
 /******************** Baseline grid: 13/18px ********************/
 body								{ font-size: 75%; line-height: 1.5; /*12/18*/}
 
-h1, h2, h3, h4, h5, h6				{ position: relative; font-family:"DroidSerifRegular","Palatino Linotype", "Book Antiqua", Palatino, serif; }
+h1, h2, h3, h4, h5, h6				{
+	position: relative;
+	/*font-family: 'Droid Serif', "DroidSerifRegular", "Palatino Linotype", "Book Antiqua", Palatino, serif;*/
+	font-family:"Droid Serif","Palatino Linotype", "Book Antiqua", Palatino, serif;
+	font-weight: normal;
+
+}
 h1, h2								{ line-height: 36px; margin-bottom: 18px;  }
 h3, h4						        { margin-bottom: 18px; }
 h3, h4, h5, h6						{ line-height: 18px; }
@@ -231,7 +238,7 @@ span.dev {color:#F90; font-weight:bold}
 
 h4.title, h6.title {
     display: inline;
-    font-family: DroidSerifRegular;
+    /*font-family: DroidSerifRegular;*/
     font-size: 12px;
     height: 18px;
     letter-spacing: 0.03em;
@@ -261,7 +268,7 @@ h4.breadcrumbs a, .subheading a, .subheading_full_width a {
 }
 
 .breadcrumbs > span, .subheading > span {
-	font-family:"DroidSerifRegular","Palatino Linotype", "Book Antiqua", Palatino, serif;
+	font-family:"Droid Serif","Palatino Linotype", "Book Antiqua", Palatino, serif;
 	font-size:11px;
 	letter-spacing:normal;
 	font-style:oblique;
@@ -271,8 +278,12 @@ h4.breadcrumbs a, .subheading a, .subheading_full_width a {
 
 .subheading, .subheading_full_width {
     color: #333333;
-    font-family: 'LeagueGothicRegular';
-    font-size: 18px;
+	font-family: 'Oswald', sans-serif;
+	font-family: 'LeagueGothicRegular';
+	font-weight:400;
+
+	font-size: 14px;
+	font-size: 18px;
     height: 36px;
     letter-spacing: 0.05em;
     line-height: 36px;
@@ -368,7 +379,7 @@ ul.subpage_nav li.current_page_item a {
 
 #services_container.sidebar ul.services li.parent_service {
     background-image: none;
-    font-family:"DroidSerifRegular","Palatino Linotype", "Book Antiqua", Palatino, serif;
+    font-family:"Droid Serif","Palatino Linotype", "Book Antiqua", Palatino, serif;
     font-size: 10px;
     height: 18px;
     line-height: 18px;
@@ -1414,11 +1425,15 @@ ul.blog_categories ul.children {
 }
 
 ul.social_icons {
-    list-style: none outside none;
-    margin: 0px 0px 18px -7px;
-    overflow: hidden;
-    padding: 0;
-    top: 0;
+	list-style: none outside none;
+	font-size: 18px;
+	margin: 0px 0px 18px -3px;
+	/* [disabled]overflow: hidden; */
+	padding: 0;
+	display:block;
+	clear:both;
+	height:18px;
+	top: 0;
 }
 
 ul.social_icons li {
@@ -1508,7 +1523,7 @@ ol.commentlist > li > .comment > .comment-content {
 }
 
 .post.comments .post_details .post_author {
-    font-family: "DroidSerifRegular","Palatino Linotype","Book Antiqua",Palatino,serif;
+    font-family:"Droid Serif","Palatino Linotype", "Book Antiqua", Palatino, serif;
     font-size: 15px;
     font-style: oblique;
     line-height: 18px;
@@ -1642,7 +1657,7 @@ p.form-allowed-tags, p.comment-notes {
     border: 1px solid #000000;
     color: #333333;
     display: block;
-    font-family: "DroidSerifRegular","Palatino Linotype","Book Antiqua",Palatino,serif;
+    font-family:"Droid Serif","Palatino Linotype", "Book Antiqua", Palatino, serif;
     font-size: 13px;
     font-style: oblique;
     height: 36px;
@@ -1868,7 +1883,8 @@ ul.services {
 .services h3 a, 
 /* .services li.parent_service a, */
 .block_link a {
-        font-family: 'LeagueGothicRegular';
+	font-family: 'Oswald', sans-serif;
+	font-family: 'LeagueGothicRegular';
 	color:#FFF;
 	  background-color: #000000;
 	border:none;
@@ -2360,7 +2376,7 @@ a.plain {
 }
 
 h4.alt_xl {
-    font-family: "DroidSerifRegular","Palatino Linotype","Book Antiqua",Palatino,serif;
+    font-family:"Droid Serif","Palatino Linotype", "Book Antiqua", Palatino, serif;
     font-size: 28px;
 }
 
@@ -2444,7 +2460,7 @@ ul#preview_team li {
     background-color: #000000;
     color: #FFFFFF;
     float: left;
-    font-family:"DroidSerifRegular","Palatino Linotype", "Book Antiqua", Palatino, serif;
+    font-family:"Droid Serif","Palatino Linotype", "Book Antiqua", Palatino, serif;
     font-size: 41px;
     line-height: 60px;
     margin: 0 10px 10px 0;
