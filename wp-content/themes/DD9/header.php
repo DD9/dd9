@@ -32,7 +32,7 @@
 <meta name="google-site-verification" content="jV9HcFOm5nSF-iidDOCEeIpjkIgGGYxKkc0E30FCyLE" />
 <meta name="google-site-verification" content="mniubP5QuKqY3c9zhYIaQTcWdw6J3B12tSty5Ia4ADA" />
 <link rel="profile" href="http://gmpg.org/xfn/11" />
-<!--link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic|Oswald:400' rel='stylesheet' type='text/css'-->
+<link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic' rel='stylesheet' type='text/css' />
 <link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>" />
 <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
 <!--[if lt IE 9]>

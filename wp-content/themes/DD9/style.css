@@ -46,8 +46,10 @@ input														{ margin: 0; }
 
 }
 
+/*font-family: 'DroidSerifRegular';*/
+/*
 @font-face {
-    /*font-family: 'DroidSerifRegular';*/
+    
 	font-family: 'Droid Serif';
     src: url('webfonts/DroidSerif-Regular-webfont.eot');
     src: url('webfonts/DroidSerif-Regular-webfont.eot?#iefix') format('embedded-opentype'),
@@ -58,7 +60,7 @@ input														{ margin: 0; }
     font-style: normal;
 
 }
-/*
+
 @font-face {
     font-family: 'DroidSerifItalic';
     src: url('webfonts/DroidSerif-Italic-webfont.eot');
