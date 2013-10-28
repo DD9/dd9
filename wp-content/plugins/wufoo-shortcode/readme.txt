@@ -8,8 +8,8 @@ Author URI: http://wufoo.com
 Author: Chris Coyier
 Requires at least: 2.6
 Tested up to: 3.3.1
-Stable tag: 1.41
-Version: 1.41
+Stable tag: 1.42
+Version: 1.42
 
 Allows the use of a special short code [wufoo] for embedding Wufoo forms.
 
@@ -45,6 +45,8 @@ For old school manual installation people: copy the folder "wufoo_shortcode" int
 1.4 - Making JavaScript embed async
 
 1.41 - Bugfix: stop hardcoding subdomain
+
+1.42 - Improvements to plugin
 
 == Frequently Asked Questions ==
 

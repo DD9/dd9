@@ -2,7 +2,7 @@
 /*
 Plugin Name: Wufoo Shortcode Plugin
 Description: Enables shortcode to embed Wufoo forms. Usage: <code>[wufoo username="chriscoyier" formhash="x7w3w3" autoresize="true" height="458" header="show" ssl="true"]</code>. This code is available to copy and paste directly from the Wufoo Code Manager.
-Version: 1.41
+Version: 1.42
 License: GPL
 Author: Chris Coyier / Wufoo
 Author URI: http://wufoo.com
@@ -16,7 +16,8 @@ function createWufooEmbedJS($atts, $content = null) {
 		'height'     => '500',
 		'header'     => 'show',
 		'ssl'        => '',
-		'defaultv'   => ''
+		'defaultv'   => '',
+		'entsource'  => 'wordpress',
 	), $atts));
 
 	if (!$username or !$formhash) {
@@ -43,12 +44,14 @@ function createWufooEmbedJS($atts, $content = null) {
 		$JSEmbed .= "'height'        : '$height',      \n";
 		$JSEmbed .= "'async'         :  true,          \n";
 		$JSEmbed .= "'header'        : '$header',      \n";
+		$JSEmbed .= "'host'          : 'wufoo.com',    \n";
+		$JSEmbed .= "'entSource'     : '$entsource',   \n";
 		$JSEmbed .= "'defaultValues' : '$defaultv'     \n";
 
 		// Only output SSL value if passes as param
 		// Gratis and Ad Hoc plans don't show that param (don't offer SSL)
 		if ($ssl) {
-	  $JSEmbed .= ",'ssl'          :  $ssl           ";
+	  		$JSEmbed .= ",'ssl'          :  $ssl           ";
 		}
 		$JSEmbed .= "};\n";
 
@@ -66,9 +69,19 @@ function createWufooEmbedJS($atts, $content = null) {
 		$iframe_embed .= 'height="'. (int) $height .'" ';
 		$iframe_embed .= 'allowTransparency="true" frameborder="0" scrolling="no" style="width:100%;border:none;"';
 		$iframe_embed .= 'src="https://'. $username .'.wufoo.com/embed/'. $formhash . '/';
-		$iframe_embed .= "def/$defaultv\">";
+		if (isset($defaultv) && $defaultv != ''){
+			$iframe_embed .= "def/$defaultv&entsource=wordpress\">";
+		}
+		else{
+			$iframe_embed .= "def/entsource=wordpress\">";
+		}
 		$iframe_embed .= '<a href="https://'. $username .'.wufoo.com/forms/'. $formhash .'/';
-		$iframe_embed .= "def/$defaultv\" ";
+		if (isset($defaultv) && $defaultv != ''){
+			$iframe_embed .= "def/$defaultv&entsource=wordpress\" ";
+		}
+		else{
+			$iframe_embed .= "def/entsource=wordpress\" ";
+		}
 		$iframe_embed .= 'rel="nofollow">Fill out my Wufoo form!</a></iframe>';
 
 		/**

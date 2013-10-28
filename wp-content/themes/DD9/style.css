@@ -438,7 +438,14 @@ top:2px;}
     width:auto;
     font-size:16px;
     height:36px;
+    font-family:"Droid Serif","Palatino Linotype", "Book Antiqua", Palatino, serif;
     
+}
+#primary_cta ul li a{
+    color: #666;    
+}
+#primary_cta ul li a:hover{
+    color: #E4311F;
 }
 
 
@@ -1731,7 +1738,7 @@ ul#menu-footer01 {
 ul#menu-footer01 li {
 	display: inline-block;
 	float: none;
-	margin-right: 8px;
+	margin-right: 10px;
 }
 
 ul#menu-footer01 li.client_login {
