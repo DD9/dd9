@@ -74,7 +74,7 @@ $project = $projects ? $projects[0] : null;
                 </a>
             <?php else: ?>
                 <a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>">
-                    <img src="http://dd9.com/wp-content/uploads/feat_placeholder.jpg" alt="<?php the_title(); ?>" width="234" height="162" />
+                    <img src="<?php bloginfo('template_url'); ?>/images/dd9-placeholder.jpg" alt="<?php the_title(); ?>" width="234" height="162" />
                 </a>
             <?php endif; ?>                                
         </div>

@@ -1289,6 +1289,10 @@ error404 .widgettitle {
 /* =Blog
 -------------------------------------------------------------- */
 
+h3.entry-title a:hover{
+    color:black;
+}
+
 ul.blog_categories, ul#menu-authors {
 	list-style:none;
 	margin:0 0 36px 0;
@@ -1323,6 +1327,10 @@ ul.blog_categories ul.children {
 	float:left;
 }
 
+.content_right .featured_image a:hover{
+    opacity: .8;
+
+}
 .content_right .preview_thumbnail img {
     display:block;
 }
@@ -1394,11 +1402,13 @@ ul.blog_categories ul.children {
 .nav-previous {
 	float: left;
 	width: 50%;
+    font-family:"Droid Serif","Palatino Linotype", "Book Antiqua", Palatino, serif;
 }
 .nav-next {
 	float: right;
 	text-align: right;
 	width: 50%;
+    font-family:"Droid Serif","Palatino Linotype", "Book Antiqua", Palatino, serif;
 }
 #content nav .meta-nav {
 	font-weight: normal;
