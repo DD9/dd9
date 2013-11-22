@@ -47,7 +47,7 @@ if($all_related_projects)
 }
 
 shuffle($related_projects);
-$related_projects = array_slice($related_projects, 0, 3);
+$related_projects = array_slice($related_projects, 0, 6);
 
 $graphic_design = get_post($gd_id);
 
@@ -234,11 +234,8 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
                   ?>
                   
                   <li>
-                    <a href="<?= get_permalink($related_project->ID) ?>">
+                    <a href="<?= get_permalink($related_project->ID) ?>" title="<?= $related_project->post_title ?>">
                       <img src="<?= $image_src ?>" alt="<?= $related_project->post_title ?>" />
-                      <span class="thumbnail_title">
-                        <?= $related_project->post_title ?>
-                      </span>
                     </a>
                   </li>
                 <?php endforeach; ?> 

@@ -1064,20 +1064,24 @@ ul.related_projects, ul.related_posts {
 
 ul.related_projects {
 	top:0;
+  overflow:hidden;
 }
 
 ul.related_projects li {
-	overflow:auto;
-	margin:0 0 18px;
+	margin:0 8px 18px 0px;
+  width:98px;
+  height:69px;
+  float: left;
+  display:block;  
 	
 }
 
 ul.related_projects li img {
 	/* [disabled]border-left:8px solid #e4311f; */
-	width:108px;
-	height:75px;
-	float:left;
-	display:block;	
+  width:98px;
+  height:69px;
+	
+	
 }
 
 ul.related_projects li a:hover img {
@@ -1087,10 +1091,10 @@ ul.related_projects li a:hover img {
 }
 
 ul.related_projects .thumbnail_title {
-	display: block;
-	float: left;
-	/* [disabled]padding: 2px 0 0 18px; */
-	width: 85px;
+	display: none;
+	/*float: left;
+	padding: 2px 0 0 18px;
+	width: 85px; */
 }
 
 ul.related_posts li {
