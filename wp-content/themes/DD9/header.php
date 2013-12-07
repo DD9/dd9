@@ -24,7 +24,7 @@
 <!--<![endif]-->
 <head>
 <meta charset="<?php bloginfo( 'charset' ); ?>" />
-<meta content="width=device-width; initial-scale=1.0" name="viewport">
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
 <title><?php wp_title(''); ?></title>
 <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
 <link rel="profile" href="http://gmpg.org/xfn/11" />

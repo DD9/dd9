@@ -24,7 +24,7 @@
 <!--<![endif]-->
 <head>
 <meta charset="<?php bloginfo( 'charset' ); ?>" />
-<meta content="width=device-width; initial-scale=1.0" name="viewport">
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
 <title><?php wp_title(''); ?></title>
 <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
 <link rel="apple-touch-icon" sizes="57x57" href="<?php bloginfo('template_url'); ?>/img/DD9_114x114_white.png" />
