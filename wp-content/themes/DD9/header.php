@@ -25,12 +25,8 @@
 <head>
 <meta charset="<?php bloginfo( 'charset' ); ?>" />
 <meta content="width=device-width; initial-scale=1.0" name="viewport">
-<title>
-<?php wp_title(''); ?>
-</title>
+<title><?php wp_title(''); ?></title>
 <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
-<meta name="google-site-verification" content="jV9HcFOm5nSF-iidDOCEeIpjkIgGGYxKkc0E30FCyLE" />
-<meta name="google-site-verification" content="mniubP5QuKqY3c9zhYIaQTcWdw6J3B12tSty5Ia4ADA" />
 <link rel="profile" href="http://gmpg.org/xfn/11" />
 <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic' rel='stylesheet' type='text/css' />
 <link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>" />
@@ -58,7 +54,6 @@
     <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
 <![endif]-->
 
-<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/js/jquery.isotope.min.js"></script> 
 <script type="text/javascript" src="<?php bloginfo('template_url'); ?>/js/flexslider/jquery.flexslider-min.js"></script>
 
 <script type="text/javascript" charset="utf-8">
@@ -76,20 +71,7 @@
   	  $("#page").toggleClass("grid", 200);
   	});
 
-  	// cache container
-  	var $container = $('ul#thumbnail_grid');
-  	// initialize isotope
-  	$container.isotope({
-  	  // options
-  	  itemSelector : 'ul#thumbnail_grid li',
-  	});
 
-  	// filter items when filter link is clicked
-  	$('.filters a').click(function(){
-  	  var selector = $(this).attr('data-filter');
-  	  $container.isotope({ filter: selector });
-  	  return false;
-  	});
 
   });
 </script>
@@ -126,8 +108,6 @@
     		<a href="/" title="DD9 Home" id="home_link"><img src="<?php bloginfo('template_url'); ?>/img/DD9_logo_v2.png" width="132" height="80" alt="DD9 Logo"></a>
 
 
-
-				<?php //get_search_form(); ?>
 
 
 			 <nav id="access" role="navigation" class="clearfix">

@@ -25,9 +25,7 @@
 <head>
 <meta charset="<?php bloginfo( 'charset' ); ?>" />
 <meta content="width=device-width; initial-scale=1.0" name="viewport">
-<title>
-<?php wp_title(''); ?>
-</title>
+<title><?php wp_title(''); ?></title>
 <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
 <link rel="apple-touch-icon" sizes="57x57" href="<?php bloginfo('template_url'); ?>/img/DD9_114x114_white.png" />
 <link rel="apple-touch-icon" sizes="72x72" href="<?php bloginfo('template_url'); ?>/img/DD9_144x144_white.png" />
@@ -36,8 +34,6 @@
 <meta name="application-name" content="DD9.com" />
 <meta name="msapplication-TileColor" content="#540d0d" />
 <meta name="msapplication-TileImage" content="<?php bloginfo('template_url'); ?>/img/DD9_144x144.png" />
-<meta name="google-site-verification" content="jV9HcFOm5nSF-iidDOCEeIpjkIgGGYxKkc0E30FCyLE" />
-<meta name="google-site-verification" content="mniubP5QuKqY3c9zhYIaQTcWdw6J3B12tSty5Ia4ADA" />
 <meta name="Author" content="DD9 | dd9.com" />
 <link rel="profile" href="http://gmpg.org/xfn/11" />
 <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic' rel='stylesheet' type='text/css' />
@@ -99,7 +95,7 @@
 	<header id="branding" role="banner" class="home">
 	
             <div id="prenav">
-            <!--<span class="toggle_grid"><a href="#">Show Grid</a></span> &nbsp; -->
+            
    <script type="text/javascript">
   var euser = "info";
   var edomain = "dd9.com";
@@ -112,9 +108,7 @@
   
       		<a href="/" title="DD9 Home" id="home_link"><img src="<?php bloginfo('template_url'); ?>/img/DD9_logo_v2.png" width="132" height="80" alt="New DD9 Logo in Red"></a>
   
-            
 
-				<?php //get_search_form(); ?>
 
 
 			    <nav id="access" role="navigation" class="clearfix">

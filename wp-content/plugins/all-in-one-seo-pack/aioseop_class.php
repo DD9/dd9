@@ -1160,7 +1160,7 @@ class All_in_One_SEO_Pack extends All_in_One_SEO_Pack_Module {
 				}
 			}
 
-			echo "\n<!-- All in One SEO Pack $this->version by Michael Torbert of Semper Fi Web Design";
+			echo "\n<!-- ";
 			if ( $this->ob_start_detected )
 				echo "ob_start_detected ";
 			echo "[$this->title_start,$this->title_end] ";
@@ -1413,7 +1413,7 @@ class All_in_One_SEO_Pack extends All_in_One_SEO_Pack_Module {
 				echo "".'<link rel="canonical" href="'.$url.'" />'."\n";
 			}
 			do_action( 'aioseop_modules_wp_head' );
-			echo "<!-- /all in one seo pack -->\n";
+			echo "<!--  -->\n";
 	}
 
 function universal_analytics() {
