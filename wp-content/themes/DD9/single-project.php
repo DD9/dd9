@@ -2,12 +2,15 @@
 
 get_header(); the_post(); 
 
+
+$num_of_related_projects = 6;
+
 $clients = get_posts(array(
     'connected_type' => 'project_clients',
-	'post_type' => 'client',
-	'suppress_filters' => false,
-	'numberposts' => -1,
-	'connected_from' => $post->ID
+  	'post_type' => 'client',
+  	'suppress_filters' => false,
+  	'numberposts' => -1,
+  	'connected_from' => $post->ID
 ));
 
 $project_services = get_posts(array(
@@ -27,27 +30,59 @@ if($project_services)
     }
 }
 
-$all_related_projects = get_posts(array(
-    'connected_type' => 'project_services',
-    'post_type' => 'project',
-    'connected_items' => $project_service_ids,
-    'post__not_in' => array($post->ID),
-    'suppress_filters' => false,
-    'numberposts' => -1
-));
-
-$related_projects = array();
-
-if($all_related_projects)
+if($clients)
 {
-    foreach($all_related_projects as $related_project)
-    {
-        $related_projects[$related_project->ID] = $related_project;
-    }
+    $client_projects = get_posts(array(
+        'connected_type' => 'project_clients',
+        'post_type' => 'project',
+        'connected_items' => $clients,
+        'post__not_in' => array($post->ID),
+        'suppress_filters' => false,
+        'numberposts' => -1
+    ));
 }
 
-shuffle($related_projects);
-$related_projects = array_slice($related_projects, 0, 6);
+$related_client_projects = array();
+if($client_projects)
+{
+    foreach($client_projects as $client_project)
+    {
+        $related_client_projects[$client_project->ID] = $client_project;
+    }
+
+    shuffle($related_client_projects);
+}
+
+if(count($related_client_projects) >= $num_of_related_projects)
+{
+    $related_projects = $related_client_projects;
+}
+else
+{
+    $service_projects = get_posts(array(
+        'connected_type' => 'project_services',
+        'post_type' => 'project',
+        'connected_items' => $project_services,
+        'post__not_in' => array($post->ID),
+        'suppress_filters' => false,
+        'numberposts' => -1
+    ));
+
+    $related_service_projects = array();
+    if($service_projects)
+    {
+        foreach($service_projects as $service_project)
+        {
+            $related_service_projects[$service_project->ID] = $service_project;
+        }
+
+        shuffle($related_service_projects);
+    }
+
+    $related_projects = array_merge($related_client_projects, $related_service_projects);
+}
+
+$related_projects = array_slice($related_projects, 0, $num_of_related_projects);
 
 $graphic_design = get_post($gd_id);
 
