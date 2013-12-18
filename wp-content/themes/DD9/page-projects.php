@@ -140,23 +140,14 @@ $wd_services = get_posts(array(
           <ul id="thumbnail_grid" class="clearfix">
 						<?php foreach($projects as $project):
 
-						$project_services = get_posts(array(
-						'connected_type' => 'project_services',
-						'post_type' => 'service',
-						'suppress_filters' => false,
-						'numberposts' => -1,
-						'connected_from' => $project->ID,
-						'connected_orderby' => '_order_to'
-						));
-
 						$images = get_posts(array(
-						'numberposts' => 1,
-						'order'=> 'ASC',
-						'orderby' => 'menu_order',
-						'post_mime_type' => 'image',
-						'post_parent' => $project->ID,
-						'post_status' => null,
-						'post_type' => 'attachment'
+  						'numberposts' => 1,
+  						'order'=> 'ASC',
+  						'orderby' => 'menu_order',
+  						'post_mime_type' => 'image',
+  						'post_parent' => $project->ID,
+  						'post_status' => null,
+  						'post_type' => 'attachment'
 						));
 
 						if($images)
@@ -167,7 +158,7 @@ $wd_services = get_posts(array(
 
 						$attributes = wp_get_post_terms($project->ID, 'attribute');
 						?>
-            <li class="element all<?php foreach($project_services as $project_service){ echo " ". $project_service->post_name; }?>">
+            <li class="element all">
               <div class="preview_thumbnail client">
                 <?php if($images): ?>
                   <a href="<?= get_permalink($project->ID) ?>" title="<?= $project->post_title ?>">   
