@@ -55,6 +55,7 @@ form li {
 
 .wufoo li {
     /* [disabled]width: 80%; */
+    width: auto !important;
 }
 .safari select.select, 
 .wufoo input.text, .wufoo textarea.textarea, .wufoo input.file, .wufoo select.select {
