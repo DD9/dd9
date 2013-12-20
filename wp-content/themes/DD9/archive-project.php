@@ -10,7 +10,7 @@ $offset = $posts_per_page * ($paged - 1);
 if($paged > 1) {
   // if we're on the second page, we need to also load the post _before_ the first one, to
   // check to see if we should display the first year found
-  $offset = $offset - 2;
+  $offset = $offset - 1;
   $posts_per_page = $posts_per_page + 1;
   echo "offset: $offset, posts_per_page: $posts_per_page";
 }
