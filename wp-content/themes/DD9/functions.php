@@ -5,6 +5,31 @@ define('WEBSITE_DESIGN', 3621);
 $gd_id = GRAPHIC_DESIGN; //these variables are needed for get_posts to work… lame.
 $wd_id = WEBSITE_DESIGN;
 
+function dd9_post_types(){
+    register_post_type('project', Array
+    (
+        'public' => true,
+        'label' => 'Projects',
+        'has_archive' => true,
+        'labels' => Array(
+            'name' => 'Projects',
+            'singular_name' => 'Project',
+            'add_new_item' => 'Add new project',
+            'edit_item' => 'Edit project',
+            'new_item' => 'New project',
+            'view_item' => 'View project',
+            'search_items' => 'Search projects',
+            'not_found' => 'No projects found',
+            'not_found_in_trash' => 'No projects found in Trash',
+            'menu_name' => 'Projects'
+        ),
+        'supports' => Array('title', 'editor', 'thumbnail', 'excerpt', 'aiosp',
+                            'optional-fields', 'details', 'revisions'),
+        'rewrite' => Array('slug' => 'projects')
+    ));
+}
+add_action('init', 'dd9_post_types');
+
 function my_connection_types() 
 {
 	if(!function_exists( 'p2p_register_connection_type'))

@@ -1,15 +1,37 @@
-<?php 
+<?php
 
-get_header(); the_post(); 
+get_header(); the_post();
+
+$paged = get_query_var('paged') ? get_query_var('paged') : 1;
+
+$posts_per_page = get_option('posts_per_page');
+$offset = $posts_per_page * ($paged - 1);
+
+if($paged > 1) {
+  // if we're on the second page, we need to also load the post _before_ the first one, to
+  // check to see if we should display the first year found
+  $offset = $offset - 2;
+  $posts_per_page = $posts_per_page + 1;
+  echo "offset: $offset, posts_per_page: $posts_per_page";
+}
 
 $all_projects = get_posts(array(
 	'post_type'=>'project',
 	'suppress_filters' => false,
-	'numberposts'=>-1,
+	'numberposts' => $posts_per_page,
+  'offset' => $offset,
 	'orderby' => 'meta_value',
 	'order' => 'DESC',
   'meta_key' => 'start_work'
 ));
+
+if($paged > 1) {
+  $previous_project = $all_projects[0];
+  $previous_project_date = get_post_meta($previous_project->ID, 'start_work', true);
+  $previous_year = substr($previous_project_date, 0, 4);
+
+  array_shift($all_projects);
+}
 
 $projects_by_year = array();
 
@@ -82,14 +104,19 @@ $wd_services = get_posts(array(
             <h4 class="subheading_full_width"><span>Work</span></h4>
           </div><!-- .two_column -->
         </div><!-- #secondary -->
-          
+
         <div class="content_right">
-          <article class="post plain">    
-            <div class="entry_content">   
-              <?php the_content(); ?>
+          <article class="post plain">
+            <div class="entry_content">
+              <p>
+                The master list of DD9 graphic design, web design and web development projects.
+                Select a service (above right) to filter the list or go to our
+                <a title="Services" href="/services/">services page</a> where you can
+                <a title="Services" href="/services/">view projects by service category</a>.
+              </p>
               <p>To the right is a list of the graphic and web design services that we provide. Visit a service page to get in depth information about our <a href="/service">design offerings</a>.</p>
-            </div>                  
-            
+            </div>
+
             <div id="services_container" class="project_index">
               <?php if($wd_services): ?>
               <ul class="services web_design clearfix">
@@ -101,11 +128,11 @@ $wd_services = get_posts(array(
                     <a href="<?= get_permalink($service->ID) ?>"><?= $service->post_title ?></a>
                   </li>
                 <?php endforeach; ?>
-              </ul><!-- .services -->	
+              </ul><!-- .services -->
               <?php else: ?>
                   No services found.
               <?php endif; ?>
-              
+
               <?php if($wd_services): ?>
               <ul class="services graphic_design clearfix">
                 <li class="parent_service subheading">
@@ -121,23 +148,19 @@ $wd_services = get_posts(array(
               <?php else: ?>
                   No services found.
               <?php endif; ?>
-            
+
             </div><!-- services_container -->
           </article>
         </div><!-- .content_right thin_border -->
-      </div><!-- .block_container.full_width --> 
+      </div><!-- .block_container.full_width -->
 
-      <?php foreach($projects_by_year as $year => $projects): ?>
       <div class="block_container full_width clearfix">
-        <div class="two_column">
-          <h4 class="subheading breadcrumbs alt_xl"><?= $year ?></h4>
+        <ul id='infinite-scroll-container'>
+          <?php foreach($projects_by_year as $year => $projects): ?>
+            <?php if($year != $previous_year): ?>
+              <li class="infinite-scroll-item year"><?= $year ?></li>
+            <?php endif ?>
 
-          <div class="block_content border_top"> </div>
-        </div><!-- .two_column -->
-
-        <div class="content_right">
-
-          <ul id="thumbnail_grid" class="clearfix">
 						<?php foreach($projects as $project):
 
 						$images = get_posts(array(
@@ -158,10 +181,10 @@ $wd_services = get_posts(array(
 
 						$attributes = wp_get_post_terms($project->ID, 'attribute');
 						?>
-            <li class="element all">
+            <li class="infinite-scroll-item">
               <div class="preview_thumbnail client">
                 <?php if($images): ?>
-                  <a href="<?= get_permalink($project->ID) ?>" title="<?= $project->post_title ?>">   
+                  <a href="<?= get_permalink($project->ID) ?>" title="<?= $project->post_title ?>">
                     <img src="<?= $image_src ?>" width="234" height="162" alt="<?php $project->post_title; ?> Preview" />
                   </a>
                 <?php else: ?>
@@ -170,31 +193,26 @@ $wd_services = get_posts(array(
                   </a>
                 <?php endif; ?>
               </div>
-              
+
               <a href="<?= get_permalink($project->ID) ?>" class="info_panel">
                 <span class="thumbnail_title"><?= $project->post_title ?></span>
-                <?php if($attributes): $i = 0; ?>                                  
-                  <ul class="thumbnail_tags">                                        
+                <?php if($attributes): $i = 0; ?>
+                  <ul class="thumbnail_tags">
                     <?php foreach($attributes as $attribute): if($i == 6) break; ?>
                       <li>
-                        <?= $attribute->name ?><?php if($i != count($attributes) - 1) echo "," ?> 
+                        <?= $attribute->name ?><?php if($i != count($attributes) - 1) echo "," ?>
                       </li>
                     <?php $i++; endforeach; ?>
                   </ul><!-- .project_tags -->
                 <?php endif; ?>
               </a><!-- #info_panel -->
-            </li>	
-            
-            <?php endforeach; ?>    
-        
-        	</ul><!-- #thumbnail_grid -->
+            </li>
 
-        <footer class="entry-meta">
-          <?php edit_post_link( __( 'Edit', 'twentyeleven' ), '<span class="edit-link">', '</span>' ); ?>
-        </footer><!-- .entry-meta -->
-              
-      	</div><!-- .content_right -->   
-			</div><!-- .block_container.full_width --> 
-      <?php endforeach; ?>
-          
+            <?php endforeach; ?>
+          <?php endforeach; ?>
+        </ul>
+      </div><!-- .block_container.full_width -->
+
+      <span id="infinite-scroll-nav"><?php posts_nav_link() ?></span>
+
 <?php get_footer(); ?>
