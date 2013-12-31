@@ -894,40 +894,51 @@ a#home_link:hover img {
 	font-size:14px;
 }
 
+.infinite-scroll-item.year:before {
+	content: "";
+	display: block;
+	position: relative;
+	width: 100%;
+	height:36px;
+}
+
 .infinite-scroll-item.year {
-	background-color:#000;
+	clear: both;
+	float: none;
+	margin: 0 0 -126px -234px;
+	overflow: visible;
 }
 
 .infinite-scroll-item.year .year_inner {
-	color:#FFF;
-	text-align:center;
-	padding:73px 0 0;
 	font-family: "Droid Serif","Palatino Linotype","Book Antiqua",Palatino,serif;
-  font-size: 28px;
-	position:relative;
+	font-size: 28px;
+	margin: -9px 0 0;
+	padding: 0;
+	position: relative;
 }
 
 .infinite-scroll-item.year .year_inner:before {
-	border-bottom: 1px solid rgba(154, 168, 167, 0.4);
+	border-bottom: 1px solid #000000;
 	content: "";
 	display: block;
 	left: 0;
 	position: absolute;
-	top: 81px;
+	top: 9px;
 	width: 100%;
 	z-index: 1;
 }
 
 .infinite-scroll-item.year .year_inner span {
-	background: none repeat scroll 0 0 #000000;
+	background: none repeat scroll 0 0 #FFFFFF;
 	display: inline-block;
-	padding: 0 18px;
+	padding: 0 18px 0 0;
 	position: relative;
 	z-index: 2;
 }
 
 #infinite-scroll-container {
-  margin:18px 0 0 -18px;
+  margin: -36px 0 0 234px;
+  width: 1008px;
 }
 
 ul#thumbnail_grid {
@@ -2974,7 +2985,7 @@ ul.filters li a.instruction:hover {
 		display:none;
 	}
 	
-	 .flexslider .controls_holder {
+	.flexslider .controls_holder {
 	width: 990px;
 	}
 	
@@ -3039,9 +3050,21 @@ ul.filters li a.instruction:hover {
 		margin: 18px auto;
 	}
 	
-	ul#thumbnail_grid > li {
+	#infinite-scroll-container {
+    margin: 18px 0 0 -18px;
+    width: auto;
+	}
+	
+	.infinite-scroll-item.year {
+    height: auto;
+    margin: 36px 0 36px 18px;
+    width: auto;
+	}
+	
+	ul#thumbnail_grid > li,
+	.infinite-scroll-item  {
 		float: none;
-		margin: 0 auto;
+		margin: 0 auto 18px;
 		width: 234px;
 	}
 	
