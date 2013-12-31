@@ -155,10 +155,10 @@ $wd_services = get_posts(array(
       </div><!-- .block_container.full_width -->
 
       <div class="block_container full_width clearfix">
-        <ul id='infinite-scroll-container'>
+        <ul id="infinite-scroll-container" class="clearfix">
           <?php foreach($projects_by_year as $year => $projects): ?>
             <?php if($year != $previous_year): ?>
-              <li class="infinite-scroll-item year"><?= $year ?></li>
+              <li class="infinite-scroll-item year"><div class="year_inner"><span><?= $year ?></span></div></li>
             <?php endif ?>
 
 						<?php foreach($projects as $project):
@@ -213,6 +213,6 @@ $wd_services = get_posts(array(
         </ul>
       </div><!-- .block_container.full_width -->
 
-      <span id="infinite-scroll-nav"><?php posts_nav_link() ?></span>
+      <div id="infinite-scroll-nav"><?php posts_nav_link() ?></span>
 
 <?php get_footer(); ?>

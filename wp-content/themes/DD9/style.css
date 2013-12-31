@@ -869,6 +869,67 @@ a#home_link:hover img {
 
 /* Custom Post Types */
 
+#infinite-scroll-nav {
+	display:none;
+}
+#infscr-loading {
+	display:block;
+	width:100%;
+	clear:both;
+	position:absolute;
+	bottom:0;
+	left:0;
+	height:60px;
+	padding: 20px 0 10px;
+	background-color:rgba(0,0,0,0.9);
+	text-align:center;
+}
+
+#infscr-loading div {
+	text-align:center;
+	margin:0 auto;
+	width:100%;
+	position:relative;
+	color:#CCC;
+	font-size:14px;
+}
+
+.infinite-scroll-item.year {
+	background-color:#000;
+}
+
+.infinite-scroll-item.year .year_inner {
+	color:#FFF;
+	text-align:center;
+	padding:73px 0 0;
+	font-family: "Droid Serif","Palatino Linotype","Book Antiqua",Palatino,serif;
+  font-size: 28px;
+	position:relative;
+}
+
+.infinite-scroll-item.year .year_inner:before {
+	border-bottom: 1px solid rgba(154, 168, 167, 0.4);
+	content: "";
+	display: block;
+	left: 0;
+	position: absolute;
+	top: 81px;
+	width: 100%;
+	z-index: 1;
+}
+
+.infinite-scroll-item.year .year_inner span {
+	background: none repeat scroll 0 0 #000000;
+	display: inline-block;
+	padding: 0 18px;
+	position: relative;
+	z-index: 2;
+}
+
+#infinite-scroll-container {
+  margin:18px 0 0 -18px;
+}
+
 ul#thumbnail_grid {
 	/*margin:2.94% 0 0 -2.94%;*/
 	margin:18px 0 0 -18px;
@@ -886,7 +947,8 @@ ul#thumbnail_grid {
 	margin:18px 0 0 -18px;
 }
 
-ul#thumbnail_grid > li {
+ul#thumbnail_grid > li,
+.infinite-scroll-item {
     float: left;
     font-size: 12px;
     height: 162px;
@@ -894,6 +956,7 @@ ul#thumbnail_grid > li {
     overflow: hidden;
     position: relative;
     width: 234px;
+		list-style:none;
 }
 
 /*#primary.full_width ul#thumbnail_grid {
@@ -971,17 +1034,17 @@ ul#services li.active {
 
 .info_panel {
 	display:block;
-    height: 162px;
-    left: 0;
-    position: absolute;
-    top: 162px;
-    width: 214px;
-    padding: 10px;
+	height: 162px;
+	left: 0;
+	position: absolute;
+	top: 162px;
+	width: 214px;
+	padding: 10px;
 	
 	-webkit-transition: top 0.3s ease 0s;
-    -moz-transition: top 0.3s ease 0s;
-    -o-transition: top 0.3s ease 0s;
-    transition: top 0.3s ease 0s;
+	-moz-transition: top 0.3s ease 0s;
+	-o-transition: top 0.3s ease 0s;
+	transition: top 0.3s ease 0s;
 	
 	background:none no-repeat scroll 2px 2px rgba(0,0,0,.8);
 }
@@ -995,7 +1058,8 @@ ul#services li.active {
 	color:#FFF;
 }
 
-ul#thumbnail_grid > li:hover .info_panel {
+ul#thumbnail_grid > li:hover .info_panel,
+.infinite-scroll-item:hover .info_panel {
    top:0;
 }
 
