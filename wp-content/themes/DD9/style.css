@@ -1844,12 +1844,22 @@ ul#menu-footer01 li.client_login {
 /* =Contact
 ----------------------------------------------- */ 
 #wufoo-wrapper,
+#wufoo-loader,
 #wufoo-zi2t8qo1tnrooa,
 #wufoo-z7x3w7,
 #wufoo-x7x3p9 {
-    width:738px;   
+    width:738px;
+    height: 1783px;   
 }
 
+#wufoo-wrapper{
+  position: relative;
+}
+#wufoo-loader{
+   position: absolute;
+   top: 0px;
+   left: 0px;
+}
 
 
 

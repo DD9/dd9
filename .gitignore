@@ -17,6 +17,7 @@ wp-content/wp-cache-config.php
 wp-content/cache/*
 wp-content/cache/supercache/*
 
+
 # wpengine specific
 .smushit-status
 wp-content/object-cache.php
@@ -98,3 +99,4 @@ _notes/**
 _mockups/**
 _presentations
 _presentations/**
+wp-content/plugins/all-in-one-seo-pack/all_in_one_seo_pack.log

@@ -52,7 +52,13 @@ get_header(); ?>
                   <?php the_content(); ?>
 
                   <div id="wufoo-wrapper">
+
+
                     <div id="wufoo-xmip98b1ir5nhb">
+                    <div id="wufoo-loader">
+                      <h4>Loading form</h4>
+                      <img src="/wp-content/plugins/infinite-scroll/img/ajax-loader.gif" />
+                    </div>
 
                     </div>
                   </div>
