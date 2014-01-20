@@ -136,9 +136,9 @@ h3, h4, h5, h6						{ line-height: 18px; }
 h1									{ font-size: 34px; top: 8px; }
 h2									{ font-size: 22px; top: 8px; }
 h3, .secondary h1, h2.widgettitle	{ font-size: 18px; top: 3px; line-height:18px; }
-.secondary h1, #primary_cta h3		{ color:#E4311F }
+.secondary h1, #primary_cta h3		{ color:#8A1000 }
 h4									{ font-size: 15px; top: 4px;
-color:#E4311F; 
+color:#8A1000; 
 }
 h5									{ font-size: 12px; top: 4px; }
 h6									{ font-size: 12px; top: 4px; }
@@ -309,7 +309,7 @@ h4.breadcrumbs a, .subheading a, .subheading_full_width a {
 }
 
 .subheading_full_width a:hover, #featured_work ul.block.left li.title a:hover {
-    border: 1px solid #F90000;
+    border: 1px solid #8A1000;
 }
 
 
@@ -409,7 +409,7 @@ ul.subpage_nav li.current_page_item a {
 }
 
 #services_container.sidebar ul.services li.active a, #services_container.sidebar ul.services li.parent_service.active a {
-	color:#e4311f;
+	color:#8A1000;
 }
 
 #services_container.sidebar ul.services li a, ul.arrows li a, ul.arrows li span {
@@ -423,7 +423,7 @@ ul.subpage_nav li.current_page_item a {
 #services_container.sidebar ul.services li a:hover,
 #services_container.sidebar ul.services li.parent_service a:hover,
 ul.sidebar_nav li a:hover, ul.sidebar_nav li.current_page_item a {
-	color:#E43131;
+	color:#8A1000;
 }
 
 #primary_cta {
@@ -447,7 +447,7 @@ top:2px;}
     color: #666;    
 }
 #primary_cta ul li a:hover{
-    color: #E4311F;
+    color: #8A1000;
 }
 
 
@@ -554,7 +554,7 @@ input#searchsubmit {
 
 /* Links */
 a {
-	color: #e4311f;
+	color: #8A1000;
 	text-decoration: none;
 }
 a:focus,
@@ -576,12 +576,12 @@ section.recent-posts .other-recent-posts a[rel="bookmark"]:hover,
 section.recent-posts .other-recent-posts .comments-link a:hover,
 .format-image footer.entry-meta a:hover,
 #site-generator a:hover {
-color: #e4311f;
+color: #8A1000;
 }
 
 /*.post_details a, .user_details a, ul.blog_categories a, ul#menu-authors a, ul.subpage_nav li a {
 	color: #333;
-	border-bottom:1px solid #f90000;
+	border-bottom:1px solid #8A1000;
 }
 */
 a:hover {
@@ -589,14 +589,14 @@ a:hover {
 }
 
 section.recent-posts .other-recent-posts .comments-link a:hover {
-	border-color: #e4311f;
+	border-color: #8A1000;
 }
 article.feature-image.small .entry-summary p a:hover,
 .entry-header .comments-link a:hover,
 .entry-header .comments-link a:focus,
 .entry-header .comments-link a:active,
 .feature-slider a.active {
-	background-color: #e4311f;
+	background-color: #8A1000;
 }
 
 h1 a{
@@ -1152,7 +1152,7 @@ ul.related_projects li {
 }
 
 ul.related_projects li img {
-	/* [disabled]border-left:8px solid #e4311f; */
+	/* [disabled]border-left:8px solid #8A1000; */
   width:98px;
   height:69px;
 	
@@ -1546,7 +1546,7 @@ ul.social_icons li a {
     color: #999;    
 }
 ul.social_icons li a:hover {
-      color: #E4311F;
+      color: #8A1000;
 }
 /*
 ul#social_links li a {
@@ -1767,8 +1767,8 @@ p.form-allowed-tags, p.comment-notes {
     width: 125px;
 }
 form#commentform input#submit:hover {
-     border: 1px solid #e4311f;
-	 color:#e4311f;
+     border: 1px solid #8A1000;
+	 color:#8A1000;
 }
 
 .comment-awaiting-moderation {
@@ -2009,7 +2009,7 @@ ul.services {
 .services li.parent_service a:hover,
 .block_link a:hover {
 	color:#FFF;
-	background-color: #E6311F;
+	background-color: #8A1000;
 }
 
 .services li.child_service {
@@ -2023,11 +2023,11 @@ ul.services {
 }
 .services li.child_service a {
 	color:#333;
-	/* [disabled]border-bottom:1px solid #F90000; */
+	/* [disabled]border-bottom:1px solid #8A1000; */
 	margin:0 10px;
 }
 .services li.child_service a:hover {
-	color:#E6311F;
+	color:#8A1000;
 	/* [disabled]border-bottom:1px solid #000; */
 	/* [disabled]margin:0 10px; */
 }
@@ -2044,7 +2044,7 @@ body.home .services li.child_service {
 body.page-id-3650 .services li.child_service:hover,
 body.home .services li.child_service:hover {
 
-    border: 1px dotted #E6311F;
+    border: 1px dotted #8A1000;
    
 }
 body.page-id-3650 ul.services li:nth-child(2n+1),
@@ -2115,7 +2115,7 @@ ul#launch_posts li h5 a {
     color: #000;
 }
 ul#launch_posts li h5 a:hover {
-	color:#E6311F;
+	color:#8A1000;
 }
 
 
@@ -2465,7 +2465,7 @@ a.plain {
 }
 
 .project_index .services li.parent_service a:hover {
-    background-color: #E6311F;
+    background-color: #8A1000;
 }
 
 .project_index .services li.parent_service {
@@ -2628,7 +2628,7 @@ ul.user_projects li:nth-child(2):before {
 }
 
 h3.user_name {
-    border-bottom: 1px dashed #F90000;
+    border-bottom: 1px dashed #8A1000;
     margin-bottom: 15px;
     margin-right: -18px;
     padding-right: 18px;
@@ -2699,7 +2699,7 @@ ul.support_staff > li {
     overflow: hidden;
 }
 .support_staff span.relationship {
-    border-top: 1px dashed #F90000;
+    border-top: 1px dashed #8A1000;
     display: block;
     font-size: 11px;
     font-style: oblique;
@@ -2813,7 +2813,7 @@ ul.filters li a.instruction {
 }
 
 ul.filters li a:hover, ul.filters li a.selected {
-	background-color:#E4311F;
+	background-color:#8A1000;
 }
 
 ul.filters li a.instruction:hover {
