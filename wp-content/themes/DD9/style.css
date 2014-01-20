@@ -732,7 +732,7 @@ a#home_link:hover img {
 	color:#000;
 	display: block;
 	font-family: 'LeagueGothicRegular';
-	font-size: 16px;
+	font-size: 17px;
 	letter-spacing: 0.05em;
 	margin-left: 25px;
 	padding: 0;
@@ -740,6 +740,7 @@ a#home_link:hover img {
 	text-transform: uppercase;
 	padding: 5px 0 0;
 }
+
 #access ul ul {
 	-moz-box-shadow: 0 3px 3px rgba(0,0,0,0.2);
 	-webkit-box-shadow: 0 3px 3px rgba(0,0,0,0.2);
@@ -770,15 +771,14 @@ a#home_link:hover img {
 	width: 168px;
 	margin-left: 0px;
 }
-#access li:hover > a,
 #access ul ul :hover > a,
 #access a:focus {
-	color: #333;
+	color: #8A1000;
 	border-bottom: 1px dotted #333;
 }
-#access li:hover > a,
+#access li a:hover,
 #access a:focus {
-	color: #373737;
+	color:#8A1000;
 	border-bottom: none;
 }
 #access ul li:hover > ul {
