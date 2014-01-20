@@ -81,7 +81,7 @@
     </span>
     <span itemprop="tel">303-417-6369</span>  &#8226; 
     <a href="http://dd9.com/" itemprop="url" title="DD9 Website">http://dd9.com/</a>  &#8226; 
-<a href="http://g.co/maps/5gszk" title="DD9 on Google Maps" target="_blank">Map</a>
+<a href="http://goo.gl/maps/N1olx" title="DD9 on Google Maps" target="_blank">Map</a>
 </div>
 
 
