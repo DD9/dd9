@@ -1838,10 +1838,6 @@ form.wpcf7-form textarea[type="textarea"]:focus, form.wpcf7-form textarea:focus 
 	padding: 0 3px;
 }
 
-#social_links li:last-of-type {
-	padding: 0 0 0 3px;
-}
-
 #social_links li a {
 	color:#999;
 }

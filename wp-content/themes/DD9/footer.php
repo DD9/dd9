@@ -24,7 +24,7 @@
       <p class="footer_address"><a href="http://goo.gl/maps/N1olx" title="DD9 on Google Maps" target="_blank">4725 16th St. #104 <br />
       Boulder, CO 80304</a> </p>
       
-      <p><strong>P</strong> / 303-417-6369 <br />
+      <p><strong><i class="icon-phone"></i></strong> 303-417-6369 <br />
       <a href="mailto:info@dd9.com" class="footer_email">info@dd9.com</a></p>
     </div>
    
