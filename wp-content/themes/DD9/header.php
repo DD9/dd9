@@ -90,7 +90,8 @@
 </head>
 
 <body <?php body_class(); ?>>
-	<div id="page" class="hfeed">
+	<div id="top_border"></div>
+  <div id="page" class="hfeed">
     <header id="branding" role="banner">
     
       <div id="prenav">

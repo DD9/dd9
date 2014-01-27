@@ -11,91 +11,62 @@
 ?>
 
 	</div><!-- #main -->
+</div><!-- #page --> 
 
 
-
-	<footer id="colophon" role="contentinfo" >
+<footer id="colophon" role="contentinfo" >
  
- 
-<div class="block_container full_width clearfix">
- 
- <div id="social" class="two_column thin_border">			
-
-<ul id="social_links" class="social_icons">
-
- <li>
-   <a href="https://www.twitter.com/DD9inc" title="DD9 on Twitter" target="_blank">
-     <i class="icon-twitter-sign"></i>
-   </a>
- </li>
- <li>
-   <a href="https://www.facebook.com/DD9inc" title="DD9 On Facebook" target="_blank">
-    <i class="icon-facebook-sign"></i>
-   </a>
- </li>
-
- <li>
-    <a href="http://www.flickr.com/photos/dd9inc/" title="DD9 On Flickr" target="_blank">
-     <i class="icon-flickr-sign"></i>   
-    </a>
- </li>
-
- <li>
-    <a href="https://github.com/DD9" title="DD9 on GitHub" target="_blank">
-      <i class="icon-github-sign"></i> 
-    </a>
- </li>
-
- <li>
-    <a href="http://www.linkedin.com/company/dd9" title="DD9 on LinkedIn" target="_blank">
-      <i class="icon-linkedin-sign"></i> 
-    </a>
- </li>
-
-
- 
-</ul> 
-
-</div><!-- #social -->
- 
-    
-    <div class="content_right thin_border">
-
-			<?php
-
-				get_sidebar( 'footer' );
-			?>
-
-			<div id="site-generator">
-				<p>Copyright &copy; 2001 - <?php echo date('Y'); ?>  DD9, Inc. All rights reserved. <a href="/wp-admin/" style="color:#CCC; font-size:8px; float:right" rel="nofollow">Admin Login</a></p>
-
-<div itemscope itemtype="http://data-vocabulary.org/Organization" id="microformat_block"> 
-    <span itemprop="name">DD9</span>, Inc.  &#8226; 
-     <span itemprop="address" itemscope 
-      itemtype="http://data-vocabulary.org/Address">
-      <span itemprop="street-address">4725 16th St. #104</span>  &#8226;  
-      <span itemprop="locality">Boulder</span>,
-      <span itemprop="region">CO</span>
-      <span itemprop="postal-code">80304</span>
-      <span itemprop="country-name">USA</span>  
-    </span>
-    <span itemprop="tel">303-417-6369</span>  &#8226; 
-    <a href="http://dd9.com/" itemprop="url" title="DD9 Website">http://dd9.com/</a>  &#8226; 
-<a href="http://goo.gl/maps/N1olx" title="DD9 on Google Maps" target="_blank">Map</a>
-</div>
-
-
-
+  <div class="block_container full_width clearfix">
+  	
+    <div class="two_column footer_contact">
+   		<h4 class="footer_name">DD9, Inc.</h4>
+      
+      <p class="footer_address"><a href="http://goo.gl/maps/N1olx" title="DD9 on Google Maps" target="_blank">4725 16th St. #104 <br />
+      Boulder, CO 80304</a> </p>
+      
+      <p><strong>P</strong> / 303-417-6369 <br />
+      <a href="mailto:info@dd9.com" class="footer_email">info@dd9.com</a></p>
+    </div>
+   
+      
+    <div class="content_right">
+    	
+      <ul id="social_links">
+        <li>
+          <a href="https://www.twitter.com/DD9inc" title="DD9 on Twitter" target="_blank"><i class="icon-twitter-sign"></i></a>
+        </li>
+        <li>
+          <a href="https://www.facebook.com/DD9inc" title="DD9 On Facebook" target="_blank"><i class="icon-facebook-sign"></i> </a>
+        </li>
+        <li>
+          <a href="http://www.flickr.com/photos/dd9inc/" title="DD9 On Flickr" target="_blank"><i class="icon-flickr-sign"></i></a>
+        </li>
+        <li>
+          <a href="https://github.com/DD9" title="DD9 on GitHub" target="_blank"><i class="icon-github-sign"></i> </a>
+        </li>
+        <li>
+          <a href="http://www.linkedin.com/company/dd9" title="DD9 on LinkedIn" target="_blank"><i class="icon-linkedin-sign"></i></a>
+        </li>
+      </ul> 
+      
+      <div id="footer_tagline">
+      	Design • Development • Branding
+      </div><!-- /footer_tagline -->
+      
+      
+    	<?php wp_nav_menu( array( 'theme_location' => 'footer-menu', 'container' => false, 'menu_id' => 'footer_nav' ) ); ?>
+  
+      <div id="footer_utility">
+        Copyright &copy; 2001 - <?php echo date('Y'); ?>  DD9, Inc. All rights reserved. <a href="/wp-admin/" style="color:#CCC; font-size:8px; float:right" rel="nofollow">Admin Login</a>
+      </div><!-- /footer_utility -->
             
-            </div>
+     </div><!-- .content_right -->
+      
+  </div><!-- .block_container -->
             
-            </div><!-- .content_right -->
-    
-    </div><!-- .block_containter -->
-            
-	</footer><!-- #colophon -->
-    
- </div><!-- #page -->  
+</footer><!-- #colophon -->
+
+ 
 
 
 <?php wp_footer(); ?>
