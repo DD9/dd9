@@ -56,11 +56,13 @@ $project = $projects ? $projects[0] : null;
             
 
             <?php if($project): ?>
-                <p><em><a href="<?= get_permalink($project->ID) ?>">View Project Case Study</a></em></p>
+              <ul class="news_project_links clearfix">
+              	<li><a href="<?= get_permalink($project->ID) ?>"><i class="icon-beaker"></i> View Case Study</a></li>
               
                 <?php if($full_url = get_post_meta($project->ID, 'full_url', true)): ?>
-              <p><em><a href="<?= $full_url ?>" class="external_link" target="_blank" title="<?php get_post_meta($project->ID, 'full_url', true); ?>">Launch the Site</a></em></p>
+              	<li><span class="sep"> |</span> <a href="<?= $full_url ?>" target="_blank" title="<?php get_post_meta($project->ID, 'full_url', true); ?>"><i class="icon-external-link"></i> Launch the Site</a></li>
                 <?php endif; ?>
+              </ul>
             <?php endif; ?>
           
           </div><!-- .entry-content -->
@@ -69,13 +71,13 @@ $project = $projects ? $projects[0] : null;
         
           <div class="featured_image">
             <?php if($images): ?>
-                <a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>">   
-                    <img src="<?= $image_src ?>" width="234" height="162" alt="<?php the_title(); ?>" />
-                </a>
+              <a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>">   
+                <img src="<?= $image_src ?>" width="234" height="162" alt="<?php the_title(); ?>" />
+              </a>
             <?php else: ?>
-                <a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>">
-                    <img src="<?php bloginfo('template_url'); ?>/images/dd9-placeholder.jpg" alt="<?php the_title(); ?>" width="234" height="162" />
-                </a>
+              <a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>">
+                <img src="<?php bloginfo('template_url'); ?>/images/dd9-placeholder.jpg" alt="<?php the_title(); ?>" width="234" height="162" />
+              </a>
             <?php endif; ?>                                
         </div>
         

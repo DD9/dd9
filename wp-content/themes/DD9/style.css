@@ -1472,13 +1472,34 @@ ul.blog_categories ul.children {
     min-height: 109px;
 }
 
-.secondary .post_details {
-   display:none;
-}
-
 .post_details #author-info {
     float: none;
     margin: 0;
+}
+
+.news_project_links {
+	margin:0;
+	list-style:none;
+	font-family:"Droid Serif","Palatino Linotype", "Book Antiqua", Palatino, serif;
+	font-style:oblique;
+}
+
+.news_project_links li {
+	float:left;
+}
+
+.secondary .news_project_links li {
+	float:none;
+	margin:0 0 5px 0;
+}
+
+.news_project_links li .sep {
+	color: #999999;
+	display: block;
+	float: left;
+	margin-top: -1px;
+	padding: 0 23px 0 15px;
+	width: 1px;
 }
 
 #content nav {
@@ -1500,13 +1521,13 @@ ul.blog_categories ul.children {
 .nav-previous {
 	float: left;
 	width: 50%;
-    font-family:"Droid Serif","Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-family:"Droid Serif","Palatino Linotype", "Book Antiqua", Palatino, serif;
 }
 .nav-next {
 	float: right;
 	text-align: right;
 	width: 50%;
-    font-family:"Droid Serif","Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-family:"Droid Serif","Palatino Linotype", "Book Antiqua", Palatino, serif;
 }
 #content nav .meta-nav {
 	font-weight: normal;
@@ -2923,7 +2944,7 @@ ul.filters li a.instruction:hover {
 	.single-project #main .entry_content,
 	.single-project .content_right .post_details  {
 		width: 100%;
-        margin-right:0px;
+    margin-right:0px;
 	}
 	
 	.content_right.blog {
