@@ -439,22 +439,24 @@ ul.sidebar_nav li a:hover, ul.sidebar_nav li.current_page_item a {
 }
 
 #primary_cta {
-    border-left: 1px dotted #000000;
-    float: right;
-    padding-left: 18px;
-    width: 216px; /*198px;*/
+	border-left: 1px dotted #000000;
+	float: right;
+	padding-left: 18px;
+	width: 216px; /*198px;*/
 	min-height:198px;
 }
 
 #primary_cta ul { 
-top:2px;}
-#primary_cta ul li {
-    width:auto;
-    font-size:16px;
-    height:36px;
-    font-family:"Droid Serif","Palatino Linotype", "Book Antiqua", Palatino, serif;
-    
+	top:2px;
 }
+#primary_cta ul li {
+	width:auto;
+	font-size:16px;
+	height:36px;
+	font-family:"Droid Serif","Palatino Linotype", "Book Antiqua", Palatino, serif;
+	font-style:oblique;
+}
+
 #primary_cta ul li a{
     color: #666;    
 }
@@ -2126,6 +2128,7 @@ ul.services {
 	/* [disabled]border-bottom:1px solid #000; */
 	/* [disabled]margin:0 10px; */
 }
+
 /* services & home page */
 body.page-id-3650 .services li.child_service,
 body.home .services li.child_service {
@@ -2272,12 +2275,12 @@ ul#design_stream li a:hover img {
 }
 
 .design_shot_time {
-    color: #999999;
-    display: block;
-    font-size: 10px;
-    height: 18px;
-    line-height: 18px;
-    padding-left: 10px;
+	color: #999999;
+	display: block;
+	font-size: 10px;
+	height: 18px;
+	line-height: 18px;
+	padding-left: 10px;
 }
 
 a.plain {
@@ -2285,13 +2288,8 @@ a.plain {
 }
 
 #branding.home {
-    background-color: #FFFFFF;
-    /*background-image: url("images/baseline_grid_light.jpg");*/
-    background-position: 0 0;
-    background-repeat: repeat;
-    margin: 0 auto;
-    width: 1242px;
-		padding:18px 0 0;
+	margin: 0 auto;
+	width: 1242px;
 }
 
 .subheading_full_width.slideshow a {border:none; border-bottom:1px solid #000;}
@@ -2304,12 +2302,12 @@ a.plain {
 
 .flexslider .slides li {
 	background-color: #FFFFFF;
-    background-position: 0 19%;
-    background-repeat: repeat-x;
+  background-position: 0 19%;
+  background-repeat: repeat-x;
 }
 
 .flexslider .slides li.slide_lumilia {
-    background-image: url("images/home_slides/slide_lumilia_tile.jpg");
+  background-image: url("images/home_slides/slide_lumilia_tile.jpg");
 }
 
 .flexslider .slides li.slide_lumilia .extra_left {

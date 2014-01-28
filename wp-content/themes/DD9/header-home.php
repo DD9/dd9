@@ -92,6 +92,8 @@
 
 <body <?php body_class(); ?>>
   
+  <div id="top_border"></div>
+  
 	<header id="branding" role="banner" class="home">
 	
   	<div id="prenav">
