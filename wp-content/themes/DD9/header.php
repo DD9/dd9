@@ -55,6 +55,7 @@
 <![endif]-->
 
 <script type="text/javascript" src="<?php bloginfo('template_url'); ?>/js/flexslider/jquery.flexslider-min.js"></script>
+<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/js/jquery.jsticky.min.js"></script>
 
 <script type="text/javascript" charset="utf-8">
   $(function() {
@@ -70,11 +71,18 @@
   	$(".toggle_grid a").click(function () {
   	  $("#page").toggleClass("grid", 200);
   	});
-
-
-
   });
 </script>
+
+<script type="text/javascript"><!-- https://github.com/AndrewHenderson/jSticky -->
+	$(document).ready( function() {
+	    $(".sticky").sticky({
+				topSpacing: 58,
+				zIndex:2,
+				stopper: ".block_container.lower"
+			});
+	});
+  </script>
 
 
 <script>

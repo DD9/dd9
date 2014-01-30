@@ -133,19 +133,80 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
 ?>
 
       <div class="block_container">    
-        <div class="secondary">   
+        <div class="secondary sticky">   
           <div class="two_column">     
              <h4 class="subheading_full_width"><a href="/projects/" title="DD9 Portfolio">Projects</a></h4>
              <div class="block_content">
                 <h1> <?php the_title(); ?></h1>
-                <p class="top_line"></p>
-                <?php include('social.php'); ?>
+                <?php /*?><p class="top_line"></p>
+                <?php include('social.php'); ?><?php */?>
+             </div><!-- .block_content -->
+          </div><!-- .two_column -->
+          
+          <div class="two_column">     
+             <div class="block_content">
+                <article class="post">  
+                  <div class="entry_content">
+                  	<!--<p class="top_line"><em></em></p> -->  
+                    <?php the_content(); ?>
+                  </div> 
+                </article>
+                
+                <ul class="post_details">
+									<?php if($clients): ?><?php foreach($clients as $client): ?>
+                    <li><h4 class="title">Client:</h4> <a href="<?= get_permalink($client->ID) ?>"><?= $client->post_title ?></a></li>    
+                    <?php endforeach; ?><?php endif; ?> 
+                   
+                    <?php if($full_url): ?><li><h4 class="title">Launch:</h4> <a href="<?= $full_url ?>" class="external_link" target="_blank"><?= $display_url; ?></a></li><?php endif; ?>
+                    
+                    <?php if($start_work): ?>
+                    <li>
+                        
+                      <h4 class="title">Date:</h4>          
+                      <?= $start_work; ?>  
+                    
+                    </li>
+                    <?php endif; ?>                
+                    
+                    <?php if($users): ?>
+                      <li>
+                        <ul class="users">
+                          <li><h4 class="title">Contributors:</h4></li>
+                          <?php foreach($groups as $group): ?>
+                            <?php foreach($users[$group] as $user): ?>
+                          
+                              <?php //  Order list of users below by same order that you set up in page-team.php
+                                    //  Team users should be listed first, followed by associates, followed by alumni ?>
+                                 
+                               <li>
+                                 <a href="<?= $user['posts_url'] ?>" class="<?= $group ?>"><?= $user['name'] ?></a>
+                               </li>
+                            <?php endforeach; ?>                       
+                          <?php endforeach; ?>
+                        </ul>
+                      </li>
+                    <?php endif; ?>
+                    
+                    <?php if($attributes): ?>
+                      <li>
+                        <ul class="attributes">
+                          <li><h4 class="title">Tags:</h4></li>
+                          <?php foreach($attributes as $attribute): ?>
+                            <li>
+                             <a href="<?= get_term_link($attribute) ?>"><?= $attribute->name ?></a>
+                            </li>
+                          <?php endforeach; ?>
+                        </ul>
+                       </li>
+                    <?php endif; ?>
+                   
+                </ul><!-- .post_details -->
+                
              </div><!-- .block_content -->
           </div><!-- .two_column -->
 
           <div class="two_column clearfix">
             <div class="block_content">
-              <p class="top_line"><em></em></p>
               <div id="services_container" class="sidebar">
                 <?php if($wd_services): ?>
                 <ul class="services web_design clearfix">
@@ -195,22 +256,18 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
             ));
             
           $featured_image_id = get_post_thumbnail_id();
-          $count = count( $images );
-          $specific = array();
-          $i = 1;     
           ?>
           
           <?php if($images): ?>
             
-            <div id="image_data">
-              <div class="total_images"> &nbsp; 1 &nbsp;<?php  $specific[$image->ID] = $i; ++$i; ?> of <?php echo $count; ?></div>
-            </div><!-- #images_data -->
             
-            <div class="flexslider project">        
-              <ul id="image_attachments_full" class="slides">
+            
+            <div class="project_images">        
+              <ul id="image_attachments_full" class="clearfix">
                 <?php foreach($images as $image): ?>
                   <?php if($class = get_image_class($image->ID)): ?>
-                  <li  style="display:none">
+                  <li>
+                 
                     <?php $image_data = wp_get_attachment_image_src($image->ID, 'thumbnail'); ?>
                     <?php $full_image_data = wp_get_attachment_image_src($image->ID, 'full'); ?>
                     <?php /*?><a href="<?= $full_image_data[0] ?>">
@@ -219,18 +276,20 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
                       <img src="<?= $full_image_data[0] ?>" alt="<?= $image->post_excerpt ?>" class="<?= $class ?>" />
 
                   <?php else: ?>
-                  <li style="display:none">
+                  <li>
+                  	
                     <?php $image_data = wp_get_attachment_image_src($image->ID, 'large'); ?>
                     <img src="<?= $image_data[0] ?>" width="864" alt="<?= $image->post_excerpt ?>" />
                   <?php endif; ?>
-                  <div class="caption"><?php
-                   if($image->post_excerpt) {
-                     echo $image->post_excerpt;
-                     } else {
-                    the_title(); 
-                    $img_count =  $image->ID;
-                    echo ' project image #' . $img_count; 
-                    } ?></div>
+                      <div class="caption">
+												<?php if($image->post_excerpt) {
+                         echo $image->post_excerpt;
+                         } else {
+                        the_title(); 
+                        $img_count =  $image->ID;
+                        echo ' project image #' . $img_count; 
+                        } ?>
+                      </div>
                     </li>
                 <?php endforeach; ?>
               </ul><!-- #image_attachments_full -->
@@ -241,11 +300,32 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
         <div class="clearfloat"></div>
       </div><!-- .block_container.full_width -->
         
-      <div class="block_container"> 
+      <div class="block_container lower"> 
         <div class="secondary">  
+
+          <?php if($posts): ?>        
+          <div class="two_column">
+            <div class="block_content">
+              <p class="top_line"></p>
+              <h4 class="black">Related Posts</h4> 
+              <ul class="related_posts">
+                <?php foreach($posts as $project_post): ?>
+                <li>
+                  <a href="<?= get_permalink($project_post->ID) ?>">
+                      <?= $project_post->post_title ?>
+                  </a>
+                      
+                  <span class="post_time"><?= get_the_time('F jS, Y', $project_post->ID) ?></span>
+                </li>
+                <?php endforeach; ?> 
+              </ul>
+            </div><!-- .block_content -->
+		      </div><!-- .two_column -->
+          <?php endif; ?>
+        </div> <!-- .secondary -->
+                             
+        <div class="content_right thin_border"> 
           <?php if($related_projects): ?> 
-          <div class="two_column">         
-            <div class="block_content border_top">
               <h4 class="black">Related Projects</h4> 
               <ul class="related_projects">
                 <?php foreach($related_projects as $related_project): ?>  
@@ -275,100 +355,8 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
                   </li>
                 <?php endforeach; ?> 
               </ul>
-            </div>
-          </div><!-- .two_column -->  
           <?php endif; ?>
-
-          <?php if($posts): ?>        
-          <div class="two_column">
-            <div class="block_content">
-              <p class="top_line"></p>
-              <h4 class="black">Related Posts</h4> 
-              <ul class="related_posts">
-                <?php foreach($posts as $project_post): ?>
-                <li>
-                  <a href="<?= get_permalink($project_post->ID) ?>">
-                      <?= $project_post->post_title ?>
-                  </a>
-                      
-                  <span class="post_time"><?= get_the_time('F jS, Y', $project_post->ID) ?></span>
-                </li>
-                <?php endforeach; ?> 
-              </ul>
-            </div><!-- .block_content -->
-		      </div><!-- .two_column -->
-          <?php endif; ?>
-        </div> <!-- .secondary -->
-                             
-        <div class="content_right thin_border"> 
-          <article class="post">  
-          <div class="entry_content">   
-            <h3>About the Project</h3>
-            <?php the_content(); ?>
-          </div> 
-
-          <!--div class="featured_image"> 
-              <?php if ( has_post_thumbnail()) {echo get_the_post_thumbnail($id, 'thumbnail'); }?>
-          </div-->
-
-          <ul class="post_details">
-            <?php if($clients): ?><?php foreach($clients as $client): ?>
-              <li><h4 class="title">Client:</h4> <a href="<?= get_permalink($client->ID) ?>"><?= $client->post_title ?></a></li>    
-              <?php endforeach; ?><?php endif; ?> 
-             
-              <?php if($full_url): ?><li><h4 class="title">Launch Project:</h4> <a href="<?= $full_url ?>" class="external_link" target="_blank"><?= $display_url; ?></a></li><?php endif; ?>
-              
-              <?php if($start_work): ?>
-              <li>
-                  
-                <h4 class="title">Date:</h4>          
-                <?= $start_work; ?>  
-              
-              </li>
-              <?php endif; ?>                
-              
-              <?php if($users): ?>
-                <li>
-                  <ul class="users">
-                    <li><h4 class="title">Contributors:</h4></li>
-                    <?php $first = true; ?>
-                    <?php foreach($groups as $group): ?>
-                      <?php foreach($users[$group] as $user): ?>
-                    
-                        <?php //  Order list of users below by same order that you set up in page-team.php
-                              //  Team users should be listed first, followed by associates, followed by alumni ?>
-                           
-                         <li>
-                           <?php if(!$first) echo ", "; ?>
-                           <a href="<?= $user['posts_url'] ?>" class="<?= $group ?>"><?= $user['name'] ?></a>
-                         </li>
-                      <?php $first = false; endforeach; ?>                       
-                    <?php endforeach; ?>
-                  </ul>
-                </li>
-              <?php endif; ?>
-              
-              <?php if($attributes): ?>
-                <li>
-                  <ul class="attributes">
-                    <li><h4 class="title">Tags:</h4></li>
-                    <?php foreach($attributes as $attribute): ?>
-                      <li>
-                       <a href="<?= get_term_link($attribute) ?>"> <?= $attribute->name ?> </a>
-                       <?php if($attribute != $attributes[count($attributes) - 1]) echo ","; ?> 
-                      </li>
-                    <?php endforeach; ?>
-                  </ul>
-                 </li>
-              <?php endif; ?>
-             
-          </ul><!-- .post_details -->
-
-          </article>
           
-          <footer class="entry-meta">
-            <?php edit_post_link( __( 'Edit', 'twentyeleven' ), '<span class="edit-link">', '</span>' ); ?>
-          </footer><!-- .entry-meta -->
         </div><!-- .content_right -->
       </div><!-- .block_container.full_width -->
 
