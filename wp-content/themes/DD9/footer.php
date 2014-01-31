@@ -15,7 +15,7 @@
 
 
 <footer id="colophon" role="contentinfo" >
- 
+
   <div class="block_container full_width clearfix">
   	
     <div class="two_column footer_contact">
@@ -67,7 +67,7 @@
 </footer><!-- #colophon -->
 
  
-
+<a class="top" href="#"><i class="icon-arrow-up"></i></a>
 
 <?php wp_footer(); ?>
 

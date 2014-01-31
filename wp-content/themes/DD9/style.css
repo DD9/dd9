@@ -1866,6 +1866,55 @@ form.wpcf7-form textarea[type="textarea"]:focus, form.wpcf7-form textarea:focus 
 /* =Footer
 ----------------------------------------------- */
 
+a.top {
+	-webkit-border-radius: 5px 5px 0 0; 
+	-moz-border-radius:  5px 5px 0 0; 
+	-o-border-radius:  5px 5px 0 0; 
+	border-radius:  5px 5px 0 0;
+	
+	background-color: #999;
+	color: #FFFFFF;
+	display: block;
+	font-size: 20px;
+	height: 35px;
+	position: fixed;
+	right: 80px;
+	bottom: 0;
+	width: 35px;
+	
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: alpha(opacity=0);
+  -moz-opacity: 0;
+  -khtml-opacity: 0;
+  opacity: 0;
+	
+	-webkit-transition: all 0.3s ease 0s;
+	-moz-transition: all 0.3 ease 0s;
+	-o-transition: all 0.3s ease 0s;
+	transition: all 0.3s ease 0s;
+}
+
+a.top .icon-arrow-up {
+	display: block;
+	height: 35px;
+	line-height: 35px;
+	margin: 0 auto;
+	text-align: center;
+	width: 35px;
+}
+
+a.top:hover {
+	background-color:#8A1000;
+}
+
+body.scrolled a.top {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: alpha(opacity=100);
+  -moz-opacity: 1;
+  -khtml-opacity: 1;
+  opacity: 1;
+}
+
 #colophon {
 	border-top: 1px solid #000000;
 	clear: both;
@@ -3209,10 +3258,14 @@ ul.filters li a.instruction:hover {
 		width: auto;
 	}
 	
-	
 	#footer_nav li.client_login {
     float: none;
 	}
+	
+	a.top {
+		right: 20px;
+	}
+	
 }
 
 @media screen and (max-width: 480px) {
