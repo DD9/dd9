@@ -76,37 +76,43 @@
 
 <script type="text/javascript"><!-- https://github.com/AndrewHenderson/jSticky -->
 	$(document).ready( function() {
-			if (jQuery(window).width() > 1040) { 
-				$(".sticky").sticky({
-					topSpacing: 36,
-					zIndex:2,
-					stopper: ".block_container.lower"
-				});
-			}
+			$(".secondary").sticky({
+				topSpacing: 36,
+				zIndex:2,
+				stopper: ".block_container.lower"
+			});
+			
+			/* Scroll to top on load */
+			$('html, body').stop().animate({ scrollTop: 0 }, 500);
 			
 	});
 </script>
 
 
-<?php /*?><script type="text/javascript"><!-- https://github.com/AndrewHenderson/jSticky -->
+
+
+
+
+<?php /*?>
+<script type="text/javascript"><!-- https://github.com/AndrewHenderson/jSticky -->
 	$(document).ready( function() {
     var $window = $(window),
-        $html = $('.secondary');
+        $sidebar = $('.secondary');
 
     function resize() {
         if ($window.width() > 1040) {
-            return $html.addClass('sticky');
+            return $sidebar.css({marginLeft: 40}).addClass('sticky');
         }
 
-        $html.removeClass('sticky');
+        $sidebar.removeClass('sticky');
     }
 
     $window
         .resize(resize)
         .trigger('resize');
 });
-</script><?php */?>
-
+</script>
+<?php */?>
 
 <!--
 	$(document).ready( function() {

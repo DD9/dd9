@@ -110,7 +110,7 @@ $posts = get_posts(array(
     'connected_type' => 'project_posts',
     'post_type' => 'post',
     'suppress_filters' => false,
-    'numberposts' => -1,
+    'numberposts' => 1,
     'connected_from' => $post->ID
 ));
 
@@ -133,7 +133,7 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
 ?>
 
       <div class="block_container">    
-        <div class="secondary sticky">   
+        <div class="secondary">   
           <div class="two_column">     
              <h4 class="subheading_full_width"><a href="/projects/" title="DD9 Portfolio">Projects</a></h4>
              <div class="block_content">
@@ -208,10 +208,10 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
           <div class="two_column clearfix">
             <div class="block_content">
               <div id="services_container" class="sidebar">
-                <?php if($wd_services): ?>
+                <?php if($wd_services && in_array($website_design->ID, $project_service_ids)): ?>
                 <ul class="services web_design clearfix">
                   <li class="parent_service subheading <?php if(in_array($website_design->ID, $project_service_ids)) echo "active"; ?>">
-                    <a href="<?= get_permalink($website_design->ID) ?>"><?= $website_design->post_title ?></a>
+                    <a href="<?= get_permalink($website_design->ID) ?>"><?= $website_design->post_title ?> Services</a>
                   </li>
                   <?php foreach($wd_services as $service): ?>
                     <li<?php if(in_array($service->ID, $project_service_ids)) echo " class='active'"; ?>>
@@ -220,13 +220,12 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
                   <?php endforeach; ?>
                 </ul><!-- .services --> 
                 <?php else: ?>
-                  No services found.
                 <?php endif; ?>
                 
-                <?php if($wd_services): ?>
+                <?php if($gd_services && in_array($graphic_design->ID, $project_service_ids)): ?>
                 <ul class="services graphic_design clearfix">
                   <li class="parent_service subheading <?php if(in_array($graphic_design->ID, $project_service_ids)) echo "active"; ?>">
-                    <a href="<?= get_permalink($graphic_design->ID) ?>"><?= $graphic_design->post_title ?></a>
+                    <a href="<?= get_permalink($graphic_design->ID) ?>"><?= $graphic_design->post_title ?> Services</a>
                   </li>
                   <?php foreach($gd_services as $service): ?>
                     <li<?php if(in_array($service->ID, $project_service_ids)) echo " class='active'"; ?>>
@@ -236,7 +235,6 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
                 </ul><!-- .services --> 
                 
                 <?php else: ?>
-                  No services found.
                 <?php endif; ?>
               </div><!-- services_container -->
             </div><!-- .block_content -->
@@ -312,7 +310,7 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
                 <?php foreach($posts as $project_post): ?>
                 <li>
                   <a href="<?= get_permalink($project_post->ID) ?>">
-                      <?= $project_post->post_title ?>
+                  	<?= $project_post->post_title ?>
                   </a>
                       
                   <span class="post_time"><?= get_the_time('F jS, Y', $project_post->ID) ?></span>
@@ -324,37 +322,60 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
           <?php endif; ?>
         </div> <!-- .secondary -->
                              
-        <div class="content_right thin_border"> 
+        <div class="content_right"> 
           <?php if($related_projects): ?> 
-              <h4 class="black">Related Projects</h4> 
-              <ul class="related_projects">
-                <?php foreach($related_projects as $related_project): ?>  
-                  <?php
-                  $images = get_posts(array(
-                  'numberposts' => 1,
-                  'order'=> 'ASC',
-                  'orderby' => 'menu_order',
-                  'post_mime_type' => 'image',
-                  'post_parent' => $related_project->ID,
-                  'post_status' => null,
-                  'post_type' => 'attachment'
-                  ));
-                  
-                  if($images)
-                  {
-                    $image_data = wp_get_attachment_image_src($images[0]->ID, 'thumbnail');
-                    $image_src = $image_data[0];
-                  }
-                  else $image_src = 'http://dd9.com/wp-content/uploads/feat_placeholder.jpg';
-                  ?>
-                  
-                  <li>
+            <p class="top_line"></p>
+            <h4 class="black">Related Projects</h4> 
+            <ul id="thumbnail_grid" class="clearfix">
+              <?php foreach($related_projects as $related_project): ?>  
+                <?php
+                $images = get_posts(array(
+                'numberposts' => 1,
+                'order'=> 'ASC',
+                'orderby' => 'menu_order',
+                'post_mime_type' => 'image',
+                'post_parent' => $related_project->ID,
+                'post_status' => null,
+                'post_type' => 'attachment'
+                ));
+                
+                if($images)
+                {
+                  $image_data = wp_get_attachment_image_src($images[0]->ID, 'thumbnail');
+                  $image_src = $image_data[0];
+									$image_metadata = wp_get_attachment_image($images[0]->ID);
+                }
+                else $image_src = 'http://dd9.com/wp-content/uploads/feat_placeholder.jpg';
+								
+								$attributes = wp_get_post_terms($related_project->ID, 'attribute');
+                ?>
+               
+                
+                <li>
+                  <div class="preview_thumbnail">
                     <a href="<?= get_permalink($related_project->ID) ?>" title="<?= $related_project->post_title ?>">
-                      <img src="<?= $image_src ?>" alt="<?= $related_project->post_title ?>" />
+                      <?php echo $image_metadata; ?> 
                     </a>
-                  </li>
-                <?php endforeach; ?> 
-              </ul>
+                  </div>
+                  
+                  <a href="<?= get_permalink($related_project->ID) ?>" class="info_panel">
+                    <span class="thumbnail_title"><?= $related_project->post_title ?></span>
+
+                    <?php if($attributes): $i = 0; ?>                                  
+                      <ul class="thumbnail_tags">                                        
+												<?php foreach($attributes as $attribute): if($i == 6) break; ?>
+                          <li>
+                            <?= $attribute->name ?><?php if($i != count($attributes) - 1) echo "," ?> 
+                          </li>
+                        <?php $i++; endforeach; ?>
+                      </ul><!-- .project_tags -->
+                    <?php endif; ?>
+                  </a><!-- #info_panel -->
+                  
+                </li>
+                
+              <?php endforeach; ?> 
+            </ul>
           <?php endif; ?>
           
         </div><!-- .content_right -->

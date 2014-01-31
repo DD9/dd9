@@ -235,6 +235,12 @@ span.dev {color:#F90; font-weight:bold}
   width:234px;
 }
 
+.secondary.sticky {
+    position: fixed;
+}
+.sticky-placeholder {
+	position:fixed;
+}
 .info_block {
     border-top: 1px solid #CCCCCC;
     padding: 17px 0 18px;
@@ -434,9 +440,7 @@ ul.subpage_nav li.current_page_item a {
 	color:#8A1000;
 }
 
-#services_container.sidebar ul.services li.parent_service.active a {
-	color:#666;
-}
+
 
 #services_container.sidebar ul.services li a, ul.arrows li a, ul.arrows li span {
     border-bottom: medium none;
@@ -1138,7 +1142,7 @@ ul#thumbnail_grid > li:hover .info_panel,
   background-color: #EFEFEF;
   border: 1px solid #DDDDDD;
 	list-style: none outside none;
-	margin: 35px 0 0;
+	margin: 0;
 	padding: 1px 0;
 	top: 0;
 	width: 864px;
@@ -1150,10 +1154,14 @@ ul#thumbnail_grid > li:hover .info_panel,
 
 #image_attachments_full img {
   display: block;
-  margin:18px;
+  padding:0;
+	margin:18px;
   min-width: 234px;
 	max-width:824px;
 	border:1px solid #DDD;
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+	box-sizing: border-box;         /* Opera/IE 8+ */
 }
 
 #image_attachments_full .caption {
@@ -1224,8 +1232,10 @@ ul.related_posts li {
 }
 
 ul.related_posts li .post_time {
-   color:#999;
-   display:block;
+   color: #999999;
+   display: block;
+   font-size: 10px;
+   font-style: oblique;
 }
 
 
@@ -2929,18 +2939,6 @@ ul.filters li a.instruction:hover {
 		padding:0;
 		height:auto;
 	}
-	
-	#image_attachments_full img {
-	  float: none;
-    }
-	
-	#image_attachments_full .caption {
-	  float: none;
-	  padding: 0 120px 0 0;
-	  width: auto;
-	  top: auto;
-    }
-	
 	.secondary .post_details {
 	   display:block;
 	}
@@ -2965,15 +2963,6 @@ ul.filters li a.instruction:hover {
 		width: 234px;
 	}
 
-	.flex-caption {
-		height: 234px;
-		top: 19px;
-	}
-	
-	.flex-control-nav {
-	/* [disabled]top: 250px; */
-	}
-	
 	.block_container.home #primary_cta, .page-id-3650 #primary_cta {
 		display:block;
 		width:216px;
@@ -2982,42 +2971,19 @@ ul.filters li a.instruction:hover {
 	ul.services {
     margin-right: 0px;
 	}
-	
+	.content_right #image_attachments_full {
+		width:612px;
+	}
 	#image_attachments_full img {
-		max-width: 100%;
-	}
-	#image_data {
-    right: -80px;
-    bottom: 0;
-    top: auto;
-    width: 120px;
-	}
-	.flexslider.project .flex-control-nav {
-    bottom: -2px;
-    left: auto;
-    margin: 0 3px 0 0;
-    right: 45px;
-    top: auto;
-    width: 10px;
-	}
-	.flexslider.project .flex-control-nav {
-    bottom: -2px;
-    left: auto;
-    right: 45px;
-    top: auto;
-    width: 10px;
-	}
-	.flexslider.project .flex-direction-nav {
-    bottom: 0;
-    position: absolute;
-    right: 50px;
-    top: auto;
-    width: 125px;
-	}
+		max-width: 576px;
+  }
 	
 	#footer_nav {
 		font-size:12px;
 	}
+	
+}
+@media screen and (max-width: 967px) {
 	
 }
 
@@ -3071,10 +3037,18 @@ ul.filters li a.instruction:hover {
 		padding:0;
 	}
 	
+	.secondary.sticky {
+    position: static;
+	}
+	
 	.two_column, ul.services {
 		float: none;
 		margin: 0 0 18px;
 		width: 100%;
+	}
+	
+	.block_content {
+		padding:0;
 	}
 	
 	#services_container, #posts_container, #screenshots_container, .content_right {
@@ -3084,6 +3058,27 @@ ul.filters li a.instruction:hover {
 	.content_right .entry_content {
 		float: none;
 		width: 100%;
+	}
+	
+	.content_right #image_attachments_full {
+		width:auto;
+	}
+	
+	#image_attachments_full img {
+    border: medium none;
+    margin: 0 auto;
+    max-width: 100%;
+    padding: 18px;
+	}
+	
+	#image_attachments_full .caption {
+		border-top: medium none;
+    margin: -15px 0 0;
+    padding: 0 18px;
+    position: relative;
+    right: auto;
+    top: auto;
+    width: auto;
 	}
 	
 	ul#launch_posts li {
@@ -3214,12 +3209,6 @@ ul.filters li a.instruction:hover {
 		width: auto;
 	}
 	
-	.flexslider.project .flex-direction-nav {
-    bottom: auto;
-    right: 0;
-    top: -24px;
-    width: 115px;
-	}
 	
 	#footer_nav li.client_login {
     float: none;
@@ -3233,7 +3222,6 @@ ul.filters li a.instruction:hover {
 	}
 
 	#access a  {
-		font-size: 90%;
 	}
 	
 	#primary {
