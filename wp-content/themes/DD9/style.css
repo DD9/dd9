@@ -2929,6 +2929,11 @@ ul.filters li a.instruction:hover {
 		left:-120px;
 	}
 	
+	.flex-caption {
+    height: 234px;
+    top: 19px;
+	}
+	
 	#primary {
 		width: 612px;
 	}
