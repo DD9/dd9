@@ -231,13 +231,10 @@ span.dev {color:#F90; font-weight:bold}
 }
 
 .secondary {
-    float:left;
-    width:234px;
+  float:left;
+  width:234px;
 }
 
-.secondary.sticky {
-	top:100px;
-}
 .info_block {
     border-top: 1px solid #CCCCCC;
     padding: 17px 0 18px;
@@ -259,7 +256,7 @@ h4.title, h6.title {
     height: 18px;
     letter-spacing: 0.06em;
     line-height: 18px;
-    margin: 0 5px 0 0;
+    margin: 0;
     text-transform: uppercase;
     top: 0;
     color: #000;
@@ -284,6 +281,7 @@ h4.breadcrumbs a, .subheading a, .subheading_full_width a {
 }
 
 .breadcrumbs > span, .subheading > span {
+	color:#666;
 	font-family:"Droid Serif","Palatino Linotype", "Book Antiqua", Palatino, serif;
 	font-size:11px;
 	letter-spacing:normal;
@@ -391,27 +389,27 @@ ul.subpage_nav li.current_page_item a {
 }
 
 #services_container.sidebar ul.services {
-    float: left;
-    list-style: none outside none;
-    margin: 0;
-    min-height: 126px;
-    padding: 0;
-    top: 5px;;
-    width: 98px;
+	float: none;
+	list-style: none outside none;
+	margin: 0 0 18px;
+	min-height: 126px;
+	padding: 0;
+	width: auto;
 }
 #services_container.sidebar ul.services.graphic_design {
-    margin: 0 0 0 18px;
 }
 
 #services_container.sidebar ul.services li.parent_service {
-    background-image: none;
-    font-family:"Droid Serif","Palatino Linotype", "Book Antiqua", Palatino, serif;
-    font-size: 10px;
-    height: 18px;
-    line-height: 18px;
-    margin: 0 0 18px;
-    padding: 0;
-    width: 100%;
+	background-image: none;
+	font-family:"Droid Serif","Palatino Linotype", "Book Antiqua", Palatino, serif;
+	font-size: 14px;
+	line-height: 18px;
+	margin: 0 0 8px;
+	padding: 0;
+	width: 100%;
+	text-transform:none;
+	font-style:oblique;
+	letter-spacing:normal;
 }
 
 #services_container.sidebar ul.services li.parent_service a {
@@ -425,15 +423,19 @@ ul.subpage_nav li.current_page_item a {
 
 
 #services_container.sidebar ul.services li, ul.arrows li {
-    background: url("images/arrow_red_bullet.png") no-repeat scroll left 5px transparent;
+  background: url("images/arrow_red_bullet.png") no-repeat scroll left 5px transparent;
 	font-size:12px;
-    height: auto;
-    margin-left: 0;
-    width: 98px;
+  height: auto;
+  margin-left: 0;
+  width: auto;
 }
 
-#services_container.sidebar ul.services li.active a, #services_container.sidebar ul.services li.parent_service.active a {
+#services_container.sidebar ul.services li.active a{
 	color:#8A1000;
+}
+
+#services_container.sidebar ul.services li.parent_service.active a {
+	color:#666;
 }
 
 #services_container.sidebar ul.services li a, ul.arrows li a, ul.arrows li span {
@@ -442,7 +444,7 @@ ul.subpage_nav li.current_page_item a {
     margin: 0 0 0 10px;
 }
 #services_container.sidebar ul.services li a, ul.sidebar_nav li a {
-    color: #666;
+    color: #999;
 }
 #services_container.sidebar ul.services li a:hover,
 #services_container.sidebar ul.services li.parent_service a:hover,
@@ -2628,17 +2630,16 @@ ul#preview_team li {
     top: 3px;
 }
 
-.user_block ul.user_details > li, ul.post_details > li {
-   float: none;
-	margin-right:18px;
-	line-height: 24px;
+.user_block ul.user_details > li {
+  float: none;
+	padding:5px 0;
 }
-ul.post_details > li {
+ul.post_details.single > li {
 	border-top: 1px dotted #000000;
   padding: 5px 0;
 }
 
-ul.post_details > li:last-of-type {
+ul.post_details.single > li:last-of-type {
 	border-bottom: 1px dotted #000000;
 }
 ul.user_projects li {

@@ -152,7 +152,7 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
                   </div> 
                 </article>
                 
-                <ul class="post_details">
+                <ul class="post_details single">
 									<?php if($clients): ?><?php foreach($clients as $client): ?>
                     <li><h4 class="title">Client:</h4> <a href="<?= get_permalink($client->ID) ?>"><?= $client->post_title ?></a></li>    
                     <?php endforeach; ?><?php endif; ?> 

@@ -76,14 +76,65 @@
 
 <script type="text/javascript"><!-- https://github.com/AndrewHenderson/jSticky -->
 	$(document).ready( function() {
-	    $(".sticky").sticky({
-				topSpacing: 58,
-				zIndex:2,
-				stopper: ".block_container.lower"
-			});
+			if (jQuery(window).width() > 1040) { 
+				$(".sticky").sticky({
+					topSpacing: 36,
+					zIndex:2,
+					stopper: ".block_container.lower"
+				});
+			}
+			
 	});
-  </script>
+</script>
 
+
+<?php /*?><script type="text/javascript"><!-- https://github.com/AndrewHenderson/jSticky -->
+	$(document).ready( function() {
+    var $window = $(window),
+        $html = $('.secondary');
+
+    function resize() {
+        if ($window.width() > 1040) {
+            return $html.addClass('sticky');
+        }
+
+        $html.removeClass('sticky');
+    }
+
+    $window
+        .resize(resize)
+        .trigger('resize');
+});
+</script><?php */?>
+
+
+<!--
+	$(document).ready( function() {
+	   if (jQuery(window).width() > 1040) { 
+				$(".sticky").sticky({
+					topSpacing: 36,
+					zIndex:2,
+					stopper: ".block_container.lower"
+				});
+			}
+	});
+
+
+$(document).ready( function sticky_relocate() {
+			var window_top = $(window).scrollTop();
+			var div_top = $('#sticky-anchor').offset().top;
+			if (window_top > div_top) {
+				$('#sticky').addClass('stick');
+			} else {
+				$('#sticky').removeClass('stick');
+			}
+		});
+	});
+	
+	$(function() {
+			$(window).scroll(sticky_relocate);
+			sticky_relocate();
+		});-->
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
