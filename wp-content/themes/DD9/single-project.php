@@ -3,7 +3,7 @@
 get_header(); the_post(); 
 
 
-$num_of_related_projects = 6;
+$num_of_related_projects = 8;
 
 $clients = get_posts(array(
     'connected_type' => 'project_clients',
