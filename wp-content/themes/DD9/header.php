@@ -76,7 +76,7 @@
 
 <script type="text/javascript"><!-- https://github.com/AndrewHenderson/jSticky -->
 	$(document).ready( function() {
-			$(".secondary").sticky({
+			$(".secondary.single_project").sticky({
 				topSpacing: 36,
 				zIndex:2,
 				stopper: ".block_container.lower"
