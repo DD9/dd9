@@ -133,7 +133,7 @@ body								{ font-size: 75%; line-height: 1.5; /*12/18*/}
 
 h1, h2, h3, h4, h5, h6				{
 	position: relative;
-	font-family:"Trajan Pro","Palatino Linotype",serif;
+	font-family:"Trajan W01 Regular","Palatino Linotype",serif;
 	font-weight: normal;
 	color:#582004;
 
@@ -294,7 +294,7 @@ h4.breadcrumbs a, .subheading a, .subheading_full_width a {
 
 .breadcrumbs > span, .subheading > span {
 	color:#666;
-	font-family:"Trajan Pro","Palatino Linotype",serif;
+	font-family:"Trajan W01 Regular","Palatino Linotype",serif;
 	font-size:11px;
 	letter-spacing:normal;
 	font-style:oblique;
@@ -410,7 +410,7 @@ ul.subpage_nav li.current_page_item a {
 
 #services_container.sidebar ul.services li.parent_service {
 	background-image: none;
-	font-family:"Trajan Pro","Palatino Linotype",serif ;
+	font-family:"Trajan W01 Regular","Palatino Linotype",serif ;
 	font-size: 14px;
 	line-height: 18px;
 	margin: 0 0 8px;
@@ -670,7 +670,7 @@ a.external_link {
 
 #beta {
   color: #565759;
-	font-family: "Trajan Pro","Palatino Linotype",serif;
+	font-family: "Trajan W01 Regular","Palatino Linotype",serif;
 	font-size: 11px;
 	left: 126px;
 	letter-spacing: 0.03em;
@@ -756,7 +756,7 @@ a#home_link:hover img {
 }
 #access a {
 	display: block;
-	font-family: 'Trajan pro',Arial,san-serif;
+	font-family: 'Trajan W01 Regular',Arial,san-serif;
 	font-size: 13px;
 	font-weight: 800;
 	letter-spacing: 0.05em;
@@ -913,7 +913,7 @@ a#home_link:hover img {
 	left:0;
 	height:60px;
 	padding: 20px 0 10px;
-	background-color:rgba(0,0,0,0.9);
+	background:none no-repeat scroll 2px 2px rgba(115, 113, 123, 0.9);
 	text-align:center;
 }
 
@@ -942,7 +942,7 @@ a#home_link:hover img {
 }
 
 .infinite-scroll-item.year .year_inner {
-	font-family: "Trajan Pro","Palatino Linotype",serif;
+	font-family: "Trajan W01 Regular","Palatino Linotype",serif;
 	font-size: 28px;
 	margin: -9px 0 0;
 	padding: 0;
@@ -1110,7 +1110,7 @@ ul#thumbnail_grid > li:hover .info_panel,
   display: block;
 	color: #FFFFFF;
   display: block;
-  font-family: "Trajan Pro","Palatino Linotype",serif ;
+  font-family: "Trajan W01 Regular","Palatino Linotype",serif ;
   font-size: 16px;
 }
 
@@ -1821,7 +1821,7 @@ p.form-allowed-tags, p.comment-notes {
     border: 1px solid #a9a19f;
     color: #52433e;
     display: block;
-    font-family:"Trajan Pro", Palatino, serif;
+    font-family:"Trajan W01 Regular", Palatino, serif;
     font-size: 13px;
     font-style: oblique;
     height: 36px;
@@ -1961,7 +1961,7 @@ h4.footer_name {
 
 #footer_tagline {
 	color: #565759;
-	font-family: "Trajan Pro","Palatino Linotype",serif;
+	font-family: "Trajan W01 Regular","Palatino Linotype",serif;
 	font-size: 11px;
 	letter-spacing: 0.03em;
 	margin:0 0 16px 0;
@@ -1974,7 +1974,7 @@ h4.footer_name {
 	padding: 18px 0;
 	border-top:1px dotted #a9a19f;
 	border-bottom:1px dotted #a9a19f;
-	font-family:"Trajan Pro","Palatino Linotype",serif;
+	font-family:"Trajan W01 Regular","Palatino Linotype",serif;
 	font-size:14px;
 }
 #footer_nav li {
@@ -2525,7 +2525,7 @@ a.plain {
 }
 
 .project_index .services li.parent_service a {
-    background-color: #52433e;
+    background-color: #73717b;
     background-image: none;
     color: #FFFFFF;
     display: block;
@@ -2560,7 +2560,7 @@ a.plain {
 }
 
 h4.alt_xl {
-    font-family:"Trajan Pro","Palatino Linotype",serif ;
+    font-family:"Trajan W01 Regular","Palatino Linotype",serif ;
     font-size: 28px;
 }
 
