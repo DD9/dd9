@@ -271,7 +271,6 @@ h4.title, h6.title {
 	text-transform: uppercase;
 	top: 0;
 	color: #52433e;
-	font-weight:bold;
 }
 
 h4.breadcrumbs {
@@ -427,6 +426,7 @@ ul.subpage_nav li.current_page_item a {
 	padding:0;
 	background-image: none;
 	background-color:transparent;
+	font-weight:normal;
 }
 
 
@@ -476,9 +476,11 @@ ul.sidebar_nav li a:hover, ul.sidebar_nav li.current_page_item a {
 	width: auto;
 }
 
-#primary_cta ul li a{
+#primary_cta ul li a {
+	color:#73717b;
 }
 #primary_cta ul li a:hover{
+	color:#582004;
 }
 
 
@@ -758,7 +760,7 @@ a#home_link:hover img {
 	display: block;
 	font-family: 'Trajan W01 Regular',Arial,san-serif;
 	font-size: 13px;
-	font-weight: 800;
+	font-weight: normal;
 	letter-spacing: 0.05em;
 	margin-left: 25px;
 	padding: 5px 0 0;
@@ -1508,7 +1510,6 @@ ul.blog_categories ul.children {
 	margin:0;
 	list-style:none;
 	font-style:oblique;
-	font-weight:900;
 }
 
 .news_project_links li {
