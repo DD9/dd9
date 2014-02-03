@@ -36,7 +36,6 @@
 <meta name="msapplication-TileImage" content="<?php bloginfo('template_url'); ?>/img/DD9_144x144.png" />
 <meta name="Author" content="DD9 | dd9.com" />
 <link rel="profile" href="http://gmpg.org/xfn/11" />
-<link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic' rel='stylesheet' type='text/css' />
 <link href='http://fonts.googleapis.com/css?family=Lato:400,400italic,900' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>" />
 <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
@@ -62,6 +61,7 @@
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
 <![endif]-->
+<script type="text/javascript" src="http://fast.fonts.net/jsapi/0e507d20-4e4f-4641-b84f-d59dd0dc677b.js"></script>
 <script type="text/javascript" src="<?php bloginfo('template_url'); ?>/js/custom.js"></script>
 <script type="text/javascript" src="<?php bloginfo('template_url'); ?>/js/flexslider/jquery.flexslider-min.js"></script>
 <script type="text/javascript">
