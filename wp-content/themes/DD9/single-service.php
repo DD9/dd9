@@ -80,11 +80,46 @@ $wd_services = get_posts(array(
           <h4 class="subheading_full_width"><a href="/services/" title="DD9 Serivce Directory">Services</a></h4>     
              <!--h4 class="subheading breadcrumbs"><a href="/services/" title="DD9 Serivce Directory">/services/</a></h4-->
              <div class="block_content">
-               
                <h1><?php the_h1_override(); ?></h1>
                <p class="top_line"><em></em></p>
-                <?php include('social.php'); ?>
+               <?php /*?><?php include('social.php'); ?><?php */?>
+             </div><!-- .block_content -->
+             
+             <div class="block_content">
+                            
+               <div id="services_container" class="sidebar">
 
+								<?php if($wd_services): ?>
+                  <ul class="services web_design clearfix">
+                    <li class="parent_service subheading<?= $website_design->ID == $post->ID ? " active" : '' ?>">
+                      <a href="<?= get_permalink($website_design->ID) ?>"><?= $website_design->post_title ?></a>
+                    </li>
+                    <?php foreach($wd_services as $service): ?>
+                      <li<?= $service->ID == $post->ID ? " class='active'" : '' ?>>
+                        <a href="<?= get_permalink($service->ID) ?>"><?= $service->post_title ?></a>
+                      </li>
+                    <?php endforeach; ?>
+                  </ul><!-- .services -->	
+                  <?php else: ?>
+                      No services found.
+                  <?php endif; ?>
+                  
+                  <?php if($wd_services): ?>
+                  <ul class="services graphic_design clearfix">
+                    <li class="parent_service subheading<?= $graphic_design->ID == $post->ID ? " active" : '' ?>">
+                      <a href="<?= get_permalink($graphic_design->ID) ?>"><?= $graphic_design->post_title ?></a>
+                    </li>
+                    <?php foreach($gd_services as $service): ?>
+                      <li<?= $service->ID == $post->ID ? " class='active'" : '' ?>>
+                        <a href="<?= get_permalink($service->ID) ?>"><?= $service->post_title ?></a>
+                      </li>
+                    <?php endforeach; ?>
+                  </ul><!-- .services -->	
+                  
+                 <?php else: ?>
+                	 No services found.
+                 <?php endif; ?>
+               </div><!-- services_container -->
                
              </div><!-- .block_content -->
           </div><!-- .secondary -->
@@ -100,66 +135,16 @@ $wd_services = get_posts(array(
             </article> 
             
             <div class="featured_image service">
-				<?php 
+							<?php 
                  if ( has_post_thumbnail()) {
                  echo get_the_post_thumbnail($id, 'full'); 
                 }
                 ?>
             </div>
             
-                
-         </div><!-- .content_right -->
-             
-        </div><!-- .block_container.full_width --> 	        
-        
-        
-        <div class="block_container breadcrumbs clearfix extra_bottom">    
-             
-          <div class="two_column services">
-            <h4 class="subheading breadcrumbs">Agency Services</a></h4>     
-             
-             <div class="block_content border_top">
-                            
-               <div id="services_container" class="sidebar">
-
-				<?php if($wd_services): ?>
-                <ul class="services web_design clearfix">
-                  <li class="parent_service subheading<?= $website_design->ID == $post->ID ? " active" : '' ?>">
-                    <a href="<?= get_permalink($website_design->ID) ?>"><?= $website_design->post_title ?></a>
-                  </li>
-                  <?php foreach($wd_services as $service): ?>
-                    <li<?= $service->ID == $post->ID ? " class='active'" : '' ?>>
-                      <a href="<?= get_permalink($service->ID) ?>"><?= $service->post_title ?></a>
-                    </li>
-                  <?php endforeach; ?>
-                </ul><!-- .services -->	
-                <?php else: ?>
-                    No services found.
-                <?php endif; ?>
-                
-                <?php if($wd_services): ?>
-                <ul class="services graphic_design clearfix">
-                  <li class="parent_service subheading<?= $graphic_design->ID == $post->ID ? " active" : '' ?>">
-                    <a href="<?= get_permalink($graphic_design->ID) ?>"><?= $graphic_design->post_title ?></a>
-                  </li>
-                  <?php foreach($gd_services as $service): ?>
-                    <li<?= $service->ID == $post->ID ? " class='active'" : '' ?>>
-                      <a href="<?= get_permalink($service->ID) ?>"><?= $service->post_title ?></a>
-                    </li>
-                  <?php endforeach; ?>
-                </ul><!-- .services -->	
-                
-                <?php else: ?>
-                    No services found.
-                <?php endif; ?>
-              </div><!-- services_container -->
-               
-             </div><!-- .block_content -->
-          </div><!-- .two_column -->
-             
-          <div class="content_right thin_border"> 
             
-              <h4 class="subheading breadcrumbs">Projects <span>for <?php the_title(); ?></span> </h4>
+            <div class="service_projects">
+            	<h4><?php the_title(); ?> Projects  </h4>
     
               <?php if($projects): ?>
               
@@ -180,7 +165,7 @@ $wd_services = get_posts(array(
                           {
                               $image_data = wp_get_attachment_image_src($images[0]->ID, 'thumbnail');
                               $image_src = $image_data[0];
-							  $image_metadata = wp_get_attachment_image($images[0]->ID);
+							  							$image_metadata = wp_get_attachment_image($images[0]->ID);
                           }
                           
                           $attributes = wp_get_post_terms($project->ID, 'attribute');
@@ -222,10 +207,14 @@ $wd_services = get_posts(array(
                No projects found.
               <?php endif; ?>
             
+            </div><!-- /service_projects -->
             
-          </div><!-- .content_right -->
+                
+         </div><!-- .content_right -->
              
-        </div><!-- .block_container.full_width --> 	    	 
+        </div><!-- .block_container.full_width --> 	        
+        
+       
 
 
 <div class="block_container full_width clearfix">
@@ -234,7 +223,6 @@ $wd_services = get_posts(array(
      <div class="block_content">
      <h3><?php the_title(); ?> Techniques</h3>
      
-	   <p class="top_line">&nbsp;</p>
 	 </div>
   </div>
     <div class="content_right">
