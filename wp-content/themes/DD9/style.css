@@ -49,6 +49,7 @@ input														{ margin: 0; }
 /*
 font-family: 'DroidSerifRegular';
 font-family:'Trajan W01 Regular';
+font-family:'Trajan W01 Bd';
 */
 /*
 @font-face {
@@ -92,8 +93,6 @@ b, strong, caption, th, thead, dt, legend		{ font-weight: bold; }
 cite, dfn, em, i								{ font-style: italic; }
 code, kbd, samp, pre, tt, var					{ font-family: mono-space, monospace; }
 p												{ word-spacing: 0.125em; hyphenate: auto; hyphenate-lines: 3; }
-/*p+p												{ text-indent: 1.5em; }
-p+p.no-indent									{ text-indent: 0; }*/
 pre												{
     white-space: pre;
     padding: 5px 10px;
@@ -143,7 +142,7 @@ h1, h2, h3, h4, h5, h6 {
 h1, h2 { 
 	line-height: 36px; 
 	margin-bottom: 18px;  
-	font-family:"Trajan W01 Regular","Palatino Linotype",serif;
+	font-family:"Trajan W01 Bd","Palatino Linotype",serif;
 }
 h3, h4  { 
 	font-size:18px;
@@ -170,7 +169,12 @@ h2 {
 
 }
 .secondary h1, #primary_cta h3		{ 
-	color:#582004 
+	color:#582004 ;
+}
+
+#primary_cta h3		{ 
+	font-family:"Trajan W01 Bd","Palatino Linotype",serif;
+	font-size:14px;
 }
 
 h4 { 
@@ -192,7 +196,7 @@ h2:first-child,
 h3:first-child,
 h4:first-child						{ margin-top: 0; }
 
-p, pre, address						{ font-size: 13px; line-height: 18px; margin-bottom:18px; position: relative; top: 4px; }
+p, pre, address						{ font-size: 13px; line-height: 18px; margin-bottom:18px; position: relative; top: 2px; }
 small								{ font-size: 11px; }
 abbr, code, kbd,
 samp, small, var					{ line-height: 15px; }
@@ -307,7 +311,7 @@ h4.title, h6.title {
 	text-transform: uppercase;
 	top: 0;
 	color: #52433e;
-	font-family:"Trajan W01 Regular","Palatino Linotype",serif;
+	font-family:"Trajan W01 Bd","Palatino Linotype",serif;
 }
 
 h4.breadcrumbs {
@@ -330,7 +334,7 @@ h4.breadcrumbs a, .subheading a, .subheading_full_width a {
 
 .breadcrumbs > span, .subheading > span {
 	color:#666;
-	font-family:"Trajan W01 Regular","Palatino Linotype",serif;
+	font-family:"Trajan W01 Bd","Palatino Linotype",serif;
 	font-size:11px;
 	letter-spacing:normal;
 	font-style:oblique;
@@ -346,7 +350,7 @@ h4.breadcrumbs a, .subheading a, .subheading_full_width a {
 	line-height: 36px;
 	text-transform: uppercase;
 	top: 0;
-	font-family: "Trajan W01 Regular","Palatino Linotype",serif;
+	font-family: "Trajan W01 Bd","Palatino Linotype",serif;
 }
 
 .subheading a {
@@ -445,7 +449,7 @@ ul.subpage_nav li.current_page_item a {
 
 #services_container.sidebar ul.services li.parent_service {
 	background-image: none;
-	font-family:"Trajan W01 Regular","Palatino Linotype",serif ;
+	font-family:"Trajan W01 Bd","Palatino Linotype",serif ;
 	font-size: 14px;
 	line-height: 18px;
 	margin: 0 0 8px;
@@ -506,7 +510,7 @@ ul.sidebar_nav li a:hover, ul.sidebar_nav li.current_page_item a {
 	top:2px;
 }
 #primary_cta ul li {
-	font-size: 16px;
+	font-size: 15px;
 	font-weight: 300;
 	margin: 0 0 10px;
 	width: auto;
@@ -708,7 +712,7 @@ a.external_link {
 
 #beta {
   color: #565759;
-	font-family: "Trajan W01 Regular","Palatino Linotype",serif;
+	font-family: "Trajan W01 Bd","Palatino Linotype",serif;
 	font-size: 9px;
 	left: 126px;
 	letter-spacing: 0.03em;
@@ -1542,7 +1546,7 @@ ul.blog_categories ul.children {
 .news_project_links {
 	margin:0;
 	list-style:none;
-	font-family:"Trajan W01 Regular","Palatino Linotype",serif;
+	font-family:"Trajan W01 Bd","Palatino Linotype",serif;
 }
 
 .news_project_links li {
@@ -1855,7 +1859,7 @@ p.form-allowed-tags, p.comment-notes {
     border: 1px solid #a9a19f;
     color: #52433e;
     display: block;
-    font-family:"Trajan W01 Regular", Palatino, serif;
+    font-family:"Trajan W01 Bd", Palatino, serif;
     font-size: 13px;
     height: 36px;
     letter-spacing: 0.04em;
@@ -1983,7 +1987,7 @@ h4.footer_name {
 	font-size:20px;
 	margin:0 0 22px;
 	top:0;
-	font-family: 'Trajan W01 Regular',Arial,san-serif;
+	font-family: 'Trajan W01 Bd',Arial,san-serif;
 }
 .footer_address {
 	margin-bottom:22px;
@@ -1996,7 +2000,7 @@ h4.footer_name {
 
 #footer_tagline {
 	color: #565759;
-	font-family: "Trajan W01 Regular","Palatino Linotype",serif;
+	font-family: "Trajan W01 Bd","Palatino Linotype",serif;
 	font-size: 11px;
 	letter-spacing: 0.03em;
 	margin:0 0 16px 0;
@@ -2239,7 +2243,9 @@ body.home .services li.child_service {
 	border: 1px dotted #a9a19f;
 	margin-left: 0px;
 	margin-right: 16px;
-	text-align: center;    
+	text-align: center; 
+	font-family:"Trajan W01 Bd","Palatino Linotype",serif;
+	font-size:11px;   
 }
 body.page-id-3650 .services li.child_service:hover,
 body.home .services li.child_service:hover {
@@ -2263,17 +2269,18 @@ body.home .services li.child_service a{
 }
 body.page-id-3650 .services li.child_service img,
 body.home .services li.child_service img {
-    display: block;
-    margin-left: 68px;
-    width:100px;
-    height:69px;    
+	display: block;
+	margin-left: 68px;
+	margin-bottom:3px;
+	width:100px;
+	height:69px;    
 }
 
 body.page-id-3650 .attachment-full.wp-post-image,
 body.home .attachment-full.wp-post-image {
-    float:left;
-    clear:left;
-    margin-right:18px;
+	float:left;
+	clear:left;
+	margin-right:18px;
 
 }
 
@@ -2284,8 +2291,8 @@ body.page-id-3650 .services li.parent_service {
 
 /* Home */
 #posts_container {
-    height: 450px; /* 342 orig */
-    overflow: hidden;
+	height: 450px; /* 342 orig */
+	overflow: hidden;
 	width:990px;
 }
 
@@ -2294,9 +2301,9 @@ body.page-id-3650 .services li.parent_service {
 }
 
 ul#launch_posts, ul.support_staff {
-    list-style: none outside none;
-    margin: 0 0 0 -18px;
-    top: 0;
+	list-style: none outside none;
+	margin: 0 0 0 -18px;
+	top: 0;
 	overflow:hidden;
 	position:relative;
 }
@@ -2596,7 +2603,7 @@ a.plain {
 }
 
 h4.alt_xl {
-    font-family:"Trajan W01 Regular","Palatino Linotype",serif ;
+    font-family:"Trajan W01 Bd","Palatino Linotype",serif ;
     font-size: 28px;
 }
 
@@ -2742,7 +2749,7 @@ h3.user_name {
 span.relationship {
 	color:#73717b;
 	font-size:13px;
-	font-family:"Trajan W01 Regular","Palatino Linotype",serif;
+	font-family:"Trajan W01 Bd","Palatino Linotype",serif;
 }
 
 /* Support Team */
