@@ -143,8 +143,8 @@ $wd_services = get_posts(array(
             </div>
             
             
-            <div class="service_projects">
-            	<h4><?php the_title(); ?> Projects  </h4>
+            <div class="service_projects thin_border">
+            	<?php /*?><h4><?php the_title(); ?> Projects  </h4><?php */?>
     
               <?php if($projects): ?>
               
