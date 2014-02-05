@@ -41,15 +41,7 @@ $project = $projects ? $projects[0] : null;
           <div class="block_content">
                
           	<h1><?php the_title(); ?></h1>
-						<?php
-            /* translators: used between list items, there is a space after the comma */
-            $tags_list = get_the_tag_list( '', __( ', ', 'twentyeleven' ) );
-            if ( $tags_list ): ?>
-              <p class="top_line tag-links">
-                <?php printf( __( '<span class="%1$s">Tagged</span> %2$s', 'twentyeleven' ), 'entry-utility-prep entry-utility-prep-tag-links', $tags_list ); ?>
-              </p>
-            <?php endif; // End if $tags_list ?>    
-             
+						
             <p class="top_line"></p> 
             <?php include('social.php'); ?>
             
@@ -98,12 +90,21 @@ $project = $projects ? $projects[0] : null;
                     $categories_list = get_the_category_list( __( ', ', 'twentyeleven' ) );
                     if ( $categories_list ):
                     ?>
-                    <li class="cat-links">
-                    <h6 class="title">Categories:</h6>
-                        <?php printf( __( ' %2$s', 'twentyeleven' ), 'entry-utility-prep entry-utility-prep-cat-links', $categories_list );
-                        $show_sep = true; ?>
-                    </li>
+                      <li class="cat-links">
+                      <h6 class="title">Categories:</h6>
+                          <?php printf( __( ' %2$s', 'twentyeleven' ), 'entry-utility-prep entry-utility-prep-cat-links', $categories_list );
+                          $show_sep = true; ?>
+                      </li>
                     <?php endif; // End if categories ?>
+                    
+                    <?php
+										/* translators: used between list items, there is a space after the comma */
+										$tags_list = get_the_tag_list( '', __( ', ', 'twentyeleven' ) );
+										if ( $tags_list ): ?>
+											<li class="tag-links">
+												<?php printf( __( '<h6 class="title">Tagged:</h6> %2$s', 'twentyeleven' ), 'entry-utility-prep entry-utility-prep-tag-links', $tags_list ); ?>
+											</li>
+										<?php endif; // End if $tags_list ?>    
                       
                   
  
