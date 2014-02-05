@@ -95,6 +95,44 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
                <p class="top_line"><em></em></p>
                
              </div><!-- .block_content -->
+             
+             <div class="block_content">
+                            
+               <div id="services_container" class="sidebar">
+
+								<?php if($wd_services): ?>
+                <ul class="services web_design clearfix">
+                  <li class="parent_service subheading <?php if(in_array($service->ID, $client_services)) echo "active";?>">
+                    <a href="<?= get_permalink($website_design->ID) ?>"><?= $website_design->post_title ?></a>
+                  </li>
+                  <?php foreach($wd_services as $service): ?>
+                    <li<?php if(in_array($service->ID, $client_services)) echo " class='active'";?>>
+                      <a href="<?= get_permalink($service->ID) ?>"><?= $service->post_title ?></a>
+                    </li>
+                  <?php endforeach; ?>
+                </ul><!-- .services -->	
+                <?php else: ?>
+                    No services found.
+                <?php endif; ?>
+                
+                <?php if($wd_services): ?>
+                <ul class="services graphic_design clearfix">
+                  <li class="parent_service subheading <?php if(in_array($service->ID, $client_services)) echo "active";?>">
+                    <a href="<?= get_permalink($graphic_design->ID) ?>"><?= $graphic_design->post_title ?></a>
+                  </li>
+                  <?php foreach($gd_services as $service): ?>
+                    <li<?php if(in_array($service->ID, $client_services)) echo " class='active'";?>>
+                      <a href="<?= get_permalink($service->ID) ?>"><?= $service->post_title ?></a>
+                    </li>
+                  <?php endforeach; ?>
+                </ul><!-- .services -->	
+                
+                <?php else: ?>
+                    No services found.
+                <?php endif; ?>
+              </div><!-- services_container -->
+               
+             </div><!-- .block_content -->
           </div><!-- .secondary -->
             
               
@@ -178,56 +216,10 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
               
              </article>
            </div><!-- .content_right -->
-        </div><!-- .block_container.full_width -->
+           
+           <div class="content_right thin_border"> 
         
-       <div class="block_container breadcrumbs clearfix extra_bottom">    
-             
-          <div class="two_column services">
-            <h4 class="subheading blue_arrow breadcrumbs">Services</a></h4>     
-             
-             <div class="block_content border_top">
-                            
-               <div id="services_container" class="sidebar">
-
-				<?php if($wd_services): ?>
-                <ul class="services web_design clearfix">
-                  <li class="parent_service subheading <?php if(in_array($service->ID, $client_services)) echo "active";?>">
-                    <a href="<?= get_permalink($website_design->ID) ?>"><?= $website_design->post_title ?></a>
-                  </li>
-                  <?php foreach($wd_services as $service): ?>
-                    <li<?php if(in_array($service->ID, $client_services)) echo " class='active'";?>>
-                      <a href="<?= get_permalink($service->ID) ?>"><?= $service->post_title ?></a>
-                    </li>
-                  <?php endforeach; ?>
-                </ul><!-- .services -->	
-                <?php else: ?>
-                    No services found.
-                <?php endif; ?>
-                
-                <?php if($wd_services): ?>
-                <ul class="services graphic_design clearfix">
-                  <li class="parent_service subheading <?php if(in_array($service->ID, $client_services)) echo "active";?>">
-                    <a href="<?= get_permalink($graphic_design->ID) ?>"><?= $graphic_design->post_title ?></a>
-                  </li>
-                  <?php foreach($gd_services as $service): ?>
-                    <li<?php if(in_array($service->ID, $client_services)) echo " class='active'";?>>
-                      <a href="<?= get_permalink($service->ID) ?>"><?= $service->post_title ?></a>
-                    </li>
-                  <?php endforeach; ?>
-                </ul><!-- .services -->	
-                
-                <?php else: ?>
-                    No services found.
-                <?php endif; ?>
-              </div><!-- services_container -->
-               
-             </div><!-- .block_content -->
-          </div><!-- .two_column -->
-             
-          <div class="content_right thin_border"> 
-        
-		  <?php if($projects): ?>
-            <h4 class="subheading blue_arrow breadcrumbs">Projects <span>for <?php the_title(); ?> </span></h4>
+		 			 <?php if($projects): ?>
             <ul id="thumbnail_grid" class="clearfix">
               <?php foreach($projects as $project): ?>
                 <?php 
@@ -289,6 +281,7 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
           </footer><!-- .entry-meta -->
  
          </div><!-- .content_right -->
-      </div><!-- .block_container.full_width -->
+        </div><!-- .block_container.full_width -->
+     
  
 <?php get_footer(); ?>

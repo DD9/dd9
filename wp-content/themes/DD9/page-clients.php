@@ -43,13 +43,12 @@ $wd_services = get_posts(array(
                     <p class="top_line"></p>
                     
                     <?php the_content(); ?>
-                    <p>&nbsp;</p>
                   </div>
               </div><!-- .two_column -->   
                   
               <div class="two_column">   
-                <h4 class="subheading breadcrumbs">Services</a></h4>     
-                 <div class="block_content border_top">
+                
+                 <div class="block_content">
                    <div id="services_container" class="sidebar">
     
                     <?php if($wd_services): ?>

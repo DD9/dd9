@@ -3219,7 +3219,7 @@ ul.filters li a.instruction:hover {
 	li#menu-item-5363, #beta, #footer_tagline, .block_container.home #primary_cta, .page-id-3650 #primary_cta, 
 	ul.filters, #image_data, .flexslider.project .flex-control-nav, .featured_image.service,
 	#studio_block .attachment-thumbnail, .user_block.team .user_gravatar, .user_block .user_details,
-	.support_staff .user_gravatar, body.single-service #services_container {
+	.support_staff .user_gravatar, body.single-service #services_container, .content_right .featured_image {
 		display:none;
 	}
 	
