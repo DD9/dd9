@@ -1947,7 +1947,7 @@ body.scrolled a.top {
 	color:#582004;
 }
 
-.icon-flickr-sign {
+#social_links li a .icon-flickr-sign {
 	display: block;
   margin-top: -1px;
 }
