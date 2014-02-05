@@ -363,7 +363,7 @@ h4.breadcrumbs a, .subheading a, .subheading_full_width a {
   background: none no-repeat scroll right center #FFFFFF;
   border: 1px solid #a9a19f;
 	height:34px;
-	line-height:34px;
+	line-height:38px;
 	padding:0 10px;
 	display:block
 }
@@ -966,51 +966,43 @@ a#home_link:hover img {
 	font-size:14px;
 }
 
-.infinite-scroll-item.year:before {
-	content: "";
-	display: block;
-	position: relative;
-	width: 100%;
-	height:36px;
-}
-
 .infinite-scroll-item.year {
 	clear: both;
 	float: none;
-	margin: 0 0 -126px -234px;
-	overflow: visible;
+	height: auto;
+	margin: 0 0 18px 18px;
+	position: relative;
+	top: -4px;
+	width: 100%;
+}
+
+.infinite-scroll-item.year:before {
+	content:"";
+	display:block;
+	height:36px;
+}
+
+#infinite-scroll-container li:first-child:before {
+	display:none;
+	height:0;
 }
 
 .infinite-scroll-item.year .year_inner {
-	font-size: 28px;
-	margin: -9px 0 0;
-	padding: 0;
-	position: relative;
-	color:#73717b;
-}
-
-.infinite-scroll-item.year .year_inner:before {
-	border-bottom: 1px solid #a9a19f;
-	content: "";
-	display: block;
-	left: 0;
-	position: absolute;
-	top: 9px;
-	width: 100%;
-	z-index: 1;
-}
-
-.infinite-scroll-item.year .year_inner span {
-	background: none repeat scroll 0 0 #FFFFFF;
-	display: inline-block;
-	padding: 0 18px 0 0;
-	position: relative;
-	z-index: 2;
+	border-top: 1px solid #A9A19F;
+	color: #73717B;
+	font-size: 20px;
+	padding: 8px 0 0;
 }
 
 #infinite-scroll-container {
-  margin: -36px 0 0 234px;
-  width: 1008px;
+  margin:0 0 0 -18px;
+}
+
+body.post-type-archive-project .content_right {
+	float: right;
+	position: relative;
+	width: 990px;
+	margin:0;
 }
 
 ul#thumbnail_grid {
@@ -2208,7 +2200,8 @@ ul.services {
 	border:none;
 	margin:0px;
 	padding:0px 10px;
-  line-height:36px;
+  line-height:38px;
+	height:36px;
   font-size: 100%;
 }
 

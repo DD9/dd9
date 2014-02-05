@@ -98,121 +98,126 @@ $wd_services = get_posts(array(
 
 ?>
 
-			<div class="block_container full_width clearfix">
-      	<div id="secondary">
-          <div class="two_column">
-            <h4 class="subheading_full_width"><span>Work</span></h4>
-          </div><!-- .two_column -->
-        </div><!-- #secondary -->
+  <div class="block_container full_width clearfix">
+    <div class="secondary fixed">
+      
+       <h4 class="subheading_full_width"><span>Work</span></h4>
+       <div class="block_content">
+          <p>
+            The master list of DD9 graphic design, web design and web development projects.
+            Select a service below to filter the list or go to our
+            <a title="Services" href="/services/">services page</a> where you can
+            <a title="Services" href="/services/">view projects by service category</a>.
+          </p>
+          <p>Below is a list of the graphic and web design services that we provide. Visit a service page to get in depth information about our <a href="/service">design offerings</a>.</p>
+       </div><!-- .block_content -->
+      
+      
+      <div class="two_column">
+        <div class="block_content">
+                          
+           <div id="services_container" class="sidebar">
 
-        <div class="content_right">
-          <article class="post plain">
-            <div class="entry_content">
-              <p>
-                The master list of DD9 graphic design, web design and web development projects.
-                Select a service (above right) to filter the list or go to our
-                <a title="Services" href="/services/">services page</a> where you can
-                <a title="Services" href="/services/">view projects by service category</a>.
-              </p>
-              <p>To the right is a list of the graphic and web design services that we provide. Visit a service page to get in depth information about our <a href="/service">design offerings</a>.</p>
-            </div>
-
-            <div id="services_container" class="project_index">
-              <?php if($wd_services): ?>
+            <?php if($wd_services): ?>
               <ul class="services web_design clearfix">
-                <li class="parent_service subheading">
+                <li class="parent_service subheading<?= $website_design->ID == $post->ID ? " active" : '' ?>">
                   <a href="<?= get_permalink($website_design->ID) ?>"><?= $website_design->post_title ?></a>
                 </li>
                 <?php foreach($wd_services as $service): ?>
-                  <li>
+                  <li<?= $service->ID == $post->ID ? " class='active'" : '' ?>>
                     <a href="<?= get_permalink($service->ID) ?>"><?= $service->post_title ?></a>
                   </li>
                 <?php endforeach; ?>
-              </ul><!-- .services -->
+              </ul><!-- .services -->	
               <?php else: ?>
                   No services found.
               <?php endif; ?>
-
+              
               <?php if($wd_services): ?>
               <ul class="services graphic_design clearfix">
-                <li class="parent_service subheading">
+                <li class="parent_service subheading<?= $graphic_design->ID == $post->ID ? " active" : '' ?>">
                   <a href="<?= get_permalink($graphic_design->ID) ?>"><?= $graphic_design->post_title ?></a>
                 </li>
                 <?php foreach($gd_services as $service): ?>
-                  <li>
+                  <li<?= $service->ID == $post->ID ? " class='active'" : '' ?>>
                     <a href="<?= get_permalink($service->ID) ?>"><?= $service->post_title ?></a>
                   </li>
                 <?php endforeach; ?>
               </ul><!-- .services -->	
               
-              <?php else: ?>
-                  No services found.
-              <?php endif; ?>
+             <?php else: ?>
+               No services found.
+             <?php endif; ?>
+           </div><!-- services_container -->
+           
+         </div><!-- .block_content -->
+       </div><!-- .two_column -->
+    </div><!-- #secondary -->
 
-            </div><!-- services_container -->
-          </article>
-        </div><!-- .content_right thin_border -->
-      </div><!-- .block_container.full_width -->
+    <div class="content_right">
+    
+      <ul id="infinite-scroll-container" class="clearfix">
+      <?php foreach($projects_by_year as $year => $projects): ?>
+        <?php if($year != $previous_year): ?>
+          <li class="infinite-scroll-item year"><div class="year_inner"><span><?= $year ?></span></div></li>
+        <?php endif ?>
 
-      <div class="block_container full_width clearfix">
-        <ul id="infinite-scroll-container" class="clearfix">
-          <?php foreach($projects_by_year as $year => $projects): ?>
-            <?php if($year != $previous_year): ?>
-              <li class="infinite-scroll-item year"><div class="year_inner"><span><?= $year ?></span></div></li>
-            <?php endif ?>
+        <?php foreach($projects as $project):
 
-						<?php foreach($projects as $project):
+        $images = get_posts(array(
+          'numberposts' => 1,
+          'order'=> 'ASC',
+          'orderby' => 'menu_order',
+          'post_mime_type' => 'image',
+          'post_parent' => $project->ID,
+          'post_status' => null,
+          'post_type' => 'attachment'
+        ));
 
-						$images = get_posts(array(
-  						'numberposts' => 1,
-  						'order'=> 'ASC',
-  						'orderby' => 'menu_order',
-  						'post_mime_type' => 'image',
-  						'post_parent' => $project->ID,
-  						'post_status' => null,
-  						'post_type' => 'attachment'
-						));
+        if($images)
+        {
+          $image_data = wp_get_attachment_image_src($images[0]->ID, 'thumbnail');
+          $image_src = $image_data[0];
+        }
 
-						if($images)
-						{
-							$image_data = wp_get_attachment_image_src($images[0]->ID, 'thumbnail');
-							$image_src = $image_data[0];
-						}
+        $attributes = wp_get_post_terms($project->ID, 'attribute');
+        ?>
+        <li class="infinite-scroll-item">
+          <div class="preview_thumbnail client">
+            <?php if($images): ?>
+              <a href="<?= get_permalink($project->ID) ?>" title="<?= $project->post_title ?>">
+                <img src="<?= $image_src ?>" width="234" height="162" alt="<?php $project->post_title; ?> Preview" />
+              </a>
+            <?php else: ?>
+              <a href="<?= get_permalink($project->ID) ?>" title="<?= $project->post_title ?>">
+                <img src="http://dd9.com/wp-content/uploads/feat_placeholder.jpg" alt="<?php $project->post_title; ?> Preview" width="234" height="162" />
+              </a>
+            <?php endif; ?>
+          </div>
 
-						$attributes = wp_get_post_terms($project->ID, 'attribute');
-						?>
-            <li class="infinite-scroll-item">
-              <div class="preview_thumbnail client">
-                <?php if($images): ?>
-                  <a href="<?= get_permalink($project->ID) ?>" title="<?= $project->post_title ?>">
-                    <img src="<?= $image_src ?>" width="234" height="162" alt="<?php $project->post_title; ?> Preview" />
-                  </a>
-                <?php else: ?>
-                  <a href="<?= get_permalink($project->ID) ?>" title="<?= $project->post_title ?>">
-                    <img src="http://dd9.com/wp-content/uploads/feat_placeholder.jpg" alt="<?php $project->post_title; ?> Preview" width="234" height="162" />
-                  </a>
-                <?php endif; ?>
-              </div>
+          <a href="<?= get_permalink($project->ID) ?>" class="info_panel">
+            <span class="thumbnail_title"><?= $project->post_title ?></span>
+            <?php if($attributes): $i = 0; ?>
+              <ul class="thumbnail_tags">
+                <?php foreach($attributes as $attribute): if($i == 6) break; ?>
+                  <li>
+                    <?= $attribute->name ?><?php if($i != count($attributes) - 1) echo "," ?>
+                  </li>
+                <?php $i++; endforeach; ?>
+              </ul><!-- .project_tags -->
+            <?php endif; ?>
+          </a><!-- #info_panel -->
+        </li>
 
-              <a href="<?= get_permalink($project->ID) ?>" class="info_panel">
-                <span class="thumbnail_title"><?= $project->post_title ?></span>
-                <?php if($attributes): $i = 0; ?>
-                  <ul class="thumbnail_tags">
-                    <?php foreach($attributes as $attribute): if($i == 6) break; ?>
-                      <li>
-                        <?= $attribute->name ?><?php if($i != count($attributes) - 1) echo "," ?>
-                      </li>
-                    <?php $i++; endforeach; ?>
-                  </ul><!-- .project_tags -->
-                <?php endif; ?>
-              </a><!-- #info_panel -->
-            </li>
+        <?php endforeach; ?>
+      <?php endforeach; ?>
+    </ul>
+    
+    
+    </div><!-- .content_right thin_border -->
+  </div><!-- .block_container.full_width -->
 
-            <?php endforeach; ?>
-          <?php endforeach; ?>
-        </ul>
-      </div><!-- .block_container.full_width -->
-
-      <div id="infinite-scroll-nav"><?php posts_nav_link() ?></span>
+  
+  <div id="infinite-scroll-nav"><?php posts_nav_link() ?></span>
 
 <?php get_footer(); ?>

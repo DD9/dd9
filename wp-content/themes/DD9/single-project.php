@@ -133,7 +133,7 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
 ?>
 
       <div class="block_container">    
-        <div class="secondary single_project">   
+        <div class="secondary fixed">   
           <div class="two_column">     
              <h4 class="subheading_full_width"><a href="/projects/" title="DD9 Portfolio">Projects</a></h4>
              <div class="block_content">

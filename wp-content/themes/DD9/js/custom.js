@@ -1,5 +1,5 @@
 $(document).ready( function() {
-		$(".secondary.single_project").sticky({
+		$(".secondary.fixed").sticky({
 			topSpacing: 36,
 			zIndex:2,
 			stopper: ".block_container.lower"
