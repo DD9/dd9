@@ -1947,6 +1947,11 @@ body.scrolled a.top {
 	color:#582004;
 }
 
+.icon-flickr-sign {
+	display: block;
+  margin-top: -1px;
+}
+
 .footer_contact {
 }
 
@@ -3026,6 +3031,9 @@ ul.filters li a.instruction:hover {
 	#footer_nav {
 		font-size:12px;
 	}
+	body.post-type-archive-project .content_right {
+    width: 738px;
+	}
 	
 }
 @media screen and (max-width: 967px) {
@@ -3133,6 +3141,11 @@ ul.filters li a.instruction:hover {
 	
 	.content_right.thin_border ul#thumbnail_grid {
 		margin: 18px auto;
+	}
+	
+	body.post-type-archive-project .content_right {
+    float: none;
+    width: auto;
 	}
 	
 	#infinite-scroll-container {
