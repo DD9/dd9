@@ -172,7 +172,6 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
                       <?php if($users): ?>
                         <ul class="users">
                           <li><h4 class="title">Contributors:</h4></li>
-                          <?php $first = true; ?>
                           <?php foreach($groups as $group): ?>
                             <?php foreach($users[$group] as $user): ?>
                           
@@ -180,12 +179,11 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
                                     //  Team users should be listed first, followed by associates, followed by alumni ?>
                                  
                                <li>
-                                 <?php if(!$first) echo ", "; ?>
                                  <a href="<?= $user['posts_url'] ?>" class="<?= $group ?>">
                                    <?= $user['name'] ?>
                                  </a>
                                </li>
-                            <?php $first = false; endforeach; ?>                       
+                            <?php endforeach; ?>                       
                           <?php endforeach; ?>
                         </ul>
                       <?php endif; ?>
@@ -200,10 +198,7 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
                         <?php foreach($industries as $industry): ?>
                           <li>
                           
-                          
                             <a href="<?= get_term_link($industry); ?>"><?= $industry->name ?></a>
-                            <?php if($industry != $industries[count($industries) - 1]) echo ","; ?>
-                            
                             
                           </li>
                         <?php endforeach; ?>
