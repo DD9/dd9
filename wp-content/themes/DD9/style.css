@@ -222,15 +222,6 @@ html, body {
 
 span.dev {color:#F90; font-weight:bold}
 
-#top_border {
-	background-color: #73717b;
-	height: 5px;
-	left: 0;
-	position: absolute;
-	top: 0;
-	width: 100%;
-	z-index: 9;
-}
 #page {
 	margin: 0 auto;
 	position: relative;
@@ -798,8 +789,8 @@ a#home_link:hover img {
 }
 #access a {
 	display: block;
-	font-size: 13px;
-	letter-spacing: 0.09em;
+	font-size: 14px;
+	letter-spacing: normal;
 	margin-left: 25px;
 	padding: 5px 0 0;
 	text-decoration: none;

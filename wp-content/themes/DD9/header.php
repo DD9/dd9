@@ -70,12 +70,10 @@
 </head>
 
 <body <?php body_class(); ?>>
-	<div id="top_border"></div>
   <div id="page" class="hfeed">
     <header id="branding" role="banner">
     
       <div id="prenav">
-        <span class="toggle_grid"><a href="#">Show Grid</a></span> &nbsp; 
         
         <script type="text/javascript">
             var euser = "info";
