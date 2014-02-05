@@ -5,7 +5,7 @@
                 <img src="<?php bloginfo('template_url'); ?>/images/home_slides/slide_lumilia.jpg" alt="Lumi Lia Logo Mobile Website Design"/>
                 <div class="flex-caption">
                     <h4 class="subheading_full_width slideshow">
-                        <a href="/services/graphic-design/">Custom Design &amp; Development</a>
+                        <a href="/services/graphic-design/">Custom Design &amp; Dev</a>
                     </h4>
                     
                     <div class="block_content">
