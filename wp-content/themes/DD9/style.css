@@ -328,7 +328,7 @@ h4.breadcrumbs {
 }
 
 h4.breadcrumbs a, .subheading a, .subheading_full_width a {
-  color: #73717b;
+  color: #52433e;
 	display: block;
 }
 
@@ -343,7 +343,7 @@ h4.breadcrumbs a, .subheading a, .subheading_full_width a {
 }
 
 .subheading, .subheading_full_width {
-	color: #73717b;
+	color: #52433e;
 	font-size: 12px;
 	height: 36px;
 	letter-spacing: 0.04em;
@@ -1639,28 +1639,12 @@ ul.social_icons li {
 }
 
 ul.social_icons li a {
-    font-size: 18px;
-    color: #999;    
+	font-size: 18px;
+	color: #73717b;    
 }
 ul.social_icons li a:hover {
-      color: #582004;
+ color: #582004;
 }
-/*
-ul#social_links li a {
-	background:url("images/social_sprite.jpg") no-repeat 0 0 transparent;
-	display:block;
-	width:18px;
-	height:18px;
-	text-indent:-500px;
-}
-
-ul#social_links li a.twitter {
-	background-position:0 -18px;
-}
-
-ul#social_links li a.email {
-	background-position:0 -36px;
-}*/
 
 /* Comments */
 
@@ -1893,7 +1877,7 @@ a.top {
 	-o-border-radius:  5px 5px 0 0; 
 	border-radius:  5px 5px 0 0;
 	
-	background-color: #999;
+	background-color: #73717b;
 	color: #FFFFFF;
 	display: block;
 	font-size: 20px;
@@ -1964,7 +1948,7 @@ body.scrolled a.top {
 }
 
 #social_links li a {
-	color:#999;
+	color:#73717b;
 }
 
 #social_links li a:hover,

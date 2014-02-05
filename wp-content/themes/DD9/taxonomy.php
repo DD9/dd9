@@ -5,9 +5,11 @@
 
 get_header(); ?>
 
-<?php get_sidebar(); ?>
+
 
 <div class="block_container full_width clearfix">
+		
+    <?php get_sidebar(); ?>
 
 			<?php if ( have_posts() ) : ?>
 
