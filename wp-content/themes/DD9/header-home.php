@@ -62,6 +62,7 @@
     <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
 <![endif]-->
 <script type="text/javascript" src="http://fast.fonts.net/jsapi/0e507d20-4e4f-4641-b84f-d59dd0dc677b.js"></script>
+<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/js/jquery.jsticky.min.js"></script>
 <script type="text/javascript" src="<?php bloginfo('template_url'); ?>/js/custom.js"></script>
 <script type="text/javascript" src="<?php bloginfo('template_url'); ?>/js/flexslider/jquery.flexslider-min.js"></script>
 <script type="text/javascript">
