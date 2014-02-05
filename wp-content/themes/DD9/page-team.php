@@ -55,7 +55,7 @@ get_header(); the_post();
                         <h3 class="user_name">
                         
                             <a href="<?= $user['posts_url'] ?>">
-                                <?= $user['name'] ?><span class="relationship">, <?= $user['relationship'] ?></span>
+                                <?= $user['name'] ?>: <span class="relationship"><?= $user['relationship'] ?></span>
                             </a>
                           
                         </h3>

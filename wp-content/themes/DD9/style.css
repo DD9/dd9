@@ -280,7 +280,7 @@ span.dev {color:#F90; font-weight:bold}
 	position:fixed;
 }
 .info_block {
-    border-top: 1px solid #CCCCCC;
+    border-top: 1px solid #a9a19f;
     padding: 17px 0 18px;
 }
 
@@ -1025,18 +1025,7 @@ ul#thumbnail_grid > li,
 		list-style:none;
 }
 
-/*#primary.full_width ul#thumbnail_grid {
-	margin:1.81% 0 0 -1.81%;
-}
-
-#primary.full_width ul#thumbnail_grid li {
-	width:23.18%;
-	margin-left:1.81%;
-	margin-bottom: 3.23%;
-}*/
-
 ul#thumbnail_grid img {
-    /*border: 1px solid #CCCCCC;*/
     height: 162px;
     width: 234px;
 }
@@ -1363,7 +1352,7 @@ img#wpstats {
 img[class*="align"],
 img[class*="wp-image-"],
 #content .gallery .gallery-icon img {/* Add fancy borders to all WordPress-added images but not things like badges and icons and the like */
-	border:1px solid #CCC;
+	border:1px solid #a9a19f;
 }
 .wp-caption img {
 	

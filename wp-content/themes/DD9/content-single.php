@@ -92,7 +92,7 @@ $project = $projects ? $projects[0] : null;
                     </li><!-- #entry-author-info -->
                    
                     <li class="post_author"><h6 class="title">Author:</h6> <a href="<?php echo get_author_posts_url(get_the_author_meta( 'ID' )); ?>"><?php the_author_meta('display_name'); ?></a></li>
-                    <li class="post_time"><h6 class="title">Posted On:</h6><?php the_time('F jS, Y'); ?></li> 
+                    <li class="post_time"><h6 class="title">Posted On:</h6> <?php the_time('F jS, Y'); ?></li> 
                     <?php
                     /* translators: used between list items, there is a space after the comma */
                     $categories_list = get_the_category_list( __( ', ', 'twentyeleven' ) );

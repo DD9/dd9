@@ -67,7 +67,7 @@ $design_shots = get_posts(array(
                   <div class="user_bio">		
                        <h3 class="user_name">
                 
-                        <?= $full_name ?><span class="relationship">, <?= $relationship ?></span>	
+                        <?= $full_name ?>: <span class="relationship"><?= $relationship ?></span>	
                       
                       </h3>
                       
