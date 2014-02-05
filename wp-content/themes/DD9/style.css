@@ -751,13 +751,10 @@ a.external_link {
 a#home_link {
     border-style: none;
     margin-left: -3px;
-    height: 80px;
+    height: auto;
     width: 132px;
 }
-a#home_link img {
-    height: 80px;
-    width: 132px;
-}
+
 a#home_link:hover img {
 	-moz-opacity:.8;
 	-webkit-opacity: .8;
@@ -881,7 +878,6 @@ a#home_link:hover img {
 
 #main {
   clear: both;
-	overflow: auto;
 	padding-bottom: 232px; /* sticky footer */
 	padding-top: 18px;
 	position: relative; 
@@ -2232,10 +2228,9 @@ body.home .services li.child_service a{
 body.page-id-3650 .services li.child_service img,
 body.home .services li.child_service img {
 	display: block;
-	margin-left: 68px;
-	margin-bottom:3px;
-	width:100px;
-	height:69px;    
+	height: 69px;
+	margin: 0 auto 3px;
+	width: 100px;  
 }
 
 body.page-id-3650 .attachment-full.wp-post-image,
@@ -3042,8 +3037,12 @@ ul.filters li a.instruction:hover {
 	width: 990px;
 	}
 	
+	.entry-header.home.left {
+    float: none;
+    width: auto;
+	}
+	
 	#main {
-		padding-top: 36px;
 	}
 	
 	#header {
@@ -3053,17 +3052,23 @@ ul.filters li a.instruction:hover {
 	#branding {
 		height:auto;
 	}
+	
+	a#home_link {
+    border-style: none;
+    display: block;
+    height: auto;
+    margin-left: -3px;
+    position: relative;
+    width: 80px;
+		float:left;
+	}
 
-	#access {
-		left:0;
-		position: relative;
-		margin:13px 0 0;
+	#access a {
+    margin-right: 0;
+		font-size: 12px;
+		padding:0;
 	}
 	
-	#access a {
-		margin-right: 25px;
-		margin-left: 0;
-	}
 
 	#primary, .content_right.blog, .content_right.blog .entry_content_holder {
 		width: 100%;
@@ -3095,6 +3100,21 @@ ul.filters li a.instruction:hover {
 	
 	#services_container, #posts_container, #screenshots_container, .content_right {
 		margin-left: 0;
+	}
+	
+	body.page-id-3650 ul.services li:nth-child(2n+1), body.home ul.services li:nth-child(2n+1) {
+		margin-right:auto;
+	}
+	body.page-id-3650 .services li.child_service, body.home .services li.child_service {
+    float: none;
+    margin: 0 auto 18px;
+    width: auto;
+	}
+	body.page-id-3650 .services li.parent_service {
+    min-height: 0;
+	}
+	.services li.parent_service p {
+    display: none;
 	}
 	
 	.content_right .entry_content {
@@ -3196,7 +3216,10 @@ ul.filters li a.instruction:hover {
 		margin-right: 0;
 	}
 		
-	.flexslider .slide_content, .block_container.home #primary_cta, .page-id-3650 #primary_cta, ul.filters, #image_data, .flexslider.project .flex-control-nav {
+	li#menu-item-4781, #beta, #footer_tagline, .block_container.home #primary_cta, .page-id-3650 #primary_cta, 
+	ul.filters, #image_data, .flexslider.project .flex-control-nav, .featured_image.service,
+	#studio_block .attachment-thumbnail, .user_block.team .user_gravatar, .user_block .user_details,
+	.support_staff .user_gravatar, body.single-service #services_container {
 		display:none;
 	}
 	
@@ -3256,9 +3279,81 @@ ul.filters li a.instruction:hover {
 		width: auto;
 	}
 	
+	.preview_content_block,
+	.preview_content_block.wide,
+	.preview_content_block.wide.last,
+	.preview_content_block .post,
+	.user_block.team .user_bio {
+		float:none;
+		min-height:0;
+    width: auto;
+	}
+	
+  ul#preview_team {
+		height: 108px;
+	}
+	
+	h3.user_name {
+    border-bottom: medium none;
+    margin-bottom: 10px;
+    margin-right: 0;
+    padding-right: 0;
+	}
+	ul.support_staff {
+		height:auto;
+		margin:18px 0 0;
+	}
+	ul.support_staff > li {
+    border-left: medium none;
+    float: none;
+    height: auto;
+    margin: 0 0 18px;
+    padding: 0;
+    width: auto;
+	}
+	.support_staff .user_header {
+    margin-bottom: 0;
+	}
+	.support_staff h6.user_name {
+    float: none;
+    height: auto;
+    top: auto;
+    width: auto;
+	}
+	.support_staff h6.user_name a {
+    padding: 0;
+	}
+	.support_staff span.relationship {
+		padding: 0;
+		border:0;
+	}
+	.support_staff .user_bio {
+    float: none;
+    height: auto;
+    margin: 0;
+    overflow: hidden;
+	}
+	.content_right.overflow {
+		height:auto;
+	}
+	
+	#footer_nav {
+    font-size: 11px;
+    letter-spacing: normal;
+    padding: 10px 0;
+		margin:0 0 18px;
+	}
+	
 	#footer_nav li.client_login {
     float: none;
 		font-size:12px;
+	}
+	h4.footer_name, .footer_address {
+		margin:0 0 10px;
+	}
+	
+	#colophon #social_links {
+		top:-45px;
 	}
 	
 	a.top {

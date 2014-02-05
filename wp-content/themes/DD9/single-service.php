@@ -81,15 +81,17 @@ $wd_services = get_posts(array(
              <!--h4 class="subheading breadcrumbs"><a href="/services/" title="DD9 Serivce Directory">/services/</a></h4-->
              <div class="block_content">
                <h1><?php the_h1_override(); ?></h1>
-               <p class="top_line"><em></em></p>
+               
                <?php /*?><?php include('social.php'); ?><?php */?>
              </div><!-- .block_content -->
              
              <div class="block_content">
                             
                <div id="services_container" class="sidebar">
-
+								
 								<?php if($wd_services): ?>
+                
+                	<p class="top_line"><em></em></p>
                   <ul class="services web_design clearfix">
                     <li class="parent_service subheading<?= $website_design->ID == $post->ID ? " active" : '' ?>">
                       <a href="<?= get_permalink($website_design->ID) ?>"><?= $website_design->post_title ?></a>
