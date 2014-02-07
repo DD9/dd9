@@ -3051,6 +3051,7 @@ ul.filters li a.instruction:hover {
 	
 	#branding {
 		height:auto;
+		padding: 15px 0 0;
 	}
 	
 	a#home_link {
@@ -3060,13 +3061,24 @@ ul.filters li a.instruction:hover {
     margin-left: -3px;
     position: relative;
     width: 80px;
-		float:left;
+		float:none;
+	}
+	
+	#access {
+    margin: 0;
+    position: relative;
+    right: auto;
+    width: auto;
 	}
 
 	#access a {
-    margin-right: 0;
-		font-size: 12px;
-		padding:0;
+    font-size: 13px;
+    margin: 0 20px 0 0;
+    padding: 0;
+	}
+	
+	#access ul.menu > li:last-of-type a {
+    margin: 0;
 	}
 	
 
