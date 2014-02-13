@@ -96,18 +96,6 @@
   
 	<header id="branding" role="banner" class="home">
 	
-  	<div id="prenav">
-            
-			<script type="text/javascript">
-        var euser = "info";
-        var edomain = "dd9.com";
-        var esubCon = "DD9 Website Inquiry";
-        document.write('<a href="mailto:' + euser + '@' + edomain +'?subject=' + esubCon +' " ' +' >' + euser + '@' + edomain +'<\/a>');
-      </script> &nbsp;
-         
-   		<a href="tel:3034176369" id="header_tel">(303)417-6369</a> &nbsp; <a href="http://go.dd9.com/" title="DD9 Client Extranet Login" rel="nofollow" id="client_login">Client Login</a>  &nbsp; <a href="http://basecamp.com/1922309" title="DD9 on Basecamp" rel="nofollow" id="basecamp_login">Active Projects</a> 
-    </div>
-  
     <a href="/" title="DD9 Home" id="home_link"><img src="<?php bloginfo('template_url'); ?>/img/DD9_logo_v3.png" width="132" height="80" alt="New DD9 Logo in Red"></a>
 
 
@@ -118,7 +106,7 @@
     <div id="beta">Design &#8226; Development &#8226; Branding</div>
   	
   	<ul id="header_contact_mobile">
-      <li><a target="_blank" href="tel:3034176369 "><i class="icon-phone"></i></a></li>
+      <li><a target="_blank" href="tel:3034176369"><i class="icon-phone"></i></a></li>
       <li><a target="_blank" href="mailto:info@dd9.com"><i class="icon-envelope"></i></a></li>
     </ul>
   
