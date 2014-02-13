@@ -3070,6 +3070,9 @@ ul.filters li a.instruction:hover {
 	body.post-type-archive-project .content_right {
     width: 738px;
 	}
+	.related_projects_container ul#thumbnail_grid > li:last-of-type { 
+		display:none;
+	}
 	
 }
 @media screen and (max-width: 967px) {
