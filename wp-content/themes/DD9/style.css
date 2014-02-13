@@ -1224,6 +1224,11 @@ ul#thumbnail_grid > li:hover .info_panel,
 	width: 72px;
 }
 
+#image_attachments_full li.original .caption {
+  background: url("images/icon_original_site.png") no-repeat right 5px transparent;
+}
+
+
 #image_attachments_full li.thumbnail .caption {
     width: 216px;
 }
@@ -3046,16 +3051,17 @@ ul.filters li a.instruction:hover {
     margin-right: 0px;
 	}
 	.content_right #image_attachments_full {
-		width:612px;
+		width:576px;
+		padding:0 18px;
 	}
 	#image_attachments_full li {
-		padding:18px;
+		padding:18px 0;
 	}
 	#image_attachments_full img {
 		max-width: 576px;
   }
 	#image_attachments_full .caption {
-    right: -126px;
+    right: -144px;
     width: 108px;
 	}	
 	#footer_nav {
@@ -3205,6 +3211,10 @@ ul.filters li a.instruction:hover {
     top: auto;
     width: auto;
 	}
+	
+	#image_attachments_full li.original .caption {
+    background:none no-repeat 0 0 transparent;
+	}	
 	
 	ul#launch_posts li {
 		float: none;

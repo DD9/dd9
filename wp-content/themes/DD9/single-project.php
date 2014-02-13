@@ -262,14 +262,14 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
               <ul id="image_attachments_full" class="clearfix">
                 <?php foreach($images as $image): ?>
                   <?php if($class = get_image_class($image->ID)): ?>
-                  <li>
+                  <li class="<?= $class ?>">
                  
                     <?php $image_data = wp_get_attachment_image_src($image->ID, 'thumbnail'); ?>
                     <?php $full_image_data = wp_get_attachment_image_src($image->ID, 'full'); ?>
                     <?php /*?><a href="<?= $full_image_data[0] ?>">
                         <img src="<?= $image_data[0] ?>" alt="Project Image"  title="<?= $image->post_excerpt ?>" class="<?= $class ?>" />
                     </a><?php */?>
-                      <img src="<?= $full_image_data[0] ?>" alt="<?= $image->post_excerpt ?>" class="<?= $class ?>" />
+                      <img src="<?= $full_image_data[0] ?>" alt="<?= $image->post_excerpt ?>" />
 										
                   <?php else: ?>
                   <li>
