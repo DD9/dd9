@@ -1167,23 +1167,24 @@ ul#thumbnail_grid > li:hover .info_panel,
 }
 
 .content_right #image_attachments_full {
-  background-color: #EFEFEF;
-  border: 1px solid #DDDDDD;
 	list-style: none outside none;
 	margin: 0;
 	padding: 1px 0;
 	top: 0;
-	width: 864px;
+	width: 898px;
 }
 
 #image_attachments_full li {
-	position:relative;
+  border: 1px solid #ebebeb;
+	background-color: #F7F7F7;
+  margin-bottom: 4px;
+  padding: 36px;
+  position: relative;
 }
 
 #image_attachments_full img {
   display: block;
   padding:0;
-	margin:18px;
   min-width: 234px;
 	max-width:824px;
 	border:1px solid #DDD;
@@ -1202,15 +1203,22 @@ ul#thumbnail_grid > li:hover .info_panel,
 	margin: 0 0 18px;
 	padding-top: 18px;
 	position: absolute;
-	right: -126px;
+	right: -90px;
 	top: 1px;
-	width: 108px;
+	width: 72px;
 }
 
 #image_attachments_full li.thumbnail .caption {
     width: 216px;
 }
 
+.block_container.lower {
+	padding-top:36px;
+}
+.related_projects_container {
+	border-top: 1px solid #A9A19F;
+	padding-top:18px;
+}
 ul.related_projects, ul.related_posts {
 	list-style:none;
 	margin:0;
@@ -1233,11 +1241,8 @@ ul.related_projects li {
 }
 
 ul.related_projects li img {
-	/* [disabled]border-left:8px solid #582004; */
   width:98px;
   height:69px;
-	
-	
 }
 
 ul.related_projects li a:hover img {
@@ -1248,9 +1253,6 @@ ul.related_projects li a:hover img {
 
 ul.related_projects .thumbnail_title {
 	display: none;
-	/*float: left;
-	padding: 2px 0 0 18px;
-	width: 85px; */
 }
 
 ul.related_posts li {
@@ -1497,16 +1499,11 @@ ul.blog_categories ul.children {
     display:block;
 }
 
-/*.content_right.blog .entry_content_holder {
-    width: 702px;
-	float:left;
-}*/
-
 .content_right .entry_content {
     float: left;
     margin-bottom: 18px;
     margin-right: 18px;
-    width: 486px; /*468px;*/
+    width: 486px;
 }
 .single-project  #main .entry_content {
 }
@@ -1518,9 +1515,8 @@ ul.blog_categories ul.children {
 .content_right .post_details {
     border-left: 1px dotted #a9a19f;
     float: left;
-    /* [disabled]margin-left: 18px; */
     padding-left: 18px;
-    width: 213px; /*197px;*/
+    width: 213px; 
     height:162px;
 }
 
@@ -3036,10 +3032,16 @@ ul.filters li a.instruction:hover {
 	.content_right #image_attachments_full {
 		width:612px;
 	}
+	#image_attachments_full li {
+		padding:18px;
+	}
 	#image_attachments_full img {
 		max-width: 576px;
   }
-	
+	#image_attachments_full .caption {
+    right: -126px;
+    width: 108px;
+	}	
 	#footer_nav {
 		font-size:12px;
 	}

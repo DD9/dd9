@@ -3,7 +3,7 @@
 get_header(); the_post(); 
 
 
-$num_of_related_projects = 8;
+$num_of_related_projects = 5;
 
 $clients = get_posts(array(
     'connected_type' => 'project_clients',
@@ -257,9 +257,7 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
           ?>
           
           <?php if($images): ?>
-            
-            
-            
+           
             <div class="project_images">        
               <ul id="image_attachments_full" class="clearfix">
                 <?php foreach($images as $image): ?>
@@ -272,23 +270,23 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
                         <img src="<?= $image_data[0] ?>" alt="Project Image"  title="<?= $image->post_excerpt ?>" class="<?= $class ?>" />
                     </a><?php */?>
                       <img src="<?= $full_image_data[0] ?>" alt="<?= $image->post_excerpt ?>" class="<?= $class ?>" />
-
+										
                   <?php else: ?>
                   <li>
                   	
                     <?php $image_data = wp_get_attachment_image_src($image->ID, 'large'); ?>
                     <img src="<?= $image_data[0] ?>" width="864" alt="<?= $image->post_excerpt ?>" />
                   <?php endif; ?>
-                      <div class="caption">
-												<?php if($image->post_excerpt) {
-                         echo $image->post_excerpt;
-                         } else {
-                        the_title(); 
-                        $img_count =  $image->ID;
-                        echo ' project image #' . $img_count; 
-                        } ?>
-                      </div>
-                    </li>
+                    <div class="caption">
+                      <?php if($image->post_excerpt) {
+                       echo $image->post_excerpt;
+                       } else {
+                      the_title(); 
+                      $img_count =  $image->ID;
+                      echo ' project image #' . $img_count; 
+                      } ?>
+                    </div>
+                  </li>
                 <?php endforeach; ?>
               </ul><!-- #image_attachments_full -->
             </div><!-- .flexslider -->
@@ -299,33 +297,10 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
       </div><!-- .block_container.full_width -->
         
       <div class="block_container lower"> 
-        <div class="secondary">  
-
-          <?php if($posts): ?>        
-          <div class="two_column">
-            <div class="block_content">
-              <p class="top_line"></p>
-              <h4 class="black">Related Posts</h4> 
-              <ul class="related_posts">
-                <?php foreach($posts as $project_post): ?>
-                <li>
-                  <a href="<?= get_permalink($project_post->ID) ?>">
-                  	<?= $project_post->post_title ?>
-                  </a>
-                      
-                  <span class="post_time"><?= get_the_time('F jS, Y', $project_post->ID) ?></span>
-                </li>
-                <?php endforeach; ?> 
-              </ul>
-            </div><!-- .block_content -->
-		      </div><!-- .two_column -->
-          <?php endif; ?>
-        </div> <!-- .secondary -->
-                             
-        <div class="content_right"> 
+      	<div class="related_projects_container">
+        
           <?php if($related_projects): ?> 
-            <p class="top_line"></p>
-            <h4 class="black">Related Projects</h4> 
+            <h4>Related Projects</h4> 
             <ul id="thumbnail_grid" class="clearfix">
               <?php foreach($related_projects as $related_project): ?>  
                 <?php
@@ -378,8 +353,8 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
             </ul>
           <?php endif; ?>
           
-        </div><!-- .content_right -->
-      </div><!-- .block_container.full_width -->
+      	</div><!-- /related_projects_container --> 
+      </div><!-- .block_container.lower -->
 
    
 
