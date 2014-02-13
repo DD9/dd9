@@ -291,6 +291,10 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
               </ul><!-- #image_attachments_full -->
             </div><!-- .flexslider -->
             <?php endif; ?> 
+            
+            <footer class="entry-meta">
+							<?php edit_post_link( __( 'Edit', 'twentyeleven' ), '<span class="edit-link">', '</span>' ); ?>
+            </footer><!-- .entry-meta -->
          
         </div><!-- .content_right -->
         <div class="clearfloat"></div>
@@ -356,10 +360,6 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
       	</div><!-- /related_projects_container --> 
       </div><!-- .block_container.lower -->
       
-      <div id="edit_post_link">
-					<?php edit_post_link( __( 'Edit', 'twentyeleven' ), '<span class="edit-link">', '</span>' ); ?>
-      </div><!-- .entry-meta -->
-
    
 
 <?php get_footer(); ?>
