@@ -5,19 +5,7 @@
 
 get_header('home'); 
 
-$feat_posts = new WP_Query( array(
-	'numberposts' => 8,
-	'post_type' => 'project',
-	'order' => 'DESC',
-	'orderby' => 'date',
-	'meta_query' => array(
-		array(
-				'key' => 'featured',
-				'value' => 'yes',
-				'compare' => 'LIKE'
-			)
-		)
-) );
+$featured_projects = get_field('featured_projects');
 
 $design_shots = get_posts(array(
 	'post_type' => 'post',
@@ -64,8 +52,7 @@ $wd_services = get_posts(array(
 <div id="primary" class="home full_width clearfix">
 
   <?php the_post(); ?>
-
-        <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+     <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
   
       <header class="entry-header home left">
       <h2>Design <br /> Development <br /> Branding</h2>
@@ -78,7 +65,7 @@ $wd_services = get_posts(array(
       <?php the_content(); ?>
       </div><!-- .entry-content -->
     </article>
-        <!-- #post-<?php the_ID(); ?> -->
+  <!-- #post-<?php the_ID(); ?> -->
 
 </div><!-- #primary -->
         
@@ -248,8 +235,9 @@ $wd_services = get_posts(array(
 </div><!-- .block_container full_width -->
 <?php endif; ?>	<?php */?>
 
-<?php if( $feat_posts->have_posts() ): ?>
-	<div class="block_container full_width clearfix">
+
+<?php if( $featured_projects ): ?>
+ <div class="block_container full_width clearfix">
     <div class="two_column">
        <h4 class="subheading_full_width"><a href="/projects/" title="Browse the DD9 Project Stream">Work</a></h4>
        <div class="block_content">
@@ -260,34 +248,57 @@ $wd_services = get_posts(array(
     
     <div id="screenshots_container">
     	<ul id="design_stream">
-				<?php while ( $feat_posts->have_posts() ) : $feat_posts->the_post(); 
-				$images = get_posts(array(
-					'post_type'=>'attachment',
-					'numberposts'=> 1,
-					'orderby'=>'menu_order',
-					'order'=>'ASC',
-					'post_parent'=>$post->ID,
-					'post_mime_type'=>'image'
-				));
-				?>
-          <li>
-            <?php if($images): ?>
-						<?php foreach($images as $image): ?>
-              <a href="<?php the_permalink() ?>" title="<?php the_title(); ?>">   
-								<?php if($image->ID): $image_data = wp_get_attachment_image_src($image->ID, 'thumbnail'); ?>
-                  <img src="<?= $image_data[0] ?>" width="108" height="75" alt="<?php the_title(); ?> Screenshot"   />
+				<?php foreach( $featured_projects as $post): // variable must be called $post (IMPORTANT) ?>
+          <?php setup_postdata($post);
+						$images = get_posts(array(
+							'post_type'=>'attachment',
+							'numberposts'=> 1,
+							'orderby'=>'menu_order',
+							'order'=>'ASC',
+							'post_parent'=>$post->ID,
+							'post_mime_type'=>'image'
+						));
+						
+						if($images)
+						{
+							$image_data = wp_get_attachment_image_src($images[0]->ID, 'thumbnail');
+							$image_src = $image_data[0];
+						}
+		
+						$attributes = wp_get_post_terms($post->ID, 'attribute');
+					 ?>
+            <li>
+              <div class="preview_thumbnail client">
+								<?php if($images): ?>
+                  <a href="<?= get_permalink($post->ID) ?>" title="<?= $post->post_title ?>">
+                    <img src="<?= $image_src ?>" width="234" height="162" alt="<?php $post->post_title; ?> Preview" />
+                  </a>
+                <?php else: ?>
+                  <a href="<?= get_permalink($project->ID) ?>" title="<?= $post->post_title ?>">
+                    <img src="http://dd9.com/wp-content/uploads/feat_placeholder.jpg" alt="<?php $post->post_title; ?> Preview" width="234" height="162" />
+                  </a>
                 <?php endif; ?>
-              </a>
-            <?php endforeach; ?>
-            <?php else: ?>
-            <?php endif; ?> 
-          </li>
-        <?php endwhile; ?>
+              </div>
+    
+              <a href="<?= get_permalink($post->ID) ?>" class="info_panel">
+                <span class="thumbnail_title"><?= $post->post_title ?></span>
+                <?php if($attributes): $i = 0; ?>
+                  <ul class="thumbnail_tags">
+                    <?php foreach($attributes as $attribute): if($i == 6) break; ?>
+                      <li>
+                        <?= $attribute->name ?><?php if($i != count($attributes) - 1) echo "," ?>
+                      </li>
+                    <?php $i++; endforeach; ?>
+                  </ul><!-- .project_tags -->
+                <?php endif; ?>
+              </a><!-- #info_panel -->
+            </li>
+        <?php endforeach; ?>
       </ul>
-    </div><!-- screenshots_container -->
+      <?php wp_reset_postdata(); // IMPORTANT - reset the $post object so the rest of the page works correctly ?>
+     </div><!-- screenshots_container -->
 	</div><!-- .block_container full_width -->
 <?php endif; ?>
-<?php wp_reset_query();  // Restore global post data stomped by the_post(). ?>
 
 
 <div class="block_container full_width clearfix">

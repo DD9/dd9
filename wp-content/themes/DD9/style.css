@@ -2359,7 +2359,7 @@ ul#launch_posts .more_link, .preview_content_block .more_link {
 }
 
 #screenshots_container {
-	height:108px;
+	height:198px;
 	overflow: hidden;
 	width:990px;
 }
@@ -2371,22 +2371,28 @@ ul#design_stream {
 	overflow:auto;
 }
 
-ul#design_stream li {
+ul#design_stream > li {
 	float:left;
 	margin:17px 0 18px 18px;
-	width:108px;
-	height:90px;
+	width:234px;
+	height:162px;
+	overflow:hidden;
+	position:relative;
 }
 
-ul#design_stream li img {
+ul#design_stream > li img {
 	display:block;
 }
 
-ul#design_stream li a:hover img {
+/*ul#design_stream li a:hover img {
 	-moz-opacity:.8;
 	-webkit-opacity:.8;
 	opacity:.8;
 
+}*/
+
+ul#design_stream > li:hover .info_panel { 
+	top:0;
 }
 
 .design_shot_time {
