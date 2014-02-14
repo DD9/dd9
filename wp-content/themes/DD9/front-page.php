@@ -4,6 +4,21 @@
  */
 
 get_header('home'); 
+
+$feat_posts = new WP_Query( array(
+	'numberposts' => 8,
+	'post_type' => 'project',
+	'order' => 'DESC',
+	'orderby' => 'date',
+	'meta_query' => array(
+		array(
+				'key' => 'featured',
+				'value' => 'yes',
+				'compare' => 'LIKE'
+			)
+		)
+) );
+
 $design_shots = get_posts(array(
 	'post_type' => 'post',
 	'numberposts' => 8,
@@ -46,26 +61,26 @@ $wd_services = get_posts(array(
 
 ?>
 
-		<div id="primary" class="home full_width clearfix">
+<div id="primary" class="home full_width clearfix">
 
-			<?php the_post(); ?>
+  <?php the_post(); ?>
 
-            <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-			
-				  <header class="entry-header home left">
-					<h2>Design <br /> Development <br /> Branding</h2>
-				  </header><!-- .entry-header -->
-			  
-				  <div class="entry-content">
-                    <header class="entry-header home">
-                    		<h1 class="entry-title"><?php the_h1_override(); ?></h1>
-					</header><!-- .entry-header -->
-					<?php the_content(); ?>
-				  </div><!-- .entry-content -->
-		    </article>
-            <!-- #post-<?php the_ID(); ?> -->
-	
-		</div><!-- #primary -->
+        <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+  
+      <header class="entry-header home left">
+      <h2>Design <br /> Development <br /> Branding</h2>
+      </header><!-- .entry-header -->
+    
+      <div class="entry-content">
+                <header class="entry-header home">
+                    <h1 class="entry-title"><?php the_h1_override(); ?></h1>
+      </header><!-- .entry-header -->
+      <?php the_content(); ?>
+      </div><!-- .entry-content -->
+    </article>
+        <!-- #post-<?php the_ID(); ?> -->
+
+</div><!-- #primary -->
         
 	   
 <div class="block_container full_width clearfix home">
@@ -190,7 +205,7 @@ $wd_services = get_posts(array(
           
 
 
-<?php if(false): //if($design_shots): ?>
+<?php /*?><?php if(false): //if($design_shots): ?>
 <div class="block_container full_width clearfix">
  <div class="two_column">
    <h4 class="subheading_full_width"><a href="/category/design-screenshots/" title="Browse the DD9 Project Stream">Design Stream</a></h4>
@@ -231,7 +246,48 @@ $wd_services = get_posts(array(
 	</div><!-- screenshots_container -->
 
 </div><!-- .block_container full_width -->
-<?php endif; ?>	
+<?php endif; ?>	<?php */?>
+
+<?php if( $feat_posts->have_posts() ): ?>
+	<div class="block_container full_width clearfix">
+    <div class="two_column">
+       <h4 class="subheading_full_width"><a href="/category/design-screenshots/" title="Browse the DD9 Project Stream">Work</a></h4>
+       <div class="block_content">
+         <h3>Featured Projects</h3>
+         <p class="top_line"><a class="viewmore" href="/category/design-screenshots/">view all projects</a></p>
+       </div>
+    </div><!-- /two_column -->
+    
+    <div id="screenshots_container">
+    	<ul id="design_stream">
+				<?php while ( $feat_posts->have_posts() ) : $feat_posts->the_post(); 
+				$images = get_posts(array(
+					'post_type'=>'attachment',
+					'numberposts'=> 1,
+					'orderby'=>'menu_order',
+					'order'=>'ASC',
+					'post_parent'=>$post->ID,
+					'post_mime_type'=>'image'
+				));
+				?>
+          <li>
+            <?php if($images): ?>
+						<?php foreach($images as $image): ?>
+              <a href="<?php the_permalink() ?>" title="<?php the_title(); ?>">   
+								<?php if($image->ID): $image_data = wp_get_attachment_image_src($image->ID, 'thumbnail'); ?>
+                  <img src="<?= $image_data[0] ?>" width="108" height="75" alt="<?php the_title(); ?> Screenshot"   />
+                <?php endif; ?>
+              </a>
+            <?php endforeach; ?>
+            <?php else: ?>
+            <?php endif; ?> 
+          </li>
+        <?php endwhile; ?>
+      </ul>
+    </div><!-- screenshots_container -->
+	</div><!-- .block_container full_width -->
+<?php endif; ?>
+<?php wp_reset_query();  // Restore global post data stomped by the_post(). ?>
 
 
 <div class="block_container full_width clearfix">
@@ -258,10 +314,6 @@ $wd_services = get_posts(array(
 
 
 	</div><!-- content_right -->
-
 </div><!-- .block_container full_width -->
-
-
-
 
 <?php get_footer(); ?>
