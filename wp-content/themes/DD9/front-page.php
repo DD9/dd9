@@ -251,10 +251,10 @@ $wd_services = get_posts(array(
 <?php if( $feat_posts->have_posts() ): ?>
 	<div class="block_container full_width clearfix">
     <div class="two_column">
-       <h4 class="subheading_full_width"><a href="/category/design-screenshots/" title="Browse the DD9 Project Stream">Work</a></h4>
+       <h4 class="subheading_full_width"><a href="/projects/" title="Browse the DD9 Project Stream">Work</a></h4>
        <div class="block_content">
          <h3>Featured Projects</h3>
-         <p class="top_line"><a class="viewmore" href="/category/design-screenshots/">view all projects</a></p>
+         <p class="top_line"><a class="viewmore" href="/projects/">view all projects</a></p>
        </div>
     </div><!-- /two_column -->
     
