@@ -1,5 +1,24 @@
 	<div class="flexslider">
       <ul class="slides">	
+         <li class="slide_cyrium" style="display:none">  
+           <div class="slide_content"> 
+              <img src="<?php bloginfo('template_url'); ?>/images/home_slides/slide_impact.jpg" alt="IMPACT Logo Collateral Website Design"/>
+              <div class="flex-caption">
+                  <h4 class="subheading_full_width slideshow">
+                      <a href="/services/graphic-design/">Complete Design Packages</a>
+                  </h4>
+                  
+                  <div class="block_content">
+                    <h3><a href="/clients/boulder-county-impact/">Logo, Collateral &amp; Website Design</a></h3>
+                      <p class="top_line">We design comprehensive solutions for both print and web.</p>
+                  </div>
+              
+              </div>
+              <div class="extra_left"></div>
+            </div><!-- slide_content -->
+          </li>	
+          
+          
       	  <li class="slide_lumilia" style="display:none">  
           	 <div class="slide_content"> 
                 <img src="<?php bloginfo('template_url'); ?>/images/home_slides/slide_lumilia.jpg" alt="Lumi Lia Logo Mobile Website Design"/>
@@ -9,7 +28,7 @@
                     </h4>
                     
                     <div class="block_content">
-                    	<h3><a href="/clients/lumi-lia/">Complete Branding, Collateral &amp; Website Packages</a></h3>
+                    	<h3><a href="/clients/lumi-lia/">Integrated Design Solutions</a></h3>
                         <p class="top_line">We create custom design solutions tailored to your company's goals.</p>
                     </div>
                 
