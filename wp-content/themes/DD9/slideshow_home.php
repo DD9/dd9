@@ -5,7 +5,7 @@
               <img src="<?php bloginfo('template_url'); ?>/images/home_slides/slide_impact.jpg" alt="IMPACT Logo Collateral Website Design"/>
               <div class="flex-caption">
                   <h4 class="subheading_full_width slideshow">
-                      <a href="/services/graphic-design/">Complete Design Packages</a>
+                      <a href="/services/graphic-design/">Full Design Packages</a>
                   </h4>
                   
                   <div class="block_content">
