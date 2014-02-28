@@ -1,6 +1,6 @@
 	<div class="flexslider">
       <ul class="slides">	
-         <?php /*?><li class="slide_cyrium" style="display:none">  
+         <li class="slide_cyrium" style="display:none">  
            <div class="slide_content"> 
               <img src="<?php bloginfo('template_url'); ?>/images/home_slides/slide_impact.jpg" alt="IMPACT Logo Collateral Website Design"/>
               <div class="flex-caption">
@@ -16,7 +16,7 @@
               </div>
               <div class="extra_left"></div>
             </div><!-- slide_content -->
-          </li>	<?php */?>
+          </li>	
           
           
       	  <li class="slide_lumilia" style="display:none">  
