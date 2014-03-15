@@ -20,7 +20,7 @@ $about_children = array(
           <h4 class="subheading_full_width"><span>About</span></h4>
             <div class="block_content">
               <?php the_content(); ?>
-              
+              <?php edit_post_link( __( 'Edit', 'twentyeleven' ), '<span class="edit-link">', '</span>' ); ?>
               <ul class="arrows sidebar_nav"><?php wp_list_pages( $about_children ); ?></ul> 
             </div>
         </div><!-- .secondary -->

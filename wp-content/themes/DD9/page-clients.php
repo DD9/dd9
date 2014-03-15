@@ -43,6 +43,7 @@ $wd_services = get_posts(array(
                     <p class="top_line"></p>
                     
                     <?php the_content(); ?>
+                    <?php edit_post_link( __( 'Edit', 'twentyeleven' ), '<span class="edit-link">', '</span>' ); ?>
                   </div>
               </div><!-- .two_column -->   
                   
