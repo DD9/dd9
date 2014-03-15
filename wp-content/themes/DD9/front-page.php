@@ -63,6 +63,7 @@ $wd_services = get_posts(array(
                     <h1 class="entry-title"><?php the_h1_override(); ?></h1>
       </header><!-- .entry-header -->
       <?php the_content(); ?>
+      <?php edit_post_link( __( 'Edit', 'twentyeleven' ), '<span class="edit-link">', '</span>' ); ?>
       </div><!-- .entry-content -->
     </article>
   <!-- #post-<?php the_ID(); ?> -->

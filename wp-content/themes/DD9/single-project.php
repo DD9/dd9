@@ -149,6 +149,7 @@ $end_work = format_short_date(get_post_meta($post->ID, 'end_work', true));
                   <div class="entry_content">
                   	<!--<p class="top_line"><em></em></p> -->  
                     <?php the_content(); ?>
+                    <?php edit_post_link( __( 'Edit', 'twentyeleven' ), '<span class="edit-link">', '</span>' ); ?>
                   </div> 
                 </article>
                 

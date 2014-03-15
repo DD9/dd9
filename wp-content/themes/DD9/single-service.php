@@ -130,6 +130,7 @@ $wd_services = get_posts(array(
             <article class="post">
               <div class="entry_content">   
                <?php the_content(); ?>
+               <?php edit_post_link( __( 'Edit', 'twentyeleven' ), '<span class="edit-link">', '</span>' ); ?>
               </div>
               
                <?php include('primary_cta.php'); ?>

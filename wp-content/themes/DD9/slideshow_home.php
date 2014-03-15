@@ -64,7 +64,7 @@
                     
                     <div class="block_content">
                     	<h3><a href="/services/application-development/">Web-based Software + Applications</a></h3>
-                        <p class="top_line">We specialize in custom design and build for Ruby On Rails&#8482; and PHP/MySQL software applications.</p>
+                        <p class="top_line">We specialize in custom design and build of Ruby On Rails&#8482; and PHP/MySQL software applications.</p>
                     </div>
                 
                 </div>
