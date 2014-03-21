@@ -2,7 +2,14 @@
 # BEGIN WordPress
 <IfModule mod_rewrite.c>
 RewriteEngine On
+
 RewriteBase /
+
+# block visitors referred from semalt.com
+RewriteCond %{HTTP_REFERER} semalt\.com [NC]
+RewriteRule .* - [F]
+
+
 RewriteRule ^index\.php$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
