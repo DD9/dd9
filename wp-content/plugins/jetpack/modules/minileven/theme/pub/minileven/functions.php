@@ -93,13 +93,13 @@ function minileven_fonts() {
 	/*	translators: If there are characters in your language that are not supported
 		by Open Sans, translate this to 'off'. Do not translate into your own language. */
 
-	if ( 'off' !== _x( 'on', 'Open Sans font: on or off', 'minileven' ) ) {
+	if ( 'off' !== _x( 'on', 'Open Sans font: on or off', 'minileven' , 'jetpack' ) ) {
 
 		$opensans_subsets = 'latin,latin-ext';
 
 		/* translators: To add an additional Open Sans character subset specific to your language, translate
 		this to 'greek', 'cyrillic' or 'vietnamese'. Do not translate into your own language. */
-		$opensans_subset = _x( 'no-subset', 'Open Sans font: add new subset (greek, cyrillic, vietnamese)', 'minileven' );
+		$opensans_subset = _x( 'no-subset', 'Open Sans font: add new subset (greek, cyrillic, vietnamese)', 'minileven' , 'jetpack' );
 
 		if ( 'cyrillic' == $opensans_subset )
 			$opensans_subsets .= ',cyrillic,cyrillic-ext';
@@ -186,3 +186,41 @@ function minileven_get_background() {
  */
 if ( '1' == get_option( 'wp_mobile_static_front_page' ) )
 	add_filter( 'pre_option_page_on_front', '__return_zero' );
+
+/**
+ * Retrieves the IDs for images in a gallery.
+ *
+ * @uses get_post_galleries() first, if available. Falls back to shortcode parsing,
+ * then as last option uses a get_posts() call.
+ *
+ * @return array List of image IDs from the post gallery.
+ */
+function minileven_get_gallery_images() {
+	$images = array();
+
+	if ( function_exists( 'get_post_galleries' ) ) {
+		$galleries = get_post_galleries( get_the_ID(), false );
+		if ( isset( $galleries[0]['ids'] ) )
+		 	$images = explode( ',', $galleries[0]['ids'] );
+	} else {
+		$pattern = get_shortcode_regex();
+		preg_match( "/$pattern/s", get_the_content(), $match );
+		$atts = shortcode_parse_atts( $match[3] );
+		if ( isset( $atts['ids'] ) )
+			$images = explode( ',', $atts['ids'] );
+	}
+
+	if ( ! $images ) {
+		$images = get_posts( array(
+			'fields'         => 'ids',
+			'numberposts'    => 999,
+			'order'          => 'ASC',
+			'orderby'        => 'menu_order',
+			'post_mime_type' => 'image',
+			'post_parent'    => get_the_ID(),
+			'post_type'      => 'attachment',
+		) );
+	}
+
+	return $images;
+}

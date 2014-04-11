@@ -33,7 +33,7 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Sitemap' ) ) {
 				"archive"			=> __( "Include Date Archives in your sitemap.<br /><a href='http://semperplugins.com/documentation/xml-sitemaps-module/' target='_blank'>Click here for documentation on this setting</a>", 'all_in_one_seo_pack' ),
 				"author"			=> __( "Include Author Archives in your sitemap.<br /><a href='http://semperplugins.com/documentation/xml-sitemaps-module/' target='_blank'>Click here for documentation on this setting</a>", 'all_in_one_seo_pack' ),
 				"gzipped"			=> __( "Create a compressed sitemap file in .xml.gz format.<br /><a href='http://semperplugins.com/documentation/xml-sitemaps-module/' target='_blank'>Click here for documentation on this setting</a>", 'all_in_one_seo_pack' ),
-				"robots"			=> __( 'Places a link to your Sitemap.xml into your virtual Robots.txt file.', 'all_in_one_seo_pack' ),
+				"robots"			=> __( "Places a link to your Sitemap.xml into your virtual Robots.txt file.<br /><a href='http://semperplugins.com/documentation/xml-sitemaps-module/' target='_blank'>Click here for documentation on this setting</a>", 'all_in_one_seo_pack' ),
 				"rewrite"			=> __( "Places a link to the sitemap file in your virtual Robots.txt file which WordPress creates.<br /><a href='http://semperplugins.com/documentation/xml-sitemaps-module/' target='_blank'>Click here for documentation on this setting</a>", 'all_in_one_seo_pack' ),
 				"debug"				=> __( "Use rewrites to generate your sitemap on the fly. NOTE: This is required for WordPress Multisite.<br /><a href='http://semperplugins.com/documentation/xml-sitemaps-module/' target='_blank'>Click here for documentation on this setting</a>", 'all_in_one_seo_pack'),
 				"addl_url"			=> __( 'URL to the page.', 'all_in_one_seo_pack' ),
@@ -793,6 +793,7 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Sitemap' ) ) {
 					$post_counts = $this->get_all_post_counts( Array('post_type' => $options['aiosp_sitemap_posttypes'], 'post_status' => 'publish') );
 				}
 				foreach( $options['aiosp_sitemap_posttypes'] as $sm ) {
+					if ( $post_counts[$sm] == 0 ) continue;
 					if ( $this->paginate ) {
 						if ( $post_counts[$sm] > $this->max_posts ) {
 							$count = 1;
@@ -1412,7 +1413,7 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Sitemap' ) ) {
 		
 		/** Return post counts using wp_count_posts(). **/
 		function get_all_post_counts( $args ) {
-			$post_counts = null;
+			$post_counts = Array();
 			$status = 'inherit';
 			if ( !empty( $args['post_status'] ) ) $status = $args['post_status'];
 			if ( !empty( $args ) && !empty( $args['post_type'] ) )
@@ -1420,7 +1421,7 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Sitemap' ) ) {
 					if ( is_array( $args['post_type'] ) )
 						$args['post_type'] = array_shift( $args['post_type'] );
 					$count = (Array)wp_count_posts( $args['post_type'] );
-					$post_counts = $count[$status];
+					$post_counts[$args['post_type']] = $count[$status];
 				} else
 					foreach( $args['post_type'] as $post_type ) {
 						$count = (Array)wp_count_posts( $post_type );
@@ -1443,7 +1444,7 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Sitemap' ) ) {
 				'cache_results' => false,
 				'no_found_rows' => true
 			);
-			if ( defined( 'WPML_TM_VERSION' ) ) $defaults['suppress_filters'] = false;
+			if ( defined( 'ICL_SITEPRESS_VERSION' ) ) $defaults['suppress_filters'] = false;
 			$args = wp_parse_args( $args, $defaults );
 			if ( empty( $args['post_type'] ) )
 				return apply_filters( $this->prefix . 'post_filter', Array(), $args );

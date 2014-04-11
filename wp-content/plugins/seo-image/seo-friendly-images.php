@@ -4,7 +4,7 @@
 Plugin Name: SEO Friendly Images
 Plugin URI: http://www.prelovac.com/vladimir/wordpress-plugins/seo-friendly-images
 Description: Automatically adds alt and title attributes to all your images. Improves traffic from search results and makes them W3C/xHTML valid as well.
-Version: 2.7.5
+Version: 2.7.6
 Author: Vladimir Prelovac
 Author URI: http://www.prelovac.com/vladimir
 
@@ -15,7 +15,7 @@ To-Do:
 Copyright 2008  Vladimir Prelovac  vprelovac@gmail.com
 
 */
-	$seo_friendly_images_localversion="2.7.5";
+	$seo_friendly_images_localversion="2.7.6";
 	$sfi_plugin_url = trailingslashit( get_bloginfo('wpurl') ).PLUGINDIR.'/'. dirname( plugin_basename(__FILE__) );
 	function seo_friendly_images_add_pages() {
 		add_options_page('SEO Friendly Images options', 'SEO Friendly Images', 'manage_options', __FILE__, 'seo_friendly_images_options_page');
