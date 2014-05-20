@@ -5,8 +5,8 @@ RewriteEngine On
 
 RewriteBase /
 
-# block visitors referred from semalt.com
-RewriteCond %{HTTP_REFERER} semalt\.com [NC]
+# block visitors referred from semalt.com and all subdomains
+RewriteCond %{HTTP_REFERER} ^https?://([^.]+\.)*semalt\.com [NC]
 RewriteRule .* - [F]
 
 
