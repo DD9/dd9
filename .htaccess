@@ -19,3 +19,10 @@ RewriteRule . /index.php [L]
 </IfModule>
 
 # END WordPress
+
+# trying to block these terrible people another way
+SetEnvIfNoCase Referer semalt.com spammer=yes
+
+Order allow,deny
+Allow from all
+Deny from env=spammer 
