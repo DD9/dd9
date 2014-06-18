@@ -1,10 +1,10 @@
 === User Switching ===
 
 Contributors: johnbillion  
-Tags: user, users, profiles, switching, wpmu, multisite, buddypress, bbpress, become, user control, user management, user access, developer  
+Tags: users, profiles, user switching, fast user switching, multisite, buddypress, bbpress, become, user management, developer  
 Requires at least: 3.1  
 Tested up to: 3.9  
-Stable tag: 0.8.9  
+Stable tag: 0.9  
 License: GPL v2 or later  
 
 Instant switching between user accounts in WordPress.
@@ -113,16 +113,22 @@ When a user switches off, the `switch_off_user` hook is called with the old user
 
 == Upgrade Notice ==
 
-= 0.8.9 =
-* Translations for French, Hebrew, Indonesian, and Portuguese.
+= 0.9 =
+
+* Minor fixes for the `login_redirect` filter.
 
 == Changelog ==
 
+= 0.9 =
+
+* Minor fixes for the `login_redirect` filter.
+* Increase the specificity of the `switch_to_old_user` and `switch_off` nonces.
+
 = 0.8.9 =
-* French translation by Fx Bénard
-* Hebrew translation by Rami Y
-* Indonesian translation by Eko Ikhyar
-* Portuguese translation by Raphael Mendonça
+* French translation by Fx Bénard.
+* Hebrew translation by Rami Y.
+* Indonesian translation by Eko Ikhyar.
+* Portuguese translation by Raphael Mendonça.
 
 = 0.8.8 =
 * Spanish Translation by Marcelo Pedra.
@@ -147,10 +153,10 @@ When a user switches off, the `switch_off_user` hook is called with the old user
 * Change the textdomain in the plugin to match the plugin slug (required for language packs in WordPress core).
 
 = 0.8.2 =
-* Russian translation by R J
+* Russian translation by R J.
 
 = 0.8.1 =
-* Japanese translation by Yusuke Hayasaki
+* Japanese translation by Yusuke Hayasaki.
 
 = 0.8 =
 * Nested switching and switching back is now supported (capability permitting). Switch, switch again, switch back, switch back!
