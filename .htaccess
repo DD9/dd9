@@ -24,7 +24,6 @@ RewriteRule . /index.php [L]
 # trying to block these terrible people another way
 SetEnvIfNoCase Referer semalt.com spammer=yes
 SetEnvIfNoCase Referer semalt.semalt.com spammer=yes
-SetEnvIfNoCase Referer "*semalt*" spammer=yes
 
 Order allow,deny
 Allow from all
