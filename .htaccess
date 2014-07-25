@@ -8,7 +8,9 @@ RewriteBase /
 # block visitors referred from semalt.com and all subdomains and other spam and fishing sites
 RewriteCond %{HTTP_REFERER} ^https?://([^.]+\.)*semalt\.com [NC,OR]
 RewriteCond %{HTTP_REFERER} ^https?://([^.]+\.)*semalt\. [NC,OR]
+RewriteCond %{HTTP_REFERER} ^https?://([^.]+\.)*kambasoft\. [NC,OR]
 RewriteCond %{HTTP_REFERER} semalt\.semalt\.com [NC,OR]
+RewriteCond %{HTTP_REFERER} kambasoft\.com [NC,OR]
 RewriteCond %{HTTP_REFERER} crawler\.semalt\.com [NC,OR]
 RewriteCond %{HTTP_REFERER} ^https?://([^.]+\.)*seoanalyses\.com [NC]
 RewriteRule .* - [F]
@@ -26,6 +28,8 @@ RewriteRule . /index.php [L]
 SetEnvIfNoCase Referer semalt.com spammer=yes
 SetEnvIfNoCase Referer semalt.semalt.com spammer=yes
 SetEnvIfNoCase Referer semalt spammer=yes
+SetEnvIfNoCase Referer kambasoft spammer=yes
+SetEnvIfNoCase Referer kambasoft.com spammer=yes
 
 Order allow,deny
 Allow from all
