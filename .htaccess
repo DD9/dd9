@@ -9,6 +9,7 @@ RewriteBase /
 RewriteCond %{HTTP_REFERER} ^https?://([^.]+\.)*semalt\.com [NC]
 RewriteCond %{HTTP_REFERER} ^https?://([^.]+\.)*semalt\. [NC]
 RewriteCond %{HTTP_REFERER} semalt\.semalt\.com [NC]
+RewriteCond %{HTTP_REFERER} crawler\.semalt\.com [NC]
 RewriteCond %{HTTP_REFERER} ^https?://([^.]+\.)*seoanalyses\.com [NC]
 RewriteRule .* - [F]
 
@@ -24,6 +25,7 @@ RewriteRule . /index.php [L]
 # trying to block these terrible people another way
 SetEnvIfNoCase Referer semalt.com spammer=yes
 SetEnvIfNoCase Referer semalt.semalt.com spammer=yes
+SetEnvIfNoCase Referer semalt spammer=yes
 
 Order allow,deny
 Allow from all
