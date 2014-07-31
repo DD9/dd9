@@ -9,6 +9,7 @@ RewriteBase /
 RewriteCond %{HTTP_REFERER} ^https?://([^.]+\.)*semalt\.com [NC,OR]
 RewriteCond %{HTTP_REFERER} ^https?://([^.]+\.)*kambasoft\.com [NC,OR]
 RewriteCond %{HTTP_REFERER} ^https?://([^.]+\.)*savetubevideo\.com [NC,OR]
+RewriteCond %{HTTP_REFERER} ^https?://([^.]+\.)*srecorder\.com [NC,OR]
 RewriteCond %{HTTP_REFERER} ^https?://([^.]+\.)*semalt\. [NC,OR]
 RewriteCond %{HTTP_REFERER} ^https?://([^.]+\.)*kambasoft\. [NC,OR]
 RewriteCond %{HTTP_REFERER} ^https?://([^.]+\.)*savetubevideo\. [NC,OR]
