@@ -95,7 +95,7 @@
   });
 </script>
 
-
+<!--
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -110,6 +110,7 @@
   })();
 
 </script>
+-->
 </head>
 
 <body <?php body_class(); ?>>
